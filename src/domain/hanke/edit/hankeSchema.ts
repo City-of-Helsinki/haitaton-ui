@@ -135,6 +135,7 @@ export const hankeSchema: yup.ObjectSchema<HankeDataFormState> = yup.object().sh
   modifiedBy: yup.string(),
   modifiedAt: yup.string(),
   generated: yup.boolean(),
+  deletionDate: yup.string().nullable(),
 });
 
 export const hankePerustiedotPublicSchema = hankeSchema.pick([

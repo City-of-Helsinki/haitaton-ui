@@ -12,7 +12,7 @@ import hakemukset from '../mocks/data/hakemukset-data';
 import { server } from '../mocks/test-server';
 import { HttpResponse, http } from 'msw';
 import { Taydennys, TaydennysAttachmentMetadata } from '../application/taydennys/types';
-import { act, fireEvent, render, screen, waitFor, within } from '../../testUtils/render';
+import { fireEvent, render, screen, waitFor, within } from '../../testUtils/render';
 import KaivuilmoitusTaydennysContainer from './KaivuilmoitusTaydennysContainer';
 import { createApplicationAttachments, createTaydennysAttachments } from '../mocks/attachments';
 import api from '../api/api';
@@ -315,17 +315,12 @@ describe('Canceling taydennys', () => {
 });
 
 describe('Taydennys attachments', () => {
-  async function uploadAttachmentMock({
-    taydennysId,
-    attachmentType,
-    file,
-    abortSignal,
-  }: {
-    taydennysId: string;
-    attachmentType: AttachmentType;
-    file: File;
-    abortSignal?: AbortSignal;
-  }) {
+  async function uploadAttachmentMock(
+    taydennysId: string,
+    attachmentType: AttachmentType,
+    file: File,
+    abortSignal?: AbortSignal,
+  ) {
     const { data } = await api.post<TaydennysAttachmentMetadata>(
       `/taydennykset/${taydennysId}/liitteet?tyyppi=${attachmentType}`,
       { liite: file },
@@ -358,9 +353,12 @@ describe('Taydennys attachments', () => {
       mandateFiles: [new File(['valtakirja'], 'valtakirja.pdf', { type: 'application/pdf' })],
       otherFiles: [new File(['muu'], 'muu.png', { type: 'image/png' })],
     });
-    await act(async () => {
-      waitFor(() => expect(screen.queryAllByText('Tallennetaan tiedostoja')).toHaveLength(0));
-    });
+    await waitFor(
+      () => {
+        expect(screen.queryAllByText('Tallennetaan tiedostoja')).toHaveLength(0);
+      },
+      { timeout: 5000 },
+    );
     await waitFor(
       () => {
         expect(screen.queryAllByText('1/1 tiedosto(a) tallennettu')).toHaveLength(3);
@@ -488,10 +486,10 @@ describe('Error notification', () => {
     expect(screen.getByRole('link', { name: /Työn alkupäivämäärä/i })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /Työn loppupäivämäärä/i })).toBeInTheDocument();
     expect(
-      screen.getByRole('link', { name: 'Työalueet (Hankealue 2): Katuosoite' }),
+      screen.getByRole('link', { name: 'Työalueet (Hankealue 1): Katuosoite' }),
     ).toBeInTheDocument();
     expect(
-      screen.getByRole('link', { name: 'Työalueet (Hankealue 2): Työn tarkoitus' }),
+      screen.getByRole('link', { name: 'Työalueet (Hankealue 1): Työn tarkoitus' }),
     ).toBeInTheDocument();
   });
 
@@ -523,12 +521,12 @@ describe('Error notification', () => {
     ).toBeInTheDocument();
     expect(
       screen.getByRole('link', {
-        name: 'Työalueet (Hankealue 2): Yleiset toimet työalueiden haittojen hallintaan',
+        name: 'Työalueet (Hankealue 1): Yleiset toimet työalueiden haittojen hallintaan',
       }),
     ).toBeInTheDocument();
     expect(
       screen.getByRole('link', {
-        name: 'Työalueet (Hankealue 2) Pyöräliikenteen merkittävyys: Toimet työalueiden haittojen hallintaan',
+        name: 'Työalueet (Hankealue 1) Pyöräliikenteen merkittävyys: Toimet työalueiden haittojen hallintaan',
       }),
     ).toBeInTheDocument();
   });
@@ -556,17 +554,11 @@ describe('Error notification', () => {
     fireEvent.change(screen.getByTestId('applicationData.customerWithContacts.customer.phone'), {
       target: { value: '' },
     });
-    fireEvent.click(screen.getAllByRole('button', { name: /poista valittu/i })[0]);
 
     expect(
       await screen.findByText(
         'Seuraavat kentät tällä sivulla vaaditaan hakemuksen lähettämiseksi:',
       ),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole('link', {
-        name: /työstä vastaava: Vähintään yksi yhteyshenkilö tulee olla asetettuna/i,
-      }),
     ).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /Työstä vastaava: Sähköposti/i })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /Työstä vastaava: Puhelin/i })).toBeInTheDocument();

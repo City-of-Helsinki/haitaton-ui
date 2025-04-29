@@ -1,6 +1,14 @@
 import React, { useState } from 'react';
 import { Box, Grid } from '@chakra-ui/react';
-import { Koros, Link, LoginButton, Notification, useOidcClient } from 'hds-react';
+import {
+  ButtonPresetTheme,
+  ButtonVariant,
+  Hero,
+  Link,
+  LoginButton,
+  Notification,
+  useOidcClient,
+} from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import clsx from 'clsx';
 import Container from '../../common/components/container/Container';
@@ -18,19 +26,18 @@ import {
   FeatureFlagsContextProps,
   useFeatureFlags,
 } from '../../common/components/featureFlags/FeatureFlagsContext';
-import MainHeading from '../../common/components/mainHeading/MainHeading';
 import HankeCreateDialog from '../hanke/hankeCreateDialog/HankeCreateDialog';
 import JohtoselvitysCreateDialog from '../johtoselvitys/johtoselvitysCreateDialog/JohtoselvitysCreateDialog';
 import useIsAuthenticated from '../auth/useIsAuthenticated';
 import useLocale from '../../common/hooks/useLocale';
+import { SKIP_TO_ELEMENT_ID } from '../../common/constants/constants';
 
 const FEEDBACK_NOTIFICATION_CLOSED = 'feedback-notification-closed';
 
 const Homepage: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { t } = useTranslation();
   const { login } = useOidcClient();
-  const { PUBLIC_HANKKEET_MAP, PUBLIC_HANKKEET_LIST, HANKEPORTFOLIO, WORKINSTRUCTIONS } =
-    useLocalizedRoutes();
+  const { PUBLIC_HANKKEET, HANKEPORTFOLIO, WORKINSTRUCTIONS } = useLocalizedRoutes();
   const [feedbackOpen, setFeedbackOpen] = useState(
     !sessionStorage.getItem(FEEDBACK_NOTIFICATION_CLOSED),
   );
@@ -43,7 +50,7 @@ const Homepage: React.FC<React.PropsWithChildren<unknown>> = () => {
   const loggedInLinks = [
     {
       key: 'kartta',
-      actionLink: PUBLIC_HANKKEET_MAP.path,
+      actionLink: PUBLIC_HANKKEET.path,
       imgProps: { src: img1, width: 384, height: 245 },
       external: false,
       featureFlags: ['publicHankkeet'],
@@ -83,15 +90,8 @@ const Homepage: React.FC<React.PropsWithChildren<unknown>> = () => {
   const loggedOutLinks = [
     {
       key: 'kartta_kirjautumaton',
-      actionLink: PUBLIC_HANKKEET_MAP.path,
+      actionLink: PUBLIC_HANKKEET.path,
       imgProps: { src: img4, width: 384, height: 245 },
-      external: false,
-      featureFlags: ['publicHankkeet'],
-    },
-    {
-      key: 'hankelista',
-      actionLink: PUBLIC_HANKKEET_LIST.path,
-      imgProps: { src: img1, width: 384, height: 245 },
       external: false,
       featureFlags: ['publicHankkeet'],
     },
@@ -123,8 +123,8 @@ const Homepage: React.FC<React.PropsWithChildren<unknown>> = () => {
             {t('homepage:loginContainer:description')}
           </p>
           <LoginButton
-            variant="secondary"
-            theme="black"
+            variant={ButtonVariant.Secondary}
+            theme={ButtonPresetTheme.Black}
             loggingInText={t('authentication:loggingIn')}
             errorText={t('authentication:loggingInErrorLabel')}
             spinnerColor="var(--color-coat-of-arms)"
@@ -173,15 +173,19 @@ const Homepage: React.FC<React.PropsWithChildren<unknown>> = () => {
 
   return (
     <div className={clsx({ [styles.bgWhite]: !isAuthenticated && !features.publicHankkeet })}>
-      <div className={styles.heroContainer}>
-        <section className={styles.hero}>
-          <MainHeading spacing="s">{pageTitle}</MainHeading>
-          <Text tag="h2" styleAs="h3" spacing="s" weight="bold">
-            {pageSubtitle}
-          </Text>
-        </section>
-        <Koros type="basic" flipVertical className={styles.koros} />
-      </div>
+      <Hero
+        theme={{
+          '--background-color': 'var(--color-summer)',
+          '--koros-color': `${isAuthenticated ? 'var(--color-black-5' : 'var(--color-white'}`,
+        }}
+        variant="noImage"
+        centeredContent
+      >
+        <Hero.Title id={SKIP_TO_ELEMENT_ID} tabIndex={-1} aria-live="polite">
+          {pageTitle}
+        </Hero.Title>
+        <Hero.Text>{pageSubtitle}</Hero.Text>
+      </Hero>
 
       {!isAuthenticated && features.publicHankkeet && (
         <Box

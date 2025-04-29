@@ -1,9 +1,16 @@
 import React from 'react';
-import { Dialog, Button, DialogVariant } from 'hds-react';
-import { IconAlertCircleFill, IconErrorFill } from 'hds-react/icons';
+import {
+  Dialog,
+  DialogVariant,
+  Notification,
+  ButtonVariant,
+  ButtonPresetTheme,
+  NotificationSize,
+} from 'hds-react';
+import { IconAlertCircleFill } from 'hds-react/icons';
 import { useTranslation } from 'react-i18next';
-
-import styles from './ConfirmationDialog.module.scss';
+import { Box } from '@chakra-ui/react';
+import Button from '../button/Button';
 
 type Props = {
   title: string;
@@ -18,7 +25,9 @@ type Props = {
   showCloseButton?: boolean;
   showSecondaryButton?: boolean;
   isLoading?: boolean;
+  loadingText?: string;
   headerIcon?: React.ReactNode;
+  disabled?: boolean;
 };
 
 const ConfirmationDialog: React.FC<React.PropsWithChildren<Props>> = ({
@@ -34,12 +43,14 @@ const ConfirmationDialog: React.FC<React.PropsWithChildren<Props>> = ({
   showCloseButton = false,
   showSecondaryButton = true,
   isLoading = false,
+  loadingText = mainBtnLabel,
   headerIcon = (
     <IconAlertCircleFill
       aria-hidden="true"
       color={variant === 'primary' ? 'var(--color-bus)' : 'var(--color-brick)'}
     />
   ),
+  disabled = false,
 }) => {
   const { t } = useTranslation();
 
@@ -47,9 +58,11 @@ const ConfirmationDialog: React.FC<React.PropsWithChildren<Props>> = ({
     <Button
       onClick={mainAction}
       data-testid="dialog-button-test"
-      variant={variant}
-      iconLeft={mainBtnIcon}
+      variant={variant === 'danger' ? ButtonVariant.Danger : ButtonVariant.Primary}
+      iconStart={mainBtnIcon}
+      disabled={disabled}
       isLoading={isLoading}
+      loadingText={loadingText}
     >
       {mainBtnLabel ?? t('common:confirmationDialog:confirmButton')}
     </Button>
@@ -57,10 +70,11 @@ const ConfirmationDialog: React.FC<React.PropsWithChildren<Props>> = ({
 
   const secondaryButton = showSecondaryButton && (
     <Button
-      variant="secondary"
+      variant={ButtonVariant.Secondary}
       onClick={close}
-      theme={variant === 'danger' ? 'black' : 'default'}
+      theme={variant === 'danger' ? ButtonPresetTheme.Black : undefined}
       data-testid="dialog-cancel-test"
+      disabled={disabled}
     >
       {t('common:confirmationDialog:cancelButton')}
     </Button>
@@ -78,7 +92,7 @@ const ConfirmationDialog: React.FC<React.PropsWithChildren<Props>> = ({
       close={showCloseButton ? (close as any) : undefined}
       closeButtonLabelText={t('common:ariaLabels:closeButtonLabelText')}
     >
-      <Dialog.Header id="dialog-title" title={title} iconLeft={headerIcon} />
+      <Dialog.Header id="dialog-title" title={title} iconStart={headerIcon} />
       <Dialog.Content>
         {typeof description === 'string' ? (
           <p data-testid="dialog-description-test">{description}</p>
@@ -86,10 +100,11 @@ const ConfirmationDialog: React.FC<React.PropsWithChildren<Props>> = ({
           <div data-testid="dialog-description-test">{description}</div>
         )}
         {errorMsg && (
-          <div className={styles.errorMsg}>
-            <IconErrorFill />
-            <p>{errorMsg}</p>
-          </div>
+          <Box paddingTop="var(--spacing-s)">
+            <Notification type="error" size={NotificationSize.Small} label={errorMsg}>
+              {errorMsg}
+            </Notification>
+          </Box>
         )}
       </Dialog.Content>
       <Dialog.ActionButtons>

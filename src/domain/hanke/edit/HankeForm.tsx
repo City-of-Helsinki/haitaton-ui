@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FieldPath, FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation, useQueryClient } from 'react-query';
-import { Button, IconCross, IconPlusCircle, IconSaveDiskette, StepState } from 'hds-react';
+import { ButtonVariant, IconCross, IconPlusCircle, IconSaveDiskette, StepState } from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import VectorSource from 'ol/source/Vector';
@@ -36,6 +36,7 @@ import DrawProvider from '../../../common/components/map/modules/draw/DrawProvid
 import FormPagesErrorSummary from '../../forms/components/FormPagesErrorSummary';
 import FormFieldsErrorSummary from '../../forms/components/FormFieldsErrorSummary';
 import { useApplicationsForHanke } from '../../application/hooks/useApplications';
+import Button from '../../../common/components/button/Button';
 
 type Props = {
   formData: HankeDataFormState;
@@ -57,7 +58,6 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
   const { setNotification } = useGlobalNotification();
   const [showNotification, setShowNotification] = useState<FormNotification | null>(null);
   const [showAddApplicationDialog, setShowAddApplicationDialog] = useState(false);
-  const [attachmentsUploading, setAttachmentsUploading] = useState(false);
   const hakemukset = useApplicationsForHanke(formData.hankeTunnus, true);
   const validationContext = {
     hanke: formData,
@@ -131,11 +131,9 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
     },
   });
 
-  const attachmentsUploadingText: string = t('common:components:fileUpload:loadingText');
-  const saveAndQuitButtonIsLoading = hankeMutation.isLoading || attachmentsUploading;
-  const saveAndQuitButtonLoadingText = attachmentsUploading
-    ? attachmentsUploadingText
-    : t('common:buttons:savingText');
+  const saveAndQuitButtonIsLoading = hankeMutation.isLoading;
+  const saveAndQuitButtonLoadingText = t('common:buttons:savingText');
+  const saveAndQuitButtonIcon = <IconSaveDiskette />;
 
   const [drawSource] = useState<VectorSource>(new VectorSource());
 
@@ -176,10 +174,6 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
   useEffect(() => {
     onIsDirtyChange(isDirty);
   }, [isDirty, onIsDirtyChange]);
-
-  function handleFileUpload(uploading: boolean) {
-    setAttachmentsUploading(uploading);
-  }
 
   function handleStepChange(stepIndex: number) {
     setActiveStepIndex(stepIndex);
@@ -225,7 +219,7 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
       validationSchema: hankeYhteystiedotPublicSchema,
     },
     {
-      element: <HankeFormLiitteet onFileUpload={handleFileUpload} />,
+      element: <HankeFormLiitteet />,
       label: t('hankePortfolio:tabit:liitteet'),
       state: StepState.available,
     },
@@ -313,10 +307,39 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
           hankeYhteystiedotPublicSchema.describe().fields,
         ) as FieldPath<HankeDataFormState>[],
       ]
-    : [['nimi']];
+    : [
+        // Basic information page
+        ['nimi'],
+        // Areas page
+        [],
+        // Haittojen hallinta page
+        [],
+        // Contacts page
+        // Only get the ytunnus fields from omistajat, rakennuttajat and toteuttajat
+        [
+          ...getFieldPaths<HankeDataFormState>(getValues('omistajat'), 'omistajat').filter((path) =>
+            /ytunnus/i.test(path),
+          ),
+          ...getFieldPaths<HankeDataFormState>(getValues('rakennuttajat'), 'rakennuttajat').filter(
+            (path) => /ytunnus/i.test(path),
+          ),
+          ...getFieldPaths<HankeDataFormState>(getValues('toteuttajat'), 'toteuttajat').filter(
+            (path) => /ytunnus/i.test(path),
+          ),
+        ],
+      ];
 
   function validateStepChange(changeStep: () => void, stepIndex: number) {
-    return changeFormStep(changeStep, pageFieldsToValidate[stepIndex] || [], trigger);
+    // Ignore 'required' errors in 'Yhteystiedot' step if hanke is not public
+    const errorsToIgnore = stepIndex === 3 && !isHankePublic ? ['required'] : undefined;
+
+    return changeFormStep(
+      changeStep,
+      pageFieldsToValidate[stepIndex] || [],
+      trigger,
+      errors,
+      errorsToIgnore,
+    );
   }
 
   return (
@@ -332,8 +355,6 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
           heading={formHeading}
           formSteps={formSteps}
           onStepChange={handleStepChange}
-          isLoading={attachmentsUploading}
-          isLoadingText={attachmentsUploadingText}
           topElement={formErrorsNotification}
           formData={watchFormValues}
           validationContext={validationContext}
@@ -348,24 +369,18 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
                 totalSteps={formSteps.length}
                 onPrevious={handlePrevious}
                 onNext={handleNext}
-                previousButtonIsLoading={attachmentsUploading}
-                previousButtonLoadingText={attachmentsUploadingText}
-                nextButtonIsLoading={attachmentsUploading}
-                nextButtonLoadingText={attachmentsUploadingText}
               >
                 <Button
-                  variant="danger"
-                  iconLeft={<IconCross aria-hidden />}
+                  variant={ButtonVariant.Danger}
+                  iconStart={<IconCross />}
                   onClick={() => onFormClose(formValues.hankeTunnus)}
-                  isLoading={attachmentsUploading}
-                  loadingText={attachmentsUploadingText}
                 >
                   {t('hankeForm:cancelButton')}
                 </Button>
                 {!lastStep && (
                   <Button
-                    variant="supplementary"
-                    iconLeft={<IconSaveDiskette aria-hidden="true" />}
+                    variant={ButtonVariant.Supplementary}
+                    iconStart={saveAndQuitButtonIcon}
                     onClick={saveAndQuit}
                     data-testid="save-form-btn"
                     isLoading={saveAndQuitButtonIsLoading}
@@ -378,19 +393,19 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
                   <>
                     {isHankePublic && (
                       <Button
-                        variant="secondary"
-                        iconLeft={<IconPlusCircle aria-hidden />}
+                        variant={ButtonVariant.Secondary}
+                        iconStart={<IconPlusCircle />}
                         onClick={saveAndAddApplication}
                       >
                         {t('hankeForm:saveAndAddButton')}
                       </Button>
                     )}
                     <Button
-                      variant="primary"
-                      iconLeft={<IconSaveDiskette aria-hidden />}
+                      variant={ButtonVariant.Primary}
+                      iconStart={saveAndQuitButtonIcon}
                       onClick={saveAndQuit}
-                      isLoading={hankeMutation.isLoading}
-                      loadingText={t('common:buttons:savingText')}
+                      isLoading={saveAndQuitButtonIsLoading}
+                      loadingText={saveAndQuitButtonLoadingText}
                     >
                       {t('hankeForm:saveButton')}
                     </Button>

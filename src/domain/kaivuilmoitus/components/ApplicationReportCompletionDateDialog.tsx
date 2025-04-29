@@ -1,4 +1,4 @@
-import { Button, Dialog, IconCheck, IconInfoCircleFill } from 'hds-react';
+import { ButtonVariant, Dialog, IconCheck, IconInfoCircleFill } from 'hds-react';
 import React, { useEffect } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import DatePicker from '../../../common/components/datePicker/DatePicker';
@@ -19,6 +19,7 @@ import useApplicationReportCompletionDateNotification from '../hooks/useApplicat
 import { format } from 'date-fns/format';
 import { fi } from 'date-fns/locale';
 import { useApplication } from '../../application/hooks/useApplication';
+import Button from '../../../common/components/button/Button';
 
 const Instructions = ({
   type,
@@ -160,7 +161,7 @@ const ApplicationReportCompletionDateDialog: React.FC<Props> = ({
       <Dialog.Header
         id={`${dialogType}-title`}
         title={dialogTitle}
-        iconLeft={<IconInfoCircleFill aria-hidden="true" />}
+        iconStart={<IconInfoCircleFill />}
       />
       <FormProvider {...formContext}>
         <form onSubmit={handleSubmit(submitForm)}>
@@ -187,14 +188,14 @@ const ApplicationReportCompletionDateDialog: React.FC<Props> = ({
           <Dialog.ActionButtons>
             <Button
               type="submit"
-              iconLeft={<IconCheck />}
+              iconStart={<IconCheck />}
               isLoading={isLoading}
               loadingText={t('common:buttons:sendingText')}
               disabled={!isConsifmButtonEnabled}
             >
               {t('common:confirmationDialog:confirmButton')}
             </Button>
-            <Button variant="secondary" onClick={onClose}>
+            <Button variant={ButtonVariant.Secondary} onClick={onClose}>
               {t('common:confirmationDialog:cancelButton')}
             </Button>
           </Dialog.ActionButtons>

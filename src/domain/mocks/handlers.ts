@@ -399,10 +399,45 @@ export const handlers = [
   http.post(`${apiUrl}/hakemukset/:id/muutosilmoitus`, async ({ params }) => {
     const { id } = params;
     try {
-      const muutosilmoitus = await hakemuksetDB.createTaydennys(Number(id));
+      const muutosilmoitus = await hakemuksetDB.createMuutosilmoitus(Number(id));
       return HttpResponse.json(muutosilmoitus, { status: 200 });
     } catch (error) {
       return HttpResponse.json((<ApiError>error).message, { status: (<ApiError>error).status });
     }
+  }),
+
+  http.put<PathParams, JohtoselvitysUpdateData | KaivuilmoitusUpdateData>(
+    `${apiUrl}/muutosilmoitukset/:id`,
+    async ({ params, request }) => {
+      const { id } = params;
+      const updates = await request.json();
+      try {
+        const muutosilmoitus = await hakemuksetDB.updateMuutosilmoitus(id as string, updates);
+        return HttpResponse.json(muutosilmoitus, { status: 200 });
+      } catch (error) {
+        return HttpResponse.json((<ApiError>error).message, { status: (<ApiError>error).status });
+      }
+    },
+  ),
+
+  http.post(`${apiUrl}/muutosilmoitukset/:id/laheta`, async ({ params }) => {
+    const { id } = params;
+    const muutosilmoitus = await hakemuksetDB.sendMuutosilmoitus(id as string);
+    return HttpResponse.json(muutosilmoitus);
+  }),
+
+  http.delete(`${apiUrl}/muutosilmoitukset/:id`, async ({ params }) => {
+    const { id } = params;
+    await hakemuksetDB.cancelMuutosilmoitus(id as string);
+    return new HttpResponse();
+  }),
+
+  http.post(`${apiUrl}/muutosilmoitukset/:id/liitteet`, async () => {
+    await delay(500);
+    return new HttpResponse();
+  }),
+
+  http.delete(`${apiUrl}/muutosilmoitukset/:id/liitteet/:attachmentId`, async () => {
+    return new HttpResponse();
   }),
 ];

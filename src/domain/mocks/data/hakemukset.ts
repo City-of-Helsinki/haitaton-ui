@@ -26,6 +26,10 @@ async function readTaydennys(id: string) {
   return hakemukset.find((hakemus) => hakemus.taydennys?.id === id);
 }
 
+async function readMuutosilmoitus(id: string) {
+  return hakemukset.find((hakemus) => hakemus.muutosilmoitus?.id === id);
+}
+
 export async function readAll() {
   return hakemukset;
 }
@@ -201,7 +205,40 @@ export async function createMuutosilmoitus(id: number) {
     id: faker.string.uuid(),
     applicationData: cloneDeep(hakemus.applicationData),
     sent: null,
+    muutokset: [],
+    liitteet: [],
   };
   hakemus.muutosilmoitus = muutosilmoitus;
+  return muutosilmoitus;
+}
+
+export async function updateMuutosilmoitus(
+  id: string,
+  updates: JohtoselvitysUpdateData | KaivuilmoitusUpdateData,
+) {
+  const hakemus = await readMuutosilmoitus(id);
+  const muutosilmoitus = hakemus?.muutosilmoitus;
+  if (!muutosilmoitus) {
+    throw new ApiError(`No muutosilmoitus with id ${id}`, 404);
+  }
+  muutosilmoitus.applicationData = Object.assign(muutosilmoitus.applicationData, updates);
+  return muutosilmoitus;
+}
+
+export async function cancelMuutosilmoitus(id: string) {
+  const hakemus = await readMuutosilmoitus(id);
+  const muutosilmoitus = hakemus?.muutosilmoitus;
+  if (!muutosilmoitus) {
+    throw new ApiError(`No muutosilmoitus with id ${id}`, 404);
+  }
+  hakemus.muutosilmoitus = null;
+}
+
+export async function sendMuutosilmoitus(id: string) {
+  const hakemus = await readMuutosilmoitus(id);
+  const muutosilmoitus = hakemus?.muutosilmoitus;
+  if (!muutosilmoitus) {
+    throw new ApiError(`No muutosilmoitus with id ${id}`, 404);
+  }
   return muutosilmoitus;
 }

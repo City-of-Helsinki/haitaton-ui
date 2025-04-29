@@ -1,7 +1,7 @@
 import { Trans, useTranslation } from 'react-i18next';
 import {
-  Breadcrumb,
-  Button,
+  ButtonPresetTheme,
+  ButtonVariant,
   IconCheckCircleFill,
   IconClock,
   IconCross,
@@ -18,7 +18,6 @@ import Container from '../../../common/components/container/Container';
 import MainHeading from '../../../common/components/mainHeading/MainHeading';
 import { AccessRightLevel, HankeUser, SignedInUser } from './hankeUser';
 import styles from './EditUserView.module.scss';
-import useHankeViewPath from '../hooks/useHankeViewPath';
 import useLinkPath from '../../../common/hooks/useLinkPath';
 import { ROUTES } from '../../../common/types/route';
 import AccessRightsInfo from '../accessRights/AccessRightsInfo';
@@ -46,13 +45,13 @@ import UserDeleteInfoErrorNotification from './UserDeleteInfoErrorNotification';
 import { useEffect, useState } from 'react';
 import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
 import { useFeatureFlags } from '../../../common/components/featureFlags/FeatureFlagsContext';
+import Button from '../../../common/components/button/Button';
 
 type Props = {
   user: HankeUser;
   hankeUsers?: HankeUser[];
   signedInUser?: SignedInUser;
   hankeTunnus: string;
-  hankeName?: string;
 };
 
 type AccessRightLevelOption = {
@@ -80,12 +79,10 @@ function EditUserView({
   hankeUsers,
   signedInUser,
   hankeTunnus,
-  hankeName,
 }: Readonly<Props>) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { HANKEPORTFOLIO } = useLocalizedRoutes();
-  const hankeViewPath = useHankeViewPath(hankeTunnus);
   const getHankeUsersPath = useLinkPath(ROUTES.ACCESS_RIGHTS);
   const features = useFeatureFlags();
   const formContext = useForm({
@@ -139,7 +136,12 @@ function EditUserView({
         features.hanke || (rightLevel !== 'KAIKKIEN_MUOKKAUS' && rightLevel !== 'HANKEMUOKKAUS'),
     )
     .map((rightLevel) => {
-      return { label: t(`hankeUsers:accessRightLevels:${rightLevel}`), value: rightLevel };
+      return {
+        label: t(`hankeUsers:accessRightLevels:${rightLevel}`),
+        value: rightLevel,
+        disabled:
+          rightLevel === 'KAIKKI_OIKEUDET' && signedInUser?.kayttooikeustaso !== 'KAIKKI_OIKEUDET',
+      };
     });
 
   const isOnlyWithAllRights: boolean =
@@ -255,22 +257,6 @@ function EditUserView({
     <div className={styles.container}>
       <header className={styles.header}>
         <Container>
-          <div className={styles.breadcrumb}>
-            <Breadcrumb
-              ariaLabel={t('hankeList:breadcrumb:ariaLabel')}
-              list={[
-                { path: hankeViewPath, title: `${hankeName} (${hankeTunnus})` },
-                {
-                  path: getHankeUsersPath({ hankeTunnus }),
-                  title: t('hankeUsers:userManagementTitle'),
-                },
-                {
-                  path: null,
-                  title: t('hankeUsers:userEditTitle'),
-                },
-              ]}
-            />
-          </div>
           <MainHeading spacingBottom="m">
             {t('hankeUsers:userEditTitle')}: {userFullName}
           </MainHeading>
@@ -303,8 +289,8 @@ function EditUserView({
             <Flex marginTop="var(--spacing-xl)" gap="var(--spacing-s)" flexWrap="wrap">
               {!tunnistautunut && (
                 <Button
-                  iconLeft={<IconEnvelope />}
-                  theme="coat"
+                  iconStart={<IconEnvelope />}
+                  theme={ButtonPresetTheme.Coat}
                   onClick={() => sendInvitation(user)}
                   isLoading={resendInvitationMutation.isLoading}
                   disabled={linksSentTo.current.includes(id)}
@@ -314,8 +300,8 @@ function EditUserView({
               )}
               {showDeleteButton && (
                 <Button
-                  iconLeft={<IconTrash />}
-                  variant="danger"
+                  iconStart={<IconTrash />}
+                  variant={ButtonVariant.Danger}
                   isLoading={deleteInfoQueryResult.isLoading}
                   onClick={() => setDeletedUser(user)}
                 >
@@ -366,10 +352,6 @@ function EditUserView({
                 options={accessRightLevelOptions}
                 required
                 disabled={isDropdownDisabled}
-                isOptionDisabled={(option) =>
-                  option.value === 'KAIKKI_OIKEUDET' &&
-                  signedInUser?.kayttooikeustaso !== 'KAIKKI_OIKEUDET'
-                }
               />
             </ResponsiveGrid>
 
@@ -379,15 +361,15 @@ function EditUserView({
               gap="var(--spacing-s)"
             >
               <Button
-                iconLeft={<IconSaveDisketteFill />}
+                iconStart={<IconSaveDisketteFill />}
                 isLoading={saveButtonIsLoading}
                 type="submit"
               >
                 {t('form:buttons:saveChanges')}
               </Button>
               <Button
-                iconLeft={<IconCross />}
-                variant="secondary"
+                iconStart={<IconCross />}
+                variant={ButtonVariant.Secondary}
                 onClick={navigateToHankeUsersView}
               >
                 {t('common:confirmationDialog:cancelButton')}

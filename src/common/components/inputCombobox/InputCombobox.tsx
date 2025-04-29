@@ -1,6 +1,6 @@
-import { Combobox } from 'hds-react';
+import { Select, SupportedLanguage, defaultFilter } from 'hds-react';
 import { uniqBy } from 'lodash';
-import { ReactNode, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
@@ -8,9 +8,11 @@ type Props = {
   id: string;
   name: string;
   options: string[];
-  label: ReactNode;
+  label: string;
   helperText?: string;
   placeholder?: string;
+  filterPlaceholder?: string;
+  filterWithAnotherTerm?: string;
   className?: string;
   pattern?: RegExp;
   errorText?: string;
@@ -29,20 +31,22 @@ export default function InputCombobox({
   label,
   helperText,
   placeholder,
+  filterPlaceholder,
+  filterWithAnotherTerm,
   className,
   pattern,
   errorText,
   uppercase,
   required,
 }: Readonly<Props>) {
-  const { t } = useTranslation();
+  const { i18n } = useTranslation();
   const { setValue, getValues } = useFormContext();
   const [rendered, setRendered] = useState(false);
   const [valid, setValid] = useState(true);
   const [comboboxOptions, setComboboxOptions] = useState(
     options.map((option) => ({ label: option })),
   );
-  const inputElement = document.getElementById(`${id}-input`) as HTMLInputElement | null;
+  const inputElement = document.getElementById(`${id}-input-element`) as HTMLInputElement | null;
 
   useEffect(() => {
     if (!rendered) {
@@ -82,23 +86,27 @@ export default function InputCombobox({
       name={name}
       render={({ field: { onChange, onBlur, value } }) => {
         return (
-          <Combobox<{ label: string }>
+          <Select
+            texts={{
+              language: i18n.language as SupportedLanguage,
+              assistive: helperText,
+              label,
+              placeholder,
+              error: errorText,
+              filterPlaceholder,
+              filterWithAnotherTerm,
+            }}
             className={className}
-            helper={helperText}
+            style={{ maxWidth: 'none' }}
             id={id}
-            label={label}
-            multiselect
+            multiSelect
             value={value.map((val: string) => ({ label: val }))}
             onChange={(updatedValue) => onChange(updatedValue.map((val) => val.label))}
             onBlur={onBlur}
             options={comboboxOptions}
-            placeholder={placeholder}
-            toggleButtonAriaLabel={t('common:components:multiselect:toggle')}
-            selectedItemRemoveButtonAriaLabel={t('common:components:multiselect:removeSelected')}
-            clearButtonAriaLabel={t('common:components:multiselect:clear')}
             invalid={!valid}
-            error={errorText}
             required={required}
+            filter={defaultFilter}
           />
         );
       }}

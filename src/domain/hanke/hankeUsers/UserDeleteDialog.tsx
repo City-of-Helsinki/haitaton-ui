@@ -1,10 +1,11 @@
-import { Button, Dialog, IconInfoCircle, IconTrash, Notification } from 'hds-react';
+import { ButtonVariant, Dialog, IconInfoCircle, IconTrash, Notification } from 'hds-react';
 import { Box } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { DeleteInfo, HankeUser } from './hankeUser';
 import { deleteUser } from './hankeUsersApi';
 import { isApplicationPending } from '../../application/utils';
 import useDebouncedMutation from '../../../common/hooks/useDebouncedMutation';
+import Button from '../../../common/components/button/Button';
 
 type Props = {
   isOpen: boolean;
@@ -83,7 +84,7 @@ export default function UserDeleteDialog({
       close={handleClose}
       closeButtonLabelText={t('common:ariaLabels:closeButtonLabelText')}
     >
-      <Dialog.Header id="user-delete-title" title={dialogTitle} iconLeft={<IconInfoCircle />} />
+      <Dialog.Header id="user-delete-title" title={dialogTitle} iconStart={<IconInfoCircle />} />
       <Dialog.Content>
         {getDialogText()}
         {isError && (
@@ -97,15 +98,15 @@ export default function UserDeleteDialog({
         {canBeDeleted ? (
           <>
             <Button
-              variant="secondary"
+              variant={ButtonVariant.Secondary}
               style={{ borderColor: 'var(--color-error)', color: 'var(--color-error)' }}
               onClick={handleClose}
             >
               {t('common:confirmationDialog:cancelButton')}
             </Button>
             <Button
-              variant="danger"
-              iconLeft={<IconTrash />}
+              variant={ButtonVariant.Danger}
+              iconStart={<IconTrash />}
               isLoading={isLoading}
               onClick={confirmDeleteUser}
             >

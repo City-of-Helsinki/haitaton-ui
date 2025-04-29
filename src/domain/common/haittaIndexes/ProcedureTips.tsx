@@ -1,31 +1,32 @@
 import { Trans, useTranslation } from 'react-i18next';
-import { Button, IconAngleDown, IconAngleUp, Link, useAccordion } from 'hds-react';
+import { Accordion, AccordionSize, IconDocument, Link, LinkSize } from 'hds-react';
 import { Box } from '@chakra-ui/react';
+import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
+import { memo, useMemo } from 'react';
 
 type Props = { haittojenhallintaTyyppi: string; haittaIndex: number };
+
+type Tip = {
+  heading: string;
+  tip: string;
+  indexTreshold?: number;
+  cardLinks?: number[];
+};
 
 /**
  * Component for displaying list of procedure tips (toimenpidevinkit) for different haittojenhallinta types.
  */
-export default function ProcedureTips({ haittojenhallintaTyyppi, haittaIndex }: Readonly<Props>) {
+const ProcedureTips: React.FC<Props> = memo(({ haittojenhallintaTyyppi, haittaIndex }) => {
   const { t } = useTranslation();
-  const {
-    isOpen,
-    buttonProps: accordionButtonProps,
-    contentProps: accordionContentProps,
-  } = useAccordion({ initiallyOpen: false });
-  const buttonIcon = isOpen ? <IconAngleUp /> : <IconAngleDown />;
 
-  const tips: {
-    // Procedure tip text
-    tip: string;
-    // Index treshold for showing the tip (if undefined, show the tip always)
-    indexTreshold?: number;
-    // List of possible link hrefs to be used in the tip text
-    links?: string[];
-  }[] = t(`hankeForm:haittojenHallintaForm:procedureTips:${haittojenhallintaTyyppi}`, {
-    returnObjects: true,
-  });
+  const { CARD } = useLocalizedRoutes();
+  const isOther = ['MUUT', 'MELU', 'POLY', 'TARINA'].includes(haittojenhallintaTyyppi);
+
+  const tips: Tip[] = useMemo(() => {
+    return t(`hankeForm:haittojenHallintaForm:procedureTips:${haittojenhallintaTyyppi}`, {
+      returnObjects: true,
+    });
+  }, [t, haittojenhallintaTyyppi]);
 
   // If tip has indexTreshold, show the tip only if haittaIndex is greater or equal to the treshold,
   // so that the tip is shown only when the index is high enough.
@@ -37,38 +38,91 @@ export default function ProcedureTips({ haittojenhallintaTyyppi, haittaIndex }: 
     return null;
   }
 
+  const translationComponents = {
+    p: <p />,
+    br: <br />,
+    ol: <ol style={{ listStylePosition: 'inside' }} />,
+    ul: <ul style={{ listStylePosition: 'inside' }} />,
+    li: <li />,
+    external: (
+      <a
+        className="hds-link hds-link--medium"
+        aria-label={`${t('common:components:link:openInNewTabAriaLabel')} ${t('common:components:link:openInExternalDomainAriaLabel')}`}
+        target="_blank"
+      >
+        External link
+      </a>
+    ),
+    span: <span />,
+    mailto: (
+      <a
+        className="hds-link hds-link--medium"
+        aria-label={t('common:components:link:openInNewTabAriaLabel')}
+        target="_blank"
+      >
+        Mailto link
+      </a>
+    ),
+  };
+
   return (
-    <>
-      <Box mb="var(--spacing-s)">
-        <Button
-          iconLeft={buttonIcon}
-          variant="secondary"
-          theme="black"
-          {...accordionButtonProps}
-          data-testid={`show-tips-button-${haittojenhallintaTyyppi}`}
-        >
-          {t('hankeForm:haittojenHallintaForm:procedureTips:showTipsButton')}
-        </Button>
-      </Box>
-      <Box backgroundColor="var(--color-black-5)" p="var(--spacing-m)" {...accordionContentProps}>
-        <Box as="h4" mb="var(--spacing-xs)" fontWeight="bold">
-          {t(`hankeForm:haittojenHallintaForm:procedureTips:titles:${haittojenhallintaTyyppi}`)}
-        </Box>
-        <Box as="ul" ml="var(--spacing-l)">
+    <Box
+      paddingX="var(--spacing-s)"
+      paddingBottom="var(--spacing-s)"
+      mb={isOther ? 'var(--spacing-xs)' : 'var(--spacing-l)'}
+      backgroundColor="var(--color-black-5)"
+      data-testid={`show-tips-button-${haittojenhallintaTyyppi}`}
+    >
+      <Accordion
+        heading={t(
+          `hankeForm:haittojenHallintaForm:procedureTips:titles:${haittojenhallintaTyyppi}`,
+        )}
+        size={AccordionSize.Small}
+        headingLevel={4}
+        theme={{
+          '--header-font-size': 'var(--fontsize-heading-s)',
+        }}
+      >
+        <Box mb="var(--spacing-s)" width="100%">
           {filteredTips.map((item) => (
-            <li key={item.tip}>
-              <Trans
-                i18nKey={item.tip}
-                components={item.links?.map((link) => (
-                  <Link href={link} openInNewTab={!link?.includes('mailto')}>
-                    Link
-                  </Link>
-                ))}
-              />
-            </li>
+            <Accordion
+              key={item.heading}
+              heading={item.heading}
+              size={AccordionSize.Small}
+              headingLevel={5}
+              theme={{
+                '--content-font-size': 'var(--fontsize-body-m)',
+                '--header-font-size': 'var(--fontsize-heading-xs)',
+              }}
+            >
+              <Box as="p" mb="var(--spacing-s)">
+                <Trans i18nKey={item.tip} components={translationComponents} />
+              </Box>
+              {item.cardLinks && item.cardLinks.length > 0 && (
+                <Box as="p" mb="var(--spacing-s)">
+                  <strong>
+                    {t('hankeForm:haittojenHallintaForm:procedureTips:common:nuisanceCardLinks')}
+                  </strong>
+                  {item.cardLinks?.map((linkId) => (
+                    <Link
+                      key={linkId}
+                      iconStart={<IconDocument />}
+                      size={LinkSize.Medium}
+                      href={`${CARD.path}${linkId}/${t('routes:CARD:basicLevel')}`}
+                      openInNewTab
+                      openInNewTabAriaLabel={t('common:components:link:openInNewTabAriaLabel')}
+                    >
+                      {t(`workInstructions:cards:card${linkId}:header`)}
+                    </Link>
+                  ))}
+                </Box>
+              )}
+            </Accordion>
           ))}
         </Box>
-      </Box>
-    </>
+      </Accordion>
+    </Box>
   );
-}
+});
+
+export default ProcedureTips;

@@ -1,5 +1,12 @@
 import { Box } from '@chakra-ui/react';
-import { Button, Dialog, IconCheck, IconCross, IconInfoCircle, Notification } from 'hds-react';
+import {
+  ButtonVariant,
+  Dialog,
+  IconCheck,
+  IconCross,
+  IconInfoCircle,
+  Notification,
+} from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -12,6 +19,7 @@ import { createHanke } from '../edit/hankeApi';
 import { NewHankeData } from '../edit/types';
 import OwnInformationFields from '../../forms/components/OwnInformationFields';
 import useDebouncedMutation from '../../../common/hooks/useDebouncedMutation';
+import Button from '../../../common/components/button/Button';
 
 type Props = {
   isOpen: boolean;
@@ -67,11 +75,7 @@ function HankeCreateDialog({ isOpen, onClose }: Readonly<Props>) {
       close={handleClose}
       closeButtonLabelText={t('common:ariaLabels:closeButtonLabelText')}
     >
-      <Dialog.Header
-        id="hanke-create-title"
-        title={dialogTitle}
-        iconLeft={<IconInfoCircle aria-hidden="true" />}
-      />
+      <Dialog.Header id="hanke-create-title" title={dialogTitle} iconStart={<IconInfoCircle />} />
       <FormProvider {...formContext}>
         <form>
           <Dialog.Content>
@@ -88,10 +92,14 @@ function HankeCreateDialog({ isOpen, onClose }: Readonly<Props>) {
           </Dialog.Content>
 
           <Dialog.ActionButtons>
-            <Button onClick={submitForm} iconLeft={<IconCheck />} isLoading={isLoading}>
+            <Button onClick={submitForm} iconStart={<IconCheck />} isLoading={isLoading}>
               {t('hankeForm:buttons:create')}
             </Button>
-            <Button variant="secondary" onClick={handleClose} iconLeft={<IconCross />}>
+            <Button
+              variant={ButtonVariant.Secondary}
+              onClick={handleClose}
+              iconStart={<IconCross />}
+            >
               {t('common:confirmationDialog:cancelButton')}
             </Button>
           </Dialog.ActionButtons>

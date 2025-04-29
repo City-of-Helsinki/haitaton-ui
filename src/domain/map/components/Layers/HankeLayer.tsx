@@ -3,11 +3,11 @@ import { Vector as VectorSource } from 'ol/source';
 import VectorLayer from '../../../../common/components/map/layers/VectorLayer';
 import { styleFunction } from '../../utils/geometryStyle';
 import CenterProjectOnMap from '../interations/CenterProjectOnMap';
-import HankkeetContext from '../../HankkeetProviderContext';
 import HighlightFeatureOnMap from '../interations/HighlightFeatureOnMap';
 import useHankeFeatures from '../../hooks/useHankeFeatures';
 import { HankeAlue, HankeData } from '../../../types/hanke';
 import FitSource from '../interations/FitSource';
+import HankkeetContext from '../../HankkeetProviderContext';
 
 type Props = {
   hankeData?: HankeData[];

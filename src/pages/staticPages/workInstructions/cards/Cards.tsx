@@ -1,12 +1,11 @@
 import React, { useEffect } from 'react';
 import Text from '../../../../common/components/text/Text';
-import Puff from './Puff';
+import Puff from '../../Puff';
 import AdditionalSummary from './AdditionalSummary';
 import styles from './cards.module.scss';
-import { useBreadcrumbs } from '../WorkInstructionsPage';
 import MainHeading from '../../../../common/components/mainHeading/MainHeading';
 import { Trans, useTranslation } from 'react-i18next';
-import { BREADCRUMBS } from '../Breadcrumbs';
+import { BREADCRUMBS, useBreadcrumbs } from '../../../../common/components/breadcrumbs/Breadcrumbs';
 import { useParams } from 'react-router-dom';
 import { BreadcrumbListItem, Link } from 'hds-react';
 import card2Img from './card2-img.png';
@@ -19,18 +18,19 @@ import card6Img1 from './card6-img1.png';
 import card7Img1 from './card7-img1.png';
 import card7Img2 from './card7-img2.png';
 import card7Img3 from './card7-img3.png';
+import { useLocalizedRoutes } from '../../../../common/hooks/useLocalizedRoutes';
 
 const Card1Basic: React.FC = () => {
   const { t } = useTranslation();
 
   return (
     <>
-      <MainHeading spacingBottom="xl">{t('workInstructions:cards:1:header')}</MainHeading>
+      <MainHeading spacingBottom="xl">{t('workInstructions:cards:card1:header')}</MainHeading>
       <Text styleAs="h2" tag="h2" spacingBottom="l">
         {t('workInstructions:cards:basicLevel')}
       </Text>
       <Puff>
-        <Trans i8nKey="workInstructions:cards:1:puff">
+        <Trans i8nKey="workInstructions:cards:card1:puff">
           <p>
             <strong>
               Kerro alueen asukkaille, yrityksille ja muille toimijoille työmaasta vähintään viikkoa
@@ -55,7 +55,7 @@ const Card1Basic: React.FC = () => {
       </Puff>
       <div className={styles.content}>
         <Trans
-          i18nKey="workInstructions:cards:1:content"
+          i18nKey="workInstructions:cards:card1:content"
           components={{ p: <p />, strong: <strong />, a: <a /> }}
         >
           <p>
@@ -98,22 +98,18 @@ const Card1Basic: React.FC = () => {
       </div>
       <AdditionalSummary>
         <Trans
-          i18nKey="workInstructions:cards:1:additionalLevelSummary"
+          i18nKey="workInstructions:cards:card1:additionalLevelSummary"
           components={{ ul: <ul />, li: <li /> }}
         >
           <ul>
-            <li>Varmista jalankulun turvallisuus ja esteettömyys</li>
-            <li>Varmista kulkuyhteydet kiinteistöihin</li>
-            <li>Tee yhteensovitus muiden hankkeiden ja töiden sekä niiden kiertoreittien kanssa</li>
-            <li>
-              Ilmoita aina katujen sulkemisesta liikenteeltä Pelastuslaitokselle ja Poliisille
-            </li>
-            <li>Tarkista aina, onko hankkeesi tai työsi erikoiskuljetusten reitillä</li>
-            <li>
-              Tarkista vaikutukset olevaan liikennevalo-ohjaukseen (kaistajärjestelyt, ilmaisimet,
-              valojen toimivuus)
-            </li>
-            <li>Poikkeavat työajat</li>
+            <li>Työmaan tapahtumat</li>
+            <li>Jalkautuminen taloyhtiöiden, elinkeinoharjoittajien ja asukkaiden pariin</li>
+            <li>Opastajat työmaalla</li>
+            <li>Pikaviestitiedotteet</li>
+            <li>Työmaan esittelykokonaisuus</li>
+            <li>Viestintävastaava ja/tai sometiimi</li>
+            <li>Työmaan viestintäkampanja</li>
+            <li>Liikennetiedotteita voidaan jakaa myös Helsingin Uutisten uutisvirrassa</li>
           </ul>
         </Trans>
       </AdditionalSummary>
@@ -126,13 +122,13 @@ const Card1Additional: React.FC = () => {
 
   return (
     <>
-      <MainHeading spacingBottom="xl">{t('workInstructions:cards:1:header')}</MainHeading>
+      <MainHeading spacingBottom="xl">{t('workInstructions:cards:card1:header')}</MainHeading>
       <Text styleAs="h2" tag="h2" spacingBottom="l">
         {t('workInstructions:cards:additionalLevel')}
       </Text>
       <div className={styles.content}>
         <Trans
-          i18nKey="workInstructions:cards:1:additionalLevelContent"
+          i18nKey="workInstructions:cards:card1:additionalLevelContent"
           components={{
             p: <p />,
             h3: <h3 />,
@@ -230,13 +226,13 @@ const Card2Basic: React.FC = () => {
 
   return (
     <>
-      <MainHeading spacingBottom="xl">{t('workInstructions:cards:2:header')}</MainHeading>
+      <MainHeading spacingBottom="xl">{t('workInstructions:cards:card2:header')}</MainHeading>
       <Text styleAs="h2" tag="h2" spacingBottom="l">
         {t('workInstructions:cards:basicLevel')}
       </Text>
       <div className={styles.content}>
         <Trans
-          i18nKey="workInstructions:cards:2:content"
+          i18nKey="workInstructions:cards:card2:content"
           components={{
             p: <p />,
             strong: <strong />,
@@ -302,7 +298,7 @@ const Card2Basic: React.FC = () => {
       </Puff>
       <div className={styles.content}>
         <Trans
-          i18nKey="workInstructions:cards:2:content2"
+          i18nKey="workInstructions:cards:card2:content2"
           components={{
             p: <p />,
             h3: <h3 />,
@@ -322,7 +318,7 @@ const Card2Basic: React.FC = () => {
             ),
             a2: (
               <Link
-                href={t('workInstructions:cards:2:link2Url')}
+                href={t('workInstructions:cards:card2:link2Url')}
                 external
                 openInNewTab
                 openInNewTabAriaLabel={t('common:components:link:openInNewTabAriaLabel')}
@@ -363,7 +359,7 @@ const Card2Basic: React.FC = () => {
       </div>
       <AdditionalSummary>
         <Trans
-          i18nKey="workInstructions:cards:2:additionalLevelSummary"
+          i18nKey="workInstructions:cards:card2:additionalLevelSummary"
           components={{ ul: <ul />, li: <li /> }}
         >
           <ul>
@@ -386,13 +382,13 @@ const Card2Additional: React.FC = () => {
 
   return (
     <>
-      <MainHeading spacingBottom="xl">{t('workInstructions:cards:2:header')}</MainHeading>
+      <MainHeading spacingBottom="xl">{t('workInstructions:cards:card2:header')}</MainHeading>
       <Text styleAs="h2" tag="h2" spacingBottom="l">
         {t('workInstructions:cards:additionalLevel')}
       </Text>
       <div className={styles.content}>
         <Trans
-          i18nKey="workInstructions:cards:2:additionalLevelContent"
+          i18nKey="workInstructions:cards:card2:additionalLevelContent"
           components={{
             p: <p />,
             h3: <h3 />,
@@ -442,7 +438,7 @@ const Card2Additional: React.FC = () => {
         </Trans>
         <div className={styles.images}>
           <div className={styles.imgContainer}>
-            <img src={card2Img} alt={t('workInstructions:cards:2:image1AltText')}></img>
+            <img src={card2Img} alt={t('workInstructions:cards:card2:image1AltText')}></img>
             <p>{t('workInstructions:cards:pictureBy')}: Silja Laine, Ramboll</p>
           </div>
         </div>
@@ -456,13 +452,13 @@ const Card3Basic: React.FC = () => {
 
   return (
     <>
-      <MainHeading spacingBottom="xl">{t('workInstructions:cards:3:header')}</MainHeading>
+      <MainHeading spacingBottom="xl">{t('workInstructions:cards:card3:header')}</MainHeading>
       <Text styleAs="h2" tag="h2" spacingBottom="l">
         {t('workInstructions:cards:basicLevel')}
       </Text>
       <Puff>
         <Trans
-          i18nKey="workInstructions:cards:3:puff"
+          i18nKey="workInstructions:cards:card3:puff"
           components={{
             p: <p />,
             strong: <strong />,
@@ -483,7 +479,7 @@ const Card3Basic: React.FC = () => {
 
       <div className={styles.content}>
         <Trans
-          i18nKey="workInstructions:cards:3:content"
+          i18nKey="workInstructions:cards:card3:content"
           components={{
             p: <p />,
             h3: <h3 />,
@@ -504,7 +500,7 @@ const Card3Basic: React.FC = () => {
             ),
             a2: (
               <Link
-                href={t('workInstructions:cards:2:link2Url')}
+                href={t('workInstructions:cards:card2:link2Url')}
                 external
                 openInNewTab
                 openInNewTabAriaLabel={t('common:components:link:openInNewTabAriaLabel')}
@@ -594,7 +590,7 @@ const Card3Basic: React.FC = () => {
       </div>
       <AdditionalSummary>
         <Trans
-          i18nKey="workInstructions:cards:3:additionalLevelSummary"
+          i18nKey="workInstructions:cards:card3:additionalLevelSummary"
           components={{ ul: <ul />, li: <li /> }}
         >
           <ul>
@@ -616,13 +612,13 @@ const Card3Additional: React.FC = () => {
 
   return (
     <>
-      <MainHeading spacingBottom="xl">{t('workInstructions:cards:3:header')}</MainHeading>
+      <MainHeading spacingBottom="xl">{t('workInstructions:cards:card3:header')}</MainHeading>
       <Text styleAs="h2" tag="h2" spacingBottom="l">
         {t('workInstructions:cards:additionalLevel')}
       </Text>
       <div className={styles.content}>
         <Trans
-          i18nKey="workInstructions:cards:3:additionalLevelContent"
+          i18nKey="workInstructions:cards:card3:additionalLevelContent"
           components={{
             p: <p />,
             h3: <h3 />,
@@ -671,11 +667,11 @@ const Card3Additional: React.FC = () => {
         </Trans>
         <div className={styles.images}>
           <div className={styles.imgContainer}>
-            <img src={card3Img1} alt={t('workInstructions:cards:3:image1AltText')}></img>
+            <img src={card3Img1} alt={t('workInstructions:cards:card3:image1AltText')}></img>
             <p>{t('workInstructions:cards:pictureBy')}: Susa Junnola</p>
           </div>
           <div className={styles.imgContainer}>
-            <img src={card3Img2} alt={t('workInstructions:cards:3:image2AltText')}></img>
+            <img src={card3Img2} alt={t('workInstructions:cards:card3:image2AltText')}></img>
             <p>{t('workInstructions:cards:pictureBy')}: Ramudden</p>
           </div>
         </div>
@@ -689,13 +685,13 @@ const Card4Basic: React.FC = () => {
 
   return (
     <>
-      <MainHeading spacingBottom="xl">{t('workInstructions:cards:4:header')}</MainHeading>
+      <MainHeading spacingBottom="xl">{t('workInstructions:cards:card4:header')}</MainHeading>
       <Text styleAs="h2" tag="h2" spacingBottom="l">
         {t('workInstructions:cards:basicLevel')}
       </Text>
       <Puff>
         <Trans
-          i18nKey="workInstructions:cards:4:puff"
+          i18nKey="workInstructions:cards:card4:puff"
           components={{
             p: <p />,
             strong: <strong />,
@@ -716,7 +712,7 @@ const Card4Basic: React.FC = () => {
       </Puff>
       <div className={styles.content}>
         <Trans
-          i18nKey="workInstructions:cards:4:content"
+          i18nKey="workInstructions:cards:card4:content"
           components={{
             p: <p />,
             h3: <h3 />,
@@ -756,11 +752,17 @@ const Card4Basic: React.FC = () => {
           </p>
           <br />
           <p>
-            <strong>Pyöräliikenne voidaan ohjata ajoradalle,</strong> jos ajoradan liikennemäärä on
-            melko pieni ja nopeusrajoitus on alhainen (max 30 km/h). Jalankulkijoiden ja
-            pyöräilijöiden pääreitin tulee olla mahdollisimman selkeä. Pyöräilijöille täytyy tarjota
-            riittävän tiheästi reittejä, joita pitkin työmaan tai autotien voi ylittää
-            turvallisesti. Reittejä tulee kehittää edelleen myös työmaan aikana.
+            <strong>
+              Yksisuuntaisten pyöräteiden tai -kaistojen liikenne voidaan ohjata ajoradalle
+              pyöräkaistoille tai sekaliikenteeseen turvallisten siirtymäkohtien avulla, jos
+              ajoradan liikennemäärä on melko pieni ja nopeusrajoitus on alhainen (max 30 km/h).
+              Kaksisuuntaisen pyörätien liikennettä ei voi osoittaa sekaliikenteeseen.{' '}
+            </strong>{' '}
+            Ajoradan puolelle väliaikaisesti siirrettävä kaksisuuntainen pyörätie tulee erotella
+            raskaalla törmäyssuojalla ajoradan autoliikenteestä. Jalankulkijoiden ja pyöräilijöiden
+            pääreitin tulee olla mahdollisimman selkeä. Pyöräilijöille täytyy tarjota riittävän
+            tiheästi reittejä, joita pitkin työmaan tai autotien voi ylittää turvallisesti. Reittejä
+            tulee kehittää edelleen myös työmaan aikana.
           </p>
           <br />
           <p>
@@ -807,7 +809,7 @@ const Card4Basic: React.FC = () => {
       </div>
       <AdditionalSummary>
         <Trans
-          i18nKey="workInstructions:cards:4:additionalLevelSummary"
+          i18nKey="workInstructions:cards:card4:additionalLevelSummary"
           components={{ ul: <ul />, li: <li /> }}
         >
           <ul>
@@ -826,13 +828,13 @@ const Card4Additional: React.FC = () => {
 
   return (
     <>
-      <MainHeading spacingBottom="xl">{t('workInstructions:cards:4:header')}</MainHeading>
+      <MainHeading spacingBottom="xl">{t('workInstructions:cards:card4:header')}</MainHeading>
       <Text styleAs="h2" tag="h2" spacingBottom="l">
         {t('workInstructions:cards:additionalLevel')}
       </Text>
       <div className={styles.content}>
         <Trans
-          i18nKey="workInstructions:cards:4:additionalLevelContent"
+          i18nKey="workInstructions:cards:card4:additionalLevelContent"
           components={{
             p: <p />,
             h3: <h3 />,
@@ -865,14 +867,14 @@ const Card5Basic: React.FC = () => {
 
   return (
     <>
-      <MainHeading spacingBottom="xl">{t('workInstructions:cards:5:header')}</MainHeading>
+      <MainHeading spacingBottom="xl">{t('workInstructions:cards:card5:header')}</MainHeading>
       <Text styleAs="h2" tag="h2" spacingBottom="l">
         {t('workInstructions:cards:basicLevel')}
       </Text>
       <Puff>
         {' '}
         <Trans
-          i18nKey="workInstructions:cards:5:puff"
+          i18nKey="workInstructions:cards:card5:puff"
           components={{
             ul: <ul />,
             li: <li />,
@@ -912,7 +914,7 @@ const Card5Basic: React.FC = () => {
       </Puff>
       <div className={styles.content}>
         <Trans
-          i18nKey="workInstructions:cards:5:content"
+          i18nKey="workInstructions:cards:card5:content"
           components={{
             p: <p />,
             strong: <strong />,
@@ -956,7 +958,7 @@ const Card5Basic: React.FC = () => {
       </div>
       <AdditionalSummary>
         <Trans
-          i18nKey="workInstructions:cards:5:additionalLevelSummary"
+          i18nKey="workInstructions:cards:card5:additionalLevelSummary"
           components={{ ul: <ul />, li: <li />, h3: <h3 /> }}
         >
           <ul>
@@ -978,13 +980,13 @@ const Card5Additional: React.FC = () => {
 
   return (
     <>
-      <MainHeading spacingBottom="xl">{t('workInstructions:cards:5:header')}</MainHeading>
+      <MainHeading spacingBottom="xl">{t('workInstructions:cards:card5:header')}</MainHeading>
       <Text styleAs="h2" tag="h2" spacingBottom="l">
         {t('workInstructions:cards:additionalLevel')}
       </Text>
       <div className={styles.content}>
         <Trans
-          i18nKey="workInstructions:cards:5:additionalLevelContent"
+          i18nKey="workInstructions:cards:card5:additionalLevelContent"
           components={{
             h3: <h3 />,
             p: <p />,
@@ -1063,18 +1065,18 @@ const Card5Additional: React.FC = () => {
         </Trans>
         <div className={styles.images}>
           <div className={styles.imgContainer}>
-            <img src={card5Img1} alt={t('workInstructions:cards:5:image1AltText')}></img>
+            <img src={card5Img1} alt={t('workInstructions:cards:card5:image1AltText')}></img>
             <p>{t('workInstructions:cards:pictureBy')}: Silja Laine, Ramboll</p>
           </div>
           <div className={styles.imgContainer}>
-            <img src={card5Img2} alt={t('workInstructions:cards:5:image2AltText')}></img>
+            <img src={card5Img2} alt={t('workInstructions:cards:card5:image2AltText')}></img>
             <p>
               {t('workInstructions:cards:pictureBy')}: Vuoden katutyömaa -kilpailun raati / Aino
               Mensonen, Ramboll
             </p>
           </div>
           <div className={styles.imgContainer}>
-            <img src={card5Img3} alt={t('workInstructions:cards:5:image3AltText')}></img>
+            <img src={card5Img3} alt={t('workInstructions:cards:card5:image3AltText')}></img>
             <p>
               {t('workInstructions:cards:pictureBy')}: Vuoden katutyömaa -kilpailun raati / Aino
               Mensonen, Ramboll
@@ -1091,13 +1093,13 @@ const Card6Basic: React.FC = () => {
 
   return (
     <>
-      <MainHeading spacingBottom="xl">{t('workInstructions:cards:6:header')}</MainHeading>
+      <MainHeading spacingBottom="xl">{t('workInstructions:cards:card6:header')}</MainHeading>
       <Text styleAs="h2" tag="h2" spacingBottom="l">
         {t('workInstructions:cards:basicLevel')}
       </Text>
       <div className={styles.content}>
         <Trans
-          i18nKey="workInstructions:cards:6:content"
+          i18nKey="workInstructions:cards:card6:content"
           components={{
             p: <p />,
             strong: <strong />,
@@ -1170,7 +1172,7 @@ const Card6Basic: React.FC = () => {
       </div>
       <AdditionalSummary>
         <Trans
-          i18nKey="workInstructions:cards:6:additionalLevelSummary"
+          i18nKey="workInstructions:cards:card6:additionalLevelSummary"
           components={{ ul: <ul />, li: <li /> }}
         >
           <ul>
@@ -1190,13 +1192,13 @@ const Card6Additional: React.FC = () => {
 
   return (
     <>
-      <MainHeading spacingBottom="xl">{t('workInstructions:cards:6:header')}</MainHeading>
+      <MainHeading spacingBottom="xl">{t('workInstructions:cards:card6:header')}</MainHeading>
       <Text styleAs="h2" tag="h2" spacingBottom="l">
         {t('workInstructions:cards:additionalLevel')}
       </Text>
       <div className={styles.content}>
         <Trans
-          i18nKey="workInstructions:cards:6:additionalLevelContent"
+          i18nKey="workInstructions:cards:card6:additionalLevelContent"
           components={{
             h3: <h3 />,
             p: <p />,
@@ -1233,7 +1235,7 @@ const Card6Additional: React.FC = () => {
         </Trans>
         <div className={styles.images}>
           <div className={styles.imgContainer}>
-            <img src={card6Img1} alt={t('workInstructions:cards:6:image1AltText')}></img>
+            <img src={card6Img1} alt={t('workInstructions:cards:card6:image1AltText')}></img>
             <p>
               {t('workInstructions:cards:pictureBy')}: Vuoden katutyömaa kilpailun raati / Aino
               Mensonen, Ramboll
@@ -1250,13 +1252,13 @@ const Card7Basic: React.FC = () => {
 
   return (
     <>
-      <MainHeading spacingBottom="xl">{t('workInstructions:cards:7:header')}</MainHeading>
+      <MainHeading spacingBottom="xl">{t('workInstructions:cards:card7:header')}</MainHeading>
       <Text styleAs="h2" tag="h2" spacingBottom="l">
         {t('workInstructions:cards:basicLevel')}
       </Text>
       <div className={styles.content}>
         <Trans
-          i18nKey="workInstructions:cards:7:content"
+          i18nKey="workInstructions:cards:card7:content"
           components={{
             p: <p />,
             br: <br />,
@@ -1314,22 +1316,22 @@ const Card7Basic: React.FC = () => {
         </Trans>
         <div className={styles.images}>
           <div className={styles.imgContainer}>
-            <img src={card7Img1} alt={t('workInstructions:cards:7:image1AltText')}></img>
+            <img src={card7Img1} alt={t('workInstructions:cards:card7:image1AltText')}></img>
             <p>{t('workInstructions:cards:pictureBy')}: Susa Junnola</p>
           </div>
           <div className={styles.imgContainer}>
-            <img src={card7Img2} alt={t('workInstructions:cards:7:image2AltText')}></img>
+            <img src={card7Img2} alt={t('workInstructions:cards:card7:image2AltText')}></img>
             <p>{t('workInstructions:cards:pictureBy')}: Ramudden</p>
           </div>
           <div className={styles.imgContainer}>
-            <img src={card7Img3} alt={t('workInstructions:cards:7:image3AltText')}></img>
+            <img src={card7Img3} alt={t('workInstructions:cards:card7:image3AltText')}></img>
             <p>{t('workInstructions:cards:pictureBy')}: Ramudden</p>
           </div>
         </div>
       </div>
       <AdditionalSummary>
         <Trans
-          i18nKey="workInstructions:cards:7:additionalLevelSummary"
+          i18nKey="workInstructions:cards:card7:additionalLevelSummary"
           components={{ ul: <ul />, li: <li /> }}
         >
           <ul>
@@ -1350,13 +1352,13 @@ const Card7Additional: React.FC = () => {
 
   return (
     <>
-      <MainHeading spacingBottom="xl">{t('workInstructions:cards:7:header')}</MainHeading>
+      <MainHeading spacingBottom="xl">{t('workInstructions:cards:card7:header')}</MainHeading>
       <Text styleAs="h2" tag="h2" spacingBottom="l">
         {t('workInstructions:cards:additionalLevel')}
       </Text>
       <div className={styles.content}>
         <Trans
-          i18nKey="workInstructions:cards:7:additionalLevelContent"
+          i18nKey="workInstructions:cards:card7:additionalLevelContent"
           components={{
             h3: <h3 />,
             p: <p />,
@@ -1401,13 +1403,13 @@ const Card8Basic: React.FC = () => {
 
   return (
     <>
-      <MainHeading spacingBottom="xl">{t('workInstructions:cards:8:header')}</MainHeading>
+      <MainHeading spacingBottom="xl">{t('workInstructions:cards:card8:header')}</MainHeading>
       <Text styleAs="h2" tag="h2" spacingBottom="l">
         {t('workInstructions:cards:basicLevel')}
       </Text>
       <div className={styles.content}>
         <Trans
-          i18nKey="workInstructions:cards:8:content"
+          i18nKey="workInstructions:cards:card8:content"
           components={{
             p: <p />,
             strong: <strong />,
@@ -1505,7 +1507,7 @@ const Card8Basic: React.FC = () => {
       </div>
       <AdditionalSummary>
         <Trans
-          i18nKey="workInstructions:cards:8:additionalLevelSummary"
+          i18nKey="workInstructions:cards:card8:additionalLevelSummary"
           components={{ ul: <ul />, li: <li /> }}
         >
           <ul>
@@ -1522,13 +1524,13 @@ const Card8Additional: React.FC = () => {
 
   return (
     <>
-      <MainHeading spacingBottom="xl">{t('workInstructions:cards:8:header')}</MainHeading>
+      <MainHeading spacingBottom="xl">{t('workInstructions:cards:card8:header')}</MainHeading>
       <Text styleAs="h2" tag="h2" spacingBottom="l">
         {t('workInstructions:cards:additionalLevel')}
       </Text>
       <div className={styles.content}>
         <Trans
-          i18nKey="workInstructions:cards:8:additionalLevelContent"
+          i18nKey="workInstructions:cards:card8:additionalLevelContent"
           components={{
             h3: <h3 />,
             p: <p />,
@@ -1550,13 +1552,13 @@ const Card9Basic: React.FC = () => {
 
   return (
     <>
-      <MainHeading spacingBottom="xl">{t('workInstructions:cards:9:header')}</MainHeading>
+      <MainHeading spacingBottom="xl">{t('workInstructions:cards:card9:header')}</MainHeading>
       <Text styleAs="h2" tag="h2" spacingBottom="l">
         {t('workInstructions:cards:basicLevel')}
       </Text>
       <div className={styles.content}>
         <Trans
-          i18nKey="workInstructions:cards:9:content"
+          i18nKey="workInstructions:cards:card9:content"
           components={{
             h3: <h3 />,
             ul: <ul />,
@@ -1592,7 +1594,7 @@ const Card9Basic: React.FC = () => {
       </div>
       <AdditionalSummary>
         <Trans
-          i18nKey="workInstructions:cards:9:additionalLevelSummary"
+          i18nKey="workInstructions:cards:card9:additionalLevelSummary"
           components={{ ul: <ul />, li: <li /> }}
         >
           <ul>
@@ -1610,13 +1612,13 @@ const Card9Additional: React.FC = () => {
 
   return (
     <>
-      <MainHeading spacingBottom="xl">{t('workInstructions:cards:9:header')}</MainHeading>
+      <MainHeading spacingBottom="xl">{t('workInstructions:cards:card9:header')}</MainHeading>
       <Text styleAs="h2" tag="h2" spacingBottom="l">
         {t('workInstructions:cards:additionalLevel')}
       </Text>
       <div className={styles.content}>
         <Trans
-          i18nKey="workInstructions:cards:9:additionalLevelContent"
+          i18nKey="workInstructions:cards:card9:additionalLevelContent"
           components={{ h3: <h3 />, p: <p />, br: <br /> }}
         >
           <h3>Liikkeenharjoittajista muodostettu työmaaraati</h3>
@@ -1638,13 +1640,13 @@ const Card10Basic: React.FC = () => {
 
   return (
     <>
-      <MainHeading spacingBottom="xl">{t('workInstructions:cards:10:header')}</MainHeading>
+      <MainHeading spacingBottom="xl">{t('workInstructions:cards:card10:header')}</MainHeading>
       <Text styleAs="h2" tag="h2" spacingBottom="l">
         {t('workInstructions:cards:basicLevel')}
       </Text>
       <div className={styles.content}>
         <Trans
-          i18nKey="workInstructions:cards:10:content"
+          i18nKey="workInstructions:cards:card10:content"
           components={{
             p: <p />,
             strong: <strong />,
@@ -1705,7 +1707,7 @@ const Card10Basic: React.FC = () => {
       </div>
       <AdditionalSummary>
         <Trans
-          i18nKey="workInstructions:cards:10:additionalLevelSummary"
+          i18nKey="workInstructions:cards:card10:additionalLevelSummary"
           components={{ ul: <ul />, li: <li /> }}
         >
           <ul>
@@ -1727,13 +1729,13 @@ const Card10Additional: React.FC = () => {
 
   return (
     <>
-      <MainHeading spacingBottom="xl">{t('workInstructions:cards:10:header')}</MainHeading>
+      <MainHeading spacingBottom="xl">{t('workInstructions:cards:card10:header')}</MainHeading>
       <Text styleAs="h2" tag="h2" spacingBottom="l">
         {t('workInstructions:cards:additionalLevel')}
       </Text>
       <div className={styles.content}>
         <Trans
-          i18nKey="workInstructions:cards:10:additionalLevelContent"
+          i18nKey="workInstructions:cards:card10:additionalLevelContent"
           components={{ h3: <h3 />, p: <p />, br: <br /> }}
         >
           <h3>Meluaidat</h3>
@@ -1795,22 +1797,32 @@ const Card: React.FC = () => {
   const { number = '', type = '' } = useParams<{ number: string; type: string }>();
   const { setBreadcrumbs } = useBreadcrumbs();
   const { t } = useTranslation();
+  const { CARD } = useLocalizedRoutes();
 
   useEffect(() => {
     const breadcrumb: BreadcrumbListItem = {
-      title: `workInstructions:cards:${number}:header`,
-      path: '',
+      title: `workInstructions:cards:card${number}:header`,
+      path:
+        type === t('routes:CARD:additionalLevel')
+          ? `${t('routes:CARD:path')}${number}/${t('routes:CARD:basicLevel')}`
+          : '',
     };
 
-    const updateBreadcrumbs = () =>
-      setBreadcrumbs([
-        BREADCRUMBS.cardsIndex,
-        breadcrumb,
-        type === t('routes:CARD:basicLevel') ? BREADCRUMBS.basicLevel : BREADCRUMBS.additionalLevel,
-      ]);
+    const updateBreadcrumbs = () => {
+      if (type === t('routes:CARD:additionalLevel')) {
+        setBreadcrumbs([
+          BREADCRUMBS.tyoOhjeet,
+          BREADCRUMBS.cardsIndex,
+          breadcrumb,
+          BREADCRUMBS.additionalLevel,
+        ]);
+      } else {
+        setBreadcrumbs([BREADCRUMBS.tyoOhjeet, BREADCRUMBS.cardsIndex, breadcrumb]);
+      }
+    };
 
     updateBreadcrumbs();
-  }, [setBreadcrumbs, number, type, t]);
+  }, [setBreadcrumbs, number, type, t, CARD.path]);
 
   const renderCard = (cardNumber: string) => {
     switch (cardNumber) {

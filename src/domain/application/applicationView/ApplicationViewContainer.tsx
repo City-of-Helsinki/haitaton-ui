@@ -8,11 +8,14 @@ import ErrorLoadingText from '../../../common/components/errorLoadingText/ErrorL
 import useHanke from '../../hanke/hooks/useHanke';
 import { useApplication } from '../hooks/useApplication';
 import useLinkPath from '../../../common/hooks/useLinkPath';
-import { HAKEMUS_ROUTES, HAKEMUS_TAYDENNYS_ROUTES } from '../../../common/types/route';
+import { HAKEMUS_ROUTES, HAKEMUS_TAYDENNYS_ROUTES, ROUTES } from '../../../common/types/route';
 import { usePermissionsForHanke } from '../../hanke/hankeUsers/hooks/useUserRightsForHanke';
 import LoadingSpinner from '../../../common/components/spinner/LoadingSpinner';
 import useCreateTaydennys from '../taydennys/hooks/useCreateTaydennys';
 import useCreateMuutosilmoitus from '../muutosilmoitus/hooks/useCreateMuutosilmoitus';
+import { MuutosLabelProvider } from '../taydennysAndMuutosilmoitusCommon/MuutosLabelContext';
+import Breadcrumbs, { BREADCRUMBS } from '../../../common/components/breadcrumbs/Breadcrumbs';
+import useHankeViewPath from '../../hanke/hooks/useHankeViewPath';
 
 type Props = {
   id: number;
@@ -25,12 +28,14 @@ function ApplicationViewContainer({ id }: Readonly<Props>) {
   const { data: hanke } = useHanke(application?.hankeTunnus);
   const { data: signedInUser } = usePermissionsForHanke(application?.hankeTunnus ?? undefined);
   const navigate = useNavigate();
+  const hankeViewPath = useHankeViewPath(hanke?.hankeTunnus ?? null);
   const getEditApplicationPath = useLinkPath(
     HAKEMUS_ROUTES[application?.applicationType ?? 'CABLE_REPORT'],
   );
   const getEditTaydennysPath = useLinkPath(
     HAKEMUS_TAYDENNYS_ROUTES[application?.applicationType ?? 'CABLE_REPORT'],
   );
+  const getEditMuutosilmoitusPath = useLinkPath(ROUTES.EDIT_KAIVUILMOITUSMUUTOSILMOITUS);
   const createTaydennysMutation = useCreateTaydennys();
   const createMuutosilmoitusMutation = useCreateMuutosilmoitus();
 
@@ -59,8 +64,13 @@ function ApplicationViewContainer({ id }: Readonly<Props>) {
     if (applicationId) {
       if (!application?.muutosilmoitus) {
         // If there is no muutosilmoitus, create one
-        // TODO: Navigation to muutosilmoitus form will be implemented in HAI-3401
-        createMuutosilmoitusMutation.mutate(applicationId);
+        createMuutosilmoitusMutation.mutate(applicationId, {
+          onSuccess() {
+            navigate(getEditMuutosilmoitusPath({ id: applicationId.toString() }));
+          },
+        });
+      } else {
+        navigate(getEditMuutosilmoitusPath({ id: applicationId.toString() }));
       }
     }
   }
@@ -85,8 +95,33 @@ function ApplicationViewContainer({ id }: Readonly<Props>) {
     return null;
   }
 
+  const applicationIdentifier =
+    application.applicationIdentifier ||
+    t(`hakemus:applicationTypeDraft:${application.applicationType}`);
+
   return (
-    <>
+    <MuutosLabelProvider
+      value={
+        application.taydennys ? t('taydennys:labels:taydennys') : t('muutosilmoitus:labels:muutos')
+      }
+    >
+      {hanke && (
+        <Breadcrumbs
+          breadcrumbs={[
+            BREADCRUMBS.omatHankkeet,
+            {
+              path: hankeViewPath,
+              title: `${hanke.nimi} (${hanke.hankeTunnus})`,
+              skipTranslate: true,
+            },
+            {
+              path: null,
+              title: `${application.applicationData.name} (${applicationIdentifier})`,
+              skipTranslate: true,
+            },
+          ]}
+        />
+      )}
       <ApplicationView
         application={application}
         hanke={hanke}
@@ -119,7 +154,7 @@ function ApplicationViewContainer({ id }: Readonly<Props>) {
           {t('common:error')}
         </Notification>
       )}
-    </>
+    </MuutosLabelProvider>
   );
 }
 

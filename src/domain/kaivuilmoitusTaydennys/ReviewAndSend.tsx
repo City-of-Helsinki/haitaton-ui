@@ -13,18 +13,14 @@ import {
   SectionItemTitle,
   SectionTitle,
 } from '../forms/components/FormSummarySection';
-import BasicInformationSummary from '../application/components/summary/KaivuilmoitusBasicInformationSummary';
-import AreaSummary from '../kaivuilmoitus/components/AreaSummary';
-import ContactsSummary from '../application/components/summary/ContactsSummary';
-import InvoicingCustomerSummary from '../application/components/summary/InvoicingCustomerSummary';
-import AttachmentSummary from '../application/components/summary/KaivuilmoitusAttachmentSummary';
-import HaittojenhallintaSummary from '../kaivuilmoitus/components/HaittojenhallintaSummary';
 import { HankeAlue } from '../types/hanke';
-import TaydennysBasicInformationSummary from '../application/taydennys/components/summary/KaivuilmoitusBasicInformationSummary';
-import TaydennysAreasSummary from '../application/taydennys/components/summary/KaivuilmoitusAreaSummary';
-import TaydennysHaittojenhallintaSummary from '../application/taydennys/components/summary/KaivuilmoitusHaittojenhallintaSummary';
-import TaydennysContactsSummary from '../application/taydennys/components/summary/ContactsSummary';
+import TaydennysBasicInformationSummary from '../application/taydennysAndMuutosilmoitusCommon/components/summary/KaivuilmoitusBasicInformationSummary';
+import TaydennysAreasSummary from '../application/taydennysAndMuutosilmoitusCommon/components/summary/KaivuilmoitusAreaSummary';
+import TaydennysHaittojenhallintaSummary from '../application/taydennysAndMuutosilmoitusCommon/components/summary/KaivuilmoitusHaittojenhallintaSummary';
+import TaydennysContactsSummary from '../application/taydennysAndMuutosilmoitusCommon/components/summary/ContactsSummary';
 import TaydennysAttachmentsList from '../application/taydennys/components/TaydennysAttachmentsList';
+import KaivuilmoitusSummary from '../kaivuilmoitus/components/KaivuilmoitusSummary';
+import React from 'react';
 
 type Props = {
   taydennys: Taydennys<KaivuilmoitusData>;
@@ -72,7 +68,8 @@ export default function ReviewAndSend({
           />
           <TaydennysHaittojenhallintaSummary
             hankealueet={hankealueet}
-            kaivuilmoitusAlueet={taydennys.applicationData.areas}
+            data={taydennys.applicationData}
+            originalData={originalApplication.applicationData}
             muutokset={muutokset}
           />
           <TaydennysContactsSummary
@@ -115,46 +112,25 @@ export default function ReviewAndSend({
               </FormSummarySection>
             </>
           )}
+          {muutokset.includes('additionalInfo') && (
+            <FormSummarySection>
+              <SectionItemTitle>
+                {t('kaivuilmoitusForm:liitteetJaLisatiedot:additionalInformation')}
+              </SectionItemTitle>
+              <SectionItemContent>
+                <p>{taydennys.applicationData.additionalInfo}</p>
+              </SectionItemContent>
+            </FormSummarySection>
+          )}
         </Box>
       </TabPanel>
       <TabPanel>
         <Box mt="var(--spacing-s)">
-          <SectionTitle>{t('form:headers:perustiedot')}</SectionTitle>
-          <BasicInformationSummary formData={originalApplication} />
-
-          <SectionTitle>{t('form:labels:areas')}</SectionTitle>
-          <AreaSummary formData={originalApplication} />
-
-          <SectionTitle>{t('hankePortfolio:tabit:haittojenHallinta')}</SectionTitle>
-          <HaittojenhallintaSummary hankealueet={hankealueet} formData={originalApplication} />
-
-          <SectionTitle>{t('form:yhteystiedot:header')}</SectionTitle>
-          <FormSummarySection>
-            <ContactsSummary
-              customerWithContacts={originalApplication.applicationData.customerWithContacts}
-              title={t('form:yhteystiedot:titles:customerWithContacts')}
-            />
-            <ContactsSummary
-              customerWithContacts={originalApplication.applicationData.contractorWithContacts}
-              title={t('form:yhteystiedot:titles:contractorWithContacts')}
-            />
-            <ContactsSummary
-              customerWithContacts={
-                originalApplication.applicationData.propertyDeveloperWithContacts
-              }
-              title={t('form:yhteystiedot:titles:rakennuttajat')}
-            />
-            <ContactsSummary
-              customerWithContacts={originalApplication.applicationData.representativeWithContacts}
-              title={t('form:yhteystiedot:titles:representativeWithContacts')}
-            />
-            <InvoicingCustomerSummary
-              invoicingCustomer={originalApplication.applicationData.invoicingCustomer}
-            />
-          </FormSummarySection>
-
-          <SectionTitle>{t('form:headers:liitteetJaLisatiedot')}</SectionTitle>
-          <AttachmentSummary formData={originalApplication} attachments={originalAttachments} />
+          <KaivuilmoitusSummary
+            application={originalApplication}
+            attachments={originalAttachments}
+            hankealueet={hankealueet}
+          />
         </Box>
       </TabPanel>
     </Tabs>

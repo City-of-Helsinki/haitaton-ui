@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { $enum } from 'ts-enum-util';
 import { Box, Flex } from '@chakra-ui/layout';
-import { Button, IconPlusCircle, Notification } from 'hds-react';
+import { Button, ButtonVariant, IconPlusCircle, Notification } from 'hds-react';
 import TextArea from '../../../common/components/textArea/TextArea';
 import { KaivuilmoitusAlue } from '../../application/types/application';
 import {
@@ -251,8 +251,8 @@ export default function KaivuilmoitusHaittojenhallintaSuunnitelma({
                   {t('hankeForm:haittojenHallintaForm:noNuisanceDetected')}
                 </Box>
                 <Button
-                  variant="supplementary"
-                  iconLeft={<IconPlusCircle />}
+                  variant={ButtonVariant.Supplementary}
+                  iconStart={<IconPlusCircle />}
                   onClick={() => setVisible(haitta)}
                   data-testid={`lisaa_${haitta}`}
                 >
@@ -315,6 +315,9 @@ export default function KaivuilmoitusHaittojenhallintaSuunnitelma({
             haittojenhallintasuunnitelma={hankeAlue?.haittojenhallintasuunnitelma}
           />
           <ProcedureTips haittojenhallintaTyyppi="MUUT" haittaIndex={0} />
+          <ProcedureTips haittojenhallintaTyyppi="MELU" haittaIndex={0} />
+          <ProcedureTips haittojenhallintaTyyppi="POLY" haittaIndex={0} />
+          <ProcedureTips haittojenhallintaTyyppi="TARINA" haittaIndex={0} />
         </Box>
         <Box mt="var(--spacing-m)">
           <TextArea

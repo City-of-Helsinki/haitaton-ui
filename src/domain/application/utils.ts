@@ -16,6 +16,7 @@ import {
   PaatosTyyppi,
   ReportCompletionDateData,
   PaperDecisionReceiver,
+  HankkeenHakemus,
 } from './types/application';
 import { SignedInUser } from '../hanke/hankeUsers/hankeUser';
 import { HIDDEN_FIELD_VALUE } from './constants';
@@ -182,16 +183,25 @@ export function isContactIn(
   return false;
 }
 
-export function getCurrentDecisions(paatokset?: { [key: string]: Paatos[] }): Paatos[] {
+export function getCurrentDecisions(
+  paatokset?: { [key: string]: Paatos[] },
+  reversed: boolean = false,
+): Paatos[] {
   if (!paatokset) {
     return [];
   }
   const allDecisions = Object.values(paatokset).flat();
-  const order = {
-    [PaatosTyyppi.TYO_VALMIS]: 1,
-    [PaatosTyyppi.TOIMINNALLINEN_KUNTO]: 2,
-    [PaatosTyyppi.PAATOS]: 3,
-  };
+  const order = !reversed
+    ? {
+        [PaatosTyyppi.TYO_VALMIS]: 1,
+        [PaatosTyyppi.TOIMINNALLINEN_KUNTO]: 2,
+        [PaatosTyyppi.PAATOS]: 3,
+      }
+    : {
+        [PaatosTyyppi.TYO_VALMIS]: 3,
+        [PaatosTyyppi.TOIMINNALLINEN_KUNTO]: 2,
+        [PaatosTyyppi.PAATOS]: 1,
+      };
   const currentOrders = allDecisions.filter((paatos) => paatos.tila === PaatosTila.NYKYINEN);
   currentOrders.sort((a, b) => order[a.tyyppi] - order[b.tyyppi]);
   return currentOrders;
@@ -288,11 +298,31 @@ export function modifyDataAfterReceive<T extends JohtoselvitysData | Kaivuilmoit
   const taydennysData =
     application.taydennys &&
     modifyKaivuilmoitusDataAfterReceive(application.taydennys.applicationData as KaivuilmoitusData);
+  const muutosilmoitusData =
+    application.muutosilmoitus &&
+    modifyKaivuilmoitusDataAfterReceive(
+      application.muutosilmoitus.applicationData as KaivuilmoitusData,
+    );
   return {
     ...application,
     applicationData: kaivuilmoitusData as T,
     taydennys: application.taydennys
       ? { ...application.taydennys, applicationData: taydennysData as T }
       : undefined,
+    muutosilmoitus: application.muutosilmoitus
+      ? { ...application.muutosilmoitus, applicationData: muutosilmoitusData as T }
+      : undefined,
   };
+}
+
+/**
+ * Return application identifiers of johtoselvitys applications for a hanke
+ */
+export function getJohtoselvitysIdentifiers(hankkeenHakemukset?: HankkeenHakemus[]) {
+  return hankkeenHakemukset
+    ?.filter(
+      (hakemus) =>
+        hakemus.applicationType === 'CABLE_REPORT' && Boolean(hakemus.applicationIdentifier),
+    )
+    .map((hakemus) => hakemus.applicationIdentifier!);
 }

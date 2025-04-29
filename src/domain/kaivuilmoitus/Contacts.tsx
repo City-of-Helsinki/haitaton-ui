@@ -11,6 +11,7 @@ import { useFormContext } from 'react-hook-form';
 import { KaivuilmoitusFormValues } from './types';
 import { TFunction } from 'i18next';
 import { HIDDEN_FIELD_VALUE } from '../application/constants';
+import Text from '../../common/components/text/Text';
 
 function getInvoicingRegistryKeyLabel(
   t: TFunction<'translation', undefined>,
@@ -125,12 +126,18 @@ export default function Contacts({ hankeTunnus }: Readonly<{ hankeTunnus: string
 
   return (
     <>
-      <ApplicationContacts hankeTunnus={hankeTunnus} />
+      <ApplicationContacts
+        hankeTunnus={hankeTunnus}
+        customerDescription={t('form:yhteystiedot:tooltips:customerDescription')}
+      />
 
       <Box marginTop="var(--spacing-l)" marginBottom="var(--spacing-l)" minInlineSize="auto">
         <Box marginBottom="var(--spacing-l)">
           <h3 className="heading-m">{t('form:yhteystiedot:titles:invoicingCustomerInfo')}</h3>
         </Box>
+        <Text tag="p" spacingBottom="s">
+          {t('form:yhteystiedot:streetAddressOrOVT')}
+        </Text>
         <ResponsiveGrid>
           <Dropdown
             id="applicationData.invoicingCustomer.type"

@@ -7,7 +7,7 @@ import FileUpload from '../../common/components/fileUpload/FileUpload';
 import { JohtoselvitysTaydennysFormValues } from './types';
 import {
   deleteAttachment,
-  getAttachmentFile,
+  downloadAttachment,
   uploadAttachment,
 } from '../application/taydennys/taydennysAttachmentsApi';
 import { getAttachmentFile as getApplicationAttachmentFile } from '../application/attachments';
@@ -24,21 +24,18 @@ type Props = {
   applicationId: number;
   taydennysAttachments: TaydennysAttachmentMetadata[];
   originalAttachments?: ApplicationAttachmentMetadata[];
-  onFileUpload: (isUploading: boolean) => void;
 };
 
 export default function Attachments({
   applicationId,
   taydennysAttachments,
   originalAttachments,
-  onFileUpload,
 }: Readonly<Props>) {
   const queryClient = useQueryClient();
   const { t } = useTranslation();
   const { getValues } = useFormContext<JohtoselvitysTaydennysFormValues>();
 
   function handleFileUpload(uploading: boolean) {
-    onFileUpload(uploading);
     if (!uploading) {
       queryClient.invalidateQueries(['application', applicationId]);
     }
@@ -75,18 +72,11 @@ export default function Attachments({
         existingAttachments={taydennysAttachments}
         maxFilesNumber={20}
         uploadFunction={({ file, abortSignal }) =>
-          uploadAttachment({
-            taydennysId: getValues('id')!,
-            attachmentType: 'MUU',
-            file,
-            abortSignal,
-          })
+          uploadAttachment(getValues('id'), 'MUU', file, abortSignal)
         }
         onUpload={handleFileUpload}
-        fileDownLoadFunction={(file) => getAttachmentFile(getValues('id')!, file.id)}
-        fileDeleteFunction={(file) =>
-          deleteAttachment({ taydennysId: getValues('id'), attachmentId: file?.id })
-        }
+        fileDownLoadFunction={(file) => downloadAttachment(getValues('id'), file.id)}
+        fileDeleteFunction={(file) => deleteAttachment(getValues('id'), file?.id)}
         onFileDelete={() => queryClient.invalidateQueries(['application', applicationId])}
       />
     </Box>

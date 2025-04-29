@@ -80,19 +80,19 @@ describe('Header', () => {
   });
 
   test('when user changes language it should change the UI language and the url based on the selected language', async () => {
-    const { user } = getWrapper(true, '/fi/julkisethankkeet/kartta');
+    const { user } = getWrapper(true, '/fi/julkisethankkeet');
 
     await changeLanguage(user, 'Suomi', 'English');
     expect(i18next.language).toBe('en');
-    expect(window.location.pathname).toBe('/en/publicprojects/map');
+    expect(window.location.pathname).toBe('/en/publicprojects');
 
     await changeLanguage(user, 'English', 'Svenska');
     expect(i18next.language).toBe('sv');
-    expect(window.location.pathname).toBe('/sv/allmannaprojekt/karta');
+    expect(window.location.pathname).toBe('/sv/allmannaprojekt');
 
     await changeLanguage(user, 'Svenska', 'Suomi');
     expect(i18next.language).toBe('fi');
-    expect(window.location.pathname).toBe('/fi/julkisethankkeet/kartta');
+    expect(window.location.pathname).toBe('/fi/julkisethankkeet');
   });
 
   test('should navigate to correct url when changing language when url contains hankeTunnus', async () => {

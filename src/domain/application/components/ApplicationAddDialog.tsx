@@ -1,11 +1,17 @@
 import { Box } from '@chakra-ui/react';
-import { Button, Dialog, IconInfoCircleFill, Select } from 'hds-react';
+import {
+  Button,
+  ButtonVariant,
+  Dialog,
+  IconInfoCircleFill,
+  Select,
+  SupportedLanguage,
+} from 'hds-react';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import Text from '../../../common/components/text/Text';
 import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
-import { ApplicationType } from '../types/application';
 import { HankeData } from '../../types/hanke';
 import useLinkPath from '../../../common/hooks/useLinkPath';
 import { ROUTES } from '../../../common/types/route';
@@ -18,11 +24,11 @@ type Props = {
 
 type Option = {
   label: string;
-  value: ApplicationType;
+  value: string;
 };
 
 const ApplicationAddDialog: React.FC<Props> = ({ isOpen, onClose, hanke }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const { JOHTOSELVITYSHAKEMUS } = useLocalizedRoutes();
   const getKaivuilmoitusPath = useLinkPath(ROUTES.KAIVUILMOITUSHAKEMUS);
@@ -36,12 +42,10 @@ const ApplicationAddDialog: React.FC<Props> = ({ isOpen, onClose, hanke }) => {
     },
   ];
 
-  const [selectedApplicationType, setSelectedApplicationType] = useState<ApplicationType | null>(
-    null,
-  );
+  const [selectedApplicationType, setSelectedApplicationType] = useState<string | undefined>();
 
-  function handleApplicationTypeChange(value: Option) {
-    setSelectedApplicationType(value.value);
+  function handleApplicationTypeChange(_: Option[], clickedOption: Option) {
+    setSelectedApplicationType(clickedOption.value);
   }
 
   function continueToApplication() {
@@ -64,7 +68,7 @@ const ApplicationAddDialog: React.FC<Props> = ({ isOpen, onClose, hanke }) => {
       <Dialog.Header
         id="application-create-title"
         title={dialogTitle}
-        iconLeft={<IconInfoCircleFill aria-hidden="true" />}
+        iconStart={<IconInfoCircleFill aria-hidden="true" />}
       />
 
       <Dialog.Content>
@@ -73,11 +77,14 @@ const ApplicationAddDialog: React.FC<Props> = ({ isOpen, onClose, hanke }) => {
         </Text>
 
         <Box marginBottom="var(--spacing-s)">
-          <Select<Option>
+          <Select
             id="select-application-type"
-            label={t('hakemus:labels:applicationType')}
-            defaultValue={null}
+            texts={{
+              label: t('hakemus:labels:applicationType'),
+              language: i18n.language as SupportedLanguage,
+            }}
             options={applicationTypeOptions}
+            value={selectedApplicationType}
             onChange={handleApplicationTypeChange}
           />
         </Box>
@@ -87,7 +94,7 @@ const ApplicationAddDialog: React.FC<Props> = ({ isOpen, onClose, hanke }) => {
         <Button onClick={continueToApplication} disabled={!selectedApplicationType}>
           {t('hakemus:buttons:createApplication')}
         </Button>
-        <Button variant="secondary" onClick={onClose}>
+        <Button variant={ButtonVariant.Secondary} onClick={onClose}>
           {t('common:confirmationDialog:cancelButton')}
         </Button>
       </Dialog.ActionButtons>

@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import {
   Accordion,
   Button,
-  IconCross,
+  ButtonPresetTheme,
+  ButtonVariant,
   IconPen,
   IconPlusCircle,
   IconTrash,
   IconUser,
+  Notification,
   Tab,
   TabList,
   TabPanel,
@@ -60,6 +62,7 @@ import HaittaIndex from '../../common/haittaIndexes/HaittaIndex';
 import HaittaTooltipContent from '../../common/haittaIndexes/HaittaTooltipContent';
 import FormPagesErrorSummary from '../../forms/components/FormPagesErrorSummary';
 import { hankeSchema } from '../edit/hankeSchema';
+import HankeStatusTag from '../components/HankeStatusTag';
 
 type AreaProps = {
   area: HankeAlue;
@@ -80,7 +83,7 @@ const HankeAreaInfo: React.FC<AreaProps> = ({ area, index }) => {
       initiallyOpen
       className={styles.hankeAreaContainer}
     >
-      <div>
+      <Box width="100%">
         <FormSummarySection>
           <SectionItemTitle>{t('hanke:alue:duration')}</SectionItemTitle>
           <SectionItemContent>
@@ -121,7 +124,7 @@ const HankeAreaInfo: React.FC<AreaProps> = ({ area, index }) => {
           {t(`hankeForm:labels:${FORMFIELD.KAISTAPITUUSHAITTA}`)}:{' '}
           {t(`hanke:${FORMFIELD.KAISTAPITUUSHAITTA}:${area.kaistaPituusHaitta}`)}
         </Text>
-      </div>
+      </Box>
     </Accordion>
   );
 };
@@ -297,10 +300,6 @@ const HankeView: React.FC<Props> = ({
     setShowAddApplicationDialog(false);
   }
 
-  const isCancelPossible = applicationsResponse
-    ? canHankeBeCancelled(applicationsResponse.applications)
-    : true;
-
   if (!hankeData) {
     return (
       <Flex justify="center" mt="var(--spacing-xl)">
@@ -311,8 +310,22 @@ const HankeView: React.FC<Props> = ({
 
   const areasTotalSurfaceArea = calculateTotalSurfaceArea(hankeData.alueet);
 
-  const { omistajat, rakennuttajat, toteuttajat, muut, alueet, status } = hankeData;
+  const {
+    omistajat,
+    rakennuttajat,
+    toteuttajat,
+    muut,
+    alueet,
+    status,
+    deletionDate,
+    alkuPvm,
+    loppuPvm,
+  } = hankeData;
   const isHankePublic = status === 'PUBLIC';
+  const isHankeCompleted = status === 'COMPLETED';
+  const isCancelPossible =
+    !isHankeCompleted &&
+    (applicationsResponse ? canHankeBeCancelled(applicationsResponse.applications) : true);
 
   const tabList = features.hanke ? (
     <TabList className={styles.tabList}>
@@ -339,27 +352,40 @@ const HankeView: React.FC<Props> = ({
 
       <InformationViewHeader backgroundColor="var(--color-summer-light)">
         <MainHeading>{hankeData?.nimi}</MainHeading>
-        <Text tag="h2" styleAs="h3" weight="bold" spacingBottom="l" data-testid="hanke-tunnus">
-          {hankeData?.hankeTunnus}
-        </Text>
-        <Text tag="p" styleAs="body-s" spacingBottom="l">
-          <strong style={{ marginRight: 'var(--spacing-s)' }}>
-            {t('hankePortfolio:labels:oikeudet')}:
-          </strong>
-          {t(`hankeUsers:accessRightLevels:${signedInUser?.kayttooikeustaso}`)}
-        </Text>
+        <Flex marginBottom="var(--spacing-m)" gap="4">
+          <Text tag="h2" styleAs="h3" weight="bold" data-testid="hanke-tunnus">
+            {hankeData?.hankeTunnus}
+          </Text>
+          <HankeStatusTag status={status} />
+        </Flex>
+        <FormSummarySection>
+          <>
+            <SectionItemTitle>{t('hankePortfolio:labels:hankkeenKesto')}:</SectionItemTitle>
+            <SectionItemContent>
+              {`${formatToFinnishDate(alkuPvm) ?? ''} - ${formatToFinnishDate(loppuPvm) ?? ''}`}{' '}
+            </SectionItemContent>
+          </>
+          <>
+            <SectionItemTitle>{t('hankePortfolio:labels:oikeudet')}:</SectionItemTitle>
+            <SectionItemContent>
+              {t(`hankeUsers:accessRightLevels:${signedInUser?.kayttooikeustaso}`)}
+            </SectionItemContent>
+          </>
+        </FormSummarySection>
 
         <InformationViewHeaderButtons>
           <FeatureFlags flags={['hanke']}>
             <CheckRightsByHanke requiredRight="EDIT" hankeTunnus={hankeData.hankeTunnus}>
-              <Button
-                onClick={onEditHanke}
-                variant="primary"
-                iconLeft={<IconPen aria-hidden="true" />}
-                theme="coat"
-              >
-                {t('hankeList:buttons:edit')}
-              </Button>
+              {!isHankeCompleted ? (
+                <Button
+                  onClick={onEditHanke}
+                  variant={ButtonVariant.Primary}
+                  iconStart={<IconPen />}
+                  theme={ButtonPresetTheme.Coat}
+                >
+                  {t('hankePortfolio:buttons:edit')}
+                </Button>
+              ) : null}
             </CheckRightsByHanke>
             <CheckRightsByHanke
               requiredRight="EDIT_APPLICATIONS"
@@ -367,37 +393,30 @@ const HankeView: React.FC<Props> = ({
             >
               {isHankePublic ? (
                 <Button
-                  variant="primary"
-                  iconLeft={<IconPlusCircle aria-hidden="true" />}
-                  theme="coat"
+                  variant={ButtonVariant.Primary}
+                  iconStart={<IconPlusCircle />}
+                  theme={ButtonPresetTheme.Coat}
                   onClick={addApplication}
                 >
-                  {t('hankeList:buttons:addApplication')}
+                  {t('hankePortfolio:buttons:addApplication')}
                 </Button>
               ) : null}
             </CheckRightsByHanke>
           </FeatureFlags>
           <Button
             onClick={onEditRights}
-            variant="primary"
-            iconLeft={<IconUser aria-hidden="true" />}
-            theme="coat"
+            variant={ButtonVariant.Primary}
+            iconStart={<IconUser />}
+            theme={ButtonPresetTheme.Coat}
           >
             {t('hankeUsers:userManagementTitle')}
           </Button>
-          <FeatureFlags flags={['hanke']}>
-            <CheckRightsByHanke requiredRight="DELETE" hankeTunnus={hankeData.hankeTunnus}>
-              <Button variant="primary" iconLeft={<IconCross aria-hidden="true" />} theme="black">
-                {t('hankeList:buttons:endHanke')}
-              </Button>
-            </CheckRightsByHanke>
-          </FeatureFlags>
           {!isLoading && isCancelPossible && (
             <CheckRightsByHanke requiredRight="DELETE" hankeTunnus={hankeData.hankeTunnus}>
               <Button
                 onClick={onCancelHanke}
-                variant="danger"
-                iconLeft={<IconTrash aria-hidden="true" />}
+                variant={ButtonVariant.Danger}
+                iconStart={<IconTrash />}
               >
                 {t('hankeForm:cancelButton')}
               </Button>
@@ -413,16 +432,28 @@ const HankeView: React.FC<Props> = ({
               generated={hankeData.generated}
               className={styles.stateNotification}
             />
-            <FormPagesErrorSummary
-              data={hankeData}
-              schema={hankeSchema}
-              validationContext={{ hanke: hankeData }}
-              notificationLabel={t('hankePortfolio:draftState:labels:insufficientPhases')}
-              testId="hankeDraftStateNotification"
-            />
+            {!isHankeCompleted && (
+              <FormPagesErrorSummary
+                data={hankeData}
+                schema={hankeSchema}
+                validationContext={{ hanke: hankeData }}
+                notificationLabel={t('hankePortfolio:draftState:labels:insufficientPhases')}
+                testId="hankeDraftStateNotification"
+              />
+            )}
+            {isHankeCompleted && (
+              <Notification
+                type="success"
+                label={t('hankePortfolio:completedState:labels:completed')}
+              >
+                {t('hankePortfolio:completedState:notifications:completed', {
+                  date: formatToFinnishDate(deletionDate ?? null),
+                })}
+              </Notification>
+            )}
           </FeatureFlags>
 
-          <Tabs initiallyActiveTab={features.hanke ? initiallyActiveTab : 0}>
+          <Tabs small initiallyActiveTab={features.hanke ? initiallyActiveTab : 0}>
             {tabList}
             {features.hanke && (
               <TabPanel>
@@ -498,7 +529,11 @@ const HankeView: React.FC<Props> = ({
                   </Flex>
                 )}
                 {applicationsResponse?.applications && (
-                  <ApplicationList applications={applicationsResponse.applications} />
+                  <ApplicationList
+                    hankeTunnus={hankeData.hankeTunnus}
+                    hankeStatus={hankeData.status}
+                    applications={applicationsResponse.applications}
+                  />
                 )}
                 {error && <ErrorLoadingText />}
               </>
@@ -506,7 +541,7 @@ const HankeView: React.FC<Props> = ({
           </Tabs>
         </InformationViewMainContent>
         <InformationViewSidebar testId="hanke-map">
-          <OwnHankeMapHeader hankeTunnus={hankeData.hankeTunnus} showLink={alueet.length > 0} />
+          <OwnHankeMapHeader hankeTunnus={hankeData.hankeTunnus} />
           {alueet?.length > 0 ? (
             <>
               <OwnHankeMap hanke={hankeData} />

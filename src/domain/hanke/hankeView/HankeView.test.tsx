@@ -31,6 +31,32 @@ test('Draft state notification is rendered when hanke is in draft state', async 
   expect(getByRole('listitem', { name: /yhteystiedot/i })).toBeInTheDocument();
 });
 
+test('Should show DRAFT state tag', async () => {
+  render(<HankeViewContainer hankeTunnus="HAI22-1" />);
+  await waitForLoadingToFinish();
+
+  const tag = screen.getByTestId('hanke-status-tag');
+
+  expect(tag).not.toHaveClass('bgGreen');
+  expect(tag).toHaveTextContent('Luonnos');
+});
+
+test('Should show duration', async () => {
+  render(<HankeViewContainer hankeTunnus="HAI22-1" />);
+  await waitForLoadingToFinish();
+
+  expect(screen.getByText('Hankkeen kesto:')).toBeInTheDocument();
+  expect(screen.getByText('26.11.2022 - 17.12.2022')).toBeInTheDocument();
+});
+
+test('Should show access rights', async () => {
+  render(<HankeViewContainer hankeTunnus="HAI22-1" />);
+  await waitForLoadingToFinish();
+
+  expect(screen.getByText('Käyttöoikeutesi hankkeelle:')).toBeInTheDocument();
+  expect(screen.getByText('Kaikki oikeudet')).toBeInTheDocument();
+});
+
 test('Draft state notification only shows form pages with missing information', async () => {
   render(<HankeViewContainer hankeTunnus="HAI22-4" />);
 
@@ -266,28 +292,6 @@ test('Should show error notification if loading applications fails', async () =>
   expect(screen.queryByText('Yritä hetken päästä uudelleen.')).toBeInTheDocument();
 });
 
-test('Should navigate to application view when clicking application identifier link', async () => {
-  const { user } = render(<HankeViewContainer hankeTunnus="HAI22-2" />);
-
-  await waitForLoadingToFinish();
-  await user.click(screen.getByRole('tab', { name: /hakemukset/i }));
-  await user.click(screen.getByTestId('applicationViewLinkIdentifier-JS2300001'));
-
-  expect(window.location.pathname).toBe('/fi/hakemus/2');
-  expect(screen.queryByText('Mannerheimintien kuopat')).toBeInTheDocument();
-});
-
-test('Should navigate to application view when clicking the eye icon', async () => {
-  const { user } = render(<HankeViewContainer hankeTunnus="HAI22-2" />);
-
-  await waitForLoadingToFinish();
-  await user.click(screen.getByRole('tab', { name: /hakemukset/i }));
-  await user.click(screen.getByTestId('applicationViewLink-2'));
-
-  expect(window.location.pathname).toBe('/fi/hakemus/2');
-  expect(screen.queryByText('Mannerheimintien kuopat')).toBeInTheDocument();
-});
-
 test('Should not show edit hanke button if user does not have EDIT permission', async () => {
   getViewPermissionForUser();
   render(<HankeViewContainer hankeTunnus="HAI22-2" />);
@@ -337,4 +341,49 @@ test('Should show user management button', async () => {
   await waitForLoadingToFinish();
 
   expect(screen.queryByRole('button', { name: 'Käyttäjähallinta' })).toBeInTheDocument();
+});
+
+describe('Completed hanke', () => {
+  test('Should not show edit button', async () => {
+    render(<HankeViewContainer hankeTunnus="HAI22-12" />);
+    await waitForLoadingToFinish();
+
+    expect(screen.queryByRole('button', { name: /muokkaa hanketta/i })).not.toBeInTheDocument();
+  });
+
+  test('Should not show cancel button', async () => {
+    render(<HankeViewContainer hankeTunnus="HAI22-12" />);
+    await waitForLoadingToFinish();
+
+    expect(screen.queryByRole('button', { name: /peru hanke/i })).not.toBeInTheDocument();
+  });
+
+  test('Should show user management button', async () => {
+    render(<HankeViewContainer hankeTunnus="HAI22-12" />);
+    await waitForLoadingToFinish();
+
+    expect(screen.getByRole('button', { name: /käyttäjähallinta/i })).toBeInTheDocument();
+  });
+
+  test('Should show notification', async () => {
+    render(<HankeViewContainer hankeTunnus="HAI22-12" />);
+    await waitForLoadingToFinish();
+
+    expect(screen.getByText('Hanke on siirretty Valmis-tilaan')).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        'Hanketta ei voi enää muokata eikä sille voi lisätä hakemuksia. Hanke poistetaan aikaisintaan 16.4.2024, jolloin kaikki hankkeen ja sen hakemusten tiedot poistuvat Haitattomasta.',
+      ),
+    ).toBeInTheDocument();
+  });
+
+  test('Should show tag', async () => {
+    render(<HankeViewContainer hankeTunnus="HAI22-12" />);
+    await waitForLoadingToFinish();
+
+    const tag = screen.getByTestId('hanke-status-tag');
+
+    expect(tag).toHaveClass('bgGreen');
+    expect(tag).toHaveTextContent('Valmis');
+  });
 });

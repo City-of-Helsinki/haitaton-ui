@@ -1,5 +1,5 @@
 /* This file needs to be a css file because stylelint-value-no-unknown-custom-properties plugin cannot read .scss files in .stylelintrc.json */
 
 :root {
-  --width-form-2-col: 740px;
+  --width-form-2-col: 750px;
 }

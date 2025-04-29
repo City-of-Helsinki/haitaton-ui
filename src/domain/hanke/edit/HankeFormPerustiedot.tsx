@@ -43,7 +43,11 @@ const HankeFormPerustiedot: React.FC<React.PropsWithChildren<FormProps>> = ({
     <div className="form0">
       <div className="formInstructions">
         <Trans i18nKey="hankeForm:perustiedotForm:instructions">
-          <p>Hankkeen luonnin kautta pääset lähettämään myös hakemuksia.</p>
+          <p>
+            Hankkeen luonnin kautta pääset lähettämään myös hakemuksia. Kun hankkeen tarvittavat
+            tiedot on täytetty, hanke julkaistaan. Hankkeesta näytetään muille käyttäjille kaikki
+            muut tiedot, paitsi yhteystiedot ja liitteet.
+          </p>
           <p>
             <strong>HUOM!</strong> Mikäli teet pelkkää johtoselvitystä yksityiselle alueelle,
             <Link href="#" onClick={openJohtoselvitysCreateDialog}>
@@ -52,6 +56,7 @@ const HankeFormPerustiedot: React.FC<React.PropsWithChildren<FormProps>> = ({
             . Yleisten alueiden johtoselvitykset haetaan hankkeen luonnin jälkeen kaivuilmoituksen
             kautta.
           </p>
+          <p>Lisäämällä hankkeen tiedot, pystyt kopioimaan ne lopuksi tarvitsemiisi hakemuksiin.</p>
           <p>
             Huomioithan, että seuraavat tiedot näytetään julkisesti kaikille Haitattoman käyttäjille
             hankkeen julkaisun jälkeen:
@@ -64,7 +69,7 @@ const HankeFormPerustiedot: React.FC<React.PropsWithChildren<FormProps>> = ({
             <li>Hankkeen omistajataho</li>
             <li>Hankkeen suunnitteluvaihe ja työn tyyppi</li>
           </ul>
-          <p>Lisäämällä hankkeen tiedot, pystyt kopioimaan ne lopuksi tarvitsemiisi hakemuksiin.</p>
+          <p>Tähdellä * merkityt kentät vaaditaan hankkeen julkaisemiseksi.</p>
         </Trans>
       </div>
       <Box marginBottom="var(--spacing-xs)">
@@ -137,14 +142,6 @@ const HankeFormPerustiedot: React.FC<React.PropsWithChildren<FormProps>> = ({
             value,
             label: t(`hanke:${FORMFIELD.TYOMAATYYPPI}:${value}`),
           }))}
-          defaultValue={
-            hanke
-              ? hanke[FORMFIELD.TYOMAATYYPPI]?.map((value) => ({
-                  value,
-                  label: t(`hanke:${FORMFIELD.TYOMAATYYPPI}:${value}`),
-                }))
-              : []
-          }
           label={t(`hankeForm:labels:${FORMFIELD.TYOMAATYYPPI}`)}
           mapValueToLabel={(value) => t(`hanke:${FORMFIELD.TYOMAATYYPPI}:${value}`)}
           errorMsg={t('hankeForm:insertFieldError')}

@@ -3,7 +3,7 @@ import { FORMFIELD, FormProps, HankeDataFormState } from './types';
 import { useTranslation } from 'react-i18next';
 import { Box, Flex } from '@chakra-ui/react';
 import Text from '../../../common/components/text/Text';
-import { IconAlertCircle, Tab, TabList, TabPanel, Tabs } from 'hds-react';
+import { IconAlertCircle, IconSize, Tab, TabList, TabPanel, Tabs } from 'hds-react';
 import useFieldArrayWithStateUpdate from '../../../common/hooks/useFieldArrayWithStateUpdate';
 import useSelectableTabs from '../../../common/hooks/useSelectableTabs';
 import useHighlightArea from '../../map/hooks/useHighlightArea';
@@ -56,7 +56,7 @@ const HankeFormHaittojenHallinta: React.FC<FormProps> = ({ hanke }) => {
           mb="var(--spacing-2-xl)"
           className="text-m noAreasText"
         >
-          <IconAlertCircle size="s" />
+          <IconAlertCircle size={IconSize.Small} />
           {t('hankeForm:haittojenHallintaForm:subHeaderNoAlueet')}
         </Flex>
       ) : (

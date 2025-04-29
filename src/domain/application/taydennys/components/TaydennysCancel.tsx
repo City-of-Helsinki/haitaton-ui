@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, IconCross, IconTrash } from 'hds-react';
+import { ButtonPresetTheme, ButtonVariant, IconCross, IconTrash } from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import { useQueryClient } from 'react-query';
 import { Application } from '../../types/application';
@@ -8,11 +8,12 @@ import { useGlobalNotification } from '../../../../common/components/globalNotif
 import useDebouncedMutation from '../../../../common/hooks/useDebouncedMutation';
 import ConfirmationDialog from '../../../../common/components/HDSConfirmationDialog/ConfirmationDialog';
 import { cancelTaydennys } from '../taydennysApi';
+import Button from '../../../../common/components/button/Button';
 
 type Props = {
   application: Application;
   navigateToApplicationViewOnSuccess?: boolean;
-  buttonVariant?: 'primary' | 'danger';
+  buttonVariant?: ButtonVariant.Primary | ButtonVariant.Danger;
   buttonIsLoading?: boolean;
   buttonIsLoadingText?: string;
 };
@@ -94,16 +95,18 @@ export default function TaydennysCancel({
         variant="danger"
         errorMsg={errorMessage}
         isLoading={taydennysCancelMutation.isLoading || isButtonDisabled}
+        loadingText={t('common:buttons:sendingText')}
+        disabled={taydennysCancelMutation.isLoading || isButtonDisabled}
       />
 
       <Button
         variant={buttonVariant}
-        theme="coat"
-        iconLeft={<IconCross />}
+        theme={ButtonPresetTheme.Coat}
+        iconStart={<IconCross />}
         onClick={openConfirmationDialog}
-        isLoading={buttonIsLoading || isButtonDisabled}
-        loadingText={buttonIsLoadingText}
         disabled={isButtonDisabled}
+        isLoading={buttonIsLoading}
+        loadingText={buttonIsLoadingText}
       >
         {t('taydennys:buttons:cancelTaydennys')}
       </Button>

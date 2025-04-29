@@ -1,4 +1,6 @@
+import { ReactElement } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Tooltip } from 'hds-react';
 import { HankeUser } from './hankeUser';
 import DropdownMultiselect from '../../../common/components/dropdown/DropdownMultiselect';
 import { TooltipProps } from '../../../common/types/tooltip';
@@ -17,7 +19,7 @@ function ContactPersonSelect<T>({
 }: Readonly<{
   name: string;
   hankeUsers?: HankeUser[];
-  tooltip?: TooltipProps;
+  tooltip?: ReactElement<TooltipProps, typeof Tooltip>;
   required?: boolean;
   mapHankeUserToValue: (user: HankeUser) => T;
   mapValueToLabel: (value: T) => string;
@@ -39,11 +41,10 @@ function ContactPersonSelect<T>({
       clearable={false}
       mapValueToLabel={mapValueToLabel}
       transformValue={transformValue}
-      defaultValue={[]}
       required={required}
       options={
         hankeUsers?.map((hankeUser) => ({
-          value: mapHankeUserToValue(hankeUser),
+          value: JSON.stringify(mapHankeUserToValue(hankeUser)),
           label: mapHankeUserToLabel(hankeUser),
         })) ?? []
       }

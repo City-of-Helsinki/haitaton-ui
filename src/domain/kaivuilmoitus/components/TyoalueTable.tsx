@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
@@ -22,11 +23,15 @@ import {
   Tyoalue,
 } from '../../application/types/application';
 import { booleanIntersects } from '@turf/boolean-intersects';
-import booleanContains from '@turf/boolean-contains';
 import useLinkPath from '../../../common/hooks/useLinkPath';
 import { ROUTES } from '../../../common/types/route';
 import Link from '../../../common/components/Link/Link';
 import { TFunction } from 'i18next';
+import {
+  applicationGeometryContains,
+  createMultiPolygonFromAreas,
+  createUnionFromAreas,
+} from '../../map/utils';
 
 type Props = {
   alueIndex: number;
@@ -116,6 +121,10 @@ export default function TyoalueTable({
 
   const tableRows: TableData[] = tyoalueet.map((alue, index) => {
     const areaName = getAreaDefaultName(t, index, tyoalueet.length);
+    const allJohtoselvitysAreas = johtoselvitykset.flatMap(
+      (johtoselvitys) => johtoselvitys.applicationData.areas as ApplicationArea[],
+    );
+
     const overlappingJohtoselvitykset =
       johtoselvitykset.filter((application) => {
         return application.applicationData.areas?.find((area) => {
@@ -123,9 +132,39 @@ export default function TyoalueTable({
           const alueGeometry = new ApplicationGeometry(
             (alue.openlayersFeature!.getGeometry()! as OlPolygon).getCoordinates(),
           );
+
+          const applicationAreaUnion = createUnionFromAreas(allJohtoselvitysAreas, applicationArea);
+          const johtoselvitysAreasMultipolygon = createMultiPolygonFromAreas(
+            allJohtoselvitysAreas,
+            applicationArea,
+          );
+
           const areaIntersects = booleanIntersects(applicationArea.geometry, alueGeometry);
-          const areaContains = booleanContains(applicationArea.geometry, alueGeometry);
-          return areaIntersects && !areaContains;
+          const areaContains = applicationGeometryContains(applicationArea.geometry, alueGeometry);
+          const areaUnionIntersects = booleanIntersects(
+            applicationAreaUnion.geometry,
+            alueGeometry,
+          );
+          const areaUnionContains = applicationGeometryContains(
+            applicationAreaUnion.geometry,
+            alueGeometry,
+          );
+          const multipolygonContains = johtoselvitysAreasMultipolygon.geometry.coordinates.some(
+            (coordinates) => {
+              return applicationGeometryContains(
+                new ApplicationGeometry(coordinates),
+                alueGeometry,
+              );
+            },
+          );
+
+          return (
+            areaIntersects &&
+            !areaContains &&
+            areaUnionIntersects &&
+            !areaUnionContains &&
+            !multipolygonContains
+          );
         });
       }) || [];
     const overlappingCount = overlappingJohtoselvitykset.length;
@@ -246,7 +285,7 @@ export default function TyoalueTable({
           theme={{
             '--header-background-color': 'var(--color-black-90)',
           }}
-          dataTestId="tyoalueet-table"
+          data-testid="tyoalueet-table"
         />
       </Box>
 

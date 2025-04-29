@@ -2,11 +2,12 @@ import { useState } from 'react';
 import { FieldPath, FormProvider, useForm } from 'react-hook-form';
 import { merge } from 'lodash';
 import {
-  Button,
+  ButtonVariant,
   IconCross,
   IconEnvelope,
   IconSaveDiskette,
   Notification,
+  NotificationSize,
   StepState,
 } from 'hds-react';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -35,7 +36,6 @@ import {
   KaivuilmoitusCreateData,
   KaivuilmoitusData,
   KaivuilmoitusUpdateData,
-  PaperDecisionReceiver,
 } from '../application/types/application';
 import { useGlobalNotification } from '../../common/components/globalNotification/GlobalNotificationContext';
 import {
@@ -49,12 +49,12 @@ import ConfirmationDialog from '../../common/components/HDSConfirmationDialog/Co
 import { changeFormStep } from '../forms/utils';
 import Areas from './Areas';
 import useNavigateToApplicationView from '../application/hooks/useNavigateToApplicationView';
-import { isApplicationDraft, isContactIn } from '../application/utils';
+import { getJohtoselvitysIdentifiers, isApplicationDraft, isContactIn } from '../application/utils';
 import { usePermissionsForHanke } from '../hanke/hankeUsers/hooks/useUserRightsForHanke';
-import useSendApplication from '../application/hooks/useSendApplication';
 import ApplicationSendDialog from '../application/components/ApplicationSendDialog';
 import HaittojenHallinta from './HaittojenHallinta';
 import FormErrorsNotification from './components/FormErrorsNotification';
+import Button from '../../common/components/button/Button';
 
 type Props = {
   hankeData: HankeData;
@@ -68,12 +68,7 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
   const [attachmentUploadErrors, setAttachmentUploadErrors] = useState<JSX.Element[]>([]);
   const { data: hankkeenHakemukset } = useApplicationsForHanke(hankeData.hankeTunnus, true);
   const { data: signedInUser } = usePermissionsForHanke(hankeData.hankeTunnus);
-  const johtoselvitysIds = hankkeenHakemukset?.applications
-    .filter(
-      (hakemus) =>
-        hakemus.applicationType === 'CABLE_REPORT' && Boolean(hakemus.applicationIdentifier),
-    )
-    .map((hakemus) => hakemus.applicationIdentifier!);
+  const johtoselvitysIds = getJohtoselvitysIdentifiers(hankkeenHakemukset?.applications);
 
   const initialValues: KaivuilmoitusFormValues = {
     id: null,
@@ -120,9 +115,6 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
     getValues('id'),
   );
 
-  const [attachmentsUploading, setAttachmentsUploading] = useState(false);
-
-  const [isSendButtonDisabled, setIsSendButtonDisabled] = useState(false);
   const [showSendDialog, setShowSendDialog] = useState(false);
 
   const {
@@ -216,28 +208,13 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
     }
   }
 
-  const applicationSendMutation = useSendApplication({
-    onSuccess(data) {
-      navigateToApplicationView(data.id?.toString());
-    },
-  });
-
-  async function onSendApplication(pdr: PaperDecisionReceiver | undefined | null) {
-    const data = getValues();
-    applicationSendMutation.mutate({
-      id: data.id as number,
-      paperDecisionReceiver: pdr,
-    });
-    setIsSendButtonDisabled(true);
-    setShowSendDialog(false);
-  }
-
   function openSendDialog() {
     setShowSendDialog(true);
   }
 
-  function closeSendDialog() {
+  function closeSendDialog(id?: number | null) {
     setShowSendDialog(false);
+    navigateToApplicationView(id?.toString());
   }
 
   function saveAndQuit() {
@@ -255,10 +232,6 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
       });
     }
     saveApplication(handleSuccess);
-  }
-
-  function handleAttachmentUpload(isUploading: boolean) {
-    setAttachmentsUploading(isUploading);
   }
 
   function closeAttachmentUploadErrorDialog() {
@@ -321,7 +294,6 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
         <Attachments
           existingAttachments={existingAttachments}
           attachmentsLoadError={attachmentsLoadError}
-          onFileUpload={handleAttachmentUpload}
         />
       ),
       label: t('form:headers:liitteetJaLisatiedot'),
@@ -344,8 +316,6 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
       saveApplication();
     }
   }
-
-  const attachmentsUploadingText: string = t('common:components:fileUpload:loadingText');
 
   function validateStepChange(changeStep: () => void, stepIndex: number) {
     return changeFormStep(changeStep, pageFieldsToValidate[stepIndex] || [], trigger, errors, [
@@ -370,8 +340,6 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
         }
         validationContext={{ application: watchFormValues }}
         onStepChange={handleStepChange}
-        isLoading={attachmentsUploading}
-        isLoadingText={attachmentsUploadingText}
         stepChangeValidator={validateStepChange}
         onSubmit={handleSubmit(openSendDialog)}
       >
@@ -387,12 +355,8 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
           }
 
           const saveAndQuitIsLoading =
-            applicationCreateMutation.isLoading ||
-            applicationUpdateMutation.isLoading ||
-            attachmentsUploading;
-          const saveAndQuitLoadingText = attachmentsUploading
-            ? attachmentsUploadingText
-            : t('common:buttons:savingText');
+            applicationCreateMutation.isLoading || applicationUpdateMutation.isLoading;
+          const saveAndQuitLoadingText = t('common:buttons:savingText');
 
           const isDraft = isApplicationDraft(getValues('alluStatus') as AlluStatus | null);
           const isContact = isContactIn(signedInUser, getValues('applicationData'));
@@ -405,10 +369,6 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
               totalSteps={formSteps.length}
               onPrevious={handlePrevious}
               onNext={handleNext}
-              previousButtonIsLoading={attachmentsUploading}
-              previousButtonLoadingText={attachmentsUploadingText}
-              nextButtonIsLoading={attachmentsUploading}
-              nextButtonLoadingText={attachmentsUploadingText}
             >
               <ApplicationCancel
                 applicationId={getValues('id')}
@@ -420,9 +380,9 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
               />
 
               <Button
-                variant="secondary"
+                variant={ButtonVariant.Secondary}
                 onClick={handleSaveAndQuit}
-                iconLeft={<IconSaveDiskette />}
+                iconStart={<IconSaveDiskette />}
                 isLoading={saveAndQuitIsLoading}
                 loadingText={saveAndQuitLoadingText}
               >
@@ -430,18 +390,13 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
               </Button>
 
               {showSendButton && (
-                <Button
-                  type="submit"
-                  iconLeft={<IconEnvelope />}
-                  loadingText={t('common:buttons:sendingText')}
-                  disabled={disableSendButton || isSendButtonDisabled}
-                >
+                <Button type="submit" iconStart={<IconEnvelope />} disabled={disableSendButton}>
                   {t('hakemus:buttons:sendApplication')}
                 </Button>
               )}
               {disableSendButton && (
                 <Notification
-                  size="small"
+                  size={NotificationSize.Small}
                   style={{ marginTop: 'var(--spacing-xs)' }}
                   type="info"
                   label={t('hakemus:notifications:sendApplicationDisabled')}
@@ -481,11 +436,9 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
       />
 
       <ApplicationSendDialog
-        type="EXCAVATION_NOTIFICATION"
+        application={getValues()}
         isOpen={showSendDialog}
-        isLoading={applicationSendMutation.isLoading}
         onClose={closeSendDialog}
-        onSend={onSendApplication}
       />
     </FormProvider>
   );

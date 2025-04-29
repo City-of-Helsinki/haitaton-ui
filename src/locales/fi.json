@@ -12,7 +12,7 @@
     "loggingInErrorLabel": "Kirjautumisessa tapahtui virhe",
     "logoutError": "Uloskirjautumisessa tapahtui virhe",
     "noADPermissionHeading": "Ei käyttöoikeutta Haitaton-asiointiin",
-    "noADPermissionText": "Sinulla ei ole oikeutta AD-tunnistautumiseen. <a>Kirjaudu ulos</a> Haitattomasta ja yritä uudelleen suomi.fi-tunnistautumisen kautta.",
+    "noADPermissionText": "AD-tunnistautuminen Haitattomaan on mahdollista ainoastaan Kaupunkiympäristön ja Staran työntekijöille. <a>Kirjaudu ulos</a> Haitattomasta ja yritä uudelleen Suomi.fi-tunnistautumisen kautta.",
     "noADUserNameHeading": "Kirjautuminen epäonnistui",
     "noADUserNameText": "Kirjautuminen AD:n kautta epäonnistui, sillä Haitaton ei saanut kirjautumisen yhteydessä nimeäsi. Ota yhteyttä organisaatiosi IT-tukeen tai <a>kirjaudu ulos</a> Haitattomasta ja yritä uudelleen suomi.fi-tunnistautumisen kautta."
   },
@@ -31,6 +31,8 @@
       "confirmButton": "Vahvista"
     },
     "components": {
+      "paginationAriaLabel": "Sivutus",
+      "moveToPage": "Siirry sivulle",
       "link": {
         "openInNewTabAriaLabel": "Avautuu uudessa välilehdessä.",
         "openInExternalDomainAriaLabel": "Siirtyy toiseen sivustoon.",
@@ -76,6 +78,9 @@
       "loadingSpinner": {
         "loadingText": "Ladataan",
         "loadingFinishedText": "Lataus on valmis"
+      },
+      "breadcrumb": {
+        "ariaLabel": "Hankkeen navigaatio"
       }
     },
     "error": "Tapahtui virhe. Yritä uudestaan.",
@@ -91,6 +96,7 @@
     "buttons": {
       "savingText": "Tallennetaan",
       "sendingText": "Lähetetään",
+      "loadingText": "$t(common:components:loadingSpinner:loadingText)",
       "remove": "Poista"
     },
     "haittaIndex": {
@@ -187,7 +193,8 @@
     "requiredForPublicationInstruction": "Tähdellä * merkityt kentät vaaditaan hankkeen julkaisemiseksi.",
     "yhteystiedot": {
       "header": "Yhteystiedot",
-      "instructions": "Hankkeelle lisättävät tahot saavat sähköpostiinsa linkin, jonka kautta he pystyvät liittymään hankkeeseeen Haitattomassa. Tämän jälkeen he pystyvät tarkastelemaan hanketta ja luomaan hankkeelle hakemuksia.",
+      "instructions": "Hankkeelle lisättävät tahot saavat sähköpostiinsa linkin, jonka kautta he pystyvät liittymään hankkeeseen Haitattomassa. Tämän jälkeen he pystyvät tarkastelemaan hanketta ja luomaan hankkeelle hakemuksia.",
+      "streetAddressOrOVT": "Laskutustiedoissa joko OVT-tunnus tai katuosoite ovat pakollisia, molempia ei tarvitse täyttää.",
       "titles": {
         "omistaja": "Hankkeen omistaja",
         "omistaja_other": "Hankkeen omistaja {{count}}",
@@ -292,7 +299,8 @@
         }
       },
       "tooltips": {
-        "hakemusYhteyshenkilo": "Lisäämillesi yhteyshenkilöille lähetetään kutsu hakemukselle sähköpostitse."
+        "hakemusYhteyshenkilo": "Lisäämillesi yhteyshenkilöille lähetetään kutsu hakemukselle sähköpostitse.",
+        "customerDescription": "Työstä vastaava on se, jonka rakennetta työssä rakennetaan, huolletaan tai korjataan, eli tyypillisesti työn tilaaja. Jos haluat tehdä kaivutöitä kaduilla tai puistoissa, ilmoita siitä kaupungille. Liitä ilmoitukseen valtakirja työstä vastaavalta, jos et itse ole työstä vastaava."
       }
     }
   },
@@ -337,20 +345,6 @@
       "headerLabel": "Hankkeet yleisillä alueilla",
       "meta": {
         "title": "Haitaton - Hankkeet yleisillä alueilla"
-      }
-    },
-    "PUBLIC_HANKKEET_MAP": {
-      "path": "/julkisethankkeet/kartta",
-      "headerLabel": "Hankkeet yleisillä alueilla",
-      "meta": {
-        "title": "Haitaton - Hankkeet yleisillä alueilla kartalla"
-      }
-    },
-    "PUBLIC_HANKKEET_LIST": {
-      "path": "/julkisethankkeet/hankelista",
-      "headerLabel": "Hankkeet yleisillä alueilla",
-      "meta": {
-        "title": "Haitaton - Hankelista"
       }
     },
     "EDIT_HANKE": {
@@ -416,6 +410,13 @@
         "title": "Haitaton - Muokkaa täydennystä kaivuilmoitushakemukseen"
       }
     },
+    "EDIT_KAIVUILMOITUSMUUTOSILMOITUS": {
+      "path": "/kaivuilmoitus-muutosilmoitus/:id/muokkaa",
+      "headerLabel": "Muokkaa muutosilmoitusta kaivuilmoitushakemukseen",
+      "meta": {
+        "title": "Haitaton - Muokkaa muutosilmoitusta kaivuilmoitushakemukseen"
+      }
+    },
     "HAITATON_INFO": {
       "path": "/tietoja",
       "headerLabel": "Tietoja Haitattomasta",
@@ -474,11 +475,25 @@
         "title": "Haitaton - Käyttöohjeet ja tuki"
       }
     },
+    "GLOSSARY": {
+      "path": "/kaytto-ohjeet/sanasto",
+      "headerLabel": "Haittomassa käytetty sanasto",
+      "meta": {
+        "title": "Haitaton - Haittomassa käytetty sanasto"
+      }
+    },
     "IDENTIFY_USER": {
       "path": "/kutsu",
       "headerLabel": "Tunnistaudu Haitattomaan",
       "meta": {
         "title": "Haitaton - Tunnistaudu Haitattomaan"
+      }
+    },
+    "COOKIE_CONSENT": {
+      "path": "/evasteasetukset",
+      "headerLabel": "Evästeasetukset",
+      "meta": {
+        "title": "Haitaton - Evästeasetukset"
       }
     }
   },
@@ -566,6 +581,20 @@
       "liikennehaittaIndeksit": "Hankealueen liikennehaittaindeksit",
       "haittaIndexesChangedLabel": "Liikennehaittaindeksit ovat muuttuneet",
       "haittaIndexesChanged": "Työalueille lasketut liikennehaittaindeksit ovat muuttuneet. Tarkista haittojenhallintasuunnitelma."
+    },
+    "hakemuslista": {
+      "labels": {
+        "downloadDecision": {
+          "PAATOS": "Lataa viimeisin päätös (PDF)",
+          "TOIMINNALLINEN_KUNTO": "Lataa toiminnallinen kunto (PDF)",
+          "TYO_VALMIS": "Lataa työ valmis (PDF)"
+        }
+      }
+    },
+    "status": {
+      "null": "$t(hanke:status:DRAFT)",
+      "DRAFT": "Luonnos",
+      "COMPLETED": "Valmis"
     }
   },
   "hankeForm": {
@@ -697,7 +726,7 @@
       "onYKTHanke": "Yhteinen kunnallistekninen työmaa – yhteistoimintasopimuksen mukainen yhteishanke. Osapuolia ovat Helsingin kaupungin kaupunkiympäristön toimialan lisäksi Helsingin kaupungin liikenne -liikelaitos (HKL), Helsingin seudun ympäristöpalvelut -kuntayhtymä HSY,  Helen Oy, Helen Sähköverkko Oy, Auris Kaasunjakelu Oy sekä viestintäverkko operaattorit Cinia Oy, DNA Oyj, Elisa Oyj ja Telia Finland Oyj. YKT -yhteistoiminnalla pyritään sujuvoittamaan kaupungissa tapahtuvaa yleisten alueiden rakentamista ja sovittamaan sopijaosapuolten erillishankkeet yhteisesti toteutettaviksi, infrapalvelujen laatua ja tarjontaa parantaviksi hankkeiksi.",
       "alkuPvm": "Hankkeen toteutuksen aloituspäivä (Huom! Yleisellä alueella tapahtuva toteutus, ei esimerkiksi tontin puolella tapahtuva toteutus)",
       "loppuPvm": "Hankkeen toteutuksen lopetuspäivä (Huom! Yleisellä alueella tapahtuva toteutus, ei esimerkiksi tontin puolella tapahtuva toteutus)",
-      "vaihe": "Hankkeen etenemisen tilan kuvaus, jota päivitetään hankkeen edetessä. Ohjelmointivaihe on alustava hankesuunnittelu- tai esisuunnitteluvaihe. Luvanhakuprosessin kannalta hanke on suunnitteluvaiheessa niin kauan, kunnes se saa toteutusluvan kaupungilta. Rakentamisvaiheessa hanke on saanut luvan kaupungilta. Haitaton ei käsittele luvanhaun, rakentamisvaiheen tai hankkeen valmistumisen/ylläpidon/luovutuksen vaiheita.",
+      "vaihe": "Hankkeen etenemisen tilan kuvaus, jota hankkeesta vastaavien tulee päivittää hankkeen edetessä. Ohjelmointivaihe on alustava hankesuunnittelu- ja esisuunnitteluvaihe. Hakemusprosessin kannalta hanke on suunnitteluvaiheessa niin kauan, kunnes edetään ensimmäisen hakemuksen laatimiseen. Tällöin hanke siirtyy Haitattomassa automaattisesti rakentamisvaiheeseen.",
       "kuvaus": "Hankkeen keskeisen sisällön ja tavoitteiden kuvaus. (Huom! Yleisellä alueella tapahtuva toteutus, ei esimerkiksi tontin puolella tapahtuva toteutus)",
       "omistajat": "Hankkeen omistaja vastaa koko hankkeesta sen alusta aina loppumiseen / valmistumiseen / luovutukseen asti.",
       "arvioijat": "Hankkeen analysoija tai arvioija voi olla hankkeen omistaja tai omistajan valtuuttama muu taho (esimerkiksi omistajatahon ulkopuolinen hankkeen suunnittelijakonsultti tai urakoitsija).",
@@ -712,15 +741,14 @@
     "perustiedotForm": {
       "header": "Perustiedot",
       "ytkHankeHeader": "YKT-hanke",
-      "instructions": "<1>Hankkeen luonnin kautta pääset lähettämään myös hakemuksia.</1><1><0>HUOM!</0> Mikäli teet pelkkää johtoselvitystä yksityiselle alueelle, <2>täytä hakemus</2>. Yleisten alueiden johtoselvitykset haetaan hankkeen luonnin jälkeen kaivuilmoituksen kautta.</1><1>Huomioithan, että seuraavat tiedot näytetään julkisesti kaikille Haitattoman käyttäjille hankkeen julkaisun jälkeen:</1><3><4>Hankkeen nimi ja tunnus sekä ajankohta</4><4>Hankkeen kuvaus</4><4>Hankealueiden nimet ja ajankohdat</4><4>Hankealueiden liikennehaittaindeksit</4><4>Hankkeen omistajataho</4><4>Hankkeen suunnitteluvaihe ja työn tyyppi</4></3><1>Lisäämällä hankkeen tiedot, pystyt kopioimaan ne lopuksi tarvitsemiisi hakemuksiin.</1>"
+      "instructions": "<p>Hankkeen luonnin kautta pääset lähettämään myös hakemuksia. Kun hankkeen tarvittavat tiedot on täytetty, hanke julkaistaan. Hankkeesta näytetään muille käyttäjille kaikki muut tiedot, paitsi yhteystiedot ja liitteet.</p><1><strong>HUOM!</strong> Mikäli teet pelkkää johtoselvitystä yksityiselle alueelle,<2>täytä hakemus</2>. Yleisten alueiden johtoselvitykset haetaan hankkeen luonnin jälkeen kaivuilmoituksen kautta.</1><p>Lisäämällä hankkeen tiedot, pystyt kopioimaan ne lopuksi tarvitsemiisi hakemuksiin.</p><p>Huomioithan, että seuraavat tiedot näytetään julkisesti kaikille Haitattoman käyttäjille hankkeen julkaisun jälkeen:</p><4><0>Hankkeen nimi ja tunnus sekä ajankohta</0><1>Hankkeen kuvaus</1><2>Hankealueiden nimet ja ajankohdat</2><3>Hankealueiden liikennehaittaindeksit</3><4>Hankkeen omistajataho</4><5>Hankkeen suunnitteluvaihe ja työn tyyppi</5></4><p>Tähdellä * merkityt kentät vaaditaan hankkeen julkaisemiseksi.</p>"
     },
     "hankkeenAlueForm": {
       "header": "Alueiden piirto",
       "subHeader": "Hankealueet",
       "area": "Alue",
-      "instructions": "Hankkeelle voi piirtää useita alueita. Piirretyille alueille muodostuu automaattisesti liikennehaittaindeksit (arvot 0-5, 5 on merkittävin). Indeksit perustuvat hankealueiden sijaintiin pyörä-, joukko- ja autoliikenteen reiteillä. Hankealueiden liikenneverkollinen merkittävyys kuvataan kartalla liikennevalovärein (vihreä = ei haittaa, keltainen = todennäköinen haitta, punainen = merkittävä haitta).",
-      "instructions2": "Kartan vasemmassa reunassa olevilla kulkumuotovalitsimilla voit tarkastella hanke- ja työalueiden haittaindeksejä tietylle kulkumuodolle. Kaikki kulkumuodot ovat oletuksena aktiivisina, voit vaihtaa näkyvien kulkumuotojen määrää klikkaamalla ikoneja. Kartalla näkyy valittujen kulkumuotojen kriittisin indeksiväri.",
-      "instructions3": "Voit muokata jo piirrettyä aluetta tarttumalla sen reunasta kiinni ja vetämällä pisteen haluamaasi kohtaan.",
+      "instructions": "Hankkeelle voi piirtää useita alueita. Piirretyille alueille muodostuu automaattisesti liikennehaittaindeksit (arvot 0–5, joista 5 on merkittävin). Indeksit perustuvat hankealueiden sijaintiin pyörä-, joukko- ja autoliikenteen reiteillä. Hankealueiden liikenneverkollinen merkittävyys kuvataan kartalla liikennevalovärein (vihreä = ei haittaa, keltainen = todennäköinen haitta, punainen = merkittävä haitta).",
+      "instructions2": "Voit muokata jo piirrettyä aluetta tarttumalla sen reunasta kiinni ja vetämällä pisteen haluamaasi kohtaan.",
       "noAlueet": "Piirrä alue kartalle merkitäksesi haitta-arviot.",
       "haitatHeader": "Alueen haitta-arviot",
       "haitatInstructions": "Anna arvio suurimmista mahdollisista vaikutuksista hankealueella.",
@@ -763,341 +791,372 @@
       "procedureTips": {
         "common": {
           "nuisanceCardLinks": "Lue lisää toimenpiteiden lisätietokorteista (avautuu uuteen välilehteen): ",
-          "1": {
+          "tip1": {
             "heading": "Kulkuyhteydet kiinteistöihin ja joukkoliikennepysäkeille",
             "text": "Suunnittele ja toteuta kulkuyhteydet kiinteistöihin eri kulkumuodoille sekä esteettömät jalankulkuyhteydet joukkoliikennepysäkeille. Varmista kiinteistöjen (erityisesti sairaalat, apteekit, koulut, päiväkodit, hoitolaitokset) jalankulkuyhteyksien esteettömyys."
           },
-          "2": {
+          "tip2": {
             "heading": "Jalankulun turvalliset ja esteettömät reitit",
             "text": "Suunnittele ja toteuta jalankulun turvalliset ja esteettömät reitit.  Ohjaa jalankulku riittävän ajoissa mahdollisimman lyhyelle kiertoreitille siten, että työn kohdalla ei oikaista käyttäen turvattomia reittejä. Kerro ennakkotiedotteissa, onko jalankulku ohjattu kadun toiselle puolelle vai onko jalankulkijoille erotettu väylä ajoradasta - näin autat erityisesti näkövammaisia suunnistamaan ja pyörätuolin käyttäjiä suunnittelemaan kulkureittejä ennakkoon. Korosta suojateitä (esim. valaistus, huomiovalot, heijastintolpat, autojen hidastetöyssyt) ja toteuta ne turvallisilla näkemillä ja esteettöminä. Luiskaa reunakivet, aitaa työmaat sekä varmista riittävän leveät, tasaiset ja loivat kulkuväylät jalankululle. Tarkista ratkaisujen ohjeidenmukaisuus: <a href=\"https://helsinkikaikille.hel.fi/ohjeita-esteettomyyden-toteuttamiseen/helsingin-kaupungin-ohjeet-ulkoalueille/\">https://helsinkikaikille.hel.fi/ohjeita-esteettomyyden-toteuttamiseen/helsingin-kaupungin-ohjeet-ulkoalueille/<span className=\"hds-icon icon hds-icon--link-external hds-icon--size-s vertical-align-medium-icon\"aria-hidden=\"true\"></span></a>"
           },
-          "3": {
+          "tip3": {
             "heading": "Opastus, liikenteenohjaus ja valaistus",
             "text": "Suunnittele ja toteuta selkeät, havaittavat, luettavat, katkeamattomat, kontrastiset ja moniaistiset opasteet ja liikennevalot. Järjestä tarvittaessa korvaava tai täydentävä valaistus reiteille."
           },
-          "4": {
+          "tip4": {
             "heading": "Työalueen suunnittelu ja järjestelyiden ylläpito",
             "text": "Suunnittele tarkasti ja ennakoivasti työsi vaiheet, aikataulu, logistiikka ja työalueen rajaus. Ylläpidä tilapäisten reittien ja ympäristön järjestelyiden siisteys ja selkeys säännöllisillä tarkastuksilla sekä korjaa välittömästi havaitut puutteet."
           },
-          "5": {
+          "tip5": {
             "heading": "Pelastustoimi",
             "text": "Varmista pelastustoimen toimintaedellytykset työsi alueella. Ilmoita aina katujen sulkemisesta liikenteeltä pelastuslaitokselle ja poliisille (<a href=\"mailto:tilannekeskus@hel.fi\">tilannekeskus@hel.fi</a>, puh. 09 310 30150)."
           },
-          "6": {
+          "tip6": {
             "heading": "Yhteensovitus muiden hankkeiden ja kiertoreittien kanssa",
             "text": "Tee yhteensovitus alueen muiden hankkeiden työkohteiden aikataulun ja tehtävien kanssa sekä eri töiden tarvitsemien kiertoreittien osalta siten, että alueelle kohdistuvat haitat voidaan jatkuvasti minimoida."
           },
-          "7": {
+          "tip7": {
             "heading": "Yhteensovitus olevien rakenteiden kanssa",
             "text": "Selvitä alueella olevat muut toimijat (rakenteet) ja tee yhteensovitus niiden kanssa."
           },
-          "8": {
+          "tip8": {
             "heading": "Liikennevalo-ohjaus",
             "text": "Tarkista vaikutukset alueen nykyiseen liikennevalo-ohjaukseen eri kulkumuotojen osalta (kaistajärjestelyt, ilmaisimet, valojen toimivuus). Jos työskentely vaikuttaa liikennevalojen toimintaan, ole yhteydessä pääkaupunkiseudun liikenteenhallintakeskukseen (<a href=\"mailto:liikenteenhallintakeskus@hel.fi\">liikenteenhallintakeskus@hel.fi</a> , p. 09 310 37555). Ole yhteydessä liikenteenhallintakeskukseen myös tilapäisten liikennevalojen tarpeesta."
           },
-          "9": {
+          "tip9": {
             "heading": "Hankeviestintä",
             "text": "Viesti hankkeesta ja työstä avoimesti, ajantasaisesti ja monikanavaisesti. Osallista asiantuntijoita, paikallisia toimijoita ja kaupunkilaisia esimerkiksi turvallisten ja esteettömien ratkaisujen arvioinnissa ja soveltamisessa. Hyödynnä saatua palautetta hankkeen ja työalueen järjestelyiden kehittämisessä."
           },
-          "10": {
+          "tip10": {
             "heading": "Erikoiskuljetusten reitit ",
             "text": "Tarkista, onko työsi erikoiskuljetusten reitillä ja reittien asettamat vaatimukset Kaupunkiympäristön toimialan liikennesuunnittelusta (<a href=\"mailto:kaupunkiymparisto@hel.fi\">kaupunkiymparisto@hel.fi</a>, asiakaspalvelu puh. 09 310 22111) sekä Pirkanmaan ELY-keskuksesta (<a href=\"mailto:erikoiskuljetukset@ely-keskus.fi\">erikoiskuljetukset@ely-keskus.fi</a>, Liikenteen asiakaspalvelun neuvonta puh. 0295 020 600)."
           },
-          "11": {
+          "tip11": {
             "heading": "Junaliikenne",
             "text": "Sovi junaliikenteeseen vaikuttavista järjestelyistä Väyläviraston kanssa (<a href=\"https://vayla.fi/palveluntuottajat/ammattiliikenne-raiteilla/lomakkeet-ja-luvat\">https://vayla.fi/palveluntuottajat/ammattiliikenne-raiteilla/lomakkeet-ja-luvat<span className=\"hds-icon icon hds-icon--link-external hds-icon--size-s vertical-align-medium-icon\"aria-hidden=\"true\"></span></a>, <a href=\"mailto:kirjaamo@vayla.fi\">kirjaamo@vayla.fi</a>) sekä HSL:n (lähijunaliikenne: <a href=\"mailto:infra@hsl.fi\">infra@hsl.fi</a>) ja/tai VR:n (lähi- ja kaukojunaliikenne: vaihde puh. 029 4343) kanssa."
           },
-          "12": {
+          "tip12": {
             "heading": "Metroliikenne",
             "text": "Työn ulottuessa 200 m säteelle metroradasta tarkista <a href=\"https://kaupunkiliikenne.fi/kaupunkiraidehankkeet-ja-kunnossapito/urakoitsijalle/tyot-metroradan-laheisyydessa/\">Kaupunkiliikenne Oy:n vaatimukset</a> ja ole tarvittaessa yhdeydessä Kaupunkiliikenne Oy:n (ratainfra ja järjestelmät: <a href=\"mailto:urakoitsijaohjeistus@kaupunkiliikenne.fi\">urakoitsijaohjeistus@kaupunkiliikenne.fi</a>) kanssa."
           },
-          "13": {
+          "tip13": {
             "heading": "Sähköautojen latauspisteet",
             "text": "Ole etukäteen yhteydessä latauslaitteen operaattoritahoon ja sovi tarvittaessa järjestelyistä."
           },
-          "14": {
+          "tip14": {
             "heading": "Sähköpotkulautojen pysäköintialueet ",
             "text": "Ole yhteydessä Kaupunkiympäristön toimialan liikennesuunnitteluun (<a href=\"mailto:kaupunkiymparisto@hel.fi\">kaupunkiymparisto@hel.fi</a>, asiakaspalvelu puh. 09 310 22111, esim. alueen käyttö tai estot tietyille alueille)"
           }
         },
         "showTipsButton": "Näytä toimenpidevinkit",
         "titles": {
-          "PYORALIIKENNE": "Pyöräliikenteen toimenpiteet",
-          "AUTOLIIKENNE": "Autoliikenteen toimenpiteet",
-          "LINJAAUTOLIIKENNE": "Linja-autoliikenteen toimenpiteet",
-          "RAITIOLIIKENNE": "Raitioliikenteen toimenpiteet",
-          "MUUT": "Muut toimenpiteet"
+          "PYORALIIKENNE": "Pyöräliikennettä koskevat toimenpidevinkit",
+          "AUTOLIIKENNE": "Autoliikennettä koskevat toimenpidevinkit",
+          "LINJAAUTOLIIKENNE": "Linja-autojen paikallisliikennettä koskevat toimenpidevinkit",
+          "RAITIOLIIKENNE": "Raitioliikennettä koskevat toimenpidevinkit",
+          "MUUT": "Päästöille yhteiset toimenpidevinkit",
+          "MELU": "Meluhaittaa koskevat toimenpidevinkit",
+          "POLY": "Pölyhaittaa koskevat toimenpidevinkit",
+          "TARINA": "Tärinää koskevat toimenpidevinkit"
         },
         "PYORALIIKENNE": [
           {
+            "heading": "Pääreittien ja priorisoitujen reittien toimivuus",
             "tip": "Tarkista vaikutukset pyöräliikenteen pääreitteihin ja priorisoituihin reitteihin ja varmista näiden toimivuus. Varmista, että laatutasotavoitteet toteutuvat tilapäisissä järjestelyissä.",
             "indexTreshold": 5
           },
           {
+            "heading": "Pääverkolla olevien töiden ajoitus",
             "tip": "Valmistaudu töiden tekemiseen ruuhka-ajan ulkopuolella priorisoidulla pyöräverkolla sekä pyöräilyn pääreiteillä, mikäli tämä tulee ilmoituksen/hakemuksen päätöksessä määräykseksi. Rajoitus toteutetaan arkisin klo 6-9 ja 15-18.",
             "indexTreshold": 5
           },
           {
-            "tip": "Pyöräliikenteeseen kohdistuvien toimenpiteiden priorisoitu järjestys: 1. Ei muutoksia pyöräliikenteen järjestelyihin / pyörätien suojaaminen työmaalta; 2. Pyöräliikenteen järjestelyn tilapäinen siirto poikkileikkauksessa; 3. Pyöräliikenteen järjestelyn tilapäinen kaventaminen; 4. Kulkumuotojen yhdistäminen samalle väylälle (ks. kohta kulkumuotojen erottelu); 5. Pyöräliikenteen tilapäinen siirto ajoradan vastakkaiselle puolelle; 6. Pyöräliikenteen tilapäinen siirto eri reitille"
+            "heading": "Pyöräliikenteeseen kohdistuvien toimenpiteiden priorisoitu järjestys",
+            "tip": "Pyöräliikenteeseen kohdistuvien toimenpiteiden priorisoitu järjestys on seuraavan listan mukainen. Pääreiteillä pitäydytään lähtökohtaisesti ensimmäisessä toimenpiteessä: <ol><li>Ei muutoksia pyöräliikenteen järjestelyihin / pyörätien suojaaminen työmaalta</li><li>Pyöräliikenteen järjestelyn tilapäinen siirto poikkileikkauksessa</li><li>Pyöräliikenteen järjestelyn tilapäinen kaventaminen</li><li>Kulkumuotojen yhdistäminen samalle väylälle (ks. kohta kulkumuotojen erottelu)</li><li>Pyöräliikenteen tilapäinen siirto ajoradan vastakkaiselle puolelle</li><li>Pyöräliikenteen tilapäinen siirto eri reitille</li></ol>"
           },
           {
-            "tip": "Suunnittele ja toteuta pyöräliikenteen tilapäiset järjestelyt lähtökohtaisesti alkuperäisten pysyvien järjestelyiden (esim. yksisuuntaiset pyörätiet/-kaistat tai kaksisuuntainen pyörätie) mukaisesti. Pyri säilyttämään jalankulusta eroteltu pyöräliikenteen ratkaisu, jos sellainen on nykytilassa. Kun autoliikenteen määrä ylittää 7000 ajoneuvoa vuorokaudessa, tulee pyöräliikenne yleensä erotella myös autoliikenteestä. Pyöräliikenteen pääreiteillä erottelu on tarpeen harkita vähäisemmilläkin autoliikenteen liikennemäärillä. Vain 1-suuntaisia pyöräliikenteen järjestelyitä on mahdollista esittää korvattavaksi työmaan kohdalla sekaliikenneratkaisulla, jolloin kadulle osoitetaan 30 km/h nopeusrajoitus."
+            "heading": "Pyöräliikenteen erottelu muista kulkumuodoista",
+            "tip": "Suunnittele ja toteuta pyöräliikenteen tilapäiset järjestelyt lähtökohtaisesti alkuperäisten pysyvien järjestelyiden (esim. yksisuuntaiset pyörätiet/-kaistat tai kaksisuuntainen pyörätie) mukaisesti. Pyri säilyttämään jalankulusta eroteltu pyöräliikenteen ratkaisu, jos sellainen on nykytilassa. Kun autoliikenteen määrä ylittää 7000 ajoneuvoa vuorokaudessa, tulee pyöräliikenne yleensä erotella myös autoliikenteestä. Pyöräliikenteen pääreiteillä erottelu on tarpeen harkita vähäisemmilläkin autoliikenteen liikennemäärillä. Vain 1-suuntaisia pyöräliikenteen järjestelyitä on mahdollista esittää korvattavaksi työmaan kohdalla sekaliikenneratkaisulla, jolloin kadulle osoitetaan 30 km/h nopeusrajoitus.",
+            "cardLinks": [
+              4
+            ]
           },
           {
-            "tip": "Suunnittele ja toteuta pyöräliikenteen tilapäiset risteysjärjestelyt erityisesti liikennevalo-ohjatuissa liittymissä eri ajosuuntien toimivuuden, mutta erityisesti vasemmalle kääntymisen sekä näkemien ja valaistuksen osalta."
+            "heading": "Risteysjärjestelyt",
+            "tip": "Suunnittele ja toteuta pyöräliikenteen tilapäiset risteysjärjestelyt erityisesti liikennevalo-ohjatuissa liittymissä eri ajosuuntien toimivuuden, mutta erityisesti vasemmalle kääntymisen sekä näkemien ja valaistuksen osalta.",
+            "cardLinks": [
+              4
+            ]
           },
           {
-            "tip": "Suunnittele ja toteuta selkeä pyöräliikenteen erikseen huomioon ottava ja turvallisesti asennettu opastus kiertoreitille. Määrittele pyöräliikenteen vaikutukset ja tarvittavat muut toimenpiteet kiertoreitille."
+            "heading": "Kiertoreitit",
+            "tip": "Suunnittele ja toteuta selkeä pyöräliikenteen erikseen huomioon ottava ja turvallisesti asennettu opastus kiertoreitille. Määrittele pyöräliikenteen vaikutukset ja tarvittavat muut toimenpiteet kiertoreitille.",
+            "cardLinks": [
+              5
+            ]
           },
           {
+            "heading": "Saavutettavuus",
             "tip": "Suunnittele ja toteuta pyöräliikenteen saavutettavuus eri osoitteisiin, palveluihin ym."
           },
           {
-            "tip": "Selvitä mahdollisen kaupunkipyöräaseman tai muun merkittävän pyöräpysäköinnin siirtotarpeet. Sovi kaupunkipyöräasemien muutostarpeista Kaupunkiliikenne Oy:n (<0>urakoitsijaohjeistus@kaupunkiliikenne.fi</0>) kanssa ja merkittävien pyöräpysäköintialueiden osalta Kaupunkiympäristön toimialan liikennesuunnittelun (<1>kaupunkiymparisto@hel.fi</1>, asiakaspalvelu puh. 09 310 22111) kanssa.",
-            "links": [
-              "mailto:urakoitsijaohjeistus@kaupunkiliikenne.fi",
-              "mailto:kaupunkiymparisto@hel.fi"
+            "heading": "Pyöräpysäköinti",
+            "tip": "Selvitä mahdollisen kaupunkipyöräaseman tai muun merkittävän pyöräpysäköinnin siirtotarpeet. Sovi kaupunkipyöräasemien muutostarpeista Kaupunkiliikenne Oy:n (<mailto href=\"mailto:urakoitsijaohjeistus@kaupunkiliikenne.fi\">urakoitsijaohjeistus@kaupunkiliikenne.fi</mailto>) kanssa ja merkittävien pyöräpysäköintialueiden osalta Kaupunkiympäristön toimialan liikennesuunnittelun (<mailto href=\"mailto:kaupunkiymparisto@hel.fi\">kaupunkiymparisto@hel.fi</mailto>, asiakaspalvelu puh. 09 310 22111) kanssa. Lähelle poistettua pyörätelinetta sijoittamaasi väliaikaiseen telineeseen tulee mahtua yhtä monta pyörää, kuin poistettuun telineeseen."
+          },
+          {
+            "heading": "Ennakkotiedotus ja tiedotus muutoksista",
+            "tip": "Tiedota merkittävistä töistä ja mahdollisista pyöräliikenteen reittimuutoksista jo suunnitteluvaiheessa ja hyvissä ajoin ennen uusien järjestelyiden toteutusta (yleiset tiedotteet, paikalliset tiedotteet). Merkitse kiertoreitti maastoon ennen työn aloittamista. Tiedota eri osapuolille mahdollisista muutoksista reiteissä hyvissä ajoin ennen uusien järjestelyiden toteutusta.",
+            "cardLinks": [
+              1
             ]
           },
           {
-            "tip": "Tiedota merkittävistä töistä ja mahdollisista pyöräliikenteen reittimuutoksista jo suunnitteluvaiheessa ja hyvissä ajoin ennen uusien järjestelyiden toteutusta (yleiset tiedotteet, paikalliset tiedotteet). Merkitse kiertoreitti maastoon ennen työn aloittamista."
-          },
-          {
-            "tip": "Toteuta heti ensimmäiseksi pyöräliikenteen suojaus työalueesta kaiteilla ja sulkulaitteilla."
-          },
-          {
-            "tip": "Toteuta pyöräteiden talvikunnossapito (mm. lumien poisto, liukkaudentorjunta) työn kohdalla."
-          },
-          {
-            "tip": "Toteuta ja ylläpidä kovat ja puhtaat pyöräteiden pinnat (väliaikainen päällyste) sekä luiskatut tasovaihdot."
-          },
-          {
-            "tip": "Tiedota eri osapuolille työstä sekä mahdollisista muutoksista reiteissä hyvissä ajoin ennen uusien järjestelyiden toteutusta (yleiset tiedotteet, paikalliset tiedotteet)."
-          },
-          {
-            "tip": "Tarkista suunnittelemiesi ratkaisujen ohjeidenmukaisuus: <0>https://www.hel.fi/static/hkr/luvat/pyoraliikenteen_tyomaaohje.pdf</0>",
-            "links": [
-              "https://www.hel.fi/static/hkr/luvat/pyoraliikenteen_tyomaaohje.pdf"
+            "heading": "Pyöräliikenteen suojaus työmaasta",
+            "tip": "Toteuta heti ensimmäiseksi pyöräliikenteen suojaus työalueesta kaiteilla ja sulkulaitteilla.",
+            "cardLinks": [
+              6,
+              7
             ]
+          },
+          {
+            "heading": "Kunnossapito",
+            "tip": "Jos työsi estää normaalin pyöräteiden koneellisen kunnossapidon yleisillä alueilla, toteuta työn kohdalla laadukas kunnossapito (mm. puhtaus, lumien poisto, liukkaudentorjunta, ajotilan ja näkemien säilyttäminen)."
+          },
+          {
+            "heading": "Pyöräteiden pinnanlaatu",
+            "tip": "Toteuta ja ylläpidä kovat ja puhtaat pyöräteiden pinnat (väliaikainen päällyste) sekä luiskatut tasovaihdot.",
+            "cardLinks": [
+              2
+            ]
+          },
+          {
+            "heading": "Pyöräliikenteen reittien työnaikaisten järjestelyiden ohjeet",
+            "tip": "Tarkista suunnittelemiesi ratkaisujen ohjeidenmukaisuus: <external href=\"https://www.hel.fi/static/hkr/luvat/pyoraliikenteen_tyomaaohje.pdf\">https://www.hel.fi/static/hkr/luvat/pyoraliikenteen_tyomaaohje.pdf</0>"
           }
         ],
         "AUTOLIIKENNE": [
           {
-            "tip": "Tutki ajokaistoihin vaikuttavien hankkeiden yhteisvaikutuksia ja ajoitusta liikenteen mallinnuksen avulla. Määrittele myös vaikutukset linja-autoliikenteeseen. Selvitä vaatimuksia hankkeelle sekä tutki tarvittaessa kiertoreittimahdollisuuksia.",
+            "heading": "Autoliikenteen laaja-alainen vaikutusten arviointi",
+            "tip": "Tutki ajokaistoihin vaikuttavien hankkeiden yhteisvaikutuksia ja ajoitusta hankkeen varhaisessa vaiheessa esimerkiksi liikenteen laaja-alaisen mallinnuksen avulla. Määrittele myös vaikutukset linja-autoliikenteeseen. Selvitä vaatimuksia hankkeelle sekä tutki tarvittaessa kiertoreittimahdollisuuksia.",
             "indexTreshold": 4
           },
           {
-            "tip": "Tutki ajokaistoihin vaikuttavan hankkeesi vaikutuksia, ajoitusta ja toimenpiteitä liikenteen mallinnuksen ja simuloinnin avulla. Määrittele ja suunnittele toimenpiteet haittojen minimoimiseksi ottaen huomioon myös muut alueella olevat hankkeet.",
+            "heading": "Autoliikenteen paikallisten vaikutusten arviointi",
+            "tip": "Tutki ajokaistoihin vaikuttavan hankkeesi vaikutuksia, ajoitusta ja toimenpiteitä esimerkiksi paikallistenliikenteen toimivuustarkasteluiden avulla. Määrittele ja suunnittele toimenpiteet autoliikenteen haittojen minimoimiseksi ottaen huomioon myös muut alueella olevat hankkeet ja toiminnot.",
             "indexTreshold": 4
           },
           {
-            "tip": "Suunnittele työt tehtäväksi ja toteuta ne lähtökohtaisesti ruuhka-ajan ulkopuolella (arkisin klo 6-9 ja klo 15-18 sekä satamareiteillä päivittäin klo 10-10.30).",
+            "heading": "Työaikarajoitukset",
+            "tip": "Suunnittele pää- ja kokoojakatujen työt tehtäväksi ja toteuta ne lähtökohtaisesti ruuhka-ajan ulkopuolella (arkisin klo 6–9 ja klo 15-18 sekä satamareiteillä päivittäin klo 10-10.30).",
             "indexTreshold": 4
           },
           {
-            "tip": "Selvitä ja toimeenpane liikkumisen ohjauksen keinoja autoliikenteen määrän vähentämiseksi hankkeen vaikutusalueella."
+            "heading": "Liikkumisen ohjaus",
+            "tip": "Selvitä ja toimeenpane liikkumisen ohjauksen keinoja autoliikenteen määrän vähentämiseksi hankkeen vaikutusalueella. Näitä voivat olla esimerkiksi ohjaaminen eri kulkumuotoihin tai liikkumisen ajoittamiseen ruuhka-ajan ulkopuolelle."
           },
           {
-            "tip": "Suunnittele ajoissa mahdolliset autoliikenteen kiertoreitit, niiden opastus sekä tarvittavat liikennevalojen muutokset."
+            "heading": "Kiertoreitit",
+            "tip": "Suunnittele ajoissa mahdolliset autoliikenteen kiertoreitit, niiden opastus sekä tarvittavat liikennevalojen muutokset. Suunnittele ajoissa toimivat järjestelyt ja/tai kiertoreitit myös raskaalle liikenteelle, huoltoliikenteelle ja jakeluliikenteelle."
           },
           {
-            "tip": "Tarkista, onko hankkeesi satamaliikenteen reitillä (<0>Pysäköinti ja ajoreittikartat</0>) Jos on, suunnittele työt tehtäväksi autoliikenteen ruuhka-ajan ulkopuolella (arkisin klo 6-9 ja klo 15-18 sekä satamareiteillä päivittäin klo 10-10.30).",
-            "links": [
-              "https://www.portofhelsinki.fi/yhteystiedot/kartat/pysakointi-ja-ajoreittikartat/)."
+            "heading": "Satamaliikenteen reitit",
+            "tip": "Tarkista, onko hankkeesi satamaliikenteen reitillä (<external href=\"https://www.portofhelsinki.fi/yhteystiedot/kartat/pysakointi-ja-ajoreittikartat/\">Pysäköinti ja ajoreittikartat <span className=\"hds-icon icon hds-icon--link-external hds-icon--size-s vertical-align-medium-icon\" aria-hidden=\"true\"></span></external>) Jos on, suunnittele työt tehtäväksi autoliikenteen ruuhka-ajan ulkopuolella (arkisin klo 6-9 ja klo 15-18 sekä satamareiteillä päivittäin klo 10-10.30)."
+          },
+          {
+            "heading": "Ajokaistojen lukumäärä",
+            "tip": "Selvitä ajokaistojen lukumäärän säilyttämistarve ottamalla yhteyttä Kaupunkiympäristön toimialan liikennesuunnitteluun (<mailto href=\"mailto:luvat@hel.fi\">luvat@hel.fi</mailto>, asiakaspalvelu puh. 09 310 22111) suunnitteluvaiheessa"
+          },
+          {
+            "heading": "Liikennevalot",
+            "tip": "Suunnittele ja varmista liikennevalojen toimivuus työn aluetta laajemmin (esim. liikennevaloliittymien tilapäiset kaistamuutokset työalueelle tultaessa, ilmaisimien sijainti ja toimivuus tilapäisissä järjestelyissä, kiertoreittien liikennevalot). Ole näiden osalta yhteydessä pääkaupunkiseudun liikenteenhallintakeskukseen (<mailto href=\"mailto:liikenteenhallintakeskus@hel.fi\">liikenteenhallintakeskus@hel.fi</mailto>, p. 09 310 37555). Ole yhteydessä liikenteenhallintakeskukseen myös tilapäisten liikennevalojen tarpeesta."
+          },
+          {
+            "heading": "Linja-autojen kauko- ja turistiliikenne",
+            "tip": "Ota yhteyttä Linja-autoliittoon (<external href=\"https://www.linja-autoliitto.fi/yhteystiedot/\">Yhteystiedot – Linja-autoliitto <span className=\"hds-icon icon hds-icon--link-external hds-icon--size-s vertical-align-medium-icon\" aria-hidden=\"true\"></span></external> <mailto href=\"mailto:etunimi.sukunimi@linja-autoliitto.fi\">etunimi.sukunimi@linja-autoliitto.fi</mailto>), mikäli hankkeesi sijoittuu merkittävälle kauko- tai turistiliikenteen reitille tai alueelle."
+          },
+          {
+            "heading": "Ennakkotiedotus ja tiedotus muutoksista",
+            "tip": "Tiedota merkittävistä töistä ja mahdollisista autoliikenteen reittimuutoksista jo suunnitteluvaiheessa ja hyvissä ajoin ennen toteutusta eri osapuolille (yleiset tiedotteet, paikalliset tiedotteet). Tiedota eri osapuolille mahdollisista muutoksista reiteissä hyvissä ajoin ennen uusien järjestelyiden toteutusta.",
+            "cardLinks": [
+              1
             ]
           },
           {
-            "tip": "Suunnittele ajoissa raskaalle liikenteelle, huoltoliikenteelle ja jakeluliikenteelle toimivat järjestelyt ja/tai kiertoreitit."
+            "heading": "Opastus",
+            "tip": "Toteuta ja ylläpidä ennakko-opastus lähestymissuunnilta vaihtoehtoisille tai suunnitelluille ajoreiteille. Huomioi opasteita suunniteltaessa niiden sijaintipaikoissa nopeusrajoitus (opasteen tekstikoko)."
           },
           {
-            "tip": "Selvitä ajokaistojen lukumäärän säilyttämistarve ottamalla yhteyttä Kaupunkiympäristön toimialan liikennesuunnitteluun (<0>kaupunkiymparisto@hel.fi</0>, asiakaspalvelu puh. 09 310 22111) suunnitteluvaiheessa",
-            "links": [
-              "mailto:kaupunkiymparisto@hel.fi"
+            "heading": "Ajonopeuden rajoittaminen",
+            "tip": "Rajoita ajonopeutta työalueen läheisyydessä erityisesti päiväkotien, koulujen, puistojen, vanhainkotien ja vammaispalveluiden lähellä. Käytä tarvittaessa autoilijoiden nopeusnäyttöjä hymiötoiminnolla. Sijainnit katselmoidaan työmaalla. Huomioi myös rajoituksen päättäminen työmaan jälkeen."
+          },
+          {
+            "heading": "Kulkumuotojen erottelu",
+            "tip": "Älä ohjaa jalankulkijoita ajoradalle, ellei jalankulkijoille ole rajattu omaa turvallista ja riittävän leveää kulkuväylää ajoradalta. Älä ohjaa pyöräliikennettä ajoradalle autoliikenteen sekaan, paitsi perustelluissa tilanteissa (ks. pyöräliikenteen toimenpidevinkit).",
+            "cardLinks": [
+              3,
+              4
             ]
           },
           {
-            "tip": "Suunnittele ja varmista liikennevalojen toimivuus työn aluetta laajemmin (esim. liikennevaloliittymien tilapäiset kaistamuutokset työalueelle tultaessa, ilmaisimien sijainti ja toimivuus tilapäisissä järjestelyissä, kiertoreittien liikennevalot). Ole näiden osalta yhteydessä pääkaupunkiseudun liikenteenhallintakeskukseen (<0>liikenteenhallintakeskus@hel.fi</0>, p. 09 310 37555). Ole yhteydessä liikenteenhallintakeskukseen myös tilapäisten liikennevalojen tarpeesta.",
-            "links": [
-              "mailto:liikenteenhallintakeskus@hel.fi"
-            ]
-          },
-          {
-            "tip": "Ota yhteyttä Linja-autoliittoon (<0>Yhteystiedot – Linja-autoliitto</0> <1>etunimi.sukunimi@linja-autoliitto.fi</1>), mikäli hankkeesi sijoittuu merkittävälle kauko- tai  turistiliikenteen reitille tai alueelle.",
-            "links": [
-              "https://www.linja-autoliitto.fi/yhteystiedot/",
-              "mailto:etunimi.sukunimi@linja-autoliitto.fi"
-            ]
-          },
-          {
-            "tip": "Tiedota merkittävistä töistä ja mahdollisista autoliikenteen reittimuutoksista jo suunnitteluvaiheessa ja hyvissä ajoin ennen toteutusta eri osapuolille (yleiset tiedotteet, paikalliset tiedotteet)."
-          },
-          {
-            "tip": "Toteuta ja ylläpidä ennakko-opastus lähestymissuunnilta vaihtoehtoisille ajoreiteille."
-          },
-          {
-            "tip": "Rajoita ajonopeutta työalueen läheisyydessä."
-          },
-          {
-            "tip": "Älä ohjaa jalankulkijoita ajoradalle, ellei niille ole rajattu omaa kulkuväylää ajoradalta."
-          },
-          {
-            "tip": "Alä ohjaa pyöräliikennettä ajoradalle autoliikenteen sekaan, paitsi perustelluissa tilanteissa (ks. pyöräliikenteen toimenpidevinkit)."
-          },
-          {
+            "heading": "Ajoratapäällysteet ja -merkinnät",
             "tip": "Toteuta ja ylläpidä työn kohdalla tasalaatuinen ajoratapäällyste sekä ajantasaiset kaistanvaihtomerkinnät, muut ajoratamerkinnät ja liikenteenohjauslaitteet."
           },
           {
-            "tip": "Toteuta työn kohdalla laadukas talvikunnossapito (mm. lumien poisto, liukkaudentorjunta, ajotilan ja näkemien säilyttäminen)."
+            "heading": "Kunnossapito",
+            "tip": "Jos työsi estää normaalin koneellisen kunnossapidon yleisillä alueilla, toteuta työn kohdalla laadukas kunnossapito (mm. puhtaus, lumien poisto, liukkaudentorjunta, ajotilan ja näkemien säilyttäminen)."
           }
         ],
         "LINJAAUTOLIIKENNE": [
           {
-            "tip": "Tarkista, vaikuttaako hankkeesi merkittävään HSL:n linja-autoreittiin. Sovi aikaisessa vaiheessa hankkeen aiheuttamista linja-autoliikennettä koskevista toimenpidetarpeista HSL:n kanssa (<0>infra@hsl.fi</0>).",
-            "links": [
-              "mailto:infra@hsl.fi"
+            "heading": "Hankkeen vaikutus linja-autojen paikallisliikenteen reitteihin",
+            "tip": "Tarkista, vaikuttaako hankkeesi merkittävään HSL:n linja-autoreittiin. Sovi aikaisessa vaiheessa hankkeen aiheuttamista linja-autoliikennettä koskevista toimenpidetarpeista HSL:n kanssa (<mailto href=\"mailto:infra@hsl.fi\">infra@hsl.fi</mailto>).",
+            "indexTreshold": 4
+          },
+          {
+            "heading": "Työaikarajoitukset",
+            "tip": "Suunnittele työt tehtäväksi ja toteuta ne lähtökohtaisesti ruuhka-ajan (klo 6-9, klo 15-18) ulkopuolella.",
+            "indexTreshold": 4
+          },
+          {
+            "heading": "Ennakkoon tehtävät yhteydenotot ja sovittavat liikennöintijärjestelyt",
+            "tip": "<p>Ota yhteyttä HSL:ään (<mailto href=\"mailto:infra@hsl.fi\">infra@hsl.fi</mailto>) suunnitteluvaiheessa hankkeesi sijaitessa HSL:n linja-autoliikenteen reitillä sekä määrittele, aiheuttaako hankkeesi HSL:n linja-autoliikenteelle haittaa, kuten kaistojen vähentymistä, viivytyksiä, matka-ajan pidentymistä, reittimuutoksia, pysäkkimuutoksia ym. Suunnittele ajoissa mahdolliset linja-autoliikenteen kiertoreitit ja niiden opastus sekä tarvittavat joukkoliikenne-etuudet. Varmista reitin toimivuus HSL:n sekä valo-ohjauksen osalta pääkaupunkiseudun liikenteenhallintakeskuksen (<mailto href=\"mailto:liikenteenhallintakeskus@hel.fi\">liikenteenhallintakeskus@hel.fi</mailto>, p. 09 310 37555) kanssa (myös tilapäinen valo-ohjaus). Sovi tarvittaessa HSL:n kanssa koeajo liikenteen sujuvuuden varmistamiseksi.</p><br><p>Jos työmaa on bussin päätepysäkillä tai se estää bussiliikenteen kyseisellä kadulla, ota yhteyttä vähintään 2,5 kuukautta ennen töiden alkua. Jos työmaa ei ole akuutti, esimerkiksi putkirikosta johtuva, ota yhteyttä vähintään 2 viikkoa ennen töiden alkua. Lisätietoa: <external href=\"https://www.hsl.fi/hsl/urakoitsijat\">Urakoitsija - ota joukkoliikenne huomioon työmaalla <span className=\"hds-icon icon hds-icon--link-external hds-icon--size-s vertical-align-medium-icon\" aria-hidden=\"true\"></span></external>.</p>",
+            "cardLinks": [
+              8
             ]
           },
           {
-            "tip": "Suunnittele työt tehtäväksi ja toteuta ne lähtökohtaisesti ruuhka-ajan (klo 6-9, klo 15-18) ulkopuolella."
-          },
-          {
-            "tip": "Ota yhteyttä HSL:ään (<0>infra@hsl.fi</0>) suunnitteluvaiheessa hankkeesi sijaitessa HSL:n linja-autoliikenteen reitillä sekä määrittele, aiheuttaako hankkeesi HSL:n linja-autoliikenteelle haittaa, kuten kaistojen vähentymistä, viivytyksiä, matka-ajan pidentymistä, reittimuutoksia, pysäkkimuutoksia ym. Suunnittele ajoissa mahdolliset linja-autoliikenteen kiertoreitit ja niiden opastus sekä tarvittavat joukkoliikenne-etuudet. Varmista reitin toimivuus HSL:n sekä valo-ohjauksen osalta pääkaupunkiseudun liikenteenhallintakeskuksen (<1>liikenteenhallintakeskus@hel.fi</1>, p. 09 310 37555) kanssa (myös tilapäinen valo-ohjaus).",
-            "links": [
-              "mailto:infra@hsl.fi",
-              "mailto:liikenteenhallintakeskus@hel.fi"
+            "heading": "Pysäkkijärjestelyt ja kulku pysäkeille",
+            "tip": "Toteuta esteetön pääsy nykyisille pysäkeille tai suunnittele ja toteuta pysäkkien siirtäminen, opastus ja esteettömät jalankulkuyhteydet. Raitio- ja linja-autopysäkkejä ei saa siirtää tai poistaa käytöstä ilman HSL:n lupaa (<mailto href=\"mailto:infra@hsl.fi\">infra@hsl.fi</mailto>). Lisätietoa: <external href=\"https://www.hsl.fi/hsl/urakoitsijat\">Urakoitsija - ota joukkoliikenne huomioon työmaalla <span className=\"hds-icon icon hds-icon--link-external hds-icon--size-s vertical-align-medium-icon\" aria-hidden=\"true\"></span></external>.",
+            "cardLinks": [
+              8
             ]
           },
           {
-            "tip": "Jos työmaa on bussin päätepysäkillä tai se estää bussiliikenteen kyseisellä kadulla, ota yhteyttä vähintään 2,5 kuukautta ennen töiden alkua. Jos työmaa ei ole akuutti, esimerkiksi putkirikosta johtuva, ota yhteyttä vähintään 2 viikkoa ennen töiden alkua. Lisätietoa: <0>Urakoitsija - ota joukkoliikenne huomioon työmaalla</0>.",
-            "links": [
-              "http://hsl.fi/hsl/urakoitsijat"
+            "heading": "Ennakkotiedotus ja tiedotus muutoksista",
+            "tip": "Tiedota merkittävistä töistä ja mahdollisista bussiliikenteen reittimuutoksista jo suunnitteluvaiheessa ja hyvissä ajoin ennen toteutusta eri osapuolille (yleiset tiedotteet, paikalliset tiedotteet). Tiedota eri osapuolille mahdollisista muutoksista reiteissä hyvissä ajoin ennen uusien järjestelyiden toteutusta.",
+            "cardLinks": [
+              1
             ]
           },
           {
-            "tip": "Toteuta esteetön pääsy nykyisille pysäkeille tai suunnittele ja toteuta pysäkkien siirtäminen, opastus ja esteettömät jalankulkuyhteydet. Raitio- ja linja-autopysäkkejä ei saa siirtää tai poistaa käytöstä ilman HSL:n lupaa (<0>infra@hsl.fi</0>). Lisätietoa: <1>Urakoitsija - ota joukkoliikenne huomioon työmaalla</1>.",
-            "links": [
-              "mailto:infra@hsl.fi",
-              "http://hsl.fi/hsl/urakoitsijat"
-            ]
-          },
-          {
-            "tip": "Tiedota merkittävistä töistä ja mahdollisista bussiliikenteen reittimuutoksista jo suunnitteluvaiheessa ja hyvissä ajoin ennen toteutusta eri osapuolille (yleiset tiedotteet, paikalliset tiedotteet)."
-          },
-          {
+            "heading": "Opastus",
             "tip": "Toteuta ja ylläpidä ennakko-opastus lähestymissuunnilta vaihtoehtoisille ajoreiteille."
           },
           {
+            "heading": "Ajoratapäällysteet ja -merkinnät",
             "tip": "Toteuta ja ylläpidä työn kohdalla tasalaatuinen ajoratapäällyste sekä ajantasaiset kaistanvaihtomerkinnät, muut ajoratamerkinnät ja liikenteenohjauslaitteet."
           },
           {
-            "tip": "Toteuta työn kohdalla laadukas talvikunnossapito (mm. lumien poisto, liukkaudentorjunta, ajotilan ja näkemien säilyttäminen). Varmista erityisesti riittävät tilat bussien kääntymiseen liittymissä."
+            "heading": "Kunnossapito",
+            "tip": "Jos työsi estää normaalin koneellisen kunnossapidon yleisillä alueilla, toteuta työn kohdalla laadukas kunnossapito (mm. puhtaus, lumien poisto, liukkaudentorjunta, ajotilan ja näkemien säilyttäminen)."
           }
         ],
         "RAITIOLIIKENNE": [
           {
-            "tip": "Tarkista, vaikuttaako hankkeesi raitiotieverkkoon. Sovi aikaisessa vaiheessa hankkeen aiheuttamista raitiotieverkon toimenpidetarpeista HSL:n kanssa (liikennöinti: <0>infra@hsl.fi</0>) ja tarvittaessa Kaupunkiliikenne Oy:n (ratainfra ja järjestelmät: <1>urakoitsijaohjeistus@kaupunkiliikenne.fi</1>) kanssa.",
-            "links": [
-              "mailto:infra@hsl.fi",
-              "mailto:urakoitsijaohjeistus@kaupunkiliikenne.fi"
-            ]
+            "heading": "Hankkeen vaikutus raitiotieliikenteeseen",
+            "tip": "Tarkista, miten hankkeesi vaikuttaa raitiotieverkkoon. Sovi aikaisessa vaiheessa hankkeen aiheuttamista raitiotieverkon toimenpidetarpeista HSL:n kanssa (liikennöinti: <mailto href=\"mailto:infra@hsl.fi\">infra@hsl.fi</mailto>) ja tarvittaessa Kaupunkiliikenne Oy:n (ratainfra ja järjestelmät: <mailto href=\"mailto:urakoitsijaohjeistus@kaupunkiliikenne.fi\">urakoitsijaohjeistus@kaupunkiliikenne.fi</mailto>) kanssa."
           },
           {
-            "tip": "Suunnittele työt tehtäväksi ja toteuta ne pääsääntöisesti raitioliikenteen liikennöintiajan ulkopuolella tai tee työt ruuhka-ajan (klo 6-9, klo 15-18) ulkopuolella.",
+            "heading": "Työaikarajoitukset",
+            "tip": "Suunnittele työt tehtäväksi ja toteuta ne pääsääntöisesti raitioliikenteen liikennöintiajan ulkopuolella mm. turvallisuussyistä. Raitiotien liikennöintihäiriöiden minimoimiseksi tee pakolliset työt ruuhka-ajan (klo 6-9, klo 15-18) ulkopuolella.",
             "indexTreshold": 5
           },
           {
-            "tip": "Arvioi ajoissa hankkeeseen liittyvien yksittäisten töiden ajankohdat ja ole ennakkoon yhteydessä HSL:ään (liikennöinti: <0>infra@hsl.fi</0>) ja Kaupunkiliikenne Oy:öön (ratainfra ja järjestelmät: <1>urakoitsijaohjeistus@kaupunkiliikenne.fi</1>), jotta mahdollisesti tarvittavia poikkeusjärjestelyitä voidaan koordinoida muiden poikkeusreittien kanssa. Suunnittele mahdolliset raitioliikenteen kiertoreitit ja joukkoliikenne-etuudet sekä varmista reitin toimivuus HSL:n, Kaupunkiliikenne Oy:n  sekä liikennevalojen osalta pääkaupunkiseudun liikenteenhallintakeskuksen (<2>liikenteenhallintakeskus@hel.fi</2>, p. 09 310 37555) kanssa.",
-            "links": [
-              "mailto:infra@hsl.fi",
-              "mailto:urakoitsijaohjeistus@kaupunkiliikenne.fi",
-              "mailto:liikenteenhallintakeskus@hel.fi"
+            "heading": "Ennakkoon tehtävät yhteydenotot ja sovittavat liikennöintijärjestelyt",
+            "tip": "<p>Arvioi ajoissa hankkeeseen liittyvien yksittäisten töiden ajankohdat ja ole ennakkoon yhteydessä HSL:ään (liikennöinti: <mailto href=\"mailto:infra@hsl.fi\">infra@hsl.fi</mailto>) ja Kaupunkiliikenne Oy:öön (ratainfra ja järjestelmät: <mailto href=\"mailto:urakoitsijaohjeistus@kaupunkiliikenne.fi\">urakoitsijaohjeistus@kaupunkiliikenne.fi</mailto>), jotta mahdollisesti tarvittavia poikkeusjärjestelyitä voidaan koordinoida muiden poikkeusreittien kanssa. Suunnittele mahdolliset raitioliikenteen kiertoreitit ja joukkoliikenne-etuudet sekä varmista reitin toimivuus HSL:n, Kaupunkiliikenne Oy:n  sekä liikennevalojen osalta pääkaupunkiseudun liikenteenhallintakeskuksen (<mailto href=\"mailto:liikenteenhallintakeskus@hel.fi\">liikenteenhallintakeskus@hel.fi</mailto>, p. 09 310 37555) kanssa.</p><br><p>Raitioliikenteen poikkeusreittien osalta tee ilmoitus HSL:lle enintään 3 vuorokauden töissä 8 viikkoa ennen töiden alkua ja yli 3 vuorokauden töissä 5 kuukautta ennen töiden alkua. Raitioliikennettä korvaavan bussiliikenteen tapauksessa tee ilmoitus HSL:lle enintään 3 vuorokauden töissä 3 kuukautta ennen töiden alkua ja yli 3 vuorokauden töissä 5 kuukautta ennen töiden alkua. Lisätietoja: <external href=\"https://www.hsl.fi/hsl/urakoitsijat\">Urakoitsija - ota joukkoliikenne huomioon työmaalla <span className=\"hds-icon icon hds-icon--link-external hds-icon--size-s vertical-align-medium-icon\" aria-hidden=\"true\"></span></external> sekä <external href=\"https://kaupunkiliikenne.fi/kaupunkiraidehankkeet-ja-kunnossapito/urakoitsijalle/tyot-raitiotieradan-laheisyydessa/\">Työt raitiotieradan läheisyydessä - Kaupunkiliikenne Oy <span className=\"hds-icon icon hds-icon--link-external hds-icon--size-s vertical-align-medium-icon\" aria-hidden=\"true\"></span></external></p>",
+            "cardLinks": [
+              8
             ]
           },
           {
-            "tip": "Raitioliikenteen poikkeusreittien osalta tee ilmoitus HSL:lle enintään 3 vuorokauden töissä 8 viikkoa ennen töiden alkua ja yli 3 vuorokauden töissä 5 kuukautta ennen töiden alkua. Raitioliikennettä korvaavan bussiliikenteen tapauksessa tee ilmoitus HSL:lle enintään 3 vuorokauden töissä 3 kuukautta ennen töiden alkua ja yli 3 vuorokauden töissä 5 kuukautta ennen töiden alkua. Lisätietoja: <0>Urakoitsija - ota joukkoliikenne huomioon työmaalla</0> sekä <1>Työt raitiotieradan läheisyydessä - Kaupunkiliikenne Oy</1>",
-            "links": [
-              "http://hsl.fi/hsl/urakoitsijat",
-              "https://kaupunkiliikenne.fi/kaupunkiraidehankkeet-ja-kunnossapito/urakoitsijalle/tyot-raitiotieradan-laheisyydessa/"
+            "heading": "Raitiotien rakenteet ja työskentely rata-alueen lähellä",
+            "tip": "Tarkista, joudutaanko raitiotien rakenteita (ml. rakennusten julkisivuissa olevat ajolankaripustukset) tai järjestelmiä tilapäisesti purkamaan tai siirtämään. Tarkista myös, joudutaanko työtä tekemään rata-alueen lähellä tai 2 m etäisyydellä ajojohtimista tai kannatinvaijereista (HUOM! Pikaraitiotiellä etäisyys 4 m). Jos joudutaan, sovi niistä HSL:n (liikennöinti: <mailto href=\"mailto:infra@hsl.fi\">infra@hsl.fi</mailto>) sekä Kaupunkiliikenne Oy:n (ratainfra ja järjestelmät: <mailto href=\"mailto:urakoitsijaohjeistus@kaupunkiliikenne.fi\">urakoitsijaohjeistus@kaupunkiliikenne.fi</mailto>) kanssa. Lisätietoja: <external href=\"https://hsl.fi/hsl/urakoitsijat\">Urakoitsija - ota joukkoliikenne huomioon työmaalla <span className=\"hds-icon icon hds-icon--link-external hds-icon--size-s vertical-align-medium-icon\" aria-hidden=\"true\"></span></external> sekä täytettävä lomake <external href=\"https://kaupunkiliikenne.fi/kaupunkiraidehankkeet-ja-kunnossapito/urakoitsijalle/tyot-raitiotieradan-laheisyydessa/\">Työt raitiotieradan läheisyydessä - Kaupunkiliikenne Oy <span className=\"hds-icon icon hds-icon--link-external hds-icon--size-s vertical-align-medium-icon\" aria-hidden=\"true\"></span></external> (Työskentely kiskoalueella tai Työskentelu pikaratikka 15 -rata-alueella)."
+          },
+          {
+            "heading": "Pysäkkijärjestelyt ja kulku pysäkeille",
+            "tip": "Toteuta esteetön pääsy nykyisille pysäkeille tai suunnittele ja toteuta pysäkkien siirtäminen, opastus ja esteettömät jalankulkuyhteydet. Raitio- ja linja-autopysäkkejä ei saa siirtää tai poistaa käytöstä ilman HSL:n lupaa (<mailto href=\"mailto:infra@hsl.fi\">infra@hsl.fi</mailto>). Lisätietoa: <external href=\"http://hsl.fi/hsl/urakoitsijat\">Urakoitsija - ota joukkoliikenne huomioon työmaalla <span className=\"hds-icon icon hds-icon--link-external hds-icon--size-s vertical-align-medium-icon\" aria-hidden=\"true\"></span></external>.",
+            "cardLinks": [
+              8
             ]
           },
           {
-            "tip": "Tarkista, joudutaanko raitiotien rakenteita (ml. rakennusten julkisivuissa olevat ajolankaripustukset) tai järjestelmiä tilapäisesti purkamaan tai siirtämään. Tarkista myös, joudutaanko työtä tekemään rata-alueen lähellä tai 2 m etäisyydellä ajojohtimista tai kannatinvaijereista (HUOM! Pikaraitiotiellä etäisyys 4 m). Jos joudutaan, sovi niistä HSL:n (liikennöinti: <0>infra@hsl.fi</0>) sekä Kaupunkiliikenne Oy:n (ratainfra ja järjestelmät: <1>urakoitsijaohjeistus@kaupunkiliikenne.fi</1>) kanssa. Lisätietoja: <2>Urakoitsija - ota joukkoliikenne huomioon työmaalla</2> sekä täytettävä lomake <3>Työt raitiotieradan läheisyydessä - Kaupunkiliikenne Oy</3> (Työskentely kiskoalueella tai Työskentelu pikaratikka 15 -rata-alueella).",
-            "links": [
-              "mailto:infra@hsl.fi",
-              "mailto:urakoitsijaohjeistus@kaupunkiliikenne.fi",
-              "http://hsl.fi/hsl/urakoitsijat",
-              "https://kaupunkiliikenne.fi/kaupunkiraidehankkeet-ja-kunnossapito/urakoitsijalle/tyot-raitiotieradan-laheisyydessa/"
+            "heading": "Ennakkotiedotus ja tiedotus muutoksista",
+            "tip": "Tiedota merkittävistä töistä ja mahdollisista raitioliikenteen reittimuutoksista jo suunnitteluvaiheessa ja hyvissä ajoin ennen toteutusta eri osapuolille (yleiset tiedotteet, paikalliset tiedotteet). Tiedota eri osapuolille mahdollisista muutoksista reiteissä hyvissä ajoin ennen uusien järjestelyiden toteutusta.",
+            "cardLinks": [
+              1
             ]
           },
           {
-            "tip": "Toteuta esteetön pääsy nykyisille pysäkeille tai suunnittele ja toteuta pysäkkien siirtäminen, opastus ja esteettömät jalankulkuyhteydet. Raitio- ja linja-autopysäkkejä ei saa siirtää tai poistaa käytöstä ilman HSL:n lupaa (<0>infra@hsl.fi</0>). Lisätietoa: <1>Urakoitsija - ota joukkoliikenne huomioon työmaalla</1>.",
-            "links": [
-              "mailto:infra@hsl.fi",
-              "http://hsl.fi/hsl/urakoitsijat"
-            ]
-          },
-          {
-            "tip": "Tiedota merkittävistä töistä ja mahdollisista raitioliikenteen reittimuutoksista jo suunnitteluvaiheessa ja hyvissä ajoin ennen toteutusta eri osapuolille (yleiset tiedotteet, paikalliset tiedotteet)."
-          },
-          {
-            "tip": "Varmista toteutuksessa, että raitioteiden liikennevalo-ohjaus toimii työnaikaisesti."
+            "heading": "Liikennevalo-ohjaus",
+            "tip": "Varmista toteutuksessa, että raitioteiden liikennevalo-ohjaus toimii työnaikaisesti. Sovi valo-ohjauksen muutoksista pääkaupunkiseudun liikenteenhallintakeskuksen (<mailto href=\"liikenteenhallintakeskus@hel.fi\">liikenteenhallintakeskus@hel.fi</mailto>, p. 09 310 37555) kanssa."
           }
         ],
         "MUUT": [
           {
-            "tip": "Selvitä työsi melu-, pöly- tai tärinäpäästöjen vaikutusalue ja sillä olevat herkät toiminnot (asunnot, päiväkodit, koulut, tärkeät palvelut, kuten terveyspalvelut, liiketilat, ravintolaterassit, tutkimuslaitokset, luontokohteet, uskonnolliset laitokset ym.). "
+            "heading": "Päästöjen vaikutusalue ja herkät toiminnot",
+            "tip": "Selvitä työsi melu-, pöly- tai tärinäpäästöjen vaikutusalue ja sillä olevat herkät toiminnot (asunnot, päiväkodit, koulut, tärkeät palvelut, kuten terveyspalvelut, liiketilat, ravintolaterassit, tutkimuslaitokset, luontokohteet, uskonnolliset laitokset ym.). Sovi tarvittavista toimenpiteistä tunnistettujen herkkien kohteiden kanssa."
           },
           {
-            "tip": "Tiedota toimijoille ja kiinteistöille vähintään viikkoa ennen tai välittömästi töiden ajankohdan ollessa tiedossa, kun tehdään melu-, pöly- tai tärinähaittaa aiheuttavia töitä. Erittäin häiritsevästä työstä tulee tehdä ilmoitus viimeistään 30 vuorokautta ennen töiden aloittamista. Anna asukkaille ja eri toimijoille aikaa varautua etukäteen tiedossa oleviin häriöihin ja neuvottele erityisesti herkkien toimintojen lähellä haitoista toimijoiden kanssa."
-          },
-          {
-            "tip": "Selvitä työsi aikatauluttamisen ja työmenetelmien mahdollisuudet päästöhaittojen minimoimiseksi toiminnoille."
-          },
-          {
-            "tip": "Laadi meluilmoitus häiritsevästä melusta viimeistään 30 vuorokautta ennen toiminnan aloittamista: <0>Meluilmoitus</0>",
-            "links": [
-              "https://www.hel.fi/fi/yritykset-ja-tyo/yritykset-ja-yrittajat/yritysten-luvat-ja-tilat/ymparistolupa-ja-ilmoitukset/meluilmoitus"
+            "heading": "Ennakkotiedotus ja tiedotus muutoksista",
+            "tip": "Tiedota toimijoille ja kiinteistöille vähintään viikkoa ennen tai välittömästi töiden ajankohdan ollessa tiedossa, kun tehdään melu-, pöly- tai tärinähaittaa aiheuttavia töitä. Erittäin häiritsevästä työstä tulee tehdä ilmoitus viimeistään 30 vuorokautta ennen töiden aloittamista. Anna asukkaille ja eri toimijoille aikaa varautua etukäteen tiedossa oleviin häriöihin ja neuvottele erityisesti herkkien toimintojen lähellä haitoista toimijoiden kanssa.",
+            "cardLinks": [
+              1
             ]
           },
           {
-            "tip": "Asuin- ja majoitushuoneistojen sekä hoitolaitosten läheisyydessä et pääsääntöisesti saa harjoittaa erityisen häiritsevää melua aiheuttavaa toimintaa yöaikaan klo 22–7."
-          },
-          {
-            "tip": "Vältä meluavia töitä päiväkotien läheisyydessä  klo 12-14, koulujen läheisyydessä klo 8-15 sekä toimistojen läheisyydessä klo 9-15."
-          },
-          {
-            "tip": "Toteuta meluvaikutuksia vähentäviä ratkaisuja, kuten siirrettävä meluaita."
-          },
-          {
-            "tip": "Laadi työmaavesien käsittelysuunnitelma hyvissä ajoin osana työmaan suunnittelua (aluksi arvioi poistettavien vesien määrä ja laatu). Työmaavesien johtamisesta hulevesiverkostoon tulee sopia Helsingin Seudun Ympäristöpalveluihin (HSY) (<0>https://yhteydenotto.hsy.fi/asiakaspalvelu</0>, puh. vaihde 09 1561 2110). Varmista HSY:n kanssa työmaavesien johtamisen verkostolliset vaikutukset mm. verkoston purkupään luontoarvoihin (esim. julkisivuremonttien pölyn hallitsematon päätyminen verkostoon). Lisätiedot: <1>Työmaavesien viemäröintiohje</1> sekä <2>https://www.hel.fi/static/ymk/esitteet/tyomaavesi.pdf</2>",
-            "links": [
-              "https://yhteydenotto.hsy.fi/asiakaspalvelu,",
-              "https://www.hsy.fi/vesi-ja-viemarit/tyomaavesien-viemarointiohje/",
-              "https://www.hel.fi/static/ymk/esitteet/tyomaavesi.pdf"
+            "heading": "Työn aikatauluttaminen ja työmenetelmät",
+            "tip": "Selvitä työsi aikatauluttamisen ja työmenetelmien mahdollisuudet päästöhaittojen minimoimiseksi toiminnoille.",
+            "cardLinks": [
+              10
             ]
+          }
+        ],
+        "MELU": [
+          {
+            "heading": "Meluilmoitus",
+            "tip": "Laadi meluilmoitus häiritsevästä melusta viimeistään 30 vuorokautta ennen toiminnan aloittamista: <external href=\"https://www.hel.fi/fi/yritykset-ja-tyo/yritykset-ja-yrittajat/yritysten-luvat-ja-tilat/ymparistolupa-ja-ilmoitukset/meluilmoitus\">Meluilmoitus <span className=\"hds-icon icon hds-icon--link-external hds-icon--size-s vertical-align-medium-icon\" aria-hidden=\"true\"></span></external>"
           },
           {
+            "heading": "Työaikarajoitukset",
+            "tip": "Asuin- ja majoitushuoneistojen sekä hoitolaitosten läheisyydessä et pääsääntöisesti saa harjoittaa erityisen häiritsevää melua aiheuttavaa toimintaa yöaikaan klo 22–7. Vältä meluavia töitäpäiväkotien läheisyydessä klo 12-14, koulujen läheisyydessä klo 8-15 sekä toimistojen läheisyydessä klo 9-15. Jaksota erityisen meluavat työt rajoitusten ulkopuolelle."
+          },
+          {
+            "heading": "Melua vähentävät ratkaisut",
+            "tip": "Toteuta meluvaikutuksia vähentäviä ratkaisuja, kuten siirrettävä meluaita.",
+            "cardLinks": [
+              10
+            ]
+          }
+        ],
+        "POLY": [
+          {
+            "heading": "Työmaavesien käsittely",
+            "tip": "Laadi työmaavesien käsittelysuunnitelma hyvissä ajoin osana työmaan suunnittelua (aluksi arvioi poistettavien vesien määrä ja laatu). Työmaavesien johtamisesta hulevesiverkostoon tulee sopia Helsingin Seudun Ympäristöpalveluihin (HSY) (<external href=\"https://yhteydenotto.hsy.fi/asiakaspalvelu\">https://yhteydenotto.hsy.fi/asiakaspalvelu <span className=\"hds-icon icon hds-icon--link-external hds-icon--size-s vertical-align-medium-icon\" aria-hidden=\"true\"></span></external>, puh. vaihde 09 1561 2110). Varmista HSY:n kanssa työmaavesien johtamisen verkostolliset vaikutukset mm. verkoston purkupään luontoarvoihin (esim. julkisivuremonttien pölyn hallitsematon päätyminen verkostoon). Lisätiedot: <external href=\"https://www.hsy.fi/vesi-ja-viemarit/tyomaavesien-viemarointiohje/\">Työmaavesien viemäröintiohje <span className=\"hds-icon icon hds-icon--link-external hds-icon--size-s vertical-align-medium-icon\" aria-hidden=\"true\"></span></external> sekä <external href=\"https://www.hel.fi/fi/kaupunkiymparisto-ja-liikenne/tontit-ja-rakentamisen-luvat/tyomaan-luvat-ja-ohjeet/tyomaan-ymparistohaittojen-ehkaisy#tyomaavedet\">Työmaavesiä koskevia ohjeita<span className=\"hds-icon icon hds-icon--link-external hds-icon--size-s vertical-align-medium-icon\" aria-hidden=\"true\"></span></external>"
+          },
+          {
+            "heading": "Pesurin käyttö",
             "tip": "Käytä pesuria lähikaduille päivittäin, jos työalue on sora- tai irtomaa-ainespintainen. Estä ajoväylien pölyäminen esimerkiksi suolaliuoksella tai murskepinnalla. Käytä pesuria tarvittaessa myös työmaa-ajoneuvoihin."
           },
           {
+            "heading": "Pölyävien varastojen ja kuormien suojaaminen",
             "tip": "Kastele ja peitä varastoidut maa- ja kiviainekset sekä purkujätteet. Kastele ja peitä pölyävät kuormat kuljetettaessa niitä rakennustyömaan ulkopuolelle."
           },
           {
-            "tip": "Käytä pölynkeräyslaitteistoja avolouhinnan porauslaitteissa (alle 200 metrin päässä herkistä kohteista tai kun louheen kuljetusreitti sijaitsee pölylle herkkien kohteiden läheisyydessä)."
+            "heading": "Pölyn leviämisen estäminen",
+            "tip": "Suunnittele ja käytä pölyä aiheuttavissa työvaiheissa pölyn leviämistä estäviä toimia. Käytä pölynkeräyslaitteistoja avolouhinnan porauslaitteissa (alle 200 metrin päässä herkistä kohteista tai kun louheen kuljetusreitti sijaitsee pölylle herkkien kohteiden läheisyydessä). Estä ajoväylien pölyäminen esimerkiksi suolaliuoksella tai käytä työmaan sisäisinä ajoreitteinä tarvittaessa murskepintaisia väyliä."
           },
           {
-            "tip": "Tarkista ratkaisujesi ohjeidenmukaisuus: <0>https://www.hel.fi/static/ymk/esitteet/rakennustyomaapoly.pdf</0>",
-            "links": [
-              "https://www.hel.fi/static/ymk/esitteet/rakennustyomaapoly.pdf"
-            ]
+            "heading": "Rakennustyömaan pölyä koskevat ohjeet",
+            "tip": "Tarkista ratkaisujesi ohjeidenmukaisuus: <external href=\"https://www.hel.fi/fi/kaupunkiymparisto-ja-liikenne/tontit-ja-rakentamisen-luvat/tyomaan-luvat-ja-ohjeet/tyomaan-ymparistohaittojen-ehkaisy#poly\">Pölyntorjuntaa koskevia ohjeita ja määräyksiä <span className=\"hds-icon icon hds-icon--link-external hds-icon--size-s vertical-align-medium-icon\" aria-hidden=\"true\"></span></external>"
+          }
+        ],
+        "TARINA": [
+          {
+            "heading": "Melu- ja tärinäilmoitus",
+            "tip": "Laadi ilmoitus häiritsevästä (melusta ja) tärinästä viimeistään 30 vuorokautta ennen toiminnan aloittamista: <external href=\"https://www.hel.fi/fi/yritykset-ja-tyo/yritykset-ja-yrittajat/yritysten-luvat-ja-tilat/ymparistolupa-ja-ilmoitukset/meluilmoitus\">Meluilmoitus <span className=\"hds-icon icon hds-icon--link-external hds-icon--size-s vertical-align-medium-icon\" aria-hidden=\"true\"></span></external>"
           },
           {
-            "tip": "Laadi ilmoitus häiritsevästä (melusta ja) tärinästä viimeistään 30 vuorokautta ennen toiminnan aloittamista: <0>Meluilmoitus</0>",
-            "links": [
-              "https://www.hel.fi/fi/yritykset-ja-tyo/yritykset-ja-yrittajat/yritysten-luvat-ja-tilat/ymparistolupa-ja-ilmoitukset/meluilmoitus"
-            ]
-          },
-          {
+            "heading": "Maaperä ja työmenetelmät",
             "tip": "Tarkista maaperätiedot ja miten maaperä vaikuttaa tärinän leviämiseen. Suunnittele työmenetelmät siten, että tärinävaikutukset minimoituvat."
           }
         ]
@@ -1153,8 +1212,8 @@
       "cableReportInstructions": "Voit joko hakea uuden johtoselvityksen tai valita hankkeelle jo lisättyjä johtoselvityksiä."
     },
     "alueet": {
-      "instructions": "<p>Aloita hakemuksen työalueiden piirtäminen lisäämällä työn alku- ja loppupäivämäärät, jolloin hankealueesi ilmestyvät näkyviin. HUOM! Työn ajankohdan tulee sijoittua hankealueen aikavälille.</p><p>Voit muokata jo piirrettyä aluetta tarttumalla sen reunasta kiinni ja vetämällä pisteen haluamaasi kohtaan.</p><p>Jos haluat piirtää hankealueiden sisälle pienempiä työalueita, aktivoi piirtotyökalut kartan päältä. Huomioi, että työalueet tulee piirtää kokonaan hankealueiden sisälle.</p><p>Jos haluat käyttää koko hankealuetta työalueena, valitse hankealue kartalta aktiviiseksi ja hanketietolaatikosta \"Käytä työalueena\".</p><p>Voit lisätä samalle hakemukselle useampia alueita mikäli niiden aikaväli on sama. Jos haluat ilmoittaa useamman alueen eri aikaväleillä, tulee sinun tehdä erillinen hakemus.</p><p>Kartan vasemmassa reunassa olevilla kulkumuotovalitsimilla voit tarkastella hanke- ja työalueiden haittaindeksejä tietylle kulkumuodolle. Kaikki kulkumuodot ovat oletuksena aktiivisina, voit vaihtaa näkyvien kulkumuotojen määrää klikkaamalla ikoneja. Kartalla näkyy valittujen kulkumuotojen kriittisin indeksiväri.</p><p>$t(kaivuilmoitusForm:requiredInstruction)</p>",
-      "areaInformationHeading": "Kaivuilmoitus työalueille",
+      "instructions": "<p>Aloita hakemuksen työalueiden piirtäminen lisäämällä työn alku- ja loppupäivämäärät, jolloin hankealueesi ilmestyvät näkyviin. HUOM! Työn ajankohdan tulee sijoittua hankealueen aikavälille.</p><p>Voit muokata jo piirrettyä aluetta tarttumalla sen reunasta kiinni ja vetämällä pisteen haluamaasi kohtaan.</p><p>Jos haluat piirtää hankealueiden sisälle pienempiä työalueita, aktivoi piirtotyökalut kartan päältä. Huomioi, että työalueet tulee piirtää kokonaan hankealueiden sisälle.</p><p>Jos haluat käyttää koko hankealuetta työalueena, valitse hankealue kartalta aktiviiseksi ja hanketietolaatikosta \"Kopioi työalueeksi\".</p><p>Voit lisätä samalle hakemukselle useampia alueita mikäli niiden aikaväli on sama. Jos haluat ilmoittaa useamman alueen eri aikaväleillä, tulee sinun tehdä erillinen hakemus.</p><p>$t(kaivuilmoitusForm:requiredInstruction)</p>",
+      "areaInformationHeading": "Työalueita koskevat yhteiset tiedot valitulla hankealueella",
       "startDate": "Työn alkupäivämäärä",
       "endDate": "Työn loppupäivämäärä",
       "liikennehaittaindeksienYhteenveto": "Työalueiden liikennehaittaindeksien yhteenveto",
@@ -1219,7 +1278,7 @@
       "endDate": "Työn arvioitu loppupäivä",
       "workArea": "Työalue",
       "workAreaPlural": "Työalueet",
-      "workAreaOverlapsSingle": "Työalue ylittää johtoselvityksen rajauksen, tee johtoselvitykseen <a>{{applicationIdentifier}}</a> muutosilmoitus.",
+      "workAreaOverlapsSingle": "Työalue ylittää johtoselvityksen <a>{{applicationIdentifier}}</a> rajauksen, muuta työalueen rajausta tai hae uusi johtoselvitys.",
       "workAreaOverlapsMultiple": "Työalue ylittää usean johtoselvityksen rajauksen, tee muutosilmoitus.",
       "areaAdditionalInfo": "Lisätietoja alueesta",
       "areaInfo": "Alueen tiedot",
@@ -1248,6 +1307,8 @@
       "newCableReport": "Uusi johtoselvitys",
       "cableReports": "Tehtyjen johtoselvitysten tunnukset",
       "cableReportsHelp": "Valitse kartalta tai listasta tai kirjoita muu tunnus ja paina Enter lisätäksesi",
+      "cableReportFilterPlaceholder": "Anna teksti suodatusta varten tai kirjoita muu tunnus",
+      "cableReportFilterWithAnotherTerm": "Kokeile toisia sanoja tai kirjoita muu tunnus ja paina Enter lisätäksesi",
       "noCableReports": "Haitaton ei löytänyt hankkeelle aiemmin lisättyjä johtoselvityksiä. Voit lisätä muita johtoselvityksiä tunnuksen perusteella.",
       "cableReportApplicationIdentifier": "Johtoselvitystunnus",
       "cableReportTagInputHelp": "Anna johtoselvitystunnus ja paina Lisää",
@@ -1279,9 +1340,8 @@
       "saveErrorText": "<0>Hakemuksen tallentaminen epäonnistui. Yritä myöhemmin uudelleen tai ota yhteyttä Haitattoman tekniseen tukeen sähköpostiosoitteessa <1>haitatontuki@hel.fi</1>.</0>",
       "sendSuccessLabel": "Hakemus lähetetty",
       "sendErrorLabel": "Lähettäminen epäonnistui",
-      "sendSuccessText": "Hakemus on lähetetty käsiteltäväksi.",
-      "sendErrorText": "<0>Hakemus on tallennettu luonnoksena, koska hakemuksen lähettäminen käsittelyyn epäonnistui. Yritä lähettämistä myöhemmin uudelleen tai ota yhteyttä Haitattoman tekniseen tukeen sähköpostiosoitteessa <1>haitatontuki@hel.fi.</1></0>",
-      "sendErrorTextNoSave": "<0>Hakemuksen lähettäminen käsittelyyn epäonnistui. Yritä lähettämistä myöhemmin uudelleen tai ota yhteyttä Haitattoman tekniseen tukeen sähköpostiosoitteessa <1>haitatontuki@hel.fi.</1></0>",
+      "sendSuccessText": "Hakemus on lähetetty käsiteltäväksi. Ilmoitus hakemuksesta lähetettiin hakemukseen lisätyille yhteyshenkilöille.",
+      "sendErrorText": "<0>Hakemuksen lähettäminen käsittelyyn epäonnistui. Yritä lähettämistä myöhemmin uudelleen tai ota yhteyttä Haitattoman tekniseen tukeen sähköpostiosoitteessa <1>haitatontuki@hel.fi.</1></0>",
       "cancelSuccessLabel": "Hakemus peruttiin",
       "cancelSuccessText": "Hakemus peruttiin onnistuneesti",
       "noApplications": "Hankkeella ei ole lisättyjä hakemuksia",
@@ -1547,20 +1607,47 @@
     }
   },
   "muutosilmoitus": {
+    "heading": "$t(muutosilmoitus:notification:label)",
+    "labels": {
+      "muutosilmoitus": "Muutosilmoitus",
+      "originalInformation": "$t(taydennys:labels:originalInformation)",
+      "muutokset": "Muutokset",
+      "muutos": "Muutos",
+      "cancelTitle": "Peru muutosilmoitus?",
+      "cancelDescription": "Haluatko varmasti perua hakemukseen tehdyt muutokset ja palauttaa aiemman päätöksen tiedot?"
+    },
     "buttons": {
       "createMuutosilmoitus": "Tee muutosilmoitus",
-      "editMuutosilmoitus": "Jatka muutosilmoitusta"
+      "editMuutosilmoitus": "Jatka muutosilmoitusta",
+      "cancelMuutosilmoitus": "Peru muutosilmoitus",
+      "sendMuutosilmoitus": "Lähetä muutosilmoitus"
     },
     "notification": {
       "label": "Muutosilmoitus",
-      "createdText": "Hakemukselle on luotu muutosilmoitus",
-      "sentText": "Hakemukselle on tehty muutosilmoitus, joka on lähetetty käsittelyyn {{date}}"
+      "createdText": "Hakemuksella on keskeneräinen muutosilmoitus.",
+      "sendSuccessLabel": "Muutosilmoitus lähetetty",
+      "sendSuccessText": "Muutosilmoitus on lähetetty käsiteltäväksi.",
+      "sendErrorLabel": "Muutosilmoituksen lähettäminen epäonnistui",
+      "sendErrorText": "$t(hakemus:notifications:reportCompletionDateErrorText)",
+      "sentText": "Hakemukselle on tehty muutosilmoitus, joka on lähetetty käsittelyyn {{date}}",
+      "cancelSuccessLabel": "Muutosilmoitus peruttiin",
+      "cancelSuccessText": "Muutosilmoitus peruttiin onnistuneesti"
+    },
+    "sendDialog": {
+      "title": "Lähetä muutosilmoitus?"
     }
   },
   "hankeSidebar": {
     "ariaSidebarContent": "Hankkeen tiedot",
     "closeButtonAriaLabel": "Sulje hankevalikko",
-    "editHanke": "Muokkaa hankkeen tietoja"
+    "editHanke": "Muokkaa hankkeen tietoja",
+    "labels": {
+      "hankealueenAjankohta": "Hankealueen ajankohta",
+      "hanke": "Hanke",
+      "hankkeenAjankohta": "Hankkeen ajankohta",
+      "omistaja": "Hankkeen omistaja",
+      "yksityishenkilo": "Yksityishenkilö"
+    }
   },
   "hankeIndexes": {
     "haittaindeksi": "Haittaindeksi",
@@ -1601,7 +1688,7 @@
     "pageTitle_loggedIn": "Tervetuloa Haitaton-asiointiin",
     "pageSubTitle_loggedIn": "Asiointijärjestelmä yleisille alueille sijoittuvien hankkeiden edistämiseen ja haittojen hallintaan",
     "pageSubTitle": "Palvelu yleisille alueille sijoittuvien hankkeiden ja niiden haittojen seurantaan",
-    "info": "Haitaton-palvelussa pääset tutustumaan kaikkiin yleisillä alueilla käynnissä oleviin ja tuleviin hankkeisiin sekä antamaan niille palautetta. Voit tarkastella hankkeita kartalla tai listalla. Oletko perustamassa hanketta tai tekemässä hakemuksia?",
+    "info": "Haitaton-palvelussa pääset tutustumaan kaikkiin yleisillä alueilla käynnissä oleviin ja tuleviin hankkeisiin. Voit tarkastella hankkeita kartalla. Oletko perustamassa hanketta tai tekemässä hakemuksia?",
     "info_link": "Siirry Haitaton-asiointiin",
     "notification": {
       "heading": "Auta meitä tekemään Haitattomasta vielä parempi!",
@@ -1632,19 +1719,14 @@
       "description": "Omista hankkeista löydät aiemmin luomasi hankkeet ja hakemukset.",
       "actionText": "Avaa omat hankkeet"
     },
-    "hankelista": {
-      "title": "Hankkeet listana",
-      "description": "Tutustu käynnissä oleviin ja tuleviin hankkeisiin listauksena.",
-      "actionText": "Avaa hankelista"
-    },
     "kartta": {
       "title": "Tutustu hankkeisiin",
-      "description": "Tutustu käynnissä oleviin ja tuleviin hankkeisiin yleisillä alueilla kartalla tai listauksena.",
+      "description": "Tutustu käynnissä oleviin ja tuleviin Haitattomassa luotuihin hankkeisiin kartalla.",
       "actionText": "Tutustu hankkeisiin kartalla"
     },
     "kartta_kirjautumaton": {
-      "title": "Hankkeet kartalla",
-      "description": "Tutustu käynnissä oleviin ja tuleviin hankkeisiin kartalla",
+      "title": "Hankkeet yleisillä alueilla",
+      "description": "Tutustu käynnissä oleviin ja tuleviin hankkeisiin kartalla.",
       "actionText": "Tutustu hankkeisiin kartalla"
     },
     "tietoja_haitattomasta": {
@@ -1718,50 +1800,8 @@
       "oikeudet": "Käyttöoikeutesi hankkeelle"
     },
     "ariaLabels": {
-      "expandHankeCard": "Laajenna hankkeen tiedot"
-    },
-    "draftState": {
-      "labels": {
-        "draft": "Hanke on luonnostilassa. Sen näkyvyys muille hankkeille on rajoitettua, eikä sille voi lisätä hakemuksia.",
-        "insufficientPhases": "$t(hankePortfolio:draftState:labels:draft) Seuraavissa vaiheissa on puuttuvia tietoja:",
-        "missingFields": "$t(hankePortfolio:draftState:labels:draft) Seuraavat kentät tällä sivulla vaaditaan hankeen julkaisemiseksi:",
-        "missingInformationForHaittojenhallinta": "$t(hankePortfolio:draftState:labels:draft) Seuraavat tiedot lomakkeella vaaditaan haittojenhallinnan täyttämiseen:"
-      }
-    }
-  },
-  "publicHankkeet": {
-    "pageHeader": "Hankkeet yleisillä alueilla",
-    "buttons": {
-      "map": "Kartta",
-      "list": "Lista"
-    }
-  },
-  "hankeList": {
-    "pageHeader": "Hankelista",
-    "paginationHeader": "Sivu",
-    "paginatioAriaLabel": "Sivutus",
-    "tableHeader": {
-      "id": "Tunnus",
-      "name": "Nimi",
-      "step": "Vaihe",
-      "startDate": "Aloitus",
-      "endDate": "Lopetus"
-    },
-    "sortButtons": {
-      "id": "Lajittele taulukko tunnuksen mukaan",
-      "name": "Lajittele taulukko nimen mukaan",
-      "step": "Lajittele taulukko vaiheen mukaan",
-      "startDate": "Lajittele taulukko aloitus päivämäärän mukaan",
-      "endDate": "Lajittele taulukko lopetus päivämäärän mukaan"
-    },
-    "sortLabels": {
-      "sorted": "Taulukko järjestetty",
-      "nimi": "Hankkeen nimi",
-      "vaihe": "Hankkeen vaihe",
-      "alkuPvm": "Hankkeen alkupäivä",
-      "loppuPvm": "Hankkeen loppupäivä",
-      "asc": "nouseva",
-      "desc": "laskeva"
+      "expandHankeCard": "Laajenna hankkeen tiedot",
+      "breadcrumb": "Hankkeen navigaatio"
     },
     "buttons": {
       "edit": "Muokkaa hanketta",
@@ -1774,10 +1814,29 @@
       "toNextPage": "Listan seuraavalle sivulle",
       "toLastPage": "Listan viimeiselle sivulle"
     },
-    "breadcrumb": {
-      "ariaLabel": "Hankkeen navigaatio"
+    "draftState": {
+      "labels": {
+        "draft": "Hanke on luonnostilassa. Sen näkyvyys muille hankkeille on rajoitettua, eikä sille voi lisätä hakemuksia.",
+        "insufficientPhases": "$t(hankePortfolio:draftState:labels:draft) Seuraavissa vaiheissa on puuttuvia tietoja:",
+        "missingFields": "$t(hankePortfolio:draftState:labels:draft) Seuraavat kentät tällä sivulla vaaditaan hankeen julkaisemiseksi:",
+        "missingInformationForHaittojenhallinta": "$t(hankePortfolio:draftState:labels:draft) Seuraavat tiedot lomakkeella vaaditaan haittojenhallinnan täyttämiseen:"
+      }
     },
-    "listDescription": "Voit käyttää taulukon otsikkopainikkeita taulukon järjestämiseen"
+    "completedState": {
+      "labels": {
+        "completed": "Hanke on siirretty Valmis-tilaan"
+      },
+      "notifications": {
+        "completed": "Hanketta ei voi enää muokata eikä sille voi lisätä hakemuksia. Hanke poistetaan aikaisintaan {{date}}, jolloin kaikki hankkeen ja sen hakemusten tiedot poistuvat Haitattomasta."
+      }
+    }
+  },
+  "publicHankkeet": {
+    "pageHeader": "Hankkeet yleisillä alueilla",
+    "buttons": {
+      "map": "Kartta",
+      "list": "Lista"
+    }
   },
   "hankeUsers": {
     "role": "Rooli hankkeessa",
@@ -1802,7 +1861,7 @@
     },
     "accessRightsInfo": {
       "heading": "Mitä eri oikeuksilla voi tehdä?",
-      "KAIKKI_OIKEUDET": "<strong>Kaikki oikeudet</strong> mahdollistaa hankkeen ja sen hakemusten sisällön muokkaamisen, kaikkien käyttöoikeuksien muokkaamisen sekä hankkeen poistamisen, kun hankkeella ei ole päätöksen saaneita hakemuksia.",
+      "KAIKKI_OIKEUDET": "<strong>Kaikki oikeudet</strong> mahdollistaa hankkeen ja sen hakemusten sisällön muokkaamisen, kaikkien käyttöoikeuksien muokkaamisen sekä hankkeen poistamisen, kun hankkeella ei ole käsittelyyn edenneitä hakemuksia.",
       "KAIKKIEN_MUOKKAUS": "<strong>Hankkeen ja hakemusten muokkaus -oikeus</strong> mahdollistaa hankkeen ja sen hakemusten sisällön muokkaamisen ja luonnin sekä muiden käyttöoikeuksien muokkaamisen, paitsi “Kaikki oikeudet”, jolla voi poistaa hankkeen.",
       "HANKEMUOKKAUS": "<strong>Hankemuokkaus-oikeus</strong> mahdollistaa hankkeen tietojen muokkaamisen, mutta ei käyttöoikeuksien muokkausta. Hakemustietoihin on tällöin katseluoikeudet.",
       "HAKEMUSASIOINTI": "<strong>Hakemusasiointi-oikeus</strong> mahdollistaa uusien hakemusten luomisen hankkeelle sekä hankkeen hakemusten tietojen muokkaamisen.",
@@ -1820,7 +1879,7 @@
       "userUpdatedErrorText": "<0>Käyttäjätietojen päivityksessä tapahtui virhe. Yritä myöhemmin uudelleen tai ota yhteyttä Haitattoman tekniseen tukeen sähköpostiosoitteessa <1>haitatontuki@hel.fi</1>.</0>",
       "userIdentifiedLabel": "Tunnistautuminen onnistui",
       "userIdentifiedText": "Sinut on nyt lisätty hankkeelle ({{hankeNimi}} {{hankeTunnus}}).",
-      "userIdentifiedError": "Tunnistautuminen epäonnistui",
+      "userIdentifiedError": "Tunnistautuminen hankkeelle epäonnistui",
       "invitationSentSuccessLabel": "Kutsulinkki lähetetty",
       "invitationSentSuccessText": "Kutsulinkki lähetetty osoitteeseen {{email}}.",
       "invitationSentErrorLabel": "Virhe linkin lähettämisessä",
@@ -1859,7 +1918,8 @@
   },
   "map": {
     "controls": {
-      "ariaLayerMenu": "Kartan tasojen valinta"
+      "ariaLayerMenu": "Kartan tasojen valinta",
+      "fullscreen": "Vaihda koko näytön tila"
     },
     "tileLayers": {
       "ortokartta": "Ortokartta",
@@ -1890,7 +1950,9 @@
       "releaseInfo": "Julkaisutiedot ja päivityshistoria",
       "releaseVer1": "6/2023: Johtoselvityksen tekeminen",
       "releaseVer2": "5/2024: Käyttöoikeudet ja niiden jakaminen",
-      "releaseAdditionalInfo": "Listan päivitysten lisäksi teemme jatkuvasti pieniä parannuksia ja päivityksiä palveluumme.",
+      "releaseVer3": "2/2025: Johtoselvityksen täydennyspyyntö sekä Helsingin kaupungin AD -kirjautuminen",
+      "releaseVer4": "4/2025: Kaivuilmoitus ja hankehallinta",
+      "releaseAdditionalInfo": "Listassa mainittujen päivitysten lisäksi teemme jatkuvasti pieniä parannuksia ja päivityksiä palveluumme.",
       "materials": "Aineistot",
       "mapMaterials": "Kartta-aineistot",
       "imageCopyrights": "Kuvien tekijätiedot"
@@ -1920,7 +1982,8 @@
       }
     },
     "accessibility": {
-      "title": "Saavutettavuusseloste"
+      "title": "Saavutettavuusseloste",
+      "content": "<p>Tämä saavutettavuusseloste koskee Haitaton-verkkosivustoa (<internal href=\"https://haitaton.hel.fi/\">https://haitaton.hel.fi/</internal>). Verkkosivustosta vastaa Helsingin kaupunki. Tässä selosteessa kerrotaan, kuinka saavutettava verkkosivusto on ja miten voit antaa meille palautetta saavutettavuudesta.</p><h2>Kuinka saavutettava tämä verkkosivusto on?</h2><p>Digitaalisten palveluiden tarjoamista koskevan lain mukaan julkisten verkkosivustojen on oltava saavutettavia, eli kaikilla tulee olla tasavertaiset mahdollisuudet käyttää niitä.</p><p>Tämä verkkosivusto täyttää osittain lain vaatimat saavutettavuuskriteerit (WCAG-kriteeristö 2.1, A- ja AA-taso). Verkkosivustossa on merkittäviä saavutettavuuspuutteita, jotka on kuvattu tarkemmin alempana.</p><h3>Sisällöt, jotka eivät ole saavutettavia</h3><p>Tämä verkkosivusto ei ole kaikilta osin saavutettava. Alla mainitut sisällöt tai toiminnot eivät täytä kaikkia lain asettamia saavutettavuusvaatimuksia. Korjaamme havaittuja saavutettavuuspuutteita jatkuvasti. Päivitämme tämän selosteen havaittujen puutteiden listausta, kun saamme puutteita korjattua.</p><h4>Ylä- ja alavalikko</h4><ul><li>Navigointilinkki etusivulle ei ole nimetty yhteneväisellä tavalla sivuston eri osissa (WCAG 2.1: 2.4.4 Linkin tarkoitus (kontekstissa)).</li><li>Nykyinen sivu ilmaistaan teknisesti virheellisesti osassa ylävalikon elementeistä (WCAG 2.1: 1.3.1 Informaatio ja suhteet).</li><li>Kaikilla navigointielementeillä ei ole yksilöllistä nimeä (WCAG 2.1: 1.3.1 Informaatio ja suhteet).</li><li>Ylävalikon mobiilinavigointimenun taustalla oleviin elementteihin on mahdollista kohdistaa ruudunlukijalla (WCAG 2.1: 1.3.2 Merkitykseen vaikuttava järjestys).</li><li>Mobiilinavigointimenun näkyvä ja saavutettava nimi poikkeavat toisistaan (WCAG 2.1:2.5.3 Nimilappu nimessä).</li><li>Kun sivustolle ei ole tunnistautunut, kaikki sivuston navigointilinkit eivät ole käytettävissä muualla kuin etusivulla (WCAG 2.1: 2.4.5 Useita tapoja).</li></ul><h4>Syöte</h4><ul><li>Sivustolla on toimintoja, jotka päivittyvät automaattisesti ilman käyttäjän erillistä syötettä, kuten hakutoiminto ja kalenterin päivämäärän valitseminen (WCAG2.1: 3.2.2 Syöte).</li></ul><h4>Näppäimistö</h4><ul><li>Kaikki interaktiiviset elementit eivät ole käytettävissä näppäimistöllä, kuten kartan alueiden listaus tai alueen piirtäminen (WCAG 2.1: 2.1.1 Näppäimistö).</li></ul><h4>Kohdistusjärjestys</h4><ul><li>Elementtien kohdistusjärjestys tai lukemisjärjestys on ajoittain epälooginen (WCAG2.1: 1.3.2 Merkitykseen vaikuttava järjestys, 2.4.3 Kohdistusjärjestys).</li></ul><h4>Linkkien kohde</h4><ul><li>Kaikkien linkkien kohde ei ilmene riittävän selkeästi linkin nimestä (WCAG 2.1:2.4.4 Linkin tarkoitus (kontekstissa)).</li></ul><h4>Painikkeiden nimi</h4><ul><li>Sivustolla on painikkeita, jonka saavutettava nimi puuttuu tai ilmaistaan virheellisesti / epäselvästi (WCAG 2.1: 4.1.2 Nimi, rooli, arvo).</li></ul><h4>Tilaviestit</h4><ul><li>Sivustolla on dynaamista sisältöä, jonka tilan muutos ei välity avustavan teknologian käyttäjille, kuten kalenterin valintaikkunan toiminta (WCAG 2.1: 4.1.3 Tilasta kertovat viestit).</li></ul><h3>Saavutettavuuden arviointi</h3><p>Saavutettavuuden arvioinnissa on noudatettu Helsingin kaupungin työohjetta ja menetelmiä, jotka pyrkivät varmistamaan palvelun saavutettavuuden kaikissa työvaiheissa.</p><p>Saavutettavuus on tarkistettu ulkopuolisen asiantuntijan suorittamana arviointina.Saavutettavuus on tarkistettu käyttäen ohjelmallista saavutettavuustarkistusta sekä verkkosivuston ja sisällön manuaalista tarkistusta.</p><h2>Huomasitko puutteita saavutettavuudessa?</h2><p>Pyrimme jatkuvasti parantamaan verkkosivuston saavutettavuutta. Ota meihin yhteyttä,jos löydät saavutettavuuspuutteita, joita ei ole kuvattu tällä sivulla, tai tarvitsemasi aineisto ei ole saavutettavaa. Anna palautetta sähköpostitse: <mailto href=\"mailto:haitaton@hel.fi\">haitaton@hel.fi</mailto>.</p><h2>Saavutettavuuden valvonta</h2><p>Liikenne- ja viestintävirasto Traficom valvoo saavutettavuusvaatimusten toteutumista.Jos et ole tyytyväinen saamaasi vastaukseen tai et saa vastausta lainkaan kahden viikon aikana, voit tehdä ilmoituksen Liikenne- ja viestintävirasto Traficomiin. Liikenne- ja viestintävirasto Traficomin sivulla kerrotaan tarkasti, miten ilmoituksen voi tehdä ja miten asia käsitellään.</p><p><b>Liikenne- ja viestintävirasto Traficom</b><br /> Digitaalisen esteettömyyden ja saavutettavuuden valvontayksikkö<br />www.saavutettavuusvaatimukset.fi<br /><mailto href=\"mailto:saavutettavuus@traficom.fi\">saavutettavuus@traficom.fi</mailto><br />puhelinnumero vaihde 029 534 5000</p><p><a href=\"https://www.saavutettavuusvaatimukset.fi/\">www.saavutettavuusvaatimukset.fi<span class=\"hds-icon icon hds-icon--link-external hds-icon--size-s vertical-align-medium-icon\" aria-hidden=\"true\"></span></a></p><h2>Saavutettavuusselosteen tiedot</h2><p>Verkkosivusto on julkaistu 1.5.2025.</p><p>Seloste on laadittu 26.6.2023.</p><p>Seloste on päivitetty 8.4.2025.</p><p><a href=\"https://www.finlex.fi/fi/lainsaadanto/saadoskokoelma/2019/306\">Laki digitaalisten palvelujen tarjoamisesta (306/2019)<span class=\"hds-icon icon hds-icon--link-external hds-icon--size-s vertical-align-medium-icon\" aria-hidden=\"true\"></span></a></p>"
     },
     "privacyPolicy": {
       "title": "Tietosuojaselosteet",
@@ -1930,13 +1993,197 @@
       "secondLinkUrl": "https://www.hel.fi/static/liitteet-2019/Kaupunginkanslia/Rekisteriselosteet/Keha/Sahkoisten%20asiointipalveluiden%20rekisteri.pdf"
     },
     "manualPage": {
-      "title": "Käyttöohjeet ja tuki",
-      "linkText": "Avaa käyttöohje tästä (pdf)",
-      "supportText": "Haitaton-järjestelmän tekninen tuki: <a>haitatontuki@hel.fi</a>",
-      "bodyText": "Johtotietopalvelun yhteystiedot löytyvät oheisen linkin takaa: <a>https://www.hel.fi/fi/kaupunkiymparisto-ja-liikenne/tontit-ja-rakentamisen-luvat/johtotietopalvelu </a>",
-      "contactText": "<p>- sähköpostiosoite: <a>johtotietopalvelu@hel.fi</a></p><p>- puhelin: 09 310 31940</p>",
-      "linkUrl": "https://www.hel.fi/static/hkr/luvat/haitaton/haitaton-asiakasohje.pdf",
-      "cableLocationServiceLink": "https://www.hel.fi/fi/kaupunkiymparisto-ja-liikenne/tontit-ja-rakentamisen-luvat/johtotietopalvelu "
+      "main": {
+        "heading": "Käyttöohjeet ja tuki",
+        "text": "Näiltä sivuilta löydät Haitattoman käyttöohjeet. Ongelmatilanteissa ota yhteyttä tekniseen tukeen.",
+        "contact": "Yhteystiedot",
+        "haitatonContact": "Haitaton-järjestelmän tekninen tuki",
+        "cableServiceContact": "Johtotietopalvelun yhteystiedot",
+        "cableLocationServiceLink": "https://www.hel.fi/fi/kaupunkiymparisto-ja-liikenne/tontit-ja-rakentamisen-luvat/johtotietopalvelu ",
+        "cableService": "Johtotietopalvelu",
+        "excavationContact": "Kaivuilmoitusten käsittelyn yhteystiedot",
+        "excavationService": "Kaduilla ja puistoissa tehtävät työt",
+        "excavationServiceLink": "https://www.hel.fi/fi/kaupunkiymparisto-ja-liikenne/tontit-ja-rakentamisen-luvat/tyomaan-luvat-ja-ohjeet/kaduilla-ja-puistoissa-tehtavat-tyot#yhteystiedot"
+      },
+      "periaatteet": {
+        "heading": "Haitaton-asioinnin periaatteet",
+        "content": "<p> Haitaton on asiointijärjestelmä, jossa edistät Helsingin kaupungin yleisille alueille (kuten kadut, aukiot ja puistot) sijoittuvia hankkeitasi ja niiden haittojenhallintaa kohti toteutusvaihetta. Järjestelmässä oleviin muihin hankkeisiin voit tutustua myös julkisessa Haitaton-palvelussa kirjautumatta sisään asiointiin. Toteutusvaiheessa Haitaton toimii johtoselvitysten (JS-alkuinen hakemustunnus) ja kaivuilmoitusten (KP-alkuinen hakemustunnus) asiointikanavana. </p> <br /><Puff> <strong>Haitaton-asiointi vaatii vahvan tunnistautumisen.</strong> Jos et voi antaa yhteystietojasi tai käyttää Helsinki-profiilia Haitaton-asioinnissa, varaa aika asiointiin paikan päällä kaupunkiympäristön asiakaspalvelussa (yhteystiedot löytyvät Helsingin kaupungin sivuilta). </Puff> <p> Syöttämällä hankkeesi mahdollisimman aikaisessa vaiheessa hankkeen elinkaarta Haitaton-järjestelmään auttaa järjestelmä parhaiten: </p> <br /> <ul> <li> <strong>hankkeesi haittojen hallinnassa</strong> tunnistamalla sen vaikutuksia mm. kulkumuotoihin ja päästöihin sekä muistuttamalla ennakkoon sovittavista asioista niiden osalta </li> <li> <strong>yhteensovituksessa muiden Haitattomaan lisättyjen hankkeiden kanssa</strong> mm. esittämällä hankkeesi alustavan tilanvarauksen ja aikataulun järjestelmän yleisessä karttaosiossa.</li> </ul> <br /> <p>Haitaton-järjestelmään luomasi hanke muodostuu hankkeen yleistiedoista sekä yksittäisistä hankealueista ja niiden aikatauluista ja haittojenhallintasuunnitelmista. Hankkeen toteutusta varten Haitattomassa tehdään hankkeen alle hakemuksia (johtoselvitykset, kaivuilmoitukset) viranomaiskäsittelyyn. Myös hakemuksella on yleistiedot ja työalueet, joiden tulee sisältyä hankealueisiin laajuudeltaan ja aikataulultaan.</p><br /><Puff> <strong> Haitaton-järjestelmä kattaa tällä hetkellä vain järjestelmään suoraan perustetut hankkeet ja niiden työt. </strong> Haitattomassa olevien hankkeiden ja töiden määrän kasvaessa jatkossa myös yhteensovitus Haitaton-asioinnissa tulee helpottumaan. </Puff> <p> Haitaton-järjestelmästä voi antaa palautetta sähköpostilla osoitteen <a href=\"mailto:haitaton@hel.fi\">haitaton@hel.fi</a>. Kaikki palautteet käsitellään, ja mahdolliset kehitysajatukset arvioidaan osana tulevia kehitystoimia. </p>"
+      },
+      "asioinninToimintokokonaisuudet": {
+        "heading": "Asioinnin toimintokokonaisuudet",
+        "content": "<p>Haitaton-asioinnin etusivu muodostuu seuraavista pääosioista sekä muista järjestelmää kuvaavista osioista:</p> <br /> <ul> <li><strong>Tutustu hankkeisiin</strong>: Osiossa tarkastellaan karttanäkymässä hankkeisiin liittyviä hankealueita. Valitsemalla kartalta hankealueen saat kartan sivupalkkiin näkyviin sen perustiedot ja haittaindeksien tiedot. Haittaindeksien sisältö ja tarkoitus on kuvattu kohdassa <a href=\"./haittaindeksit\">Haittaindeksien laskenta ja haittojenhallintasuunnitelma.</a></li> <li><strong>Luo uusi hanke</strong>: Osiossa voit luoda uuden hankkeen. Hankelomakkeen pakollisten kenttien täytön jälkeen hanke on julkinen eli näkyy muille käyttäjille, jonka jälkeen voit myös laatia hakemuksia (kaivuilmoitus, johtoselvitys) hankkeen alle. Hankkeen perustajana saat automaattisesti kaikki oikeudet hankkeen muokkaamiseen. Lue lisää hankkeen käyttöoikeuksista kohdassa <a href=\"./yhteyshenkilot\">Yhteystietojen lisääminen ja muokkaaminen sekä niiden käyttöoikeudet</a>.</li> <li><strong>Tee johtoselvityshakemus</strong>: Osiossa voit tehdä yksittäisen johtoselvityshakemuksen. Haitaton perustaa tässä yhteydessä automaattisesti hankerungon, jolla on hankkeen tiedoista vain johtoselvitykseltä saatu nimi. Hankerungon perustajana saat automaattisesti kaikki oikeudet hankerungon muokkaamiseen. Omat johtoselvityksesi eivät näy muille käyttäjille. Voit kuitenkin täydentää hankerungosta hankkeen täyttämällä pakolliset hanketiedot, jolloin se muuttuu kaikille käyttäjille näkyväksi hankkeeksi. Tällöin voit lisätä hankkeelle jatkossa myös muita hakemuksia alkuperäisen johtoselvityksen lisäksi.</li> <li><strong>Omat hankkeet</strong>: Osion kautta voit tarkastella hankkeita ja niiden hakemuksia sekä hankerunkoja (eli yksittäisiä johtoselvityksiä), joissa olet mukana perustajana tai jälkikäteen lisättynä yhteyshenkilönä. Riittävillä käyttöoikeuksilla voit hallita hankkeissa mukana olevien muiden henkilöiden käyttöoikeuksia. Lue lisää käyttöoikeuksista kohdassa <a href=\"./yhteyshenkilot\">Yhteystietojen lisääminen ja muokkaaminen sekä niiden käyttöoikeudet</a>. Riittävillä käyttöoikeuksilla voit myös lisätä hankkeelle uusia hakemuksia hankesivun kautta ja/tai muokata jo luotuja hakemuksia hakemussivun kautta. Yksittäisten hakemusten viranomaistilaa voit seurata näillä sivuilla myös katseluoikeuksilla.</li> <li><strong>Työohjeet:</strong> Osion kautta pääset käsiksi kaupungin virallisiin työohjeisiin ja muihin tärkeisiin tietoihin. Osiossa voit myös tarkastella hankkeen ja hakemuksen haittojenhallinnan toimenpidevinkkejä täydentäviä lisätietokortteja. Lisätietokorttien sisältö perustuu käytöstä jo poistuneeseen Helsingin kaupungin Työmaaopas-julkaisuun. Sisältöä on lisäksi täydennetty Vuoden katutyömaa -kilpailusta kerätyillä parhailla käytännöillä sekä muokattu Haitattoman haittojenhallinnan toimenpidevinkkejä tukevaan muotoon.</li> </ul> <br /> <p>Muut järjestelmää kuvaavat osiot ovat <strong>Käyttöohjeet ja tuki</strong>, <strong>Tietoja Haitattomasta</strong>, <strong>Saavutettavuusseloste</strong> sekä <strong>Tietosuojaselosteet</strong>. Nämä sekä <strong>Hankkeet kartalla</strong> ja <strong>Työohjeet</strong> ovat saatavilla myös kirjautumattomille käyttäjille Haitaton-palvelussa.</p>"
+      },
+      "asioinninKulku": {
+        "heading": "Asioinnin kulku",
+        "content": "<p>Seuraavassa kaaviossa on esitetty suoraviivainen eteneminen Haitaton-asioinnissa uuden hankkeen luomisesta hakemuksien laatimiseen, töiden toteutukseen ja hankkeen valmistumiseen. Voit myös tehdä pelkän johtoselvityshakemuksen, jolloin uutta hanketta ei tarvitse erikseen luoda. Tällöin muodostuu ns. hankerunko, jonka voi myöhemmin muuttaa hankkeeksi. Hankkeella voi olla useita hakemuksia.</p><br /><p><strong>Kirjaudu Haitaton-asiointiin</strong> joko kirjautumattomasta näkymästä (Haitaton-palvelu) tai suoralinkillä. Kirjautuminen edellyttää vahvaa tunnistautumista. Linkki Haitaton-palveluun löytyy Helsingin kaupungin sivuilta Kaduilla ja puistoissa tehtävät työt -osiosta.</p><figure><VaiheetImg1Component alt=\"Kaaviokuva Haitaton-asioinnin vaiheista.\" /><figcaption><strong>Kuva:</strong> Perusta Haitaton-hanke mahdollisimman aikaisessa vaiheessa hankkeen elinkaarta alustavien tilanvarausten esittämiseksi julkisesti sekä haittojenhallinnan käynnistämiseksi. Perustamasi hankkeen alle voit luoda hakemuksia, jotka lähetät viranomaiskäsittelyyn hankkeen toteutusvaihetta varten. Kaivuilmoitukset tulee lisäksi ilmoittaa toiminnalliseen kuntoon tai suoraan valmiiksi. Hanke valmistuu, kun sen viimeinen päivämäärä on ohi ja hankkeella ei ole aktiivisia hakemuksia.</figcaption></figure>"
+      },
+      "hankkeenPerustaminen": {
+        "heading": "Hankkeen perustaminen",
+        "content": "<p><strong>Luo uusi hanke</strong> Haitaton-järjestelmään mahdollisimman aikaisessa vaiheessa hankkeen elinkaarta haittojen ennakoivaa tarkastelua ja <a href=\"./haittaindeksit\">haittojenhallintasuunnitelmaa</a> sekä eri hankkeiden yhteensovitusta varten. Tämä on myös hankkeesi etu. <a href=\"./hankkeenJaHakemuksenTilat\">Hankkeen tila</a> tallentuu ensin luonnoksena ja näkyy julkisesti vasta, kun olet täyttänyt hankelomakkeen pakolliset tiedot. Julkisella hankkeella voit edetä myös hakemusten (kaivuilmoitus, johtoselvitys) luontiin.</p><br /><p><strong>Hankealueiden piirtoon</strong> ja karttoihin liittyvät näkökohdat on käsitelty kappaleessa <a href=\"./karttatoiminnot\">Karttatoiminnot ja - työkalut</a>. Täytä jokaiselle hankealueelle pyydetyt haitta-arviot. Haitaton laskee tämän jälkeen <a href=\"./haittaindeksit\">haittaindeksit</a> jokaisen yksittäisen hankealueen haittojenhallintasuunnitelman perustaksi.</p><br /><p><strong>Laadi ennakoivat</strong> <a href=\"./haittaindeksit\">haittojenhallintasuunnitelmat</a> ja toteuta niitä niiltä osin, kuin hankkeen vaiheessa on mahdollista (esimerkiksi joukkoliikenteen järjestelyistä ennakkoon sopiminen).</p><br /><p><strong>Lisätessäsi hankkeelle</strong> <a href=\"\"./yhteyshenkilot\">uusia henkilöitä</a> Haitaton lähettää henkilön sähköpostiosoitteeseen kaksi <a href=\"./sahkopostiheratteet\">herätettä</a>, joista ensimmäisessä ohjataan tunnistautumaan hankkeelle, jotta hanke löytyy jatkossa henkilön Omat hankkeet -osiosta. Kun hankkeelle on tunnistauduttu, pääsee toisessa herätteessä olevan linkin kautta suoraan hankkeelle, jonne henkilö on lisätty. Sama käytäntö koskee hankkeen hakemuksia. Haitattomassa hallitaan yhteyshenkilöitä ja näiden henkilötietoa hankekohtaisesti. Näin ollen jokaiseen hankkeeseen joutuu tunnistautumaan erikseen.</p><br /><p><strong>Hankkeelle lisättyjen henkilöiden käyttöoikeuksia hallitaan</strong> hankesivun Käyttäjähallinta-osiossa. Listattuna oleviin hankkeisiin sinulla on joko perustajana automaattisesti saamasi Kaikki oikeudet tai jonkun muun henkilön perustamalle hankkeelle sinulle lisätyt <a href=\"./kayttooikeustasot\">käyttöoikeudet</a>. Saamillasi muokkausoikeuksilla voit hallita saman tasoisia tai suppeampia käyttöoikeuksia. Katseluoikeuksilla ei ole mahdollista hallita käyttöoikeuksia Käyttäjähallinta-osiossa. Käyttöoikeuksien muutoksesta lähtee heräte henkilölle, jonka oikeuksia on muutettu.</p><br /><p><strong>Liitteitä</strong> lisättäessä kannattaa sillä olla kuvaava tiedostonimi, koska erillistä kuvausta ei niille voi lisätä. Hankkeelta voi vapaasti poistaa liitteitä. Tarkista sallitut liitetiedostomuodot ja tiedostokoko lomakkeiden Liitteet-sivulta.</p>"
+      },
+      "hakemuksienTekeminen": {
+        "heading": "Hakemuksien tekeminen ja lähettäminen käsittelyyn",
+        "content": "<p><strong>Lisää hakemuksia</strong> -toiminto aktivoituu hankelomakkeen viimeiselle sivulle, kun olet täyttänyt pakolliset hanketiedot ja hanke näkyy myös muille Haitaton-käyttäjille yleisellä kartalla. Lisää hakemus -toiminto tulee näkyviin tällöin myös hankesivun yläosaan.</p><br /><p>Voit tehdä hankkeen sisällä erillisiä johtoselvityksiä ja kaivuilmoituksia. Lisäksi kaivuilmoituksen yhteydessä voit tehdä samalla uuden johtoselvityksen, mikäli aiemmin laadittua johtoselvitystä ei ole liitettäväksi kaivuilmoitukseen. Tällöin molemmilla hakemuksilla on sama aluerajaus ja perustiedot.</p><br /><p><strong>Työalueiden piirtoon</strong> ja karttoihin näkökohdat on käsitelty kappaleessa <a href=\"./karttatoiminnot\">Karttatoiminnot ja - työkalut</a>. Tarkenna hankealueelta sen sisällä oleville työalueille periytyviä haitta-arviota. Haitaton laskee tämän jälkeen <a href=\"./haittaindeksit\">haittaindeksit</a> hakemuksen haittojenhallintasuunnitelman perustaksi.</p><br /><Puff>Alueen piirrossa voit tarvittaessa kopioida hankealueen suoraan työalueeksi. Yksittäinen työalue voi olla enintään hankealueen kokoinen, ja työalueen tulee sisältyä hankealueen aikatauluun. Hankealueen sisällä voi myös olla useita eri työalueita.</Puff><p><strong>Haittojen hallinta</strong> –sivulla kaivuilmoituslomakkeella tarkennetaan hankealueilta työalueille periytyviä haittamäärittelyitä ja <a href=\"./haittaindeksit\">haittojenhallintasuunnitelma</a> työkohteeseen sopivaksi. Haitaton kokoaa hakemuksellasi olevat haittojenhallintatoimet yhdeksi haittojenhallintasuunnitelmaksi, joka lähetetään hakemuksen liitteenä viranomaiskäsittelyyn. Tässä käsittelyssä haittojenhallintasuunnitelma liitetään osaksi päätöstä.</p><br /><p><strong>Lisätessäsi hakemukselle</strong> <a href=\"./yhteystiedot\">uusia henkilöitä</a>, jotka eivät vielä ole lisättynä hankkeelle, Haitaton lähettää henkilön sähköpostiosoitteeseen kaksi <a href=\"./sahkopostiheratteet\">herätettä</a>, joista ensimmäisessä ohjataan tunnistautumaan hankkeelle, jotta hanke ja sen hakemukset löytyvät jatkossa henkilön Omat hankkeet -osiosta. Kun hankkeelle on tunnistauduttu, pääsee toisessa herätteessä olevan linkin kautta suoraan hakemukselle, jonne henkilö on lisätty. Haitattomassa hallitaan yhteyshenkilöitä ja näiden henkilötietoa hankekohtaisesti. Näin ollen jokaiseen hankkeeseen joutuu tunnistautumaan erikseen.</p><br /><p><strong>Lisätessäsi hakemukselle uusia henkilöitä, jotka ovat jo lisättynä hankkeelle</strong>, Haitaton lähettää henkilön sähköpostiosoitteeseen yhden herätteen. Herätteessä olevan linkin kautta henkilö pääsee suoraan hakemukselle, jolle hänet on lisätty.</p><br /><p><strong>Hakemukseen lisättyjen henkilöiden</strong> <a href=\"./kayttooikeustasot\">käyttöoikeuksia</a> voit hallita hankesivun Käyttäjähallinta-osiossa. Käyttöoikeudet ovat hanketasoisia (ks. hankkeen perustaminen). Käyttöoikeuksien muutoksesta lähtee heräte henkilölle, jonka oikeuksia on muutettu.</p><br /><p><strong>Liitteitä</strong> lisättäessä kannattaa sillä olla kuvaava tiedostonimi, koska erillistä kuvausta ei niille voi lisätä. Hakemusten liitteitä ei pysty poistamaan, kun hakemus on lähetetty käsittelyyn. Liitteenä lisättävää valtakirjaa ei näytetä muille käyttäjille. Tarkista sallitut liitetiedostomuodot ja tiedostokoko lomakkeiden Liitteet-sivulta.</p><br /><p>Hakemuksen voit lähettää viranomaiskäsittelyyn, kun hakemuslomakkeen pakolliset tiedot on täytetty. Lähettämisen yhteydessä sitoudut sähköiseen tiedoksiantoon, jolloin hakemuksesi päätökset saapuvat Haitattomaan. Hakemuslomakkeen lähettämisen yhteydessä voit tilata kaivuilmoitusta koskevan päätöksen myös paperisena. Tällöin sinun tulee antaa lomakkeella vastaanottajan osoitetiedot. Paperisen päätöksen tilaaminen ei poista sähköiseen asiointiin sitoutumista, vaan päätökset saapuvat joka tapauksessa myös Haitattomaan.</p><br /><p>Käsittelyssä-tilaan etenevä hakemus saa viranomaisjärjestelmässä tunnuksen JS (johtoselvitys) tai KP (kaivuilmoitus) sekä yksilöivän numerosarjan tunnuksen perään. Käsittelyyn lähetettyä hakemusta ei voi muokata ennen viranomaisen tekemää täydennyspyyntöä tai päätöstä. Haitaton lähettää <a href=\"./sahkopostiheratteet\">sähköpostiherätteitä</a> hakemuksien eri tilanteista.</p>"
+      },
+      "tyonSeuranta": {
+        "heading": "Työn seuranta ja valmistumisesta ilmoittaminen",
+        "content": "<p><strong>Seuraa ja ylläpidä hanketta sekä sen hakemuksia ja töitä</strong> Omat hankkeet -sivun kautta. </p><br /><p><strong>Hankesivulla</strong> näet hankkeen tiedot ja voit tarvittaessa käyttöoikeuksiesi puitteissa päivittää muokkaustoiminnolla esim. hankealueiden laajuutta ja aikataulua kattamaan hakemusten työalueiden muutostarpeet. Hankkeen <a href=\"./haittaindeksit\">haittojenhallintasuunnitelmaa</a> tulee päivittää aina hanketta koskevien tietojen muuttuessa. Hankesivun hakemuslistalla voit seurata hankkeelle tehtyjen <a href=\"./hankkeenJaHakemuksenTilat\">hakemusten tilaa</a> viranomaiskäsittelyssä sekä siirtyä yksittäiselle hakemussivulle.</p><br /><p><strong>Hakemussivulla</strong> näet hakemuksen tiedot, voit seurata <a href=\"./hankkeenJaHakemuksenTilat\">hakemuksen tilaa</a> viranomaiskäsittelyssä ja viranomaisen mahdollisen täydennyspyynnön sisältöä, tehdä käyttöoikeuksiesi puitteissa täydennyksen tai muutosilmoituksen sekä ladata saamasi viranomaispäätökset. Hakemuksen <a href=\"./haittaindeksit\">haittojenhallintasuunnitelma</a> tulee tarkistaa mahdollisten täydennysten ja muutosten yhteydessä.</p><br /><p><strong>Kaivutyö tulee ilmoittaa Haitaton-asioinnin kautta toiminnalliseen kuntoon (talvityö) sekä työn valmistuttua valmiiksi.</strong></p><br /><p><strong>Hanke valmistuu Haitaton-asioinnissa</strong>, kun sen viimeinen päivämäärä on ohi ja hankkeen kaikki työt on hyväksytty valmiiksi. Haitaton ilmoittaa lähestyvästä valmistumispäivämäärästä <a href=\"./sahkopostiheratteet\">sähköpostiherätteellä</a>. Hanke säilyy katseltavana Haitaton-asioinnissa tämän jälkeen 6 kk ennen koko hankkeen ja sen tietojen poistamista Haitaton-järjestelmästä. Viranomainen säilyttää hakemuksia sekä niitä koskevia päätöksiä viranomaiselle määritellyn säilytysajan mukaisesti.</p><br /><p>Mikäli hanke on valmistunut ennen sen viimeistä päivämäärää, päivitä hankkeesi viimeinen päivämäärä Haitattomassa vastaamaan valmistumispäivää. Tällöin hanke ei näy enää turhaan Haitattoman karttaosiossa hankkeen ulkopuolisille muille käyttäjille.</p>"
+      },
+      "taydennyspyynto": {
+        "heading": "Johtoselvityksen tai kaivuilmoituksen täydennyspyyntö ja siihen vastaaminen",
+        "content": "<p><strong>Täydennä</strong>-toiminto aktivoituu hakemussivulle, jos viranomainen pyytää sinua täydentämään käsittelyyn lähettämäsi johtoselvityksen tai kaivuilmoituksen hakemustietoja. Täydennyspyynnöstä toimitetaan <a href=\"./sahkopostiheratteet\">sähköpostiheräte</a>. Täydennyspyynnön sisältö näkyy hakemussivun sekä hakemuslomakkeen yläreunassa. Tarkista täydennystä laatiessasi tekemiesi täydennysten mahdolliset vaikutukset haittojenhallintasuunnitelmaan sekä työn yhteensovitukseen muiden töiden kanssa.</p><br /><p>Täydentämisen jälkeen voit lähettää hakemuksen uudelleen käsittelyyn. Voit tarvittaessa myös perua aloittamasi täydennysluonnoksen ja aloittaa sen laatimisen uudelleen aiempien tietojen pohjalta.</p>"
+      },
+      "muutosilmoitus": {
+        "heading": "Muutosilmoituksen tekeminen kaivuilmoitukselle",
+        "content": "<p><strong>Tee muutosilmoitus </strong>-toiminto aktivoituu kaivuilmoituksen hakemussivulle, kun hakemus on saanut edellisestä käsittelyyn lähettämästäsi hakemuksesta viranomaispäätöksen. Tarkista muutosilmoitusta laatiessasi tekemiesi muutosten mahdolliset vaikutukset haittojenhallintasuunnitelmaan sekä työn yhteensovitukseen muiden töiden kanssa. </p><br /><Puff>Lähettäessäsi muutosilmoituksen käsittelyyn, ei sitä voi enää perua viranomaisen järjestelmässä. Käsittelyyn lähettämäsi muutosilmoitus saa aina uuden viranomaispäätöksen.</Puff><br /><p>Muutosilmoitukseesi saamastasi uudesta viranomaispäätöksestä (tai täydennyspyynnöstä) muodostuu hakemustunnuksen perään juokseva numerointi, esimerkiksi KP1234567-2. </p><br /><p>Myös muutosilmoitukseen voit saada viranomaisen täydennyspyynnön. Täydennyspyynnön saanut muutosilmoituksesi saa jo ennalta tulevan päätöksen mukaisen järjestysnumeron kaivuilmoitustunnuksen perään.</p><br /><Puff>Johtoselvitykselle et voi tehdä muutosilmoitusta Haitattomassa, mutta esimerkiksi kaivuilmoituksen muutosilmoituksen yhteydessä voit tarvittaessa pyytää samalla uuden johtoselvityksen.</Puff>"
+      },
+      "johtoselvitys": {
+        "heading": "Pelkän johtoselvityshakemuksen tekeminen",
+        "content": "<p>Haitaton-asioinnin etusivun <strong>Tee johtoselvityshakemus</strong> -osion kautta voit tehdä pelkän erillisen yksittäisen johtoselvityksen esimerkiksi yksityiseltä tontilta tehtäviä johtoselvityksiä varten. Tällöin Haitaton muodostaa samalla automaattisesti ns. hankerungon hakemuksen nimellä.  Hankerunko löytyy jatkossa Omat hankkeet -sivun listalta. Hankerungolle ei voi lisätä muita hakemuksia. </p><br /><p>Johtoselvityshakemuksen voit lähettää viranomaiskäsittelyyn, kun sen pakolliset hakemustiedot on täytetty. Johtoselvityshakemuksen käsittelyn tilaa voit seurata hakemuslistan tai hakemussivun kautta. Täältä voit myös ladata viimeisimmän päätöksen. Johtoselvityshakemus voi saada <a href=\"./taydennyspyynto\">täydennyspyynnön</a> viranomaiselta.</p><br /><p>Hankerungon voit täydentää myöhemmin hankkeeksi lisäämällä sille pakolliset hanketiedot, jonka jälkeen voit lisätä muitakin hakemuksia hankkeen alle.</p>        <figure><JohtoselvitysImg1Component alt=\"Kaaviokuva hankkeen luomiseksi automaattisesta hankerungosta.\" /><figcaption><strong>Kuva:</strong> Erillisen yksittäisen johtoselvityshakemuksen tekeminen muodostaa Haitattomaan hankerungon, jolle ei voi lisätä muita hakemuksia. Hankerungon voit täydentää myöhemmin hankkeeksi täyttämällä pakolliset hanketiedot, minkä jälkeen voit lisätä hankkeelle muitakin hakemuksia.</figcaption></figure>"
+      },
+      "hankkeenJaHakemuksenTilat": {
+        "heading": "Hankkeen ja hakemuksen tilat",
+        "content": "<p>Hankkeella voi olla Haitattomassa seuraavat tilat, jotka näytetään Omat hankkeet -sivulla ja hankesivulla:</p><br /><ul><li><strong>Luonnos</strong>-tila, jolloin hanke ei näy julkisesti, eikä hankkeelle voi lisätä hakemuksia.</li><li>Julkisessa tilassa hanke on aktiivinen ja näkyy muille käyttäjille, mutta tätä hankkeen tilatietoa ei näytetä erikseen käyttöliittymässä.</li><li><strong>Valmis</strong>-tila, jolloin hanketta ei voi enää muokata. Valmis hanke poistetaan Haitattomasta 6 kk kuluttua valmiiksi asettamisesta.</li></ul><br /><p>Hankerungolle ei esitetä tilatietoa. </p><br /><p>Hakemuksella voi olla kronologisesti seuraavat tilat:</p><br /><ul><li>Luonnos</li><li>Lähetetty käsittelyyn</li><li>Käsittelyssä</li><li>Täydennyspyyntö</li><li>Täydennetty käsittelyyn</li><li>Odottaa päätöstä</li><li>Päätös</li><li>Toiminnallinen kunto hylätty (vain kaivuilmoitus)</li><li>Toiminnallinen kunto hyväksytty (vain kaivuilmoitus)</li><li>Työ valmis hylätty (vain kaivuilmoitus)</li><li>Hakemus peruttu</li><li>Työ valmis hyväksytty (vain kaivuilmoitus)</li><li>Työ arkistoitu</li></ul>"
+      },
+      "haittaindeksit": {
+        "heading": "Haittaindeksit ja haittojenhallintasuunnitelma",
+        "content": "<p>Haitattoman keskeinen toiminnallisuus on haittaindeksien laskeminen ja näyttäminen jokaiselle kartalle piirretylle alueelle arvovälillä 0–5 sekä liikennevaloväreillä. Ensi vaiheessa sinun tulee määritellä jokaiselle hankealueelle haittojenhallinnan toimenpiteitä mahdollisimman aikaisessa vaiheessa hankkeen elinkaarta.</p><br /><p>Hankealueen haittojenhallinnan toimenpiteitä tarkennetaan hankealueen sisälle piirretyille kaivuilmoituksen työalueille. Nämä yhdistetään lopulta haittojenhallintasuunnitelmaksi kaivuilmoituksen liitteeksi. Kaivuilmoitushakemuksen viranomaiskäsittelyssä käydään läpi myös haittojenhallintasuunnitelma, jota hakemuksessa sitoudutaan toteuttamaan.</p><br /><p>Haittojenhallintasuunnitelman toimenpiteiden ajantasaisuus tulee tarkistaa hankkeen ja hakemuksen muutostilanteissa.</p><br /><p>Haittaindeksilaskentaa ja haittojenhallintasuunnitelmaa ei tehdä johtoselvitykselle.</p><Accordion heading=\"Pyöräliikenteen haittaindeksi\"><p>Jokaiselle haittaindeksille on määritelty oma merkittävyysasteikko arvoilla 0–5 (5 on merkittävin), millä arvioidaan samalla mahdollisen haitan vakavuutta.</p><br /><p></p><div class=\"hds-table-container\" tabindex=\"0\"><table class=\"hds-table hds-table--light\" aria-label=\"Pyöräliikenteen haittaindeksit\"><caption class=\"hds-table__caption\"><strong>Pyöräliikenteen haittaindeksi </strong>muodostuu seuraavista arvoista.</caption><thead><tr class=\"hds-table__header-row\"><th scope=\"col\">Haitta-indeksi</th><th scope=\"col\">Pyöräliikenne</th><th scope=\"col\">Väritys</th></tr></thead><tbody class=\"hds-table__content\"><tr><td>0</td><td>Ei tunnistettua pyöräliikenteen reittiä</td><td>harmaa</td></tr><tr><td>1</td><td>Puistoreitti, jolla mahdollisesti pyöräliikennettä</td><td>vihreä</td></tr><tr><td>2</td><td>Muut pyöräliikenteen yhteydet </td><td>vihreä</td></tr><tr><td>3</td><td>Muut pyöräliikenteen reitit (tai reitin/yhteyden luokitustieto puuttuu pyöräliikenteen tausta-aineistosta)</td><td>keltainen</td></tr><tr><td>5</td><td>Pyöräliikenteen pääreitti tai pääreitin osana toimiva katu</td><td>punainen</td></tr></tbody></table></div></Accordion><Accordion heading=\"Raitioliikenteen haittaindeksit\"><div class=\"hds-table-container\" tabindex=\"0\"><table class=\"hds-table hds-table--light\" aria-label=\"Raitioliikenteen haittaindeksit\"><caption class=\"hds-table__caption\"><strong>Raitioliikenteen haittaindeksi</strong> muodostuu seuraavista arvoista.</caption><thead><tr class=\"hds-table__header-row\"><th scope=\"col\">Haitta-indeksi</th><th scope=\"col\">Raitioliikenne</th><th scope=\"col\">Väritys</th></tr></thead><tbody class=\"hds-table__content\"><tr><td>0</td><td>Ei tunnistettuja raitiotiekiskoja</td><td>harmaa</td></tr><tr><td>3</td><td>Raitiotieverkon rataosa, joilla ei ole säännöllistä linjaliikennettä</td><td>keltainen</td></tr><tr><td>5</td><td>Raitiotieverkon rataosa, jolla on säännöllistä linjaliikennettä</td><td>punainen</td></tr></tbody></table></div></Accordion><Accordion heading=\"Linja-autojen paikallisliikenteen haittaindeksit\"><div class=\"hds-table-container\" tabindex=\"0\"><table class=\"hds-table hds-table--light\" aria-label=\"Raitioliikenteen haittaindeksit\"><caption class=\"hds-table__caption\"><strong>Linja-autojen paikallisliikenteen</strong> haittaindeksi muodostuu seuraavista arvoista.</caption><thead><tr class=\"hds-table__header-row\"><th scope=\"col\">Haitta-indeksi</th><th scope=\"col\">Linja-autojen paikallisliikenne</th><th scope=\"col\">Väritys</th></tr></thead><tbody class=\"hds-table__content\"><tr><td>0</td><td>Ei linja-autojen paikallisliikennettä</td><td>harmaa</td></tr><tr><td>2</td><td>Linja-autojen paikallisliikennettä muulloin, kuin ruuhka-aikana</td><td>vihreä</td></tr><tr><td>3</td><td>Linja-autojen paikallisliikenteen linjojen vuoromäärä enintään 10 ruuhkatunnissa</td><td>keltainen</td></tr><tr><td>4</td><td>Linja-autojen paikallisliikenteen runkolinja tai vuoromäärä enintään 20 ruuhkatunnissa</td><td>punainen</td></tr><tr><td>5</td><td>Kamppi-Rautatientori -alue, Mannerheimintie, Kaisaniemenkatu, Hämeentie tai linja-autojen paikallisliikenteen linjojen vuoromäärä yli 20 ruuhkatunnissa</td><td>punainen</td></tr></tbody></table></div></Accordion><Accordion heading=\"Autoliikenteen haittaindeksit\"><div class=\"hds-table-container\" tabindex=\"0\"><table class=\"hds-table hds-table--light\" aria-label=\"Katuluokka, painoarvo 0.2\"><caption class=\"hds-table__caption\"><strong>Autoliikenteen haittaindeksi</strong> muodostuu useamman painotetun tekijän yhdistelmänä ja indeksiluvussa voi siten olla desimaaleja. Autoliikenteen indeksilaskennan mahdollistamiseksi tulee jokaisen aluepiirron yhteydessä valita esivalintalaatikoista arviot kaistahaittojen lukumäärästä ja pituudesta. Hakemuksilla nämä valinnat koskevat kaikkia samalla hankealueella olevia työalueita. Lisäksi laskennan tulokseen vaikuttaa määrittelemäsi hankealueen tai hakemuksen työalueiden alku- ja loppupäivämäärän mukainen kesto. Hankealueille manuaalisesti täyttämäsi haitta-arviot periytyvät esioletuksina hankealueille tehtävien hakemusten työalueille.</caption><thead><tr class=\"hds-table__header-row\"><th scope=\"col\">Haitta-indeksi</th><th scope=\"col\">Katuluokka, painoarvo 0.2 </th><th scope=\"col\">Väritys</th></tr></thead><tbody class=\"hds-table__content\"><tr><td>0</td><td>Ei tunnistettua katuluokkaa</td><td>harmaa</td></tr><tr><td>1</td><td>Asuntokatu, huoltoväylä tai vähäliikenteinen katu</td><td>vihreä</td></tr><tr><td>2</td><td>Kantakaupungin asuntokatu, huoltoväylä tai vähäliikenteinen katu</td><td>vihreä</td></tr><tr><td>3</td><td>Paikallinen kokoojakatu</td><td>keltainen</td></tr><tr><td>4</td><td>Alueellinen kokoojakatu</td><td>punainen</td></tr><tr><td>5</td><td>Pääkatu tai moottoriväylä</td><td>punainen</td></tr></tbody></table><br /><table class=\"hds-table hds-table--light\" aria-label=\"Autoliikenteen määrä, painoarvo 0.25\"><thead><tr class=\"hds-table__header-row\"><th scope=\"col\">Haitta-indeksi</th><th scope=\"col\">Autoliikenteen määrä, painoarvo 0.25</th><th scope=\"col\">Väritys</th></tr></thead><tbody class=\"hds-table__content\"><tr><td>0</td><td>Ei tunnistettua autoliikennettä</td><td>harmaa</td></tr><tr><td>1</td><td>Alle 500 autoa arkivuorokaudessa</td><td>vihreä</td></tr><tr><td>2</td><td>500–1 499 autoa arkivuorokaudessa</td><td>vihreä</td></tr><tr><td>3</td><td>1 500–4 999 autoa arkivuorokaudessa</td><td>keltainen</td></tr><tr><td>4</td><td>5 000–9 999 autoa arkivuorokaudessa</td><td>punainen</td></tr><tr><td>5</td><td>10 000 tai enemmän autoja arkivuorokaudessa</td><td>punainen</td></tr></tbody></table><br /><table class=\"hds-table hds-table--light\" aria-label=\"Vaikutus autoliikenteen kaistamääriin, painoarvo 0.25\"><thead><tr class=\"hds-table__header-row\"><th scope=\"col\">Haitta-indeksi</th><th scope=\"col\">Vaikutus autoliikenteen kaistamääriin, painoarvo 0.25</th><th scope=\"col\">Väritys</th></tr></thead><tbody class=\"hds-table__content\"><tr><td>0</td><td>Ei vaikutusta autoliikenteen kaistamääriin</td><td>harmaa</td></tr><tr><td>1</td><td>Yksi autokaista vähenee - ajosuunta vielä käytössä</td><td>vihreä</td></tr><tr><td>2</td><td>Yksi autokaista vähenee kahdella ajosuunnalla - ajosuunnat vielä käytössä</td><td>vihreä</td></tr><tr><td>3</td><td>Useita autokaistoja vähenee ajosuunnilla - ajosuunnat vielä käytössä </td><td>keltainen</td></tr><tr><td>4</td><td>Yksi autoliikenteen ajosuunta poistuu käytöstä</td><td>punainen</td></tr><tr><td>5</td><td>Useita autoliikenteen ajosuuntia poistuu käytöstä</td><td>punainen</td></tr></tbody></table><br /><table class=\"hds-table hds-table--light\" aria-label=\"Autoliikenteen kaistavaikutusten pituus, painoarvo 0.2\"><thead><tr class=\"hds-table__header-row\"><th scope=\"col\">Haitta-indeksi</th><th scope=\"col\">Autoliikenteen kaistavaikutusten pituus, painoarvo 0.2</th><th scope=\"col\">Väritys</th></tr></thead><tbody class=\"hds-table__content\"><tr><td>0</td><td>Ei vaikuta autoliikenteen kaistajärjestelyihin</td><td>harmaa</td></tr><tr><td>2</td><td>Kaistavaikutusten pituus alle 10 m</td><td>vihreä</td></tr><tr><td>3</td><td>Kaistavaikutusten pituus 10–99 m</td><td>keltainen</td></tr><tr><td>4</td><td>Kaistavaikutusten pituus 100–499 m</td><td>punainen</td></tr><tr><td>5</td><td>Kaistavaikutusten pituus 500 m tai enemmän</td><td>punainen</td></tr></tbody></table><br /><table class=\"hds-table hds-table--light\" aria-label=\"Hankkeen/Työn kesto, painoarvo 0.1\"><thead><tr class=\"hds-table__header-row\"><th scope=\"col\">Haitta-indeksi</th><th scope=\"col\">Hankkeen/Työn kesto, painoarvo 0.1</th><th scope=\"col\">Väritys</th></tr></thead><tbody class=\"hds-table__content\"><tr><td>0</td><td>Hankkeen/Työn kesto alle 2 viikkoa</td><td>harmaa</td></tr><tr><td>3</td><td>Hankkeen/Työn kesto 2 viikkoa - 3 kuukautta</td><td>keltainen</td></tr><tr><td>5</td><td>Hankkeen/Työn kesto yli 3 kuukautta</td><td>punainen</td></tr></tbody></table></div></Accordion><Accordion heading=\"Melu,- pöly-, ja tärinähaittojen  haittaindeksit\"><div class=\"hds-table-container\" tabindex=\"0\"><table class=\"hds-table hds-table--light\" aria-label=\"Melu,- pöly-, ja tärinähaittojen  haittaindeksit\"><caption class=\"hds-table__caption\"><strong>Alueen melu-, pöly-, ja tärinähaitoille</strong> täytät kullekin omat arviot manuaalisesti esivalintalaatikoista alla olevan asteikon mukaisesti. Määrittelemäsi melu-, pöly- ja tärinäindeksit eivät saa käyttöliittymässä liikennevalovärejä. Hankealueille manuaalisesti täyttämäsi haitta-arviot periytyvät esioletuksina hankealueille tehtävien hakemusten työalueille.</caption><thead><tr class=\"hds-table__header-row\"><th scope=\"col\">Haitta-indeksi</th><th scope=\"col\">Haitta</th></tr></thead><tbody class=\"hds-table__content\"><tr><td>0</td><td>Ei haittaa</td></tr><tr><td>1</td><td>Satunnainen haitta</td></tr><tr><td>3</td><td>Toistuva haitta</td></tr><tr><td>5</td><td>Jatkuva haitta</td></tr></tbody></table></div></Accordion>"
+      },
+      "laskentaperiaatteet": {
+        "heading": "Haittaindeksien laskentaperiaatteet ja luokitukset",
+        "content": "<p>Haitaton laskee jokaiselle yksittäiselle karttaikkunaan piirtämällesi hanke- ja työalueelle paikkatietopohjaisesti liikenteelliset haittaindeksit. Haittaindeksin luku kuvaa haitan riskiä, ja sen avulla saat tietoa eri kulkumuotojen merkittävyydestä alueella ja mahdollisten haittojen vakavuudesta. Indeksilaskennan suorittaminen vaatii aina ensin autoliikenteen kaistahaittojen ja päästöhaittojen arvioimista jokaiselle piirretylle alueelle piirtoikkunan alla olevassa osiossa. Laskettavia haittaindeksejä ovat:</p><br /><ul><li><strong>pyöräliikenne</strong>,</li><li><strong>raitioliikenne</strong>,</li><li><strong>linja-autojen paikallisliikenne</strong> sekä</li><li><strong>autoliikenne</strong>.</li></ul><br /><p>Kulkumuotoihin liittyviä indeksiarvoja korostetaan liikennevaloväreillä käyttöliittymän tekstiosioissa sekä hanke- ja hakemuskartoilla aluevärjäyksinä siten, että </p><br /><ul><li>arvot 5 ja 4 antavat punaisen värin (merkittävä riski), </li><li>arvo 3 keltaisen värin (mahdollisesti merkittävä riski) sekä </li><li>arvot 2 ja 1 vihreän värin (ei todennäköinen riski).</li></ul><br /><p>Haittaindeksin arvolla 0 kulkumuodon indeksiväri on harmaa, jolloin tietoa kulkumuodosta ei ole löytynyt paikkatiedosta. Sinisellä värjätään alueet, joista näytetään kartalla pelkkä aluerajaus ilman indeksitietoa. </p><br /><Puff>Haitaton-järjestelmän haittaindeksien laskenta ei vielä tunnista eritasokohteita, joten näissä kohteissa haittaindeksit muodostuvat aina risteävien väylien pahimman haittaindeksitilanteen mukaan.</Puff><Puff>Haittaindeksit kuvaavat aina laskentahetkellä järjestelmässä saatavilla ollutta paikkatietoa, jolloin hankealueelle aiemmin tehty indeksilaskenta voi antaa eri tuloksia, kuin sen sisälle myöhemmin piirretylle työalueelle tehty laskenta, tai toisin päin. Indeksilaskenta suoritetaan piirtämillesi alueille uudelleen vain hanke- tai hakemustietoja muokattaessa, eli laskentaa ei päivitetä olemassa oleville alueille automaattisesti tausta-ajona.</Puff><p>Laskettavista tiedoista pyöräliikenteen ja autoliikenteen paikkatiedot ovat staattisimpia eli eivät toistaiseksi reagoi väliaikaisiin liikenneverkollisiin muutoksiin (esim. kiertoreitit), ja pysyviinkin katuverkon muutoksiin voi kaupungin paikkatietoaineistoissa tulla päivityksiä suurella viiveellä. Raitiolinjaston päivityksistä sen sijaan saadaan rajapinnan kautta sekä infra- että liikennöintitietoa, jolloin säännöllisesti liikennöidyt linjaosuudet päivittyvät aineistoon ajantasaisesti. Myös linja-autojen paikallisliikenteen ajantasaista reittitietoa saadaan rajapinnan kautta, ja tieto voikin muuttua esimerkiksi monivuotisen työmaan aikana useamman kerran.</p>"
+      },
+      "laatiminen": {
+        "heading": "Haittojenhallintasuunnitelman laatiminen, ylläpito ja toteuttaminen",
+        "content": "<p>Haitaton-järjestelmän keskeinen osio on hankkeita ja niiden kaivuilmoituksia koskeva haittojenhallintasuunnitelma. Hankealueelle ensin laatimasi haittojenhallintasuunnitelma periytyy aina hankealueen sisällä sijaitsevien työalueiden taustatiedoksi. Tällöin aiemmin hankkeen aikana sovitut haittojenhallinnan toimenpiteet näkyvät lähtötietoina työalueiden haittojenhallintasuunnitelmalle.</p><br /><p>Hankealueen haittojenhallintasuunnitelmaa tarkennetaan kaivuilmoituksen työalueiden kohdalla esimerkiksi silloin, kun kaivuilmoituksen työalue on huomattavasti pienempi kuin hankealue tai hankkeen perustamisen aikaiset haittojenhallintaan vaikuttavat tiedot ovat päivittyneet.</p><br />        <figure><HaittojenhallintaImg1Component alt=\"Kaaviokuva hankealuetta vastaavan työalueen haittojenhallintasuunnitelman periytymisestä.\" /><figcaption><strong>Kuva 1:</strong> Haittojenhallintasuunnitelma periytyy hankealueelta sen sisälläoleville työalueille lähtökohdaksi. Hankealueen ja työalueen ollessa ominaisuuksiltaansamat, voi näillä olla samankaltainen haittojenhallintasuunnitelma.Haittojenhallintasuunnitelma tulee kaikissa tapauksissa kuitenkin käydä läpi jatarkentaa hakemuksen viranomaiskäsittelyyn.</figcaption></figure><figure><HaittojenhallintaImg2Component alt=\"Kaaviokuva hankealuetta pienemmän työalueen haittojenhallintasuunnitelman periytymisestä.\" /><figcaption><strong>Kuva 2:</strong> Haittojenhallintasuunnitelma periytyy hankealueelta sen sisälläoleville työalueille lähtökohdaksi. Hankealuetta pienempää työaluetta eivät välttämättäkoske kaikki hankealueen haittojenhallintatoimenpiteet. Haittojenhallintasuunnitelmatulee kaikissa tapauksissa kuitenkin käydä läpi ja tarkentaa hakemuksenviranomaiskäsittelyyn.</figcaption></figure><Puff>Yhdellä hakemuksella voi olla työalueita useilla eri hankealueilla, mikäli hakemuksen aikataulu mahtuu eri hankealueiden aikataulujen sisään.</Puff><p>Haittojenhallintasuunnitelmassa tarkennat haittojenhallinnan toimet kaikkiin tyhjinä oleviin tekstikenttiin, mutta vähintään Aina huomioon otettavat toimet -kohtaan. Haitaton tarjoaa avuksesi yhteystietoja ja muita ohjeita eri osioiden toimenpidevinkeissä.</p><br /><p><strong>Aina huomioon otettavat toimet</strong></p><br /><p>Haittojenhallintasuunnitelman yhteydessä listataan tärkeisiin erityishuomioihin sekä erilaisiin paikallisiin toimintoihin liittyviä toimenpidevinkkejä, jotka käyttäjän tulee käydä läpi ja arvioida, millä toimenpiteillä haitat ovat hallittavissa. Olemassa olevia toimintojen tietoja tulee täydentää maastokäynnillä, sidosryhmiltä sekä eri karttapalveluita (esim. Helsingin palvelukartta) hyödyntäen. </p><br /><p>Yhteisvaikutuksia muiden hankkeiden kanssa arvioidaan etusivun karttatoiminnon avulla sekä Helsingin kaupungin karttapalvelussa näkyvien hankkeiden ja töiden avulla. Yhteensovitus tehdään suoraan hankkeiden kesken ja sovitut hallintatoimenpiteet esitetään haittojenhallintasuunnitelmassa.</p><br /><Puff>Haitattomaan suoraan syötettyjen hankkeiden ja töiden määrän kasvaessa jatkossa myös yhteensovitus Haitaton-asioinnissa tulee helpottumaan.</Puff><Accordion heading=\"Lisätietoja toimenpidevinkeistä\"><p><strong>Pyöräliikenne, raitioliikenne, linja-autojen paikallisliikenne ja autoliikenne</strong></p><br /><p>Haittojenhallintasuunnitelman yhteydessä listataan Haitattoman automaattisesti tai käyttäjän manuaalisesti tunnistamiin kulkumuotoihin liittyviä toimenpidevinkkejä, jotka käyttäjän tulee käydä läpi ja arvioida, millä toimenpiteillä haitat ovat hallittavissa.</p><br /><Puff>Pyöräliikenteen ja autoliikenteen kiertoreittejä ei ole saatavilla paikkatietorajapintojen kautta. Sen sijaan mahdolliset raitioliikenteen ja linja-autojen paikallisliikenteen kiertoreitit päivittyvät Haitattomaan linjastotietojen muuttumisen myötä. Kiertoreittisuunnitelmia ei ole karttanäkymissä tässä vaiheessa saatavilla.</Puff><p><strong>Päästöihin liittyvät toimet</strong></p><br /><p>Haittojenhallintasuunnitelman yhteydessä listataan meluun, pölyyn ja tärinään liittyviä toimenpidevinkkejä, jotka käyttäjän tulee käydä läpi ja arvioida, millä toimenpiteillä haitat ovat hallittavissa.</p></Accordion>"
+      },
+      "yhteyshenkilot": {
+        "heading": "Yhteyshenkilöiden lisääminen ja muokkaaminen sekä niiden käyttöoikeudet",
+        "content": "<p>Hankkeelle ja hakemukselle lisätään henkilöitä ensisijaisesti hanke- ja hakemuslomakkeiden kautta. Uudesta yhteyshenkilöstä lisätään aina etunimi, sukunimi, sähköpostiosoite ja puhelinnumero. </p><br /><p>Haitaton muodostaa kaikista hankkeelle lisätyistä henkilöistä hankekohtaisen henkilölistan, jota voi katsella ja muokata hankesivun Käyttäjähallinnan kautta. Käyttäjähallinta-osiossa voi muokata hankkeen henkilölistalla olevien henkilöiden sähköpostiosoitetta, puhelinnumeroa sekä käyttöoikeuksia tai poistaa henkilön, mikäli henkilö ei ole mukana missään käsittelyyn lähetetyssä hakemuksessa. Sivulla voi myös seurata, ketkä käyttäjät ovat tunnistautuneet hankkeelle. Tarvittaessa tunnistaumattomalle henkilölle voi lähettää uuden sähköpostikutsun.</p><br /><p>Käyttöoikeutesi hankkeella näkyvät hankesivun ja mahdollisen hakemussivun yläpalkissa. Hankkeen perustajana olet hankkeen ensimmäinen henkilö, ja sinulla on automaattisesti Kaikki oikeudet hankkeelle.</p><br /><Puff>Hankkeella tulee aina olla vähintään yksi henkilö, jolla on Kaikki oikeudet.</Puff><p>Henkilötietojen käsittelyperiaatteet Haitaton-asioinnissa on kuvattu erillisessä tietosuojaselosteessa, joka löytyy Haitaton-järjestelmän etusivun kautta.</p>"
+      },
+      "kutsunSaaminen": {
+        "heading": "Kutsun saaminen hankkeelle sähköpostilla ja hankkeelle tunnistautuminen",
+        "content": "<Puff>Varmista aina ensin ennen sähköpostilinkin kautta tunnistautumista, että Haitattoman sähköpostinkutsun lähettäjä on <strong>noreply.haitaton@hel.fi</strong>.</Puff><br /><p><strong>Kun uusi yhteyshenkilö tallennetaan hankkeelle</strong>, saa tämä henkilö automaattisesti katseluoikeudet hankkeelle ja <a href=\"./sahkopostiheratteet\">sähköpostiherätteen</a>, jossa on linkki Haitaton-järjestelmään kirjautumiseen. Jotta hanke näkyy tunnistautuvan henkilön Omat hankkeet -listalla, tulee hankkeelle tunnistautua sähköpostissa olevan suoralinkin kautta. </p><br /><p>Tunnistauduttuasi hankkeelle voit katsella hankkeen ja sen hakemusten tietoja tai mahdollisesti saamiesi laajempien käyttöoikeuksien mukaisesti muokata hanketta tai lisätä/muokata hankkeen hakemuksia.</p><br /><p><strong>Kun uusi yhteyshenkilö tallennetaan hakemukselle</strong>, saa tämä henkilö automaattisesti katseluoikeudet hankkeelle ja kaksi <a href=\"./sahkopostiheratteet\">sähköpostiherätettä</a>, joista ensimmäisessä on linkki Haitaton-järjestelmään kirjautumiseen. Jotta hanke näkyy tunnistautuvan henkilön Omat hankkeet -listalla, tulee hankkeelle tunnistautua sähköpostissa olevan suoralinkin kautta. Toisen sähköpostin linkki vie tämän jälkeen suoraan kyseiselle hakemukselle.</p><br /><Puff>Muista aina ensin tunnistautua hankkeelle saamasi sähköpostiherätteen kautta, jotta hanke ja sen mahdolliset hakemukset näkyvät jatkossa Omat hankkeet –osiossasi.</Puff>"
+      },
+      "kayttooikeustasot": {
+        "heading": "Käyttöoikeustasot",
+        "content": "<p>Haitaton-järjestelmään kirjautuneen käyttäjän käyttöoikeustasot ovat aina hankekohtaisia ja ne on listattu jäljempänä. Lisää käyttöoikeuksia voit pyytää hankkeessa Kaikki oikeudet tai Hankkeen ja hakemusten muokkaus -oikeudet omaavilta henkilöiltä. Kaikki oikeudet hankkeelle voi antaa ainoastaan Kaikki oikeudet -tason omaava toinen henkilö. Hakemusasiointioikeuksilla voit jakaa hakemuksellesi lisää vastaavia oikeuksia. </p><br /><Puff>Muista aina ensin tunnistautua hankkeelle saamasi sähköpostiherätteen kautta, jotta hanke ja sen mahdolliset hakemukset näkyvät jatkossa Omat hankkeet –osiossasi.</Puff><p><strong>Kaikki oikeudet mahdollistaa</strong></p><ul><li>Hankkeen ja sen hakemusten sisällön muokkaamisen</li><li>Kaikkien käyttöoikeuksien muokkaamisen</li><li>Hankkeen poistamisen, kun hankkeella ei ole vielä ollut käsittelyyn edenneitä hakemuksia</li></ul><br /><p><strong>Hankkeen ja hakemusten muokkaus</strong> -oikeudet mahdollistaa</p><ul><li>hankkeen ja sen hakemusten sisällön muokkaamisen</li><li>muiden käyttöoikeuksien muokkaamisen, paitsi Kaikki oikeudet</li></ul><br /><p><strong>Hankemuokkaus</strong>-oikeudet mahdollistaa hankkeen tietojen muokkaamisen, mutta ei käyttöoikeuksien muokkausta. Hakemustietoihin on katseluoikeudet.</p><br /><p><strong>Hakemusasiointi</strong>-oikeudet mahdollistaa </p><ul><li>uusien hakemusten luomisen hankkeelle,</li><li>hankkeen hakemusten tietojen muokkaamisen</li></ul><br /><p><strong>Katselu</strong>-oikeudet mahdollistaa hankkeen ja sen hakemusten tietojen katselun. Katseluoikeus asetetaan alkuun automaattisesti kaikille hankkeelle ja hakemukselle lisätyille henkilöille, ja laajemmat oikeudet tulee antaa henkilöille erikseen Käyttäjähallinta-osion kautta.</p>"
+      },
+      "sahkopostiheratteet": {
+        "heading": "Sähköpostiherätteet",
+        "content": "<p>Haitaton lähettää sähköpostiherätteitä hankkeen ja hakemusten yhteystietojen muutoksista sekä tilamuutoksista ja viranomaisviesteistä. Oheisessa taulukossa on lista herätteistä.</p> <br /> <p>Mikäli hankkeelle kutsuttu henkilö ei ole reagoinut kutsuun, voit lähettää kutsun uudelleen Käyttäjähallinta-osiosta. Kutsutun käyttäjän tulee aina ensin tunnistautua hankkeelle, jotta hanke ja sen hakemukset näkyvät käyttäjän Omat hankkeet -osiossa.</p><br /><br /><Accordion heading=\"Katso lisätietoja herätteistä\"><div class=\"hds-table-container\" tabindex=\"0\"><table class=\"hds-table hds-table--light\" aria-label=\"Service users (light variant)\"><caption class=\"hds-table__caption\"><strong>Taulukko 1.</strong> Yhteyshenkilöitä koskevat ilmoitukset</caption><thead><tr class=\"hds-table__header-row\"><th scope=\"col\">Tilanne, jossa sähköposti-ilmoitus lähetetään</th><th scope=\"col\">Kenelle viesti lähetetään</th><th scope=\"col\">Huomioita</th></tr></thead><tbody class=\"hds-table__content\"><tr><td>Henkilön lisääminen hankkeelle</td><td>Lisätylle henkilölle</td><td>Tämä viesti lähetetään myös pelkästään hakemuslomakkeelle lisätylle henkilöllehankkeelle tunnistautumista varten.</td></tr><tr><td>Henkilön lisääminen hakemuslomakkeelle, kun hänet on jo lisätty hankkeelle</td><td>Lisätylle henkilölle</td><td>Mikäli kyseessä on yhdistetty johtoselvitys- ja kaivuilmoitushakemus, henkilöllelähtee kaksi erillistä viestiä.</td></tr><tr><td>Käyttöoikeustason muutos tai käyttöoikeuksien poisto / henkilön poistohankkeelta</td><td>Henkilölle, jonka käyttöoikeustaso on muuttunut tai on poistettu hankkeelta</td><td></td></tr></tbody></table></div><br /><div class=\"hds-table-container\" tabindex=\"0\"><table class=\"hds-table hds-table--light\" aria-label=\"Service users (light variant)\"><caption class=\"hds-table__caption\"><strong>Taulukko 2.</strong> Hanketta koskevat ilmoitukset</caption><thead><tr class=\"hds-table__header-row\"><th scope=\"col\">Tilanne, jossa sähköposti-ilmoitus lähetetään</th><th scope=\"col\">Kenelle viesti lähetetään</th><th scope=\"col\">Huomioita</th></tr></thead><tbody class=\"hds-table__content\"><tr><td>Hankkeen loppupäivämäärä lähenee</td><td>Niille, joilla on kaikki oikeudet, hankkeen ja hakemuksen muokkaus -oikeudet jahankemuokkaus-oikeudet.</td><td>Haitaton tunnistaa hankkeen päättymispäivän olevan 14 vrk päässä ja uudestaan 5vrk päässä.</td></tr><tr><td>Hankkeen loppupäivämäärä on ohitettu ja Haitaton merkitsee hankkeenvalmistuneeksi</td><td>Niille, joilla on kaikki oikeudet, hankkeen ja hakemuksen muokkaus -oikeudet jahankemuokkaus-oikeudet.</td><td>Haitaton tunnistaa hankkeen päättymispäivän menneen, jolloin viesti lähtee hetiseuraavana päivänä.</td></tr><tr><td>Hanke poistuu käyttäjiltä Haitaton-järjestelmästä</td><td>Kaikille hankkeen käyttäjille</td><td>Haitaton tunnistaa hankkeen poistumispäivän 5 vrk päässä.</td></tr></tbody></table></div><br /><div class=\"hds-table-container\" tabindex=\"0\"><table class=\"hds-table hds-table--light\" aria-label=\"Service users (light variant)\"><caption class=\"hds-table__caption\"><strong>Taulukko 3.</strong> Hakemuksia koskevat ilmoitukset</caption><thead><tr class=\"hds-table__header-row\"><th scope=\"col\">Tilanne, jossa sähköposti-ilmoitus lähetetään</th><th scope=\"col\">Kenelle viesti lähetetään</th></tr></thead><tbody class=\"hds-table__content\"><tr><td>Hakemukselle on tullut täydennyspyyntö</td><td>Kaikille kyseisen hakemuksen yhteyshenkilöille, joilla on oikeudet hakemuksenmuokkaamiseen.</td></tr><tr><td>Hakemukselle tehty täydennyspyyntö perutaan Allun puolella</td><td>Kaikille kyseisen hakemuksen yhteyshenkilöille, joilla on oikeudet hakemuksenmuokkaamiseen.</td></tr><tr><td>Kaivuilmoituksesta on tehty päätös</td><td>Kaikille kyseisen hakemuksen yhteyshenkilöille.</td></tr><tr><td>Johtoselvitys on saatavilla</td><td>Kaikille kyseisen hakemuksen yhteyshenkilöille.</td></tr><tr><td>Kaivuilmoitus on hyväksytty toiminnalliseen kuntoon</td><td>Kaikille kyseisen hakemuksen yhteyshenkilöille.</td></tr><tr><td>Kaivuilmoitus on hyväksytty valmiiksi</td><td>Kaikille kyseisen hakemuksen yhteyshenkilöille.</td></tr></tbody></table></div></Accordion>"
+      },
+      "karttatoiminnot": {
+        "heading": "Karttatoiminnot ja -työkalut",
+        "content": "<p>Haitaton-järjestelmässä on karttaupotuksia useilla eri sivuilla. Pääosa kartoista on tarkoitettu tietojen katseluun. Hanke- ja hakemuslomakkeissa Alueiden piirto -sivun kartalla on eniten toiminnallisuuksia.</p><br /><p>Suuriin karttanäkymiin on toteutettu:</p><br /><ul><li><strong>Osoitehaku</strong> kartan kohdistukseen</li><li><strong>Karttatasot-valikkopuu</strong> (valittavana karttasarja ja/tai ortokartta)</li><li><strong>Lähestymiskartta</strong> (pieni karttaikkuna)</li></ul><br /><p>Koko näytön karttanäkymiin on toteutettu:</p><br /><ul><li><strong>Hanketieto-sivupalkki</strong> (hankealuetta klikkaamalla)</li><li><strong>Hakemustieto-sivupalkki</strong> (hakemusaluetta klikkaamalla)</li></ul><br /><p>Kartan lähentäminen ja loitontaminen tapahtuu kartan päällä esim. hiiren rullalla.  </p><br /><Puff>Karttatason ensimmäinen taso, nk. Opaskartta on suuntaa antava. Piirtämistä varten on karttaa lähennettävä vähintään seuraavalle karttatasolle, jolla näkyvät mm. rakennusten tarkat rajat.</Puff><p>Hankelomakkeen ja hakemuslomakkeen Alueiden piirto -sivulla on lisäksi piirtotyökaluina kynä (viiva/alue) ja neliö. Karttanäkymässä voit myös kopioida hankealueen tai johtoselvityksen alueen uudeksi työalueeksi viemällä osoitin olevan alueen päälle, jolloin Kopioi työalueeksi –toiminto aktivoituu kartan ponnahdusikkunaan. Huomioi, että työalueen tulee olla aina kokonaan hankealueen sisällä. Huomioi myös, että hankealuetta ei voi myöhemmin pienentää siten, että jokin hankealueelle piirretty työalue jää hankealueen ulkopuolelle osin tai kokonaan.</p><br /><p>Piirrettyjen hankealueiden poistamistoiminto sijaitsee karttaikkunan alapuolella aluekohtaisena Poista alue -painikkeena. Piirrettyjen työalueiden poistamistoiminto on roskakori-ikoni karttaikkunan alapuolella työaluelistan reunassa. </p><br /><p>Alueiden piirto –sivulla on mahdollista laajentaa piirtokartta koko näytön suuruiseksi sekä palauttaa laaja näkymä takaisin pienempään piirtokarttaan.</p><br /><Puff>Kartan piirtotyökaluja ei suositella käytettäväksi mobiilikäyttöliittymässä.</Puff>"
+      },
+      "glossary": {
+        "heading": "Haitattomassa käytetty sanasto",
+        "openAll": "Avaa kaikki",
+        "closeAll": "Sulje kaikki",
+        "words": [
+          {
+            "term": "Haitaton-asiointi",
+            "definition": "Helsingin kaupungin asiointijärjestelmä hankkeiden ja niiden hakemusten edistämiseen sekä hankkeiden toteutuksesta aiheutuvien haittojen hallinnan suunnitteluun."
+          },
+          {
+            "term": "Haitaton-palvelu",
+            "definition": "Julkinen hanketietojen katselun käyttöliittymä. Näkyvien tietojen ja ominaisuuksien määrää on rajoitettu Haitaton-asiointiin verrattuna."
+          },
+          {
+            "term": "Haittaindeksi",
+            "definition": "Indeksiluku asteikolla 0–5 (5 on suurin merkittävyys), joka kertoo yksittäisen hanke- tai työalueen liikenneverkollisista riskeistä perustuen paikkatietopohjaiseen laskentaan. Yksittäisten hankkeiden liikenneverkollisia yhteisvaikutuksia arvioidaan karttanäkymän avulla. Kartoilla alueet on pääosin rasteroitu niiden saaman suurimman indeksiarvon mukaan, mutta kulkumuotokohtaisia indeksejä voi tarkastella hanke- ja hakemuslomakkeen haittojenhallintasivulla. Indeksin suuruutta korostetaan liikennevalovärein: alle 3 = vihreä; 3 - alle 4 = keltainen; 4 – 5 = punainen. Kartta-arvioinnin pohjalta käyttäjä voi arvioida eri hankkeiden aikatauluja ja yhteensovitustarpeita erityisesti liikenneverkon osalta, mutta myös muita vaikutuksia hankkeiden ympäristössä.<ul><li>Pyöräliikenneindeksin osalta tunnistetaan pyöräliikenteen pääverkko ja priorisoidut reitit sekä muu pyöräliikenteen verkko.</li><li>Raitioliikenteen osalta tunnistetaan liikennöidyt reitit ja muut kiskoreitit.</li><li>Linja-autojen paikallisliikenteen osalta tunnistetaan liikennöityjen reittien merkittävyys.</li><li>Autoliikenteen osalta tunnistetaan useampi tekijä. Haittaindeksiin lasketaan hankkeen keston, autoliikennemäärän, liikenteellisen katuluokituksen sekä käyttäjän karkeasti arvioimien kaistavaikutusten (määrä ja pituus) pohjalta autoliikenteen painotettu merkittävyys.</li><li>Päästöjen osalta esitetään käyttäjän itse valitsemat haittamääreet.</li></ul>"
+          },
+          {
+            "term": "Haittojenhallintasuunnitelma",
+            "definition": "Hankkeen tai sen yksittäisen hakemuksen/työalueen kolmansille osapuolille muodostamien haittojen hallinnan työkalu. Käyttäjän tulee kertoa haittojenhallintasuunnitelmassa viranomaiselle, miten toteuttaa järjestelmässä esitettyjen haittanäkökulmien hallinnan yksittäisessä hankkeessa tai sen hakemuksessa. Käyttäjän tulee laatia haittojenhallintasuunnitelma hankkeessa aina huomioon otettavien asioiden osalta, hankkeen arvioiduille päästövaikutuksille sekä Haitaton-järjestelmän hankealueelta tunnistamille kulkumuodoille. Suunnitelmaa tarkennetaan hakemusten työalueiden osalta ja se toimitetaan hakemuksen liitteenä viranomaiskäsittelyyn."
+          },
+          {
+            "term": "Haittojenhallintasuunnitelma hankkeella",
+            "definition": "Koko hankkeen haittojenhallintaperiaatteiden kuvaus. Tätä suunnittelua tulee tehdä Haitaton-järjestelmässä hankkeelle useita kuukausia tai jopa vuosia ennen hankkeen toteuttamista (esimerkiksi hankkeen laajojen liikennevaikutusten arviointi)."
+          },
+          {
+            "term": "Haittojenhallintasuunnitelma hakemuksella/työalueella",
+            "definition": "Osa viranomaiskäsittelyyn menevää hakemusta. Hakemuksen haittojenhallintasuunnitelmassa tarkennetaan, koskevatko koko hankkeen haittojenhallintatoimenpiteet juuri kyseistä hakemusta vai voidaanko hakemuksessa edetä vähäisemmillä toimilla viranomaisen päätöksenhakuun. Viranomainen seuraa myös yksittäisen hakemuksen haittojenhallintasuunnitelman toteutumista työalueen töiden keston ajan."
+          },
+          {
+            "term": "Hakemuksen tila",
+            "definition": "Tila, joka ilmoittaa hakemuksen elinkaaren vaiheen sekä kytkennän viranomaisjärjestelmään."
+          },
+          {
+            "term": "Hakemus",
+            "definition": "Lain kadun ja eräiden yleisten alueiden kunnossa- ja puhtaanapidosta 14 a § mukaan yleisellä alueella suoritettavasta työstä on työstä vastaavan jätettävä kunnalle ilmoitus. Kiinteistöremontin (vast.) kyseessä ollessa asunto-osakeyhtiön / kiinteistöosakeyhtiön katsotaan olevan työstä vastaava. Mikäli työteknisistä syistä on tarkoituksenmukaista, voi työn suorittava urakoitsija hakea tarvittavat päätökset ja vuokraukset työn tilaajan puolesta. Tällöin työn tilaajan on annettava hakijalle valtakirja. Valtakirjalla ei voi siirtää lainsäädännössä rakennushankkeen osapuolille määrättyjä velvollisuuksia. Työn tilaaja ja -suorittaja vastaavat rakennustyömaan turvallisuudesta yhteisvastuullisesti siten kuin mm. Maankäyttö- ja rakennuslaki sekä Työturvallisuuslaki ja Valtioneuvoston asetus rakennustyön turvallisuudesta määräävät."
+          },
+          {
+            "term": "Hakemusalue",
+            "definition": "Tuleva työalue. Hakemusalueen tulee sisältyä kokonaan johonkin hankealueeseen."
+          },
+          {
+            "term": "Hanke",
+            "definition": "Käyttäjän määrittelemä sisällöltään ja kestoltaan rajattu tehtävä. Hankkeen määrittelyt tarkentuvat hankeen vaiheiden edetessä. Hankkeeseen voi liittyä useita eri hakemuksia ja siten hakemusalueita. Hakemus liittyy aina hankkeeseen."
+          },
+          {
+            "term": "Hankealue/-et",
+            "definition": "Hankkeelle piirretty alue tai piirretyt alueet, jotka kattavat kaikki hankkeen tulevat työaluetarpeet."
+          },
+          {
+            "term": "Hankerunko",
+            "definition": "Pelkän johtoselvityshakemuksen tekemisestä muodostunut runko hankkeelle (käytännössä hankkeen nimi ja hankealueet). Hankerunko ei mahdollista uusien hakemusten tekemistä sen alle ilman hankerungon täydentämistä hankkeeksi lisäämällä sille hankkeen pakolliset tiedot."
+          },
+          {
+            "term": "Hankkeen omistaja",
+            "definition": "Hanketta hallinnoiva organisaatio tai henkilö, jonka myös vastaa hanke- ja hakemuskokonaisuudesta. Omistajan yhteyshenkilö saa lähtökohtaisesti kaikki oikeudet hankkeelle. Omistajalla tulee olla yhteyshenkilö. Jotta Haitaton-järjestelmässä on aina viimeisin tieto vastuuhenkilöstä, voi yhteyshenkilöä vaihtaa hankkeen kuluessa."
+          },
+          {
+            "term": "Hankkeen vaiheet",
+            "definition": "Hanke voi olla Haitaton-järjestelmässä kolmessa eri vaiheessa. Hankeen vaiheen ja suunnitteluvaiheen tarkentamisen tarkoituksena on informoida muita sidosryhmiä hankkeen etenemisen vaiheesta sekä auttaa käyttäjää haittojenhallintasuunnitelman täyttämisessä nostamalla esiin kulloisessakin vaiheessa olevia akuutteja haittojenhallintasuunnitelman toimenpiteitä.<ul><li>Ohjelmointi (arviolta 2–5 vuotta ennen toteutusta) käsittää varhaisen vaiheen hanketarpeen muodostamisen Haitaton-järjestelmään. Tällöin hankkeiden haittojen hallinnassa on keskeistä erityisesti hankkeiden keskinäinen yhteensovittaminen sekä yksittäisen hankkeen liikenneverkollisten haittojen hallinta.</li><li>Suunnittelu käsittää eri suunnitteluvaiheet, joita voivat olla esim. yleissuunnitelma-, katusuunnitelma- ja rakennussuunnitelmatasot (arviolta 0–3 vuotta ennen toteutusta). Tällöin on keskeistä tunnistaa suunnitteluratkaisujen vaikutus toteutuksesta aiheutuviin haittoihin. Tässä vaiheessa on myös tunnistettava ne sidosryhmät, joihin haitat kohdentuvat ja käynnistettävä riittävän etupainotteisesti keskustelut haittojen hallinnantoimenpiteistä. Myös toteutusta edeltävät tilaajan urakan valmistelutehtävät voivat kuulua tähän vaiheeseen.</li><li>Rakentaminen käsittää alueiden sisälle suunniteltujen toimenpiteiden toteuttamisen. Hanke siirtyy automaattisesti tähän vaiheeseen Haitattomassa, kun ensimmäinen hakemus luodaan hankkeen alle.</li></ul>"
+          },
+          {
+            "term": "Johtoselvitys (hakemustyyppi)",
+            "definition": "Helsingin kaupungin alueella tehtävissä kaivu-, kairaus- ja louhintatöissä on kaivajan aina ennen kaivuilmoituksen jättämistä haettava ajantasainen johtoselvitys. Johtoselvitys sisältää karttaotteen maanalaisista johdoista ja rakenteista. Lisäksi selvityksen yhteydessä annetaan johdon omistajan ohjeita työn suorittamiseksi. Selvityksen liitteeksi tarvitaan työsuunnitelma. Hakemukset käsitellään saapumisjärjestyksessä. Johtoselvityksen voimassaoloaika on 1 kuukausi. Johtoselvitys on maksuton kaivu-, kairaus- ja louhintatöitä tekeville. Suunnittelua varten johtokartat ja muut kartta-aineistot tilataan sähköisesti maksullisesta <a href=\"https://karttakori.hel.fi/\" target=\"_blank\">Karttakori-palvelusta<span className=\"hds-icon icon hds-icon--link-external hds-icon--size-s vertical-align-medium-icon\"aria-hidden=\"true\"></span></a>."
+          },
+          {
+            "term": "Kaivuilmoitus (hakemustyyppi)",
+            "definition": "Helsingin kaupungin kaduilla, jalankulku- tai pyöräteillä, toreilla tai puistoissa tehtävistä kaivu-, kairaus- ja louhintatöistä on tehtävä kaivuilmoitus. Kaivuilmoituksen jättämisen yhteydessä pyydetään viranomaiselta automaattisesti myös johtoselvitys, mikäli aiemmin tehdyn johtoselvityksen tunnusta ei ole liitetty hakemukseen. Hakemukseen liittyy olennaisena osana käyttäjän täyttämä haittojenhallintasuunnitelma, jonka toteutumista viranomainen seuraa työn aikana. Ilmoituksen liitteeksi laaditaan tilapäisen liikennejärjestelyn suunnitelma, mikäli työ vaikuttaa jalankulkuun pyöräliikenteeseen tai moottoriajoneuvoliikenteeseen tai pysäköintipaikkoja varataan muuhun käyttöön siirtokehotuskyltillä. Kaivutyö tulee ilmoittaa talvikaudella (1.12.–14.5.) toiminnalliseen kuntoon ja kaikissa tapauksissa valmiiksi, jotta työ voidaan valvoa ja laskutus katkaista tai päättää."
+          },
+          {
+            "term": "Maksuluokat",
+            "definition": "Viranomaisen määrittämät maksuluokat kaivuilmoitukselle. Maksuluokkakartta ja maksuluokkataulukko löytyvät Helsingin kaupungin sivuilta, joille on linkki Haitattoman etusivun Työohjeet-sivulta."
+          },
+          {
+            "term": "Omat hankkeet",
+            "definition": "Lista hankkeista, joissa olet mukana jossain roolissa ja saamiesi käyttöoikeuksien mukaisesti. Omat hankkeet -listallasi näkyvät myös pelkän johtoselvityksen perustamisesta muodostetut hankerungot."
+          },
+          {
+            "term": "Sijoitussopimus(tunnus)",
+            "definition": "Yksityisten rakenteiden sijoittamisesta yleiselle alueelle tehtävä sopimus. Sopiminen asetetaan vireille Helsingissä Lupapiste.fi -järjestelmän kautta. Haitaton-järjestelmässä tulee lisätä olemassa oleva sijoitussopimustunnus hakemukselle, silloin kun hakemus koskee tällaisen rakenteen toteuttamista."
+          },
+          {
+            "term": "Tilapäisten liikennejärjestelyiden suunnitelma",
+            "definition": "Jos työskentely kadulla tai puistossa vaikuttaa jalankulkuun, pyöräliikenteeseen tai muuhun ajoneuvoliikenteeseen, tarvitaan suunnitelma tilapäisistä liikennejärjestelyistä kaivuilmoituksen liitteeksi. Suunnitelma tarvitaan myös silloin, kun pysäköintipaikkoja varataan muuhun käyttöön siirtokehotuskyltillä. Erillinen suunnitelma liitetään osaksi hakemusta pdf-muodossa. Yksinkertaisemmissa liikennejärjestelyissä on mahdollista lisätä liitteeksi myös kaupungin valmiin tyyppikuvan mukainen tilapäinen liikennejärjestely."
+          },
+          {
+            "term": "Toiminnallinen kunto -ilmoitus",
+            "definition": "Talvikaudella 1.12.–14.5. ajorata, pyörätie ja jalkakäytävä tulee asfaltoida tilapäisellä asfalttipäällysteellä pintaan saakka, jonka jälkeen työn voi ilmoittaa toiminnalliseksi. Jalkakäytävillä ja muilla alueilla voidaan käyttää kivituhkaa tai hienoa mursketta sopimalla asiasta tarkastajan kanssa etukäteen. Toiminnallinen tila katkaisee laskutuksen yllä mainittuna aikana. Katuluokan mukainen lopullinen päällystys on tehtävä 14.5. mennessä tai laskutus jatkuu 15.5. alkaen siihen asti, kunnes työ on hyväksytysti vastaanotettu."
+          },
+          {
+            "term": "Työ valmis -ilmoitus",
+            "definition": "Työn valmistuttua päätöksen saajan on tehtävä päätöksen myöntäjälle ilmoitus työn valmistumisesta ja tilattava loppukatselmus, jossa työalueen kunto tarkastetaan sekä työ vastaanotetaan. Työ on valmis, kun asfalttipinnat ovat kaivutöiden päällystysohjeiden mukaisesti asfaltoitu, asfaltin saumat käsitelty liima-aineella, viheralueet korjattu ja kaivualue kokonaisuudessaan ennallistettu työtä edeltävään tai sitä parempaan tasoon ohjeiden mukaisesti. Maksut päättyvät, kun työ on hyväksytysti vastaanotettu."
+          },
+          {
+            "term": "Työalue",
+            "definition": "Hakemukselle piirretty alue, jolla työskennellään. Työalueeseen tulee sisällyttää kaikki työn toteuttamiseksi tarvittava tila."
+          },
+          {
+            "term": "Työstä vastaava henkilö",
+            "definition": "Työstä vastaava on se, jonka rakennetta työssä rakennetaan, huolletaan tai korjataan, eli tyypillisesti työn tilaaja. Jos haluat tehdä kaivutöitä kaduilla tai puistoissa, ilmoita siitä kaupungille. Liitä ilmoitukseen valtakirja työstä vastaavalta, jos et itse ole työstä vastaava."
+          },
+          {
+            "term": "YKT-hanke",
+            "definition": "Yhteinen kunnallistekninen työmaa -yhteistoimintasopimuksen mukainen hanke. Osapuolia sopimuksessa ovat Helsingin kaupungin lisäksi Helsingin kaupunkiliikenne Oy, Helsingin seudun ympäristöpalvelut -kuntayhtymä HSY, Helen Oy, Helen Sähköverkko Oy, Auris Kaasunjakelu Oy sekä viestintäverkko operaattorit Cinia Oy, DNA Oyj, Elisa Oyj ja Telia Finland Oyj. YKT -yhteistoiminnalla pyritään sujuvoittamaan kaupungissa tapahtuvaa yleisten alueiden rakentamista ja sovittamaan sopijaosapuolten erillishankkeet yhteisesti toteutettaviksi, infrapalvelujen laatua ja tarjontaa parantaviksi hankkeiksi."
+          }
+        ]
+      }
     },
     "404Page": {
       "title": "Sivua ei löytynyt",
@@ -1964,7 +2211,6 @@
     "imageAltText": "Piirretty kuva rakennustyömaasta"
   },
   "workInstructions": {
-    "breadcrumb": "Murupolku",
     "main": {
       "header": "Työohjeet",
       "content": "<p>Haitaton tarjoaa hanke- ja hakemuslomakkeiden haittojenhallinnan täyttösivulla käyttäjän avuksi toimenpidevinkkejä, joissa esitetään kootusti mm. tärkeitä aikamääreitä ennakkoon tehtäviin yhteydenottoihin ja neuvotteluihin.</p><br /><p>Tälle sivustolle on koottu lisätietokortteja, jotka täydentävät osaa haittojenhallinnan toimenpidevinkeistä sekä antavat lisätason ideoita perustasoa laadukkaamman työmaan toteutukseen kolmansien osapuolten kannalta.</p><br /><p>Viralliset työohjeet löytyvät Helsingin kaupungin sivuilta osoitteesta</p><a href=\"https://www.hel.fi/fi/kaupunkiymparisto-ja-liikenne/tontit-ja-rakentamisen-luvat/tyomaan-luvat-ja-ohjeet\">Työmaan luvat ja ohjeet (hel.fi)</a>"
@@ -1976,17 +2222,17 @@
     "cards": {
       "basicLevel": "Vaadittava perustaso",
       "additionalLevel": "Mahdollinen lisätaso",
-      "readMore": "Lue lisää",
+      "readMore": "Katso mahdollinen lisätaso",
       "notFound": "Ohjetta ei löytynyt",
       "pictureBy": "Kuva",
-      "1": {
+      "card1": {
         "header": "1. Tiedotus eri osapuolille ja palaute",
         "puff": "<p><strong>Kerro alueen asukkaille, yrityksille ja muille toimijoille työmaasta vähintään viikkoaennen sen alkua.</strong>{' '}Työmaan aloittamisesta kertovassa tiedotteessa tulee kertoa:</p><br></br><ul><li>työmaan tarkka aloituspäivämäärä, </li><li>työmaan arvioitu kesto, </li><li>mitä työmaalla tehdään,</li><li>poikkeusreitit,</li><li>mahdolliset muutokset joukkoliikenteeseen ja pysäkkeihin,</li><li>päiväaikataulu, </li><li>melua aiheuttavien työvaiheiden arvioitu ajankohta sekä urakoitsijan sekä rakennuttajan yhteystiedot.</li></ul>",
         "content": "<p><strong>Valitse sopivat viestintäkanavat yhdessä tilaajan viestinnän kanssa,</strong> ja joukkoliikenteestä tiedottaminen sovitaan yhdessä HSL:n kanssa. Herkkien kohteiden (kuten koulut, päiväkodit, sairaalat ja vanhainkodit) osalta on varauduttava neuvottelemaan työajoista ja kohteiden huomioimisesta rakentamisessa erikseen. Myös työmaan aikaisista häiriöistä, viivästyksistä sekä työmaan loppumisesta tulee tiedottaa yhteistyössä tilaajan viestinnän kanssa. Helsingin Kaupunkiympäristön hankkeissa viestinnän yhteistyökumppanina on<a href=\"mailto:kymp.viestinta@hel.fi\" className=\"hds-link\" target=\"_blank\">kymp.viestinta@hel.fi.</a></p><br></br><p><strong>Viestinnän tulee olla selkeää, yleistajuista ja ymmärrettävää.</strong> Pyri puhumaan aktiivissa passiivin sijaan. Älä esimerkiksi kirjoita työmaatauluun, että ”alueella saneerataan kunnallistekniikkaa”, vaan ”uusimme vesijohtoja ja viemäreitä”. Käytä vain selkeitä päälauseita.</p><br></br><p><strong>Työmailla seurataan palautteita ja vikailmoituksia,</strong> joita kaupunkilaiset jättävät hankkeen omaan palautejärjestelmään tai Helsingin kaupungin hankkeissa kaupungin palautejärjestelmään (<a href=\"https://palautteet.hel.fi/\"className=\"hds-link\"target=\"_blank\"aria-label=\"Palautejärjestelmä. Avautuu uuteen ikkunaan.\">https://palautteet.hel.fi/</a>). Niiden perusteella tehdään tarvittavat korjaukset. Esimerkiksi jalankulkijan infotaulussa ja työmaataulussa kannustetaan antamaan palautetta ja linkataan palautejärjestelmään. Myös QR-koodia voidaan hyödyntää.</p>",
         "additionalLevelContent": "<h3>Työmaan tapahtumat</h3> <p> Voit sopia tilaajan kanssa työmaalla järjestettävistä tapahtumista lähialueen asukkaille ja ohikulkijoille. Näitä voivat olla esimerkiksi työmaan aloituspäivänä pidettävät avajaiset, asukasillat ja työmaapäivystykset. </p> <br /> <h3>Jalkautuminen taloyhtiöiden, elinkeinoharjoittajien ja asukkaiden pariin</h3> <p> Rakenna keskusteluyhteys työmaan ympäröivien sidosryhmien parissa. Jaa yhteystietoja ja keskustele. Pelkkä sähköposti ei riitä. Keskustele taloyhtiön kanssa tiedottamisesta. Tiedote voi olla lappu postilaatikossa tai rappukäytävän ovessa, myöhemmin sähköposti, jos näin sovit. On suositeltavaa jakaa tietoa myös alueen omissa Facebook-ryhmissä, jos se niissä sallitaan. Jalkaudu sinne, missä ihmiset ovat, älä oleta, että heistä kaikki tulee seuraamaan itse ylläpitämiäsi kanavia, jossa jaat tietoa. </p> <br /> <h3>Opastajat työmaalla</h3> <p> Työmaan ensimmäisinä päivinä paikalla on keltaisiin infoliiveihin pukeutuneita työmaaoppaita neuvomassa kaupunkilaisia, vastaamassa heidän kysymyksiinsä ja jakamassa työmaa-alueen karttoja. </p> <br /> <h3>Pikaviestitiedotteet</h3> <p> Haastavissa kohteissa voidaan ottaa käyttöön tilattavat tiedotteet tekstiviesteinä tai muun sovitun pikaviestipalvelun kautta. Monella työmaalla on ollut käytössä WhatsApp-ryhmä, jossa kerrotaan työmaan aikatauluista ja välitetään tilannetietoja vähintään kerran viikossa. Jos työmaan viestinnässä on käytössä esim. WhatsApp, tulee työmaataulussa kertoa siitä. </p> <br /> <h3>Työmaan esittelykokonaisuus</h3> <p> Työmaata esitellään laajemmin esimerkiksi kontin tai seinäkkeen avulla. Esittelykokonaisuudessa kerrotaan tarkemmin tehtävästä työstä, sen vaiheista, erityispiirteistä ja suunnitelmista. Lisäksi esitellään työmaan suunniteltu lopputulos ja sen vaikutuksia kaupunkilaisille. </p> <br /> <h3>Viestintävastaava ja/tai sometiimi</h3> <p> Työmaan viestintävastaava on urakoitsijan tehtävään osoittama henkilö, joka on tiiviisti mukana työmaan arjessa ja kokouksissa. Hän toteuttaa työmaan viestintäsuunnitelmaa yhdessä tilaajan viestinnän ja muiden toimijoiden kanssa. Viestintävastaavan ansiosta viestintä työmaalta kaupunkilaisille on sujuvaa ja ajantasaista. Suuremmilla ja vaikuttavuudeltaan merkittävillä työmailla harkitse sometiimin perustamista. Jos työmaa on merkittävä vaikutuksiltaan, tulee erityisesti kiinnittää huomiota viestintään. </p> <br /> <h3>Työmaan viestintäkampanja</h3> <p> Vaikutuksiltaan merkittävälle työmaalle suunnitellaan viestinnällinen kampanja, jossa voidaan hyödyntää esimerkiksi kaupungissa olevia digitaalisia mainostauluja tai urakoitsijan omia digitaalisia näyttöjä työmaa-alueella ja sen läheisyydessä. Viestintäkampanjan toteutustavasta, kestosta ja laajuudesta sovitaan yhdessä tilaajan kanssa. </p> <br /> <h3>Liikennetiedotteita voidaan jakaa myös Helsingin Uutisten uutisvirrassa</h3> <p> Ole yhteydessä: <a href=\"https://oma.media.fi/lehti/helsingin-uutiset/yhteystiedot/laheta-juttuvinkki/\"> Lähetä juttuvinkki Helsingin Uutisiin </a> </p>",
-        "additionalLevelSummary": "<ul><li>Varmista jalankulun turvallisuus ja esteettömyys</li><li>Varmista kulkuyhteydet kiinteistöihin</li><li>Tee yhteensovitus muiden hankkeiden ja töiden sekä niiden kiertoreittien kanssa</li><li>Ilmoita aina katujen sulkemisesta liikenteeltä Pelastuslaitokselle ja Poliisille</li><li>Tarkista aina, onko hankkeesi tai työsi erikoiskuljetusten reitillä</li><li>Tarkista vaikutukset olevaan liikennevalo-ohjaukseen (kaistajärjestelyt, ilmaisimet, valojen toimivuus)</li><li>Poikkeavat työajat</li></ul>"
+        "additionalLevelSummary": "<ul><li>Työmaan tapahtumat</li><li>Jalkautuminen taloyhtiöiden, elinkeinoharjoittajien ja asukkaiden pariin</li><li>Opastajat työmaalla</li><li>Pikaviestitiedotteet</li><li>Työmaan esittelykokonaisuus</li><li>Viestintävastaava ja/tai sometiimi</li><li>Työmaan viestintäkampanja</li><li>Liikennetiedotteita voidaan jakaa myös Helsingin Uutisten uutisvirrassa</li></ul>"
       },
-      "2": {
+      "card2": {
         "header": "2. Esteettömyys sekä kulkureittien pinnanlaatu",
         "content": "<p><strong>Sulkupuomi tai –aita on jalankulkijoita ja pyöräilijöitä varten olevalle reitille opastavien liikennemerkkien kohdalla.</strong> Sen on sijaittava täsmälleen suojatien kohdalla, jotta näkövammainen pääsee oikealle reitille.</p><br /><p><strong>Sulkuaitoihin kiinnitettävien merkkien alareunan tulee olla vähintään metrin korkeudella.</strong></p><br /><p><strong>Ajorata ja reunakivi on luiskattava samalle korkeudelle kolmen senttimetrin pykälällä,</strong> jos auto-, kävely- ja pyöräteillä liikkuvia joudutaan ohjaamaan reunakiven yli. Myös esimerkiksi kaapelikourut on luiskattava. Jos työmaalla käytetään liikennevaloja, niiden tulee noudattaa esteettömyysohjeistuksia.</p><br /><p><strong>Esteetön reitti opastetaan esteettömän reitin opastemerkeillä.</strong> Jos reitti ei ole esteetön, tee ilmoitus Näkövammaisten liittoon väliaikaisista järjestelyistä. Ääniopastus tulee huomioida myös työmaan aikana.</p>",
         "content2": "<p>Jos reitillä on kaivanto, sen kohdalle on asetettava työn ajaksi silta tai väliaikainen päällyste. Siinä tapauksessa, että alue joudutaan jättämään ilman päällystettä korkeintaan vuorokaudeksi, se on merkittävä liikennemerkeillä ja erittäin selvästi näkyvillä suojauslaitteilla.</p><br /><p>Päällysteen saumassa ei saa olla pykälää. Päällystämätöntä kohtaa ei saa jättää pitkään mäkeen, jossa se voi olla vaarallinen pyöräilijöille tai rullaluistelijoille. Terävät asfalttireunat on kulkusuunnassa viistettävä esimerkiksi kylmäasfalttimassalla ohjeistuksien mukaiseen kaltevuuteen.</p><br /><h3>Ohjeet</h3><br /><a1 href=\"https://www.hel.fi/static/hki4all/ohjeet/2022/suraku-kortti-1.pdf\">SuRaKu-kortti Suojatiet ja jalkakäytävät</a1><br /><a2 href=\"https://helsinkikaikille.hel.fi/ohjeita-esteettomyyden-toteuttamiseen/helsingin-kaupungin-ohjeet-ulkoalueille/\">Suojateitä koskevat tyyppipiirustukset</a2>",
@@ -1995,7 +2241,7 @@
         "additionalLevelContent": "<h3>Esteettömän reitin kartta</h3><p>Työmaalle sijoitettaviin karttoihin merkitään esteetön reitti symbolilla</p><br /><h3>Esteettömyyskävely</h3><p>Suunnitellaan ja toteutetaan työmaalla esteettömyyskävely.</p><br /><h3>Pohja-asfaltointi</h3><p>Työmaalla käytetään asfaltointia kulkuväylillä sekä väliaikaisissa luiskissa.</p><br /><h3>Täristävät hidastetarrat pyöräilijöille</h3><p>Tarvittaviin kohtiin lisätään ns. tärinäraidat, jotka hidastavat luonnollisesti pyöräilijöiden vauhtia työmaan kohdalla.</p><br /><h3>Piilotetut johdot ja kaapelit</h3><p>Työmaalla johdot ja kaapelit on piilotettu, asfaltoitu tai koteloitu esteettömyys huomioiden.</p><br /><h3>Talvikunnossapidon huomiointi</h3><p>Työmaalla on mietitty myös talvikunnossapitoa, ja esimerkiksi pyöräbaanoilla suositaan harjasuolausta</p><br /><h3>Tiedotus tilapäisistä reiteistä</h3><p>Näkövammaisten liittoa tulee informoida työmaan muutoksista ja reiteistä (<a href=\"mailto:toimisto@hun.fi\">toimisto@hun.fi</a>).</p>",
         "image1AltText": "Ohjekyltti esteettömälle reitille rautateiden työmaan yhteydessä"
       },
-      "3": {
+      "card3": {
         "header": "3. Jalankulun reitit sekä kadun ylitys",
         "puff": "<p><strong>Jalankulku tulee ohjata työmaan ohi yhtenäisesti merkittyä reittiä,</strong> joka on erotettu ajoradasta sulkulaitteiden avulla aina kun se on mahdollista. Muutoin jalankulkijat opastetaan vakituisten suojateiden kohdalta tien toiselle puolelle. Jalankulkijat eivät missään vaiheessa saa joutua ohittamaan työmaata liikenteen seassa ajoradan kautta. Jalankulkijoiden pääreitin pitää olla mahdollisimman selkeä. Jalankulkijoille tulee tarjota riittävän tiheästi reittejä, joiden avulla työmaan tai autotien voi ylittää turvallisesti. Reittejä tulee myös kehittää edelleen työmaan aikana.</p>",
         "content": "<p><strong>Vapaan reitin leveyden tulee olla yksinomaan jalankulkijoille vähintään 1,5 metriä ja vapaan korkeuden 2,2 metriä.</strong> Jos leveämpää tilaa ei pystytä järjestämään, jalkakäytävä voi olla 1,2 metriä leveä. Väyliä kavennettaessa tulee huomioida, miten väylää voidaan pitää kunnossa. Jos kaventaminen estää normaalin kaluston käyttämisen kunnossapidossa, se voi vaikuttaa kunnossapitovastuisiin. Vastuurajat käydään läpi sopimusvaiheessa.</p><br /><p><strong>Työmaalle suunnitellut reititykset tulee käydä läpi kohteessa esimerkiksi kävelemällä tai pyöräilemällä.</strong> Samalla voidaan tarkistaa, minne kävelyn ja pyöräilyn opasteet tulee sijoittaa sekä arvioida miten helppo liiketiloihin ja kiinteistöihin on päästä jalan ja pyörällä.</p><br /><p><strong>Käytöstä poissaolevien liikennevalojen valot tulee huputtaa ja napit tarvittaessa peittää.</strong> Käytöstä poissaolevat liikennemerkit tulee huputtaa tai poistaa (myös työmaa-aitauksen sisälle jäävät) työn ajaksi, samoin kadunpintaan maalatut liikenteen ohjausmerkinnät, jotka ovat ristiriitaisia väliaikaisten liikennejärjestelyjen kanssa, poistetaan jyrsimällä. Ääniopastus tulee huomioida myös työmaan aikana.</p><br /><p><strong>Liikenteenohjaajia tulee käyttää, kun alueella on paljon erityisryhmiä (esim. lapsia).</strong> Liikenteenohjaajia on käytettävä myös tehtäessä lyhytaikaisia töitä alueella, joka ei ole aidattu ja jonne on pääsy käytöissä olevilta väyliltä.</p><br /><p><strong>Suojateiden tulee olla esteettömiä ja turvallisia koko työmaan ajan.</strong> Erityisesti täytyy huomioida kulkuväylien tasaisuus ja kaltevuus. On myös tärkeää, että kaikki työmaa-alueen suojatiet on toteutettu kuivatuksen kannalta huolellisesti ja valaistu hyvin. Suojateiden turvallisuuteen on kiinnitettävä erityisesti huomiota puistojen, vanhainkotien ja vammaispalveluiden läheisyydessä sekä alueella, jolla liikkuu lapsia. Suojateiden kohdalla työmaa-aidan tulee olla niin havaittava, että ajoneuvoliikenteen kuljettajat pystyvät näkemään suojatielle astuvat pienet lapset. Jos suojateitä joudutaan sulkemaan tai siirtämään tulee varmistaa, että korvaava yhteys on riittävän lähellä, jotta kadun ylitys ei tapahtuisi suojatiettömästä kohdasta. Siirretyistä, tilapäisistä suojateista ilmoitetaan opasteella, joka kertoo suojatien suunnan ja etäisyyden metreissä.</p><br /><p><strong>Tilapäiset suojatiet on sijoitettava liikenneturvallisuuden ylläpitämisen kannalta olennaisiin paikkoihin.</strong> Tässä on tärkeää huomioida muun muassa näkymät ja jalankulkureitit. Tarvittaessa on lisäksi laskettava pysyvää nopeusrajoitusta pistemäisesti. Ajoneuvoliikennettä on varoitettava muuttuneista suojatiejärjestelyistä merkillä 151 (Suojatien ennakkovaroitus). Vilkkaalla tiellä on käytettävä siirrettäviä liikennevaloja.</p><br /><h3>Ohjeet</h3><br /><a1 href=\"https://www.hel.fi/static/hki4all/ohjeet/2022/suraku-kortti-1.pdf>\">SuRaKu-kortti Suojatiet ja jalkakäytävät</a1><br /><a2 href=\"https://helsinkikaikille.hel.fi/ohjeita-esteettomyyden-toteuttamiseen/helsingin-kaupungin-ohjeet-ulkoalueille/\">Suojateitä koskevat tyyppipiirustukset</a2>",
@@ -2004,14 +2250,14 @@
         "image1AltText": "Jalankulkija työmaa-aitojen välissä",
         "image2AltText": "Työntekijä maalaa suojatien merkintöjä"
       },
-      "4": {
+      "card4": {
         "header": "4. Pyöräliikenteen reitit, pyöräpysäköinti sekä kadun ylitys",
         "puff": "<p><strong>Pyöräliikenne tulee huomioida ajoradan ajojärjestelyissä kaduilla, joilla ei ole erillistä pyöräliikenteen väylää.</strong> Vilkkaimmilla kaduilla pyöräliikenne on eroteltu moottoriajoneuvoliikenteestä omalle väylälleen. Väylät voivat olla yksi- tai kaksisuuntaisia. Helsingissä jalankulku ja pyöräliikenne on yleensä lisäksi eroteltu toisistaan. Jokaisella työmaalla tulee huolehtia siitä, että pyöräliikenteen yhteydet jatkuvat loogisesti kulkusuuntaan nähden. Lisäksi pyörällä on päästävä mm. sivukaduille ja kiinteistöille.</p>",
-        "content": "<p><strong>Pyöräliikenne ja jalankulkijat pyritään erottamaan toisistaan myös työmaan aikana.</strong> Tämä voi edellyttää väylien tilapäistä kaventamista tai tilan lainaamista esimerkiksi ajoradan pysäköinniltä. Pyörätien leveys mitoitetaan käyttäjämäärän perusteella. Kaksisuuntaisen pyörätien on kuitenkin oltava vähintään 2 metriä leveä.</p><br /><p><strong>Poikkeustilanteissa erotellun väylän tilalla käytettävän yhdistetyn jalankulun ja pyöräliikenteen väylän tulee olla vähintään 3 metriä leveä,</strong> jotta molemmat kulkumuodot mahtuvat liikkumaan. Jos osuus on lyhyt ja jalankulkijoita on vähän, 2,5 metriä riittää.</p><br /><p><strong>Pyöräliikenne voidaan ohjata ajoradalle,</strong> jos ajoradan liikennemäärä on melko pieni ja nopeusrajoitus on alhainen (max 30 km/h). Jalankulkijoiden ja pyöräilijöiden pääreitin tulee olla mahdollisimman selkeä. Pyöräilijöille täytyy tarjota riittävän tiheästi reittejä, joita pitkin työmaan tai autotien voi ylittää turvallisesti. Reittejä tulee kehittää edelleen myös työmaan aikana.</p><br /><p><strong>Työmaalle suunnitellut reititykset tulee käydä läpi kohteessa esimerkiksi kävelemällä tai pyöräilemällä.</strong> Samalla voidaan tarkistaa, minne kävelyn ja pyöräilyn opasteet tulee sijoittaa sekä arvioida miten helppo liiketiloihin ja kiinteistöihin on päästä jalan ja pyörällä.</p><br /><p><strong>Käytöstä poissaolevien liikennevalojen valot tulee huputtaa ja napit tarvittaessa peittää.</strong> Käytöstä poissaolevat liikennemerkit tulee huputtaa tai poistaa (myös työmaa-aitauksen sisälle jäävät) työn ajaksi samoin kadunpintaan maalatut liikenteen ohjausmerkinnät, jotka ovat ristiriitaisia väliaikaisten liikennejärjestelyjen kanssa, poistetaan jyrsimällä.</p><br /><p><strong>Liikenteenohjaajia tulee käyttää, kun alueella on paljon erityisryhmiä (esim. lapsia).</strong> Liikenteenohjaajia on käytettävä myös tehtäessä lyhytaikaisia töitä alueella, joka ei ole aidattu ja jonne on pääsy käytöissä olevilta väyliltä.</p><br /><p><strong>Mikäli pyörätelineitä joudutaan poistamaan käytöstä työmaan ajaksi,</strong> työmaan läheisyyteen kasataan väliaikainen pyöräteline. Siihen tulee mahtua yhtä monta pyörää kuin poistettuun telineeseen. Kaupunkipyöräasemien osalta tulee olla yhteydessä Kaupunkiliikenne Oy:öön, jotta korvaava sijainti löydetään.</p><br /><h3>Ohjeet</h3><br /><a href=\"https://www.hel.fi/static/hkr/luvat/pyoraliikenteen_tyomaaohje.pdf\">Pyöräliikenteen suunnitteluohje: Työmaat ja tapahtumat</a>",
+        "content": "<p><strong>Pyöräliikenne ja jalankulkijat pyritään erottamaan toisistaan myös työmaan aikana.</strong> Tämä voi edellyttää väylien tilapäistä kaventamista tai tilan lainaamista esimerkiksi ajoradan pysäköinniltä. Pyörätien leveys mitoitetaan käyttäjämäärän perusteella. Kaksisuuntaisen pyörätien on kuitenkin oltava vähintään 2,5 metriä leveä. Poikkeuksellisesti alle 30 metrin matkalla leveys voi olla yli 2,2 metriä, mutta edellytyksenä on, että kahden eri suunnasta tulevan tavarapyörän kuljettajan on mahdollista arvioida kohtaamisen onnistuminen tai pysähtymisen tarve koko kavennuksen matkalla.</p><br /><p><strong>Poikkeustilanteissa erotellun väylän tilalla käytettävän yhdistetyn jalankulun ja pyöräliikenteen väylän tulee olla vähintään 3 metriä leveä,</strong> jotta molemmat kulkumuodot mahtuvat liikkumaan. Jos osuus on lyhyt ja jalankulkijoita on vähän, 2,5 metriä riittää.</p><br /><p><strong>Yksisuuntaisten pyöräteiden tai -kaistojen liikenne voidaan ohjata ajoradalle pyöräkaistoille tai sekaliikenteeseen turvallisten siirtymäkohtien avulla, jos ajoradan liikennemäärä on melko pieni ja nopeusrajoitus on alhainen (max 30 km/h). Kaksisuuntaisen pyörätien liikennettä ei voi osoittaa sekaliikenteeseen.</strong> Ajoradan puolelle väliaikaisesti siirrettävä kaksisuuntainen pyörätie tulee erotella raskaalla törmäyssuojalla ajoradan autoliikenteestä. Jalankulkijoiden ja pyöräilijöiden pääreitin tulee olla mahdollisimman selkeä. Pyöräilijöille täytyy tarjota riittävän tiheästi reittejä, joita pitkin työmaan tai autotien voi ylittää turvallisesti. Reittejä tulee kehittää edelleen myös työmaan aikana.</p><br /><p><strong>Työmaalle suunnitellut reititykset tulee käydä läpi kohteessa esimerkiksi kävelemällä tai pyöräilemällä.</strong> Samalla voidaan tarkistaa, minne kävelyn ja pyöräilyn opasteet tulee sijoittaa sekä arvioida miten helppo liiketiloihin ja kiinteistöihin on päästä jalan ja pyörällä.</p><br /><p><strong>Käytöstä poissaolevien liikennevalojen valot tulee huputtaa ja napit tarvittaessa peittää.</strong> Käytöstä poissaolevat liikennemerkit tulee huputtaa tai poistaa (myös työmaa-aitauksen sisälle jäävät) työn ajaksi, samoin kadunpintaan maalatut liikenteen ohjausmerkinnät, jotka ovat ristiriitaisia väliaikaisten liikennejärjestelyjen kanssa, poistetaan jyrsimällä.</p><br /><p><strong>Liikenteenohjaajia tulee käyttää, kun alueella on paljon erityisryhmiä (esim. lapsia).</strong> Liikenteenohjaajia on käytettävä myös tehtäessä lyhytaikaisia töitä alueella, joka ei ole aidattu ja jonne on pääsy käytöissä olevilta väyliltä.</p><br /><p><strong>Mikäli pyörätelineitä joudutaan poistamaan käytöstä työmaan ajaksi,</strong> työmaan läheisyyteen kasataan väliaikainen pyöräteline. Siihen tulee mahtua yhtä monta pyörää kuin poistettuun telineeseen. Kaupunkipyöräasemien osalta tulee olla yhteydessä Kaupunkiliikenne Oy:öön, jotta korvaava sijainti löydetään.</p><br /><h3>Ohjeet</h3><br /><a href=\"https://www.hel.fi/static/hkr/luvat/pyoraliikenteen_tyomaaohje.pdf\">Pyöräliikenteen suunnitteluohje: Työmaat ja tapahtumat</a>",
         "additionalLevelSummary": "<ul><li>Täristävät hidastetarrat pyöräilijöille</li><li>Peilit tiukoissa mutkissa</li><li>Asiantuntijat ja kokemusasiantuntijat</li></ul>",
         "additionalLevelContent": "<h3>Täristävät hidastetarrat pyöräilijöille</h3><p>Ennen työmaata pyöräväylille laitetaan hidastetarrat, jotka hidastavat luonnollisesti pyöräilijöiden vauhtia työmaan kohdalla.</p><br /><h3>Peilit tiukoissa mutkissa</h3><p>Tarvittaviin kohtiin lisätään peilit pyöräilijöille paremman näkyvyyden takaamiseksi.</p><br /><h3>Asiantuntijat ja kokemusasiantuntijat</h3><p>Työmaan reittejä ja opastusta suunnitellessa hyödynnetään asiantuntijoita ja kokemusasiantuntijoita.</p>"
       },
-      "5": {
+      "card5": {
         "header": "5. Jalankulun ja pyöräliikenteen opastaminen",
         "puff": "<h3>Siirrot:</h3><ul><li><strong>Jos julkisen liikenteen pysäkkejä joudutaan siirtämään tai poistamaan käytöstä,</strong> niiden kohdalla täytyy ilmoittaa opasteilla seuraavan pysäkin etäisyys ja miten kauan sinne kestää kävellä. Opastaminen ja pysäkkien siirrot sovitaan yhdessä HSL:n kanssa (<a href=\"mailto:infra@hsl.fi\">infra@hsl.fi</a>).</li><li><strong>Siirretyistä, tilapäisistä suojateistä ilmoitetaan opasteella,</strong> joka kertoo korvaavan suojatien suunnan ja etäisyyden metreissä. Opaste sijoitetaan poistuneen suojatien kohdalle.</li><li><strong>Siirrettäville taksitolpille etsitään uusi sijainti,</strong> jonne opastetaan työmaalta.</li></ul>",
         "content": "<p><strong>Opastuksen tulee alkaa reilusti ennen työmaata, mikäli työmaa hankaloittaa liikkumista merkittävästi.</strong> Pyöräilijöitä, jalankulkijoita ja autoilijoita varoitetaan työmaasta niin hyvissä ajoin, että he ehtivät tarpeen tullen vielä muuttaa reittiään.</p><br /><p><strong>Jalkakäytävällä tai pyörätiellä tehtävästä työstä on aina varoitettava liikennemerkillä 142 (Tietyö).</strong> Jalankulku- ja pyöräteillä liikennemerkin alimman reunan tulee olla 2,2–3,2 metrin korkeudella. Opasteita ei saa kiinnittää pysyvien liikenteenohjauslaitteiden pylväisiin, eivätkä ne saa aiheuttaa näköestettä tai törmäysvaaraa. Opasteet on pystytettävä niin, että ne kestävät esimerkiksi tuuli- ja lumikuormat kaatumatta tai irtoamatta. Opasteet asennetaan kulkuväylän viereen esimerkiksi työmaa-aitaan tai erilliseen pylvääseen.</p><br /><p><strong>Väliaikaisten liikennejärjestelyjen opasteet ovat keltaisia ja mustia.</strong> Niiden tekstikoko on yleensä 80–200 millimetriä. Jalankulkijoille ja pyöräilijöille tekstikoko on yleensä 60–80 millimetriä. Liikennemerkeillä tulee viestiä jalankulkijoille ja pyöräilijöille selkeästi ja katkeamattomasti reitit, jotka vievät työmaan ohi.</p><br /><p><strong>Jos opasteissa käytetään karttoja,</strong> tulee niissä jättää pois ylimääräiset yksityiskohdat (esim. talonumerot ja korkeuskäyrät) ja näyttää vain olennainen yksinkertaisella tavalla.</p>",
@@ -2021,14 +2267,14 @@
         "image2AltText": "Liikennemerkki, jossa merkintä Varo kiskouria",
         "image3AltText": "Merkintä tiessä, jossa jalankulkija ja teksti Varo!"
       },
-      "6": {
+      "card6": {
         "header": "6. Kaivannot ja sillat",
         "content": "<p><strong>Jalkakäytävällä, pyörätiellä tai jommankumman vieressä oleva kaivanto reunustetaan</strong> kaiteella tai aidalla, jotta kaivantoon ei ole vaaraa suistua. Suojauslaitteen valinnassa otetaan huomioon, miten hyvin se pysyy paikallaan.</p><br /><p><strong>Jalkakäytävällä tai pyörätiellä oleva laaja kaivanto peitetään tilapäisellä sillalla.</strong> Sen kannen rakenteessa ei saa olla rakoja, eikä kahden sillan väliin saa tulla pyöräilijöille vaarallista uraa. Kansi ei saa olla sateella tai muuten liukas. Silloille tulee olla luiskat. Jos sillat tehdään kahdesta tai useammasta osasta, on ne asennettava tiiviisti kiinni toisiinsa.</p><br /><p><strong>Tilapäisen sillan on oltavat vähintään 1,5 metriä leveä jalankulkijoille.</strong> Silta rakennetaan väylän tasoon, mutta jos se ei onnistu, viisteiden kaltevuus saa olla enintään 1:10. Jos kaivantosillan kansi ei rajoitu kiinteään seinään, kannen reunassa tulee olla vähintään 5 senttimetrin korkuinen suojareunus.</p><br /><p><strong>Jalankulkijoille tarkoitetulla kaivantosillalla on oltava molemmilla puolilla käsijohde 0,9 metrin korkeudella.</strong> Jos myös pyöräilijät käyttävät siltaa, kaiteen yläreunan on oltava 1,2 metrin korkeudella ja sillan leveämpi. Kaivantosillan kaiteessa tulee aina olla osuus, joka estää kaiteen läpi putoamisen. Yli 1,5 metriä syvien kaivantojen kohdilla kaivantosillan kaiteen tulee aina olla vähintään 1,2 metriä.</p><br /><p><strong>Jos jalankulkijat joutuvat ylittämään työmaan, tehdään ylikulkusilta.</strong> Se suunnitellaan tapauskohtaisesti erillisen ohjeistuksen mukaan.</p><br /><h3>Ohjeet</h3><br /><a href=\"https://www.hel.fi/static/hkr/luvat/pks_kaivutyoohje.pdf\">Yleisten alueiden käyttö, tilapäiset liikennejärjestelyt ja katutyöt</a>",
         "additionalLevelSummary": "<ul><li>Kaivannon aitauksien valaistus</li><li>Kaivantosillan asennuksen viimeistely</li><li>Konttisilta</li><li>Varoitusmerkit ylikulkusillan yhteydessä</li></ul>",
         "additionalLevelContent": "<h3>Kaivannon aitauksien valaistus</h3><p>Turvallisuutta ja viihtyisyyttä lisätään tuomalla lisävalaistusta ledinauhalla aitauksiin.</p><br /><h3>Kaivantosillan asennuksen viimeistely</h3><p>Kaivantosilta tulee asentaa ja viimeistellä siten, ettei se aiheuta vaaraa liikkujille (esim. nostolenkkien kohdalle tulpat).</p><br /><h3>Konttisilta</h3><p>Ylikulkusillan voi tehdä myös konttiratkaisuilla, joka ratkaisee myös roiskumisen haasteet. Tällöin on hyvä huomioida myös konttien valaiseminen.</p><br /><p>Konttisiltoihin voi myös tehdä paikallista taidetta.</p><br /><h3>Varoitusmerkit ylikulkusillan yhteydessä</h3><p>Ylikulkusillan ulostulojen läheisyydessä huomioidaan muu liikenne esimerkiksi maalaamalla maahan varoitusmerkki pyöräilijöistä tai lisäämällä liikennemerkkejä.</p><br /><p>Pyöräilijöitä varoitetaan maahan maalatulla kävelijän kuvakkeella.</p>",
         "image1AltText": "Merkintä tiessä, jossa pyötä ja teksti Varo!"
       },
-      "7": {
+      "card7": {
         "header": "7. Työmaa-aidat ja valaistus",
         "content": "<p><strong>Yhtenäiset työmaa-aidat</strong> rajaavat työmaa-alueen siististi ja aukottomasti. Pitkä-aikaisen aidan koon, materiaalin ja värin tai kuvituksen on sovelluttava ympäristöön. Työmaa-aidan tulee taata turvallinen näkyvyys (esim. raskasaita, jonka läpi näkyy).</p><br /><p><strong>Työmaa-aidan kannatinpalkin tai jalustan tulee olla sellainen, ettei se aiheuta kompastumisvaaraa jalankulkijalle.</strong> Sen täytyy myös sallia mahdollisimman yhtenäinen johde valkoiselle kepille.</p><br /><p><strong>Väylän vähimmäisleveyden on täytyttävä niin, että aidan jalusta tai kannatin on huomioitu.</strong> Jalustat tulee mahdollisuuksien mukaan asentaa siten, että ne vievät mahdollisimman vähän tilaa kulkuväylältä.</p><br /><p><strong>Jos työmaalla käytetään siirrettäviä työmaa-aitoja,</strong> suositaan kuvan kaltaisia malleja, jotka vastaavat esteettömyyssäädöksiä tai joissa on yhtenäinen kannatinpalkki tai jalusta.</p><br /><p><strong>Alueella liikkuminen ja kadun ylittäminen pidetään turvallisena järjestämällä korvaava tilapäinen valaistus,</strong> mikäli jalkakäytävän tai pyörätien valaistus joudutaan poistamaan työn aikana. Valaistuksella on olennainen merkitys reitin liikenneturvallisuuteen ja siihen, että jalankulkijat ja pyöräilijät on mahdollista havaita selkeästi tien ylityspaikoissa. Moni väylä kulkee valaistun tien varressa eikä siksi tarvitse omaa valaistusta. Jos tällaista väylää korvaava reitti kuitenkin kulkee kauempana tiestä, eikä tien valaistus riitä valaisemaan uutta reittiä, valaistus on taattava muulla keinolla.</p><br /><p><strong>Valaistukseen on kiinnitettävä erityisesti huomiota puistojen, vanhainkotien ja vammaispalveluiden läheisyydessä sekä alueella, jolla liikkuu lapsia.</strong></p>",
         "additionalLevelSummary": "<ul><li>Viistotut aidanjalat</li><li>LED-valonauhat aidoissa</li><li>Työmaatolppien suojaus</li><li>Viihtyvyyden lisääminen</li><li>Yhteneväinen ilme</li></ul>",
@@ -2037,28 +2283,27 @@
         "image2AltText": "Siirrettäviä työmaa-aitoja jalustoilla",
         "image3AltText": "Siirrettäviä työmaa-aitoja kannatinpalkilla"
       },
-      "8": {
+      "card8": {
         "header": "8. Julkisen liikenteen ja pysäkkien huomioon ottaminen",
         "puff": "",
         "content": "<p><strong>Jos kadulla on julkista liikennettä, on tarpeen neuvotella HSL:n, Kaupunkiliikenteen ja/tai Linja-autoliiton kanssa</strong> hyvissä ajoin ennen liikennejärjestelyjä niiden vaikutuksista liikenteeseen. Paikalliseen joukkoliikenteeseen (raitiotie ja linja-autoliikenne) liittyvät muutostarpeet tulee ilmoittaa osoitteeseen <a href=\"mailto:infra@hsl.fi\">infra@hsl.fi</a>. Lisäksi tulee olla tarpeen mukaan yhteydessä Kaupunkiliikenne Oy:öön (metrot ja raitiovaunut) ja Linja-autoliittoon (kaukoliikenne).</p><br /><Puff><p><strong>Raitiotie- tai linja-autopysäkkien osalta on liikennejärjestelyissä huomioitava seuraavat asiat:</strong></p><ul><li>Kävely-yhteydet pysäkeille on säilytettävä, ja niissä on huomioitava esteettömyys.</li><li>Pysäkit on hyvä pitää lähellä niiden pysyviä paikkoja, jotta julkinen liikenne pysyy aikataulussa.</li><li>Pysäkkien liikennöitävä kunto säilyy.</li><li>Pysäkkien sijaintia muutettaessa on huolehdittava riittävästä opastuksesta.</li></ul><br /><p><strong>HSL:ää tulee tiedottaa hyvissä ajoin työmaasta, mahdollisista reittimuutoksista ja pysäkeistä, joita saatetaan joutua siirtämään ja poistamaan käytöstä työmaan takia.</strong> Pysäkkien siirroissa tai linja-autojen poikkeusreiteissä on otettava yhteys HSL:ään vähintään kaksi viikkoa etukäteen. Mikäli työmaa sijaitsee linja-auton päätepysäkillä tai linja-autoliikenne estyy kadulla, yhteyttä on otettava vähintään 2,5 kuukautta etukäteen. Raitioliikenteen osalta yhteyttä on otettava vähintään 6 kuukautta etukäteen.</p></Puff><p><strong>Kun pysäkki siirretään, urakoitsijan kontolla on asentaa väliaikainen pysäkkitolppa (vähintään 2,7 metriä korkea), liikennemerkki ja jalusta.</strong> Urakoitsija asentaa pysäkkitolppaan tarvittavan määrän tiedotekoteloita ja vastaa väliaikaisen pysäkkialueen kunnossapidosta. Työn loputtua urakoitsija purkaa väliaikaisen pysäkin ja palauttaa alkuperäisen.</p><br /><p><strong>HSL asentaa ja siirrättää liikennemerkin linjakilpikehikon väliaikaisille pysäkeille sovittuna ajankohtana.</strong> Kaupunki ja HSL voivat myös päättää, että pysäkille asennetaan katos ja/tai esteettömyyssäädökset täyttävä rampitettu koroke, joka nousee bussin tai raitiovaunun lattian tasolle.</p><br /><p><strong>Pysäkkejä ei saa siirtää tai poistaa ilman HSL:n lupaa.</strong> Urakoitsijan on noudatettava HSL:n yleisohjetta sekä sovittava HSL:n kanssa yksityiskohdista. Poistetun pysäkin kohdalle täytyy laittaa opaste, joka ohjaa korvaavan pysäkin luo. Opasteessa esitetään suunta (tarvittaessa kartta) pysäkille sekä matka metreinä.</p><br /><p><strong>Työmaan tietojen vieminen avoimeen rajapintaan,</strong> kuten HSL:n Digitransit-palveluun, tulee sopia yhdessä HSL:n kanssa.</p>",
         "additionalLevelSummary": "<ul><li>Valmisrakenteinen bussipysäkki</li></ul>",
         "additionalLevelContent": "<h3>Valmisrakenteinen bussipysäkki</h3><p>Työmaalla hyödynnetään valmisrakenteista bussipysäkkiä, jossa on katos, luiskat ja nihkeä, pitävä pinta.</p>"
       },
-      "9": {
+      "card9": {
         "header": "9. Kiinteistöjen ja liikkeenharjoittajien tarpeet",
         "content": "<h3>Kadun liikkeiden osalta tulee työmaajärjestelyissä huomioida seuraavat asiat:</h3><ul><li>Kulkukelpoiset yhteydet on järjestettävä kaikille kadun liikkeille koko työn ajan.</li><li>Liikkeenharjoittajien kanssa on selvitettävä tavaraliikenteen vaatimukset.</li><li>Liikkeenharjoittajien näkyvyyttä katutilassa tulee häiritä mahdollisimman vähän.</li><li>Liikkeenharjoittajia tulee kuulla ennen työmaata ja työmaan aikana.</li></ul><br /><h3>Kadun kiinteistöjen osalta tulee työmaajärjestelyissä huomioida seuraavat asiat:</h3><ul><li>Pelastusajon ja -toimen tarpeet</li><li>Kulkukelpoiset yhteydet on järjestettävä kaikille kiinteistöille ja rakennuksille koko työn ajan.</li><li>Kiinteistöjen asukkailla ja käyttäjillä tulee olla helposti saatavilla ajantasaista tietoa työmaan etenemisestä. Keinoina voidaan käyttää esimerkiksi taloyhtiötiedotetta, WhatsApp-ryhmää tai diginäyttöä kiinteistön edustalla.</li></ul>",
         "additionalLevelSummary": "<ul> <li>Liikkeenharjoittajista muodostettu työmaaraati</li> <li>Liikkeenharjoittajien näkyvyys</li> </ul>",
         "additionalLevelContent": "<h3>Liikkeenharjoittajista muodostettu työmaaraati</h3><p>Työmaan edustajat muodostavat yhdessä paikallisten liikkeenharjoittajien kanssa työmaaraadin, joka yhdessä pohtii ratkaisuja työmaanaikaiselle toiminnalle.</p><br /><h3>Liikkeenharjoittajien näkyvyys</h3><p>Liikkeenharjoittajien näkyvyyttä jopa lisätään mahdollisuuksien mukaan.</p>"
       },
-      "10": {
+      "card10": {
         "header": "10. Melu-, pöly- ja tärinä sekä työmaan siisteys ja järjestelyiden ylläpito",
         "content": "<p><strong>Työmaista syntyy väistämättä erilaisia melu- ja pölyhaittoja sekä mahdollisia tärinähaittoja.</strong> Niitä pyritään vähentämään mahdollisuuksien mukaan esimerkiksi työn aikataulutuksella, aidoilla, maa-aineksen kastelulla tai muulla työhön sopivalla menetelmällä esim. kiven tai betonin sahaustöissä käytetään vettä sitomaan pölyä, tai käytetään louhintatöiden porauksissa pölynkerääjää.</p><br /><p><strong>Työmenetelmän valinta on huomioitava, jos joudutaan louhimaan. Lisäksi tärinänsuojaukset tulee tehdä herkille laitteille.</strong></p><br /><h3>Ohjeet:</h3><br /><a href=\"https://www.hel.fi/fi/kaupunkiymparisto-ja-liikenne/ympariston-ja-luonnon-suojelu/ymparistohaittojen-ehkaisy/ymparistonsuojelumaaraykset\">Helsingin kaupungin ympäristönsuojelumääräykset</a><br /><br /><p><strong>Jokaisen työmaan työntekijän vastuulla on huolehtia siitä, että työmaa näyttäytyy kaupunkilaisille toimivana ja siistinä</strong>. Työmaalla säilytettävät tarvikkeet ja materiaalit tulee pitää järjestyksessä, mieluiten aidattuina. Reitit on pidettävä puhtaina esimerkiksi hiekka- tai sorakasoista, ja kuopat täytyy täyttää välittömästi. Työmaalle voidaan tuoda ylimääräisiä lajitteluastioita kaupunkilaisten ja työmaan työntekijöiden käyttöön.</p>",
         "additionalLevelSummary": "<ul> <li>Meluaidat</li> <li>Kaupunkilaisten huomioiminen</li> <li>Uudet menetelmät</li> <li>Siisteys ja järjestelyjen ylläpito</li> <li>Alueen viihtyisyys</li> <li>Lasten huomiointi</li> </ul>",
-        "additionalLevelContent": "<h3>Meluaidat</h3><p>Työmaa aidataan sopimuksien mukaisista suunnista ääntä vaimentavalla, siirreltävällä meluaidalla.</p><br /><h3>Kaupunkilaisten huomioiminen</h3><p>Lähellä asuvien ja työmaan läheisyydessä liikkuvien asukkaiden huomioimnen esim. jakamalla korvatulppia.</p><br /><h3>Uudet menetelmät</h3><p>Etsitään uusia tapoja, jotka vähentävät melu-, pöly- ja tärinähaittoja, esim. peruutusääni ”puhalluksena”.</p><br /><h3>Siisteys ja järjestelyjen ylläpito</h3><p>Päätoteuttajan ja turvallisuuskoordinaattorin lakisääteisten velvollisuuksien lisäksi työmaa yhdessä sitoutuu säännöllisesti tarkistamaan työmaan siisteyteen ja selkeyteen liittyvät järjestelyt sekä korjauttamaan havaitsemansa puutteet. Tarkastukset tulee tehdä päivittäin tai kerran viikossa riippuen työmaan järjestelyistä ja sijainnista.</p><br /><p>Tarkastuksista pidetään kirjaa, ja niitä voidaan käsitellä työmaakokouksissa. Tarkastustiheyttä mietittäessä tulee huomioida esimerkiksi, kuinka todennäköisesti työmaa joutuu ilkivallan kohteeksi. Järjestelyt tulee tarkastaa myös poikkeuksellisten sääolosuhteiden jälkeen. Tarvittaessa kullekin työmaalle nimetään päivystäjä, joka lähtee mihin vuorokauden aikaan tahansa korjaamaan rikkoutuneita tai muuten vaarallisiksi todettuja järjestelyjä.</p><br /><h3>Alueen viihtyisyys</h3><p>Työmaalla kiinnitetään huomiota viihtyisyyteen. Työmaa voi yhteistyössä taiteilijoiden tai asukkaiden kanssa pohtia ja toteuttaa yhteistä viihtyvyyttä.</p><br /><h3>Lasten huomiointi</h3><p>Mieti tilaajan kanssa, miten lapset voitaisiin huomioida työmaallasi. Keinoja voivat olla esimerkiksi kurkistusaukot aidoissa, vierailut työmaalle, kaivuukoneiden nimikointi, työmaaturvallisuuspäivät, heijastimien jako ja aitojen maalaus. Koulujen ja päiväkotien kanssa keskustellaan erikseen sopivista ajankohdista, ettei työ osu välituntien/ulkoilun, koulun aloituksen tai päiväunien aikaan.</p>"
+        "additionalLevelContent": "<h3>Meluaidat</h3><p>Työmaa aidataan sopimuksien mukaisista suunnista ääntä vaimentavalla, siirreltävällä meluaidalla.</p><br /><h3>Kaupunkilaisten huomioiminen</h3><p>Lähellä asuvien ja työmaan läheisyydessä liikkuvien asukkaiden huomioiminen esim. jakamalla korvatulppia.</p><br /><h3>Uudet menetelmät</h3><p>Etsitään uusia tapoja, jotka vähentävät melu-, pöly- ja tärinähaittoja, esim. peruutusääni ”puhalluksena”.</p><br /><h3>Siisteys ja järjestelyjen ylläpito</h3><p>Päätoteuttajan ja turvallisuuskoordinaattorin lakisääteisten velvollisuuksien lisäksi työmaa yhdessä sitoutuu säännöllisesti tarkistamaan työmaan siisteyteen ja selkeyteen liittyvät järjestelyt sekä korjauttamaan havaitsemansa puutteet. Tarkastukset tulee tehdä päivittäin tai kerran viikossa riippuen työmaan järjestelyistä ja sijainnista.</p><br /><p>Tarkastuksista pidetään kirjaa, ja niitä voidaan käsitellä työmaakokouksissa. Tarkastustiheyttä mietittäessä tulee huomioida esimerkiksi, kuinka todennäköisesti työmaa joutuu ilkivallan kohteeksi. Järjestelyt tulee tarkastaa myös poikkeuksellisten sääolosuhteiden jälkeen. Tarvittaessa kullekin työmaalle nimetään päivystäjä, joka lähtee mihin vuorokauden aikaan tahansa korjaamaan rikkoutuneita tai muuten vaarallisiksi todettuja järjestelyjä.</p><br /><h3>Alueen viihtyisyys</h3><p>Työmaalla kiinnitetään huomiota viihtyisyyteen. Työmaa voi yhteistyössä taiteilijoiden tai asukkaiden kanssa pohtia ja toteuttaa yhteistä viihtyvyyttä.</p><br /><h3>Lasten huomiointi</h3><p>Mieti tilaajan kanssa, miten lapset voitaisiin huomioida työmaallasi. Keinoja voivat olla esimerkiksi kurkistusaukot aidoissa, vierailut työmaalle, kaivuukoneiden nimikointi, työmaaturvallisuuspäivät, heijastimien jako ja aitojen maalaus. Koulujen ja päiväkotien kanssa keskustellaan erikseen sopivista ajankohdista, ettei työ osu välituntien/ulkoilun, koulun aloituksen tai päiväunien aikaan.</p>"
       }
     },
     "sideNav": {
-      "moveToPage": "Siirry sivulle",
       "externalLinks": {
         "permitsAndInstructions": {
           "label": "Työmaan luvat ja ohjeet",

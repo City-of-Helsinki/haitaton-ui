@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import VectorSource, { VectorSourceEvent } from 'ol/source/Vector';
 import { useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
-import { Button, IconPlusCircle, Notification } from 'hds-react';
+import { Button, ButtonPresetTheme, ButtonSize, IconPlusCircle, Notification } from 'hds-react';
 import { Box } from '@chakra-ui/react';
 import { debounce } from 'lodash';
 import { Feature, Map as OlMap, MapBrowserEvent } from 'ol';
@@ -32,6 +32,8 @@ import isFeatureWithinFeatures from '../../map/utils/isFeatureWithinFeatures';
 import { styleFunction } from '../../map/utils/geometryStyle';
 import { OverlayProps } from '../../../common/components/map/types';
 import AreaOverlay from '../../map/components/AreaOverlay/AreaOverlay';
+import FullScreenControl from '../../../common/components/map/controls/FullscreenControl';
+import useDrawContext from '../../../common/components/map/modules/draw/useDrawContext';
 
 type Props = {
   drawSource: VectorSource;
@@ -66,6 +68,10 @@ export default function ApplicationMap({
 
   const { mapTileLayers, toggleMapTileLayer } = useMapDataLayers();
   const ortoLayerOpacity = mapTileLayers.kantakartta.visible ? 0.5 : 1;
+
+  const {
+    actions: { setSelectedFeature },
+  } = useDrawContext();
 
   useEffect(() => {
     function handleAddFeature(e: VectorSourceEvent<FeatureLike>) {
@@ -181,9 +187,11 @@ export default function ApplicationMap({
       ) {
         // If mofified feature is going over hanke feature, revert back to original geometry
         modifiedFeature.setGeometry(originalFeature.getGeometry());
+      } else {
+        setSelectedFeature(modifiedFeature);
       }
     },
-    [hankeLayerFilter],
+    [hankeLayerFilter, setSelectedFeature],
   );
 
   function handleCopyArea(feature: Feature<Geometry>) {
@@ -197,7 +205,12 @@ export default function ApplicationMap({
   return (
     <div>
       <div className={styles.mapContainer}>
-        <Map zoom={9} center={mapCenter} mapClassName={styles.mapContainer__inner}>
+        <Map
+          zoom={9}
+          center={mapCenter}
+          mapClassName={styles.mapContainer__inner}
+          showAttribution={false}
+        >
           {mapTileLayers.kantakartta.visible && <Kantakartta />}
           {mapTileLayers.ortokartta.visible && <Ortokartta opacity={ortoLayerOpacity} />}
 
@@ -209,6 +222,8 @@ export default function ApplicationMap({
 
           <OverviewMapControl />
 
+          <FullScreenControl />
+
           <FitSource source={drawSource} fitOnce />
 
           <FeatureInfoOverlay
@@ -218,9 +233,9 @@ export default function ApplicationMap({
               if (overlayProperties?.enableCopyArea && onCopyArea) {
                 copyAreaElement = workTimesSet ? (
                   <Button
-                    theme="coat"
-                    size="small"
-                    iconLeft={<IconPlusCircle />}
+                    theme={ButtonPresetTheme.Coat}
+                    size={ButtonSize.Small}
+                    iconStart={<IconPlusCircle />}
                     onClick={() => handleCopyArea(feature as Feature<Geometry>)}
                   >
                     {t('hakemus:buttons:copyWorkArea')}
@@ -248,6 +263,7 @@ export default function ApplicationMap({
             <LayerControl
               tileLayers={Object.values(mapTileLayers)}
               onClickTileLayer={(id: MapTileLayerId) => toggleMapTileLayer(id)}
+              className={styles.layerControl}
             />
           </Controls>
         </Map>

@@ -1,4 +1,3 @@
-import React from 'react';
 import { Notification } from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import { useGlobalNotification } from './GlobalNotificationContext';
@@ -40,7 +39,6 @@ export default function GlobalNotification() {
       type={type}
       closeButtonLabelText={closeButtonLabelText || defaultCloseButtonLabelText}
       onClose={closeNotification}
-      style={{ zIndex: 100 }}
     >
       {message}
     </Notification>

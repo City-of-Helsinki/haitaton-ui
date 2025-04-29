@@ -7,7 +7,6 @@ import Map from '../../../common/components/map/Map';
 import Kantakartta from '../../map/components/Layers/Kantakartta';
 import AddressSearchContainer from '../../map/components/AddressSearch/AddressSearchContainer';
 import OverviewMapControl from '../../../common/components/map/controls/OverviewMapControl';
-import styles from './HaittojenhallintaMap.module.scss';
 import useHankealueFeature from '../../map/hooks/useHankealueFeature';
 import { HankeAlue } from '../../types/hanke';
 import VectorLayer from '../../../common/components/map/layers/VectorLayer';
@@ -62,7 +61,7 @@ export default function HaittojenhallintaMap({
       <Map zoom={9}>
         <Kantakartta />
         <AddressSearchContainer position={{ top: '1rem', left: '1rem' }} />
-        <OverviewMapControl className={styles.overviewMap} />
+        <OverviewMapControl />
         <FitSource source={hankeSource.current} />
         <VectorLayer
           source={hankeSource.current}

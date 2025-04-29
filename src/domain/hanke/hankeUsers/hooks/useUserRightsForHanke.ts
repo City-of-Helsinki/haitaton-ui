@@ -1,6 +1,7 @@
 import { useQuery } from 'react-query';
 import { SignedInUser, SignedInUserByHanke } from '../hankeUser';
 import { getSignedInUserForHanke, getSignedInUserByHanke } from '../hankeUsersApi';
+import axios from 'axios';
 
 export function usePermissionsForHanke(hankeTunnus?: string) {
   return useQuery<SignedInUser>(
@@ -14,7 +15,20 @@ export function usePermissionsForHanke(hankeTunnus?: string) {
 }
 
 export function usePermissionsByHanke() {
-  return useQuery<SignedInUserByHanke>(['signedInUserByHanke'], () => getSignedInUserByHanke(), {
-    enabled: true,
-  });
+  return useQuery<SignedInUserByHanke | null>(
+    ['signedInUserByHanke'],
+    async () => {
+      try {
+        return await getSignedInUserByHanke();
+      } catch (error: unknown) {
+        if (axios.isAxiosError(error) && error.response?.status === 401) {
+          return null;
+        }
+        throw error;
+      }
+    },
+    {
+      enabled: true,
+    },
+  );
 }

@@ -164,5 +164,19 @@
     "tunnistautunut": true,
     "hankeTunnus": "HAI22-2",
     "kutsuttu": null
+  },
+  {
+    "id": "9c4002e4-db74-4aad-8b70-67210f3c5af6",
+    "sahkoposti": "teppo@test.com",
+    "etunimi": "Teppo",
+    "sukunimi": "Työmies",
+    "puhelinnumero": "0401234567",
+    "kayttooikeustaso": "KAIKKIEN_MUOKKAUS",
+    "roolit": [
+      "RAKENNUTTAJA"
+    ],
+    "tunnistautunut": false,
+    "hankeTunnus": "HAI22-12",
+    "kutsuttu": "2024-01-15T19:59:59.999Z"
   }
 ]

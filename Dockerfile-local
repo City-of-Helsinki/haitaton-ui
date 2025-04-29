@@ -1,8 +1,17 @@
-FROM public.ecr.aws/docker/library/node:20-alpine as staticbuilder
+FROM registry.access.redhat.com/ubi9/nodejs-20:latest AS staticbuilder
+
+USER root
+RUN npm install -g yarn
+
 # Copy files needed for downloading dependencies
 COPY ./package.json /builder/package.json
 COPY ./yarn.lock /builder/yarn.lock
 WORKDIR /builder
+
+RUN chown -R default:root /builder
+
+USER default
+
 # The sources are not copied yet, so this step is cached between different builds
 # with modified sources, as long as the files above have not changed.
 RUN yarn && yarn cache clean --force
@@ -16,10 +25,7 @@ COPY ./tsconfig.eslint.json /builder/tsconfig.eslint.json
 COPY ./.eslintrc.js /builder/.eslintrc.js
 RUN REACT_APP_DISABLE_SENTRY=1 yarn build
 
-FROM public.ecr.aws/docker/library/nginx:1.22.1
-# Install mods for nginx that include the Headers More mod, that allows the
-# removal of the Server -header
-RUN apt-get update && apt-get --no-install-recommends install -y nginx-extras && apt-get clean
+FROM registry.access.redhat.com/ubi9/nginx-124:latest
 EXPOSE 8000
 COPY --from=staticbuilder ./builder/build /usr/share/nginx/html
 WORKDIR /usr/share/nginx/html
@@ -29,7 +35,6 @@ WORKDIR /usr/share/nginx/html
 COPY ./scripts/env.sh /opt/env.sh
 COPY .env /opt/.env
 COPY package.json /opt/package.json
-RUN chmod +x /opt/env.sh
 
 #COPY ./nginx/variables.conf /etc/nginx/templates/10-variables.conf.template
 
@@ -38,7 +43,10 @@ COPY ./scripts/nginx-env.sh /opt/nginx-env.sh
 # The script copies /opt/nginx.conf to /etc/nginx/nginx.conf
 # while replacing the environment variables
 COPY ./nginx/nginx.conf /opt/nginx.conf
+USER root
+RUN chmod +x /opt/env.sh
 RUN chmod +x /opt/nginx-env.sh
+USER default
 
 ENV REACT_APP_DISABLE_SENTRY=1
 

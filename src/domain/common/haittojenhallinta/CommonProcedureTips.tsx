@@ -1,13 +1,13 @@
 import { Box } from '@chakra-ui/react';
-import { Accordion, IconDocument, Link } from 'hds-react';
-import React from 'react';
+import { Accordion, AccordionSize, IconDocument, Link, LinkSize } from 'hds-react';
+import React, { memo } from 'react';
 
 import { Trans, useTranslation } from 'react-i18next';
 import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
 
 type CardLink = { number: number; heading: string; content: string; cardLinks: number[] };
 
-const CommonProcedureTips: React.FC = () => {
+const CommonProcedureTips: React.FC = memo(() => {
   const { CARD } = useLocalizedRoutes();
   const { t } = useTranslation();
 
@@ -16,8 +16,8 @@ const CommonProcedureTips: React.FC = () => {
     for (let i = 1; i <= 14; i++) {
       tipContents.push({
         number: i,
-        heading: t(`hankeForm:haittojenHallintaForm:procedureTips:common:${i}:heading`),
-        content: t(`hankeForm:haittojenHallintaForm:procedureTips:common:${i}:content`),
+        heading: t(`hankeForm:haittojenHallintaForm:procedureTips:common:tip${i}:heading`),
+        content: t(`hankeForm:haittojenHallintaForm:procedureTips:common:tip${i}:content`),
         cardLinks: [],
       });
     }
@@ -31,7 +31,7 @@ const CommonProcedureTips: React.FC = () => {
       <Accordion
         key={tip.number}
         heading={tip.heading}
-        size="s"
+        size={AccordionSize.Small}
         headingLevel={5}
         theme={{
           '--content-font-size': 'var(--fontsize-body-m)',
@@ -40,7 +40,7 @@ const CommonProcedureTips: React.FC = () => {
       >
         <Box as="p" mb="var(--spacing-s)">
           <Trans
-            i18nKey={`hankeForm:haittojenHallintaForm:procedureTips:common:${tip.number}:text`}
+            i18nKey={`hankeForm:haittojenHallintaForm:procedureTips:common:tip${tip.number}:text`}
             components={{
               a: (
                 <a
@@ -69,13 +69,13 @@ const CommonProcedureTips: React.FC = () => {
             {tip.cardLinks.map((linkId) => (
               <Link
                 key={linkId}
-                iconLeft={<IconDocument />}
-                size="M"
+                iconStart={<IconDocument />}
+                size={LinkSize.Medium}
                 href={`${CARD.path}${linkId}/${t('routes:CARD:basicLevel')}`}
                 openInNewTab
                 openInNewTabAriaLabel={t('common:components:link:openInNewTabAriaLabel')}
               >
-                {t(`workInstructions:cards:${linkId}:header`)}
+                {t(`workInstructions:cards:card${linkId}:header`)}
               </Link>
             ))}
           </Box>
@@ -96,17 +96,19 @@ const CommonProcedureTips: React.FC = () => {
     >
       <Accordion
         heading={t('hankeForm:haittojenHallintaForm:subHeaderPlan')}
-        size="s"
+        size={AccordionSize.Small}
         headingLevel={4}
         initiallyOpen
         theme={{
           '--header-font-size': 'var(--fontsize-heading-s)',
         }}
       >
-        <Box mb="var(--spacing-s)"> {renderProcedureTips()}</Box>
+        <Box mb="var(--spacing-s)" width="100%">
+          {renderProcedureTips()}
+        </Box>
       </Accordion>
     </Box>
   );
-};
+});
 
 export default CommonProcedureTips;

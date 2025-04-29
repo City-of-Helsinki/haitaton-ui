@@ -1,5 +1,12 @@
 import { Box } from '@chakra-ui/react';
-import { Button, Dialog, IconCheck, IconCross, IconInfoCircle, Notification } from 'hds-react';
+import {
+  ButtonVariant,
+  Dialog,
+  IconCheck,
+  IconCross,
+  IconInfoCircle,
+  Notification,
+} from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -12,6 +19,7 @@ import { newJohtoselvitysSchema } from '../validationSchema';
 import { createJohtoselvitys } from '../../application/utils';
 import OwnInformationFields from '../../forms/components/OwnInformationFields';
 import useDebouncedMutation from '../../../common/hooks/useDebouncedMutation';
+import Button from '../../../common/components/button/Button';
 
 type Props = {
   isOpen: boolean;
@@ -65,7 +73,7 @@ function JohtoselvitysCreateDialog({ isOpen, onClose }: Readonly<Props>) {
       <Dialog.Header
         id="johtoselvitys-create-title"
         title={dialogTitle}
-        iconLeft={<IconInfoCircle />}
+        iconStart={<IconInfoCircle />}
       />
       <FormProvider {...formContext}>
         <form onSubmit={handleSubmit(submitForm)}>
@@ -92,10 +100,14 @@ function JohtoselvitysCreateDialog({ isOpen, onClose }: Readonly<Props>) {
           </Dialog.Content>
 
           <Dialog.ActionButtons>
-            <Button type="submit" iconLeft={<IconCheck />} isLoading={isLoading}>
+            <Button type="submit" iconStart={<IconCheck />} isLoading={isLoading}>
               {t('homepage:hakemus:actionText')}
             </Button>
-            <Button variant="secondary" onClick={handleClose} iconLeft={<IconCross />}>
+            <Button
+              variant={ButtonVariant.Secondary}
+              onClick={handleClose}
+              iconStart={<IconCross />}
+            >
               {t('common:confirmationDialog:cancelButton')}
             </Button>
           </Dialog.ActionButtons>

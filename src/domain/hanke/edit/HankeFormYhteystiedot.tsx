@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { $enum } from 'ts-enum-util';
-import { Accordion, Button, Fieldset, IconPlusCircle } from 'hds-react';
+import { Accordion, Button, ButtonVariant, Fieldset, IconPlusCircle } from 'hds-react';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 import { CONTACT_FORMFIELD, FORMFIELD, FormProps, HankeDataFormState } from './types';
 import {
@@ -63,6 +63,7 @@ const ContactFields: React.FC<
   const { t } = useTranslation();
   const { watch, setValue } = useFormContext();
   const selectedContactType = watch(`${contactType}.${index}.tyyppi`);
+  const registryKey = watch(`${contactType}.${index}.ytunnus`);
   const isPrivatePerson = selectedContactType === CONTACT_TYYPPI.YKSITYISHENKILO;
   const registryKeyInputDisabled = isPrivatePerson;
 
@@ -73,6 +74,13 @@ const ContactFields: React.FC<
       });
     }
   }, [registryKeyInputDisabled, contactType, index, setValue]);
+
+  useEffect(() => {
+    if (registryKey === '') {
+      // set the registry key to null when it is empty
+      setValue(`${contactType}.${index}.ytunnus`, null);
+    }
+  }, [contactType, index, registryKey, setValue]);
 
   function handleUserSelect(user: HankeUser) {
     setValue(`${contactType}.${index}.${CONTACT_FORMFIELD.EMAIL}`, user.sahkoposti, {
@@ -169,7 +177,7 @@ const HankeFormYhteystiedot: React.FC<Readonly<FormProps>> = ({ hanke }) => {
   });
 
   const addOmistaja = useCallback(() => {
-    appendOmistaja(getEmptyContact(), { shouldFocus: false });
+    appendOmistaja(getEmptyContact(), { shouldFocus: true });
   }, [appendOmistaja]);
 
   // initialize Omistaja to have at least one contact
@@ -212,6 +220,9 @@ const HankeFormYhteystiedot: React.FC<Readonly<FormProps>> = ({ hanke }) => {
       <Text tag="p" styleAs="body-m" spacingBottom="s">
         {t(`form:yhteystiedot:instructions`)}
       </Text>
+      <Text tag="p" styleAs="body-m" spacingBottom="s">
+        {t(`form:requiredForPublicationInstruction`)}
+      </Text>
 
       {/* Omistaja */}
       <Accordion
@@ -252,8 +263,9 @@ const HankeFormYhteystiedot: React.FC<Readonly<FormProps>> = ({ hanke }) => {
         })}
 
         <Button
-          variant="supplementary"
-          iconLeft={<IconPlusCircle aria-hidden />}
+          className="haitaton-button-icon-size-initial"
+          variant={ButtonVariant.Supplementary}
+          iconStart={<IconPlusCircle />}
           onClick={() => appendOmistaja(getEmptyContact())}
         >
           {t('form:yhteystiedot:titles:lisaaOmistaja')}
@@ -298,8 +310,9 @@ const HankeFormYhteystiedot: React.FC<Readonly<FormProps>> = ({ hanke }) => {
         })}
 
         <Button
-          variant="supplementary"
-          iconLeft={<IconPlusCircle aria-hidden />}
+          className="haitaton-button-icon-size-initial"
+          variant={ButtonVariant.Supplementary}
+          iconStart={<IconPlusCircle />}
           onClick={() => appendRakennuttaja(getEmptyContact())}
         >
           {t('form:yhteystiedot:titles:lisaaRakennuttaja')}
@@ -344,8 +357,9 @@ const HankeFormYhteystiedot: React.FC<Readonly<FormProps>> = ({ hanke }) => {
         })}
 
         <Button
-          variant="supplementary"
-          iconLeft={<IconPlusCircle aria-hidden />}
+          className="haitaton-button-icon-size-initial"
+          variant={ButtonVariant.Supplementary}
+          iconStart={<IconPlusCircle />}
           onClick={() => appendToteuttaja(getEmptyContact())}
         >
           {t('form:yhteystiedot:titles:lisaaToteuttaja')}
@@ -422,8 +436,9 @@ const HankeFormYhteystiedot: React.FC<Readonly<FormProps>> = ({ hanke }) => {
         })}
 
         <Button
-          variant="supplementary"
-          iconLeft={<IconPlusCircle aria-hidden />}
+          className="haitaton-button-icon-size-initial"
+          variant={ButtonVariant.Supplementary}
+          iconStart={<IconPlusCircle />}
           onClick={() => appendMuuTaho(getEmptyOtherContact())}
         >
           {t('form:yhteystiedot:titles:lisaaMuuTaho')}

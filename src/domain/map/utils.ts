@@ -6,11 +6,28 @@ import Polygon from 'ol/geom/Polygon';
 import { Interval, isWithinInterval } from 'date-fns';
 import { HankeGeoJSON } from '../../common/types/hanke';
 import { DateInterval, GeometryData } from './types';
-import { HankeData, HankeDataDraft, HankeGeometria } from '../types/hanke';
+import { HankeGeometria } from '../types/hanke';
 import { getSurfaceArea } from '../../common/components/map/utils';
+import {
+  Feature as GeoJSONFeature,
+  FeatureCollection,
+  Polygon as GeoJSONPolygon,
+  Position,
+} from 'geojson';
+import {
+  feature as turfFeature,
+  featureCollection as turfFeatureCollection,
+  multiPolygon as turfMultiPolygon,
+} from '@turf/helpers';
+import booleanIntersects from '@turf/boolean-intersects';
+import union from '@turf/union';
+import booleanEqual from '@turf/boolean-equal';
+import intersect from '@turf/intersect';
+import { ApplicationArea, ApplicationGeometry } from '../application/types/application';
+
+const format = new GeoJSON();
 
 export const formatFeaturesToHankeGeoJSON = (features: GeometryData): HankeGeoJSON => {
-  const format = new GeoJSON();
   const json = format.writeFeatures(features);
   const data = JSON.parse(json);
 
@@ -25,13 +42,10 @@ export const formatFeaturesToHankeGeoJSON = (features: GeometryData): HankeGeoJS
   };
 };
 
-export const hankeHasGeometry = (hanke: HankeData | HankeDataDraft) =>
-  hanke.alueet?.some((alue) => Boolean(alue.geometriat));
-
 /**
- * Check if date range is is within interval.
+ * Check if date range is within interval.
  * Interval to check against is given to the function as an object with start and end properties.
- * Returns a function that takes a date range an checks if that is within the interval.
+ * Returns a function that takes a date range and checks if that is within the interval.
  * Optional allowOverlapping option can be given, and if it's true the function
  * will return true also if the date ranges overlap.
  */
@@ -113,10 +127,9 @@ export function formatSurfaceArea(geometry: Geometry | undefined) {
  */
 export function getTotalSurfaceArea(geometries: Geometry[]): number {
   try {
-    const totalSurfaceArea = geometries.reduce((totalArea, geom) => {
+    return geometries.reduce((totalArea, geom) => {
       return totalArea + Math.round(getSurfaceArea(geom));
     }, 0);
-    return totalSurfaceArea;
   } catch (error) {
     return 0;
   }
@@ -128,9 +141,99 @@ export function getTotalSurfaceArea(geometries: Geometry[]): number {
  * @returns OpenLayers Feature
  */
 export function getFeatureFromHankeGeometry(geometry: HankeGeometria) {
-  const feature = new Feature(
-    new Polygon(geometry.featureCollection.features[0]?.geometry.coordinates),
-  );
+  return new Feature(new Polygon(geometry.featureCollection.features[0]?.geometry.coordinates));
+}
 
-  return feature;
+/**
+ * Returns true if feature1 contains feature2.
+ *
+ * Due to a bug in Turf.js's `booleanContains` function (https://github.com/Turfjs/turf/issues/2588),
+ * this function checks that the intersection of feature1 and feature2 is equal to feature2.
+ * Equality is checked without properties.
+ */
+export function featureContains(
+  outer: GeoJSONFeature<GeoJSONPolygon>,
+  inner: GeoJSONFeature<GeoJSONPolygon>,
+): boolean {
+  const features: FeatureCollection<GeoJSONPolygon> = turfFeatureCollection([outer, inner]);
+  const intersected = intersect(features);
+  const innerWithoutProperties: GeoJSONFeature<GeoJSONPolygon> = { ...inner, properties: {} };
+  return (intersected && booleanEqual(intersected, innerWithoutProperties)) || false;
+}
+
+export function applicationGeometryContains(
+  puter: ApplicationGeometry,
+  inner: ApplicationGeometry,
+): boolean {
+  const outerFeature = turfFeature(puter);
+  const innerFeature = turfFeature(inner);
+  return featureContains(outerFeature, innerFeature);
+}
+
+export function featureContainsApplicationGeometry(
+  feature: GeoJSONFeature<GeoJSONPolygon>,
+  geometry: ApplicationGeometry,
+): boolean {
+  const inner = turfFeature(geometry);
+  return featureContains(feature, inner);
+}
+
+export function olFeatureToGeoJSON(
+  feature?: Feature<Polygon>,
+): GeoJSONFeature<GeoJSONPolygon> | undefined {
+  return (
+    feature &&
+    (format.writeFeatureObject(feature, {
+      featureProjection: 'EPSG:3879',
+      dataProjection: 'EPSG:3879',
+    }) as GeoJSONFeature<GeoJSONPolygon>)
+  );
+}
+
+/**
+ * Combines multiple application areas into a single unified area by performing a union operation
+ * on their geometries. The function iterates through the provided application areas and checks
+ * if their geometries intersect with the current combined area. If they do, it merges them into
+ * a single geometry.
+ */
+export function createUnionFromAreas(areas: ApplicationArea[], initialValue: ApplicationArea) {
+  return areas.reduce((combinedArea, currentArea) => {
+    if (booleanIntersects(combinedArea.geometry, currentArea.geometry)) {
+      const features = turfFeatureCollection([
+        turfFeature(combinedArea.geometry),
+        turfFeature(currentArea.geometry),
+      ]);
+      const unionFeature = union(features);
+      if (unionFeature?.geometry) {
+        return {
+          ...combinedArea,
+          geometry: new ApplicationGeometry(unionFeature.geometry.coordinates as Position[][]),
+        };
+      }
+    }
+    return combinedArea;
+  }, initialValue);
+}
+
+/**
+ * Creates a MultiPolygon geometry by combining the geometries of the given areas.
+ * If the geometry of the current area intersects with the combined geometry,
+ * it merges the coordinates into a single MultiPolygon. Otherwise, it skips the current area.
+ */
+export function createMultiPolygonFromAreas(
+  areas: ApplicationArea[],
+  initialValue: ApplicationArea,
+) {
+  return areas.reduce(
+    (combinedArea, currentArea) => {
+      if (booleanIntersects(combinedArea.geometry, currentArea.geometry)) {
+        return turfMultiPolygon([
+          ...combinedArea.geometry.coordinates,
+          currentArea.geometry.coordinates,
+        ]);
+      }
+      return combinedArea;
+    },
+    turfMultiPolygon([initialValue.geometry.coordinates]),
+  );
 }

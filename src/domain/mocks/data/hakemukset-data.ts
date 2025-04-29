@@ -34,11 +34,11 @@ const hakemukset: Application[] = [
         contacts: [
           {
             hankekayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-            email: 'matti.meikalainen@test.com',
             firstName: 'Matti',
             lastName: 'Meikäläinen',
-            orderer: true,
+            email: 'matti.meikalainen@test.com',
             phone: '0401234567',
+            orderer: true,
           },
         ],
       },
@@ -83,11 +83,11 @@ const hakemukset: Application[] = [
         contacts: [
           {
             hankekayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afb1',
-            email: 'tauno@test.com',
             firstName: 'Tauno',
             lastName: 'Testinen',
-            orderer: false,
+            email: 'tauno@test.com',
             phone: '0401234567',
+            orderer: false,
           },
         ],
       },
@@ -130,11 +130,11 @@ const hakemukset: Application[] = [
         contacts: [
           {
             hankekayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-            email: 'matti.meikalainen@test.com',
             firstName: 'Matti',
             lastName: 'Meikäläinen',
-            orderer: true,
+            email: 'matti.meikalainen@test.com',
             phone: '0401234567',
+            orderer: true,
           },
         ],
       },
@@ -242,11 +242,11 @@ const hakemukset: Application[] = [
         },
         contacts: [
           {
-            email: 'matti@test.com',
             firstName: 'Matti',
             lastName: 'Meikäläinen',
-            orderer: false,
+            email: 'matti@test.com',
             phone: '0000000000',
+            orderer: false,
           },
         ],
       },
@@ -289,11 +289,11 @@ const hakemukset: Application[] = [
         contacts: [
           {
             hankekayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-            email: 'matti.meikalainen@test.com',
             firstName: 'Matti',
             lastName: 'Meikäläinen',
-            orderer: true,
+            email: 'matti.meikalainen@test.com',
             phone: '0401234567',
+            orderer: true,
           },
         ],
       },
@@ -317,11 +317,11 @@ const hakemukset: Application[] = [
         contacts: [
           {
             hankekayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-            email: 'matti.meikalainen@test.com',
             firstName: 'Matti',
             lastName: 'Meikäläinen',
-            orderer: true,
+            email: 'matti.meikalainen@test.com',
             phone: '0401234567',
+            orderer: true,
           },
         ],
       },
@@ -364,11 +364,11 @@ const hakemukset: Application[] = [
         contacts: [
           {
             hankekayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-            email: 'matti.meikalainen@test.com',
             firstName: 'Matti',
             lastName: 'Meikäläinen',
-            orderer: true,
+            email: 'matti.meikalainen@test.com',
             phone: '0401234567',
+            orderer: true,
           },
         ],
       },
@@ -414,11 +414,11 @@ const hakemukset: Application[] = [
         contacts: [
           {
             hankekayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-            email: 'matti.meikalainen@test.com',
             firstName: 'Matti',
             lastName: 'Meikäläinen',
-            orderer: true,
+            email: 'matti.meikalainen@test.com',
             phone: '0401234567',
+            orderer: true,
           },
         ],
       },
@@ -588,11 +588,11 @@ const hakemukset: Application[] = [
         contacts: [
           {
             hankekayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-            email: 'matti.meikalainen@test.com',
             firstName: 'Matti',
             lastName: 'Meikäläinen',
-            orderer: true,
+            email: 'matti.meikalainen@test.com',
             phone: '0401234567',
+            orderer: true,
           },
         ],
       },
@@ -616,11 +616,11 @@ const hakemukset: Application[] = [
         contacts: [
           {
             hankekayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-            email: 'matti.meikalainen@test.com',
             firstName: 'Matti',
             lastName: 'Meikäläinen',
-            orderer: true,
+            email: 'matti.meikalainen@test.com',
             phone: '0401234567',
+            orderer: true,
           },
         ],
       },
@@ -741,11 +741,11 @@ const hakemukset: Application[] = [
         contacts: [
           {
             hankekayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-            email: 'matti.meikalainen@test.com',
             firstName: 'Matti',
             lastName: 'Meikäläinen',
-            orderer: true,
+            email: 'matti.meikalainen@test.com',
             phone: '0401234567',
+            orderer: true,
           },
         ],
       },
@@ -765,11 +765,11 @@ const hakemukset: Application[] = [
         contacts: [
           {
             hankekayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afb1',
-            email: 'tauno@test.com',
             firstName: 'Tauno',
             lastName: 'Testinen',
-            orderer: false,
+            email: 'tauno@test.com',
             phone: '0401234567',
+            orderer: false,
           },
         ],
       },
@@ -891,11 +891,11 @@ const hakemukset: Application[] = [
         contacts: [
           {
             hankekayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-            email: 'matti.meikalainen@test.com',
             firstName: 'Matti',
             lastName: 'Meikäläinen',
-            orderer: true,
+            email: 'matti.meikalainen@test.com',
             phone: '0401234567',
+            orderer: true,
           },
         ],
       },
@@ -915,11 +915,11 @@ const hakemukset: Application[] = [
         contacts: [
           {
             hankekayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afb1',
-            email: 'tauno@test.com',
             firstName: 'Tauno',
             lastName: 'Testinen',
-            orderer: false,
+            email: 'tauno@test.com',
             phone: '0401234567',
+            orderer: false,
           },
         ],
       },
@@ -1013,11 +1013,11 @@ const hakemukset: Application[] = [
         contacts: [
           {
             hankekayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-            email: 'matti.meikalainen@test.com',
             firstName: 'Matti',
             lastName: 'Meikäläinen',
-            orderer: true,
+            email: 'matti.meikalainen@test.com',
             phone: '0401234567',
+            orderer: true,
           },
         ],
       },
@@ -1063,11 +1063,11 @@ const hakemukset: Application[] = [
         contacts: [
           {
             hankekayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-            email: 'matti.meikalainen@test.com',
             firstName: 'Matti',
             lastName: 'Meikäläinen',
-            orderer: true,
+            email: 'matti.meikalainen@test.com',
             phone: '0401234567',
+            orderer: true,
           },
         ],
       },
@@ -1186,11 +1186,11 @@ const hakemukset: Application[] = [
         contacts: [
           {
             hankekayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-            email: 'matti.meikalainen@test.com',
             firstName: 'Matti',
             lastName: 'Meikäläinen',
-            orderer: true,
+            email: 'matti.meikalainen@test.com',
             phone: '0401234567',
+            orderer: true,
           },
         ],
       },
@@ -1210,11 +1210,11 @@ const hakemukset: Application[] = [
         contacts: [
           {
             hankekayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afb1',
-            email: 'tauno@test.com',
             firstName: 'Tauno',
             lastName: 'Testinen',
-            orderer: false,
+            email: 'tauno@test.com',
             phone: '0401234567',
+            orderer: false,
           },
         ],
       },
@@ -1373,11 +1373,11 @@ const hakemukset: Application[] = [
         contacts: [
           {
             hankekayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-            email: 'matti.meikalainen@test.com',
             firstName: 'Matti',
             lastName: 'Meikäläinen',
-            orderer: true,
+            email: 'matti.meikalainen@test.com',
             phone: '0401234567',
+            orderer: true,
           },
         ],
       },
@@ -1393,11 +1393,11 @@ const hakemukset: Application[] = [
         contacts: [
           {
             hankekayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afb1',
-            email: 'tauno@test.com',
             firstName: 'Tauno',
             lastName: 'Testinen',
-            orderer: false,
+            email: 'tauno@test.com',
             phone: '0401234567',
+            orderer: false,
           },
         ],
       },
@@ -1533,11 +1533,11 @@ const hakemukset: Application[] = [
         contacts: [
           {
             hankekayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-            email: 'matti.meikalainen@test.com',
             firstName: 'Matti',
             lastName: 'Meikäläinen',
-            orderer: true,
+            email: 'matti.meikalainen@test.com',
             phone: '0401234567',
+            orderer: true,
           },
         ],
       },
@@ -1557,11 +1557,11 @@ const hakemukset: Application[] = [
         contacts: [
           {
             hankekayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afb1',
-            email: 'tauno@test.com',
             firstName: 'Tauno',
             lastName: 'Testinen',
-            orderer: false,
+            email: 'tauno@test.com',
             phone: '0401234567',
+            orderer: false,
           },
         ],
       },
@@ -1667,8 +1667,8 @@ const hakemukset: Application[] = [
       placementContracts: ['SL1234567'],
       areas: [
         {
-          name: 'Hankealue 2',
-          hankealueId: 2,
+          name: 'Hankealue 1',
+          hankealueId: 1,
           tyoalueet: [
             {
               geometry: {
@@ -1781,11 +1781,11 @@ const hakemukset: Application[] = [
         contacts: [
           {
             hankekayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-            email: 'matti.meikalainen@test.com',
             firstName: 'Matti',
             lastName: 'Meikäläinen',
-            orderer: true,
+            email: 'matti.meikalainen@test.com',
             phone: '0401234567',
+            orderer: true,
           },
         ],
       },
@@ -1805,11 +1805,11 @@ const hakemukset: Application[] = [
         contacts: [
           {
             hankekayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afb1',
-            email: 'tauno@test.com',
             firstName: 'Tauno',
             lastName: 'Testinen',
-            orderer: false,
+            email: 'tauno@test.com',
             phone: '0401234567',
+            orderer: false,
           },
         ],
       },
@@ -1837,6 +1837,429 @@ const hakemukset: Application[] = [
       ],
     },
   } as Application<KaivuilmoitusData>,
+  {
+    id: 14,
+    alluStatus: 'DECISION',
+    applicationType: 'EXCAVATION_NOTIFICATION',
+    hankeTunnus: 'HAI22-2',
+    applicationIdentifier: 'KP2500001',
+    applicationData: {
+      applicationType: 'EXCAVATION_NOTIFICATION',
+      name: 'Aidasmäentien vihoviimeiset kaivuut',
+      startTime: new Date('2025-01-12T00:00:00Z'),
+      endTime: new Date('2025-11-12T00:00:00Z'),
+      workDescription: 'Kaivetaan Aidasmäentiellä taas kerran',
+      constructionWork: true,
+      maintenanceWork: false,
+      emergencyWork: false,
+      propertyConnectivity: false,
+      rockExcavation: false,
+      cableReportDone: true,
+      requiredCompetence: true,
+      cableReports: ['JS2300002'],
+      placementContracts: ['SL1234567'],
+      areas: [
+        {
+          name: 'Hankealue 2',
+          hankealueId: 2,
+          tyoalueet: [
+            {
+              geometry: {
+                type: 'Polygon',
+                crs: {
+                  type: 'name',
+                  properties: {
+                    name: 'urn:ogc:def:crs:EPSG::3879',
+                  },
+                },
+                coordinates: [
+                  [
+                    [25498585.50387858, 6679353.862125141],
+                    [25498588.30930639, 6679372.671835153],
+                    [25498578.30073113, 6679371.404998987],
+                    [25498577.10224065, 6679355.728613365],
+                    [25498585.50387858, 6679353.862125141],
+                  ],
+                ],
+              },
+              area: 159.32433261766946,
+            },
+            {
+              geometry: {
+                type: 'Polygon',
+                crs: {
+                  type: 'name',
+                  properties: {
+                    name: 'urn:ogc:def:crs:EPSG::3879',
+                  },
+                },
+                coordinates: [
+                  [
+                    [25498581.440262634, 6679345.526261961],
+                    [25498582.233686976, 6679350.99321805],
+                    [25498576.766730886, 6679351.786642391],
+                    [25498575.973306544, 6679346.319686302],
+                    [25498581.440262634, 6679345.526261961],
+                  ],
+                ],
+              },
+              area: 30.517131072352957,
+            },
+          ],
+          katuosoite: 'Aidasmäentie 5',
+          tyonTarkoitukset: ['VESI'],
+          meluhaitta: 'TOISTUVA_MELUHAITTA',
+          polyhaitta: 'JATKUVA_POLYHAITTA',
+          tarinahaitta: 'SATUNNAINEN_TARINAHAITTA',
+          kaistahaitta: 'YKSI_KAISTA_VAHENEE',
+          kaistahaittojenPituus: 'PITUUS_10_99_METRIA',
+          lisatiedot: '',
+          haittojenhallintasuunnitelma: {
+            YLEINEN: 'Työalueen yleisten haittojen hallintasuunnitelma',
+            PYORALIIKENNE: 'Pyöräliikenteelle koituvien työalueen haittojen hallintasuunnitelma',
+            AUTOLIIKENNE: 'Autoliikenteelle koituvien työalueen haittojen hallintasuunnitelma',
+            LINJAAUTOLIIKENNE: '',
+            RAITIOLIIKENNE: 'Raitioliikenteelle koituvien työalueen haittojen hallintasuunnitelma',
+            MUUT: 'Muiden työalueen haittojen hallintasuunnitelma',
+          },
+        },
+      ],
+      customerWithContacts: {
+        customer: {
+          type: 'COMPANY',
+          name: 'Yritys Oy',
+          country: 'FI',
+          email: 'yritys@test.com',
+          phone: '0000000000',
+          registryKey: '1164243-9',
+          registryKeyHidden: false,
+          ovt: null,
+          invoicingOperator: null,
+          sapCustomerNumber: null,
+        },
+        contacts: [
+          {
+            hankekayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+            firstName: 'Matti',
+            lastName: 'Meikäläinen',
+            email: 'matti.meikalainen@test.com',
+            phone: '0401234567',
+            orderer: true,
+          },
+        ],
+      },
+      contractorWithContacts: {
+        customer: {
+          type: 'COMPANY',
+          name: 'Yritys 2 Oy',
+          country: 'FI',
+          email: 'yritys2@test.com',
+          phone: '040123456',
+          registryKey: '1234567-1',
+          registryKeyHidden: false,
+          ovt: null,
+          invoicingOperator: null,
+          sapCustomerNumber: null,
+        },
+        contacts: [
+          {
+            hankekayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afb1',
+            firstName: 'Tauno',
+            lastName: 'Testinen',
+            email: 'tauno@test.com',
+            phone: '0401234567',
+            orderer: false,
+          },
+        ],
+      },
+      representativeWithContacts: null,
+      propertyDeveloperWithContacts: null,
+      invoicingCustomer: {
+        type: 'COMPANY',
+        name: 'Laskutus Oy',
+        registryKey: '1234567-1',
+        registryKeyHidden: false,
+        postalAddress: {
+          streetAddress: { streetName: 'Laskutuskuja 1' },
+          postalCode: '00100',
+          city: 'Helsinki',
+        },
+      },
+      paperDecisionReceiver: {
+        name: 'Pekka Paperinen',
+        streetAddress: 'Paperipolku 3 A 4',
+        postalCode: '00451',
+        city: 'Helsinki',
+      },
+    },
+    paatokset: {
+      KP2500001: [
+        {
+          id: '404e0300-db95-4c65-9d27-eff8930fef23',
+          hakemusId: 8,
+          hakemustunnus: 'KP2500001',
+          tyyppi: 'PAATOS',
+          tila: 'NYKYINEN',
+          nimi: 'KI 2024-06-27',
+          alkupaiva: new Date('2024-05-28'),
+          loppupaiva: new Date('2024-05-31'),
+          size: 35764,
+        },
+      ],
+    },
+    muutosilmoitus: {
+      id: '6a24e4a6-8f87-4da7-96f9-5f6b54ea6834',
+      sent: null,
+      muutokset: [],
+      applicationData: {
+        applicationType: 'EXCAVATION_NOTIFICATION',
+        name: 'Aidasmäentien muutoskaivuut',
+        startTime: new Date('2023-01-12T00:00:00Z'),
+        endTime: new Date('2024-11-12T00:00:00Z'),
+        workDescription: 'Kaivetaan Aidasmäentiellä',
+        constructionWork: true,
+        maintenanceWork: false,
+        emergencyWork: false,
+        propertyConnectivity: false,
+        rockExcavation: false,
+        cableReportDone: true,
+        requiredCompetence: true,
+        cableReports: ['JS2300002'],
+        placementContracts: ['SL1234567'],
+        areas: [
+          {
+            name: 'Hankealue 2',
+            hankealueId: 2,
+            tyoalueet: [
+              {
+                geometry: {
+                  type: 'Polygon',
+                  crs: {
+                    type: 'name',
+                    properties: {
+                      name: 'urn:ogc:def:crs:EPSG::3879',
+                    },
+                  },
+                  coordinates: [
+                    [
+                      [25498585.50387858, 6679353.862125141],
+                      [25498588.30930639, 6679372.671835153],
+                      [25498578.30073113, 6679371.404998987],
+                      [25498577.10224065, 6679355.728613365],
+                      [25498585.50387858, 6679353.862125141],
+                    ],
+                  ],
+                },
+                area: 159.32433261766946,
+              },
+              {
+                geometry: {
+                  type: 'Polygon',
+                  crs: {
+                    type: 'name',
+                    properties: {
+                      name: 'urn:ogc:def:crs:EPSG::3879',
+                    },
+                  },
+                  coordinates: [
+                    [
+                      [25498581.440262634, 6679345.526261961],
+                      [25498582.233686976, 6679350.99321805],
+                      [25498576.766730886, 6679351.786642391],
+                      [25498575.973306544, 6679346.319686302],
+                      [25498581.440262634, 6679345.526261961],
+                    ],
+                  ],
+                },
+                area: 30.517131072352957,
+              },
+            ],
+            katuosoite: 'Aidasmäentie 5',
+            tyonTarkoitukset: ['VESI'],
+            meluhaitta: 'TOISTUVA_MELUHAITTA',
+            polyhaitta: 'JATKUVA_POLYHAITTA',
+            tarinahaitta: 'SATUNNAINEN_TARINAHAITTA',
+            kaistahaitta: 'YKSI_KAISTA_VAHENEE',
+            kaistahaittojenPituus: 'PITUUS_10_99_METRIA',
+            lisatiedot: '',
+            haittojenhallintasuunnitelma: {
+              YLEINEN: 'Työalueen yleisten haittojen hallintasuunnitelma',
+              PYORALIIKENNE: 'Pyöräliikenteelle koituvien työalueen haittojen hallintasuunnitelma',
+              AUTOLIIKENNE: 'Autoliikenteelle koituvien työalueen haittojen hallintasuunnitelma',
+              LINJAAUTOLIIKENNE: '',
+              RAITIOLIIKENNE:
+                'Raitioliikenteelle koituvien työalueen haittojen hallintasuunnitelma',
+              MUUT: 'Muiden työalueen haittojen hallintasuunnitelma',
+            },
+          },
+        ],
+        customerWithContacts: {
+          customer: {
+            type: 'COMPANY',
+            name: 'Yritys Oy',
+            country: 'FI',
+            email: 'yritys@test.com',
+            phone: '0000000000',
+            registryKey: '1164243-9',
+            registryKeyHidden: false,
+            ovt: null,
+            invoicingOperator: null,
+            sapCustomerNumber: null,
+          },
+          contacts: [
+            {
+              hankekayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+              firstName: 'Matti',
+              lastName: 'Meikäläinen',
+              email: 'matti.meikalainen@test.com',
+              phone: '0401234567',
+              orderer: true,
+            },
+          ],
+        },
+        contractorWithContacts: {
+          customer: {
+            type: 'COMPANY',
+            name: 'Yritys 2 Oy',
+            country: 'FI',
+            email: 'yritys2@test.com',
+            phone: '040123456',
+            registryKey: '1234567-1',
+            registryKeyHidden: false,
+            ovt: null,
+            invoicingOperator: null,
+            sapCustomerNumber: null,
+          },
+          contacts: [
+            {
+              hankekayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afb1',
+              firstName: 'Tauno',
+              lastName: 'Testinen',
+              email: 'tauno@test.com',
+              phone: '0401234567',
+              orderer: false,
+            },
+          ],
+        },
+        representativeWithContacts: null,
+        propertyDeveloperWithContacts: null,
+        invoicingCustomer: {
+          type: 'COMPANY',
+          name: 'Laskutus Oy',
+          registryKey: '1234567-1',
+          registryKeyHidden: false,
+          postalAddress: {
+            streetAddress: { streetName: 'Laskutuskuja 1' },
+            postalCode: '00100',
+            city: 'Helsinki',
+          },
+        },
+        paperDecisionReceiver: {
+          name: 'Pekka Paperinen',
+          streetAddress: 'Paperipolku 3 A 4',
+          postalCode: '00451',
+          city: 'Helsinki',
+        },
+      },
+      liitteet: [],
+    },
+  } as Application<KaivuilmoitusData>,
+  {
+    id: 15,
+    alluStatus: null,
+    applicationType: 'CABLE_REPORT',
+    hankeTunnus: 'HAI22-12',
+    applicationIdentifier: null,
+    applicationData: {
+      applicationType: 'CABLE_REPORT',
+      name: 'Mannerheimintien päättyneet luonnoskaivuut',
+      customerWithContacts: {
+        customer: {
+          type: 'COMPANY',
+          name: 'Yritys Oy',
+          country: 'FI',
+          email: 'yritys@test.com',
+          phone: '0000000000',
+          registryKey: '1164243-9',
+          registryKeyHidden: false,
+          ovt: null,
+          invoicingOperator: null,
+          sapCustomerNumber: null,
+        },
+        contacts: [
+          {
+            hankekayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+            email: 'matti.meikalainen@test.com',
+            firstName: 'Matti',
+            lastName: 'Meikäläinen',
+            orderer: true,
+            phone: '0401234567',
+          },
+        ],
+      },
+      areas: [
+        {
+          geometry: {
+            type: 'Polygon',
+            crs: {
+              type: 'name',
+              properties: {
+                name: 'urn:ogc:def:crs:EPSG::3879',
+              },
+            },
+            coordinates: [
+              [
+                [25498583.87, 6679281.28],
+                [25498584.13, 6679314.07],
+                [25498573.17, 6679313.38],
+                [25498571.91, 6679281.46],
+                [25498583.87, 6679281.28],
+              ],
+            ],
+          },
+        },
+      ],
+      startTime: new Date('2023-07-14T00:00:00.000Z'),
+      endTime: new Date('2023-07-16T00:00:00.000Z'),
+      workDescription: 'Kuvaus',
+      contractorWithContacts: {
+        customer: {
+          type: 'COMPANY',
+          name: 'Yritys 2 Oy',
+          country: 'FI',
+          email: 'yritys2@test.com',
+          phone: '040123456',
+          registryKey: null,
+          registryKeyHidden: false,
+          ovt: null,
+          invoicingOperator: null,
+          sapCustomerNumber: null,
+        },
+        contacts: [
+          {
+            hankekayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afb1',
+            email: 'tauno@test.com',
+            firstName: 'Tauno',
+            lastName: 'Testinen',
+            orderer: false,
+            phone: '0401234567',
+          },
+        ],
+      },
+      postalAddress: {
+        city: 'Helsinki',
+        postalCode: '00100',
+        streetAddress: { streetName: 'Mannerheimintie 5' },
+      },
+      representativeWithContacts: null,
+      propertyDeveloperWithContacts: null,
+      constructionWork: true,
+      maintenanceWork: false,
+      emergencyWork: false,
+      propertyConnectivity: false,
+      rockExcavation: true,
+    },
+  } as Application<JohtoselvitysData>,
 ];
 
 export default hakemukset;
@@ -1857,5 +2280,6 @@ export const hankkeenHakemukset: HankkeenHakemus[] = hakemukset
         areas: hakemus.applicationData.areas,
       },
       paatokset: hakemus.paatokset,
+      muutosilmoitus: hakemus.muutosilmoitus,
     };
   });

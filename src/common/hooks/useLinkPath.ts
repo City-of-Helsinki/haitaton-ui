@@ -42,8 +42,6 @@ const useLinkPath = (route: ROUTES): ((routeParams: RouteParams) => string) => {
     [ROUTES.ACCESS_RIGHTS]: hankeTunnusReturnFunc,
     [ROUTES.EDIT_USER]: hankeUserReturnFunc,
     [ROUTES.PUBLIC_HANKKEET]: defaultReturnFunc,
-    [ROUTES.PUBLIC_HANKKEET_MAP]: defaultReturnFunc,
-    [ROUTES.PUBLIC_HANKKEET_LIST]: defaultReturnFunc,
     [ROUTES.FULL_PAGE_MAP]: hankeTunnusReturnFunc,
     [ROUTES.HAKEMUS]: applicationIdReturnFunc,
     [ROUTES.JOHTOSELVITYSHAKEMUS]: defaultReturnFunc,
@@ -52,14 +50,17 @@ const useLinkPath = (route: ROUTES): ((routeParams: RouteParams) => string) => {
     [ROUTES.KAIVUILMOITUSHAKEMUS]: hankeTunnusReturnFunc,
     [ROUTES.EDIT_KAIVUILMOITUSHAKEMUS]: applicationIdReturnFunc,
     [ROUTES.EDIT_KAIVUILMOITUSTAYDENNYS]: applicationIdReturnFunc,
+    [ROUTES.EDIT_KAIVUILMOITUSMUUTOSILMOITUS]: applicationIdReturnFunc,
     [ROUTES.HAITATON_INFO]: defaultReturnFunc,
     [ROUTES.ACCESSIBILITY]: defaultReturnFunc,
     [ROUTES.PRIVACY_POLICY]: defaultReturnFunc,
     [ROUTES.REFERENCES]: defaultReturnFunc,
     [ROUTES.MANUAL]: defaultReturnFunc,
+    [ROUTES.GLOSSARY]: defaultReturnFunc,
     [ROUTES.WORKINSTRUCTIONS]: defaultReturnFunc,
     [ROUTES.CARDS_INDEX]: defaultReturnFunc,
     [ROUTES.CARD]: defaultReturnFunc,
+    [ROUTES.COOKIE_CONSENT]: defaultReturnFunc,
   });
 };
 

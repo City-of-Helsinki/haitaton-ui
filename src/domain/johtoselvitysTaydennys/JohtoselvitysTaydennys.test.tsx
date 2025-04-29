@@ -408,17 +408,12 @@ describe('Error notification', () => {
 });
 
 describe('Taydennys attachments', () => {
-  async function uploadAttachmentMock({
-    taydennysId,
-    attachmentType,
-    file,
-    abortSignal,
-  }: {
-    taydennysId: string;
-    attachmentType: AttachmentType;
-    file: File;
-    abortSignal?: AbortSignal;
-  }) {
+  async function uploadAttachmentMock(
+    taydennysId: string,
+    attachmentType: AttachmentType,
+    file: File,
+    abortSignal?: AbortSignal,
+  ) {
     const { data } = await api.post<TaydennysAttachmentMetadata>(
       `/taydennykset/${taydennysId}/liitteet?tyyppi=${attachmentType}`,
       { liite: file },

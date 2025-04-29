@@ -4,6 +4,7 @@ import React from 'react';
 import Text from '../../../common/components/text/Text';
 import styles from './FormSummarySection.module.scss';
 import { useTranslation } from 'react-i18next';
+import { useMuutosLabel } from '../../application/taydennysAndMuutosilmoitusCommon/MuutosLabelContext';
 
 const SectionTitle: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
@@ -64,11 +65,12 @@ const SectionItemContentAdded: React.FC<Readonly<SectionItemContentProps>> = ({
   ...chakraProps
 }) => {
   const { t } = useTranslation();
+  const label = useMuutosLabel();
 
   return (
     <SectionItemContent border="1px solid black" padding="var(--spacing-2-xs)" {...chakraProps}>
       <Box as="p" marginBottom="var(--spacing-s)" fontWeight={500}>
-        {t('taydennys:labels:taydennys')}:
+        {label ?? t('taydennys:labels:taydennys')}:
       </Box>
       {children}
     </SectionItemContent>

@@ -21,6 +21,7 @@ import useHaittaIndexes from '../hooks/useHaittaIndexes';
 import HaittaIndexes from '../../common/haittaIndexes/HaittaIndexes';
 import useDrawContext from '../../../common/components/map/modules/draw/useDrawContext';
 import { haveHaittaIndexesIncreased } from '../../common/haittaIndexes/utils';
+import { useApplicationsForHanke } from '../../application/hooks/useApplications';
 
 function getEmptyArea(feature: Feature): Omit<HankeAlueFormState, 'geometriat'> {
   return {
@@ -58,7 +59,8 @@ const HankeFormAlueet: React.FC<FormProps & { drawSource: VectorSource }> = ({
   const watchHankeAlueet = watch('alueet');
   const addressCoordinate = useAddressCoordinate(hanke.tyomaaKatuosoite);
   const haittaIndexesMutation = useHaittaIndexes();
-
+  const { data: hankkeenHakemukset } = useApplicationsForHanke(hanke.hankeTunnus, true);
+  const hakemukset = hankkeenHakemukset?.applications || [];
   const { tabRefs, setSelectedTabIndex } = useSelectableTabs(hankeAlueet, {
     selectLastTabOnChange: true,
   });
@@ -203,9 +205,6 @@ const HankeFormAlueet: React.FC<FormProps & { drawSource: VectorSource }> = ({
       <Box mb="var(--spacing-m)">
         <p>{t('hankeForm:hankkeenAlueForm:instructions2')}</p>
       </Box>
-      <Box mb="var(--spacing-m)">
-        <p>{t('hankeForm:hankkeenAlueForm:instructions3')}</p>
-      </Box>
       <Text tag="p" spacingBottom="m">
         {t('form:requiredForPublicationInstruction')}
       </Text>
@@ -221,6 +220,8 @@ const HankeFormAlueet: React.FC<FormProps & { drawSource: VectorSource }> = ({
           features={features}
           center={addressCoordinate}
           drawSource={drawSource}
+          hankkeenHakemukset={hakemukset}
+          restrictDrawingToHakemusAreas={true}
         />
       </Box>
 

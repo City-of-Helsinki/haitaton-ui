@@ -19,7 +19,7 @@ import { HaittaSubSection } from '../../../common/haittaIndexes/HaittaSubSection
 import styles from './Haittojenhallintasuunnitelma.module.scss';
 import ProcedureTips from '../../../common/haittaIndexes/ProcedureTips';
 import HaittaTooltipContent from '../../../common/haittaIndexes/HaittaTooltipContent';
-import { Button, IconPlusCircle } from 'hds-react';
+import { Button, ButtonVariant, IconPlusCircle } from 'hds-react';
 import { HAITTOJENHALLINTATYYPPI } from '../../../common/haittojenhallinta/types';
 import {
   mapNuisanceEnumIndexToNuisanceIndex,
@@ -172,8 +172,8 @@ const HankkeenHaittojenhallintasuunnitelma: React.FC<Readonly<Props>> = ({ hanke
                 {t('hankeForm:haittojenHallintaForm:noNuisanceDetected')}
               </Box>
               <Button
-                variant="supplementary"
-                iconLeft={<IconPlusCircle aria-hidden />}
+                variant={ButtonVariant.Supplementary}
+                iconStart={<IconPlusCircle />}
                 onClick={() => setVisible(haitta)}
               >
                 {t('hankeForm:haittojenHallintaForm:addControlPlan')}
@@ -223,6 +223,9 @@ const HankkeenHaittojenhallintasuunnitelma: React.FC<Readonly<Props>> = ({ hanke
         />
         <Box mt="var(--spacing-s)">
           <ProcedureTips haittojenhallintaTyyppi="MUUT" haittaIndex={0} />
+          <ProcedureTips haittojenhallintaTyyppi="MELU" haittaIndex={0} />
+          <ProcedureTips haittojenhallintaTyyppi="POLY" haittaIndex={0} />
+          <ProcedureTips haittojenhallintaTyyppi="TARINA" haittaIndex={0} />
         </Box>
         <Box mt="var(--spacing-m)">
           <TextArea

@@ -148,18 +148,19 @@ export const applicationTypeSchema = yup.mixed<ApplicationType>().defined().requ
 
 export const sendSchema = yup.object().shape({
   orderPaperDecision: yup.boolean().required(),
-  paperDecisionReceiver: yup.lazy((_value, context) => {
-    // Checking the value of `orderPaperDecision` from the context
-    if (context.parent.orderPaperDecision) {
-      return yup
-        .object({
-          name: yup.string().trim().max(100).required(),
-          streetAddress: yup.string().trim().max(100).required(),
-          postalCode: yup.string().trim().max(10).required(),
-          city: yup.string().trim().max(100).required(),
-        })
-        .required();
-    }
-    return yup.mixed().nullable();
-  }),
+  paperDecisionReceiver: yup
+    .object({
+      name: yup.string().trim().max(100).required(),
+      streetAddress: yup.string().trim().max(100).required(),
+      postalCode: yup.string().trim().max(10).required(),
+      city: yup.string().trim().max(100).required(),
+    })
+    .nullable()
+    .test('paperDecisionConditional', 'Paper decision fields are invalid', function (value) {
+      const { orderPaperDecision } = this.parent;
+      // If toggle is off, ignore the inner fields
+      if (!orderPaperDecision) return true;
+      // Otherwise, validate the object (returning true if it exists)
+      return !!value;
+    }),
 });

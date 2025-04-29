@@ -1,6 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useController } from 'react-hook-form';
-import { SearchInput as HDSSearchInput, Notification, SearchInputProps } from 'hds-react';
+import {
+  SearchInput as HDSSearchInput,
+  Notification,
+  NotificationSize,
+  SearchInputProps,
+} from 'hds-react';
 import { Box } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import clsx from 'clsx';
@@ -62,7 +67,7 @@ export default function SearchInput<T>({
         <Notification
           type="error"
           label={t('form:validations:default')}
-          size="small"
+          size={NotificationSize.Small}
           className={styles.errorNotification}
         >
           {errorText}

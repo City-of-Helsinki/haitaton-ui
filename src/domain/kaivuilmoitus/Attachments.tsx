@@ -8,23 +8,21 @@ import { deleteAttachment, getAttachmentFile, uploadAttachment } from '../applic
 import { KaivuilmoitusFormValues } from './types';
 import FileUpload from '../../common/components/fileUpload/FileUpload';
 import styles from './Kaivuilmoitus.module.scss';
-import { Link, Notification } from 'hds-react';
+import { Link, Notification, NotificationSize } from 'hds-react';
 import TextArea from '../../common/components/textArea/TextArea';
 
 type Props = {
   existingAttachments: ApplicationAttachmentMetadata[] | undefined;
   attachmentsLoadError: boolean;
-  onFileUpload: (isUploading: boolean) => void;
 };
 
-function Attachments({ existingAttachments, attachmentsLoadError, onFileUpload }: Readonly<Props>) {
+function Attachments({ existingAttachments, attachmentsLoadError }: Readonly<Props>) {
   const queryClient = useQueryClient();
   const { t } = useTranslation();
   const { getValues } = useFormContext<KaivuilmoitusFormValues>();
   const alluStatus = getValues('alluStatus');
 
   function handleFileUpload(uploading: boolean) {
-    onFileUpload(uploading);
     if (!uploading) {
       queryClient.invalidateQueries('attachments');
     }
@@ -87,7 +85,7 @@ function Attachments({ existingAttachments, attachmentsLoadError, onFileUpload }
         {t('kaivuilmoitusForm:liitteetJaLisatiedot:mandate')}
       </Box>
       <Notification
-        size="small"
+        size={NotificationSize.Small}
         type="info"
         label={t('kaivuilmoitusForm:liitteetJaLisatiedot:mandateCheck')}
         style={{ marginTop: 'var(--spacing-s)', marginBottom: 'var(--spacing-s)' }}

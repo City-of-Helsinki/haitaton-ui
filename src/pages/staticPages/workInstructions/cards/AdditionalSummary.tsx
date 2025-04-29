@@ -1,4 +1,4 @@
-import { Button, Card } from 'hds-react';
+import { Button, ButtonPresetTheme, ButtonVariant, Card } from 'hds-react';
 import React from 'react';
 import styles from './cards.module.scss';
 import { useTranslation } from 'react-i18next';
@@ -25,8 +25,8 @@ const AdditionalSummary: React.FC<React.PropsWithChildren<{ children?: React.Rea
     >
       <div className={styles.additionalsummary}>{children}</div>
       <Button
-        variant="secondary"
-        theme="black"
+        variant={ButtonVariant.Secondary}
+        theme={ButtonPresetTheme.Black}
         role="link"
         onClick={(e) => {
           e.preventDefault();

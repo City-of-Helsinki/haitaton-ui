@@ -171,7 +171,7 @@ export type HankeAlue = {
 enum HANKE_STATUS {
   DRAFT = 'DRAFT',
   PUBLIC = 'PUBLIC',
-  ENDED = 'ENDED',
+  COMPLETED = 'COMPLETED',
 }
 
 export type HANKE_STATUS_KEY = keyof typeof HANKE_STATUS;
@@ -200,8 +200,89 @@ export interface HankeData {
   modifiedBy?: null | string;
   modifiedAt?: null | string;
   generated?: boolean;
+  deletionDate?: string | null;
 }
 
 type DraftRequiredFields = 'nimi' | 'kuvaus' | 'vaihe';
 
 export type HankeDataDraft = PartialExcept<HankeData, DraftRequiredFields>;
+
+export interface PublicHanke {
+  id: number;
+  hankeTunnus: string;
+  nimi: string;
+  kuvaus: string | null;
+  alkuPvm: string | null;
+  loppuPvm: string | null;
+  vaihe: HANKE_VAIHE_KEY | null;
+  tyomaaTyyppi: HANKE_TYOMAATYYPPI_KEY[];
+  omistajat: Array<PublicHankeYhteystieto>;
+  alueet: PublicHankeAlue[];
+}
+
+interface PublicHankeYhteystieto {
+  organisaatioNimi?: string | null;
+}
+
+type PublicHankeAlue = {
+  id: number | null;
+  hankeId: number | null;
+  haittaAlkuPvm: Date | null;
+  haittaLoppuPvm: Date | null;
+  geometriat?: HankeGeometria;
+  kaistaHaitta: HANKE_KAISTAHAITTA_KEY | null;
+  kaistaPituusHaitta: HANKE_KAISTAPITUUSHAITTA_KEY | null;
+  meluHaitta: HANKE_MELUHAITTA_KEY | null;
+  polyHaitta: HANKE_POLYHAITTA_KEY | null;
+  tarinaHaitta: HANKE_TARINAHAITTA_KEY | null;
+  nimi: string;
+  tormaystarkastelu?: HaittaIndexData | null;
+};
+
+function toHankeAlue(alue: PublicHankeAlue): HankeAlue {
+  return {
+    id: alue.id,
+    hankeId: alue.hankeId ?? undefined,
+    haittaAlkuPvm: alue.haittaAlkuPvm,
+    haittaLoppuPvm: alue.haittaLoppuPvm,
+    geometriat: alue.geometriat,
+    kaistaHaitta: alue.kaistaHaitta,
+    kaistaPituusHaitta: alue.kaistaPituusHaitta,
+    meluHaitta: alue.meluHaitta,
+    polyHaitta: alue.polyHaitta,
+    tarinaHaitta: alue.tarinaHaitta,
+    nimi: alue.nimi,
+    tormaystarkasteluTulos: alue.tormaystarkastelu,
+  };
+}
+
+export function toHankeData(publicHanke: PublicHanke): HankeData {
+  return {
+    id: publicHanke.id,
+    hankeTunnus: publicHanke.hankeTunnus,
+    onYKTHanke: null,
+    nimi: publicHanke.nimi,
+    kuvaus: publicHanke.kuvaus,
+    alkuPvm: publicHanke.alkuPvm,
+    loppuPvm: publicHanke.loppuPvm,
+    vaihe: publicHanke.vaihe,
+    tyomaaKatuosoite: null,
+    tyomaaTyyppi: publicHanke.tyomaaTyyppi,
+    alueet: publicHanke.alueet.map(toHankeAlue),
+    omistajat: [
+      {
+        id: 0,
+        tyyppi: null,
+        nimi: publicHanke.omistajat[0]?.organisaatioNimi ?? '',
+        email: '',
+        puhelinnumero: '',
+        ytunnus: null,
+      },
+    ],
+    rakennuttajat: [],
+    toteuttajat: [],
+    muut: [],
+    tormaystarkasteluTulos: null,
+    status: HANKE_STATUS.PUBLIC,
+  };
+}

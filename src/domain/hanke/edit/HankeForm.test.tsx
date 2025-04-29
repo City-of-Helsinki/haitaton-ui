@@ -420,8 +420,8 @@ describe('HankeForm', () => {
 
     // Hanke owner (accordion open by default)
     // Yritys should be default contact type
-    expect(screen.getByText(/yritys/i)).toBeInTheDocument();
-    await user.click(screen.getByRole('button', { name: /tyyppi/i }));
+    expect(screen.getByRole('combobox', { name: /yritys/i })).toBeInTheDocument();
+    await user.click(screen.getByRole('combobox', { name: /tyyppi/i }));
     await user.click(screen.getByText(/yhteisö/i));
 
     fireEvent.change(screen.getAllByRole('combobox', { name: /nimi/i })[0], {
@@ -441,7 +441,7 @@ describe('HankeForm', () => {
     await user.click(screen.getByText(/lisää rakennuttaja/i));
     expect(screen.getAllByText('Rakennuttaja')).toHaveLength(1);
 
-    await user.click(screen.getAllByRole('button', { name: /tyyppi/i })[1]);
+    await user.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[1]);
     await user.click(screen.getByText(/yksityishenkilö/i));
     expect(screen.getAllByLabelText(/y-tunnus/i)[1]).toBeDisabled();
 
@@ -872,7 +872,7 @@ describe('HankeForm', () => {
     expect(screen.getByTestId('test-linjaautoliikenneindeksi')).toHaveTextContent('0');
     expect(screen.getByTestId('test-raitioliikenneindeksi')).toHaveTextContent('2');
 
-    await user.click(screen.getByRole('button', { name: 'Kaistahaittojen pituus *' }));
+    await user.click(screen.getByRole('combobox', { name: /Kaistahaittojen pituus/ }));
     await user.click(screen.getByText('10-99 m'));
 
     expect(screen.getByTestId('test-pyoraliikenneindeksi')).toHaveTextContent('4');
@@ -922,8 +922,8 @@ describe('New contact person form and contact person dropdown', () => {
 
     expect(await screen.findByText('Yhteyshenkilö tallennettu')).toBeInTheDocument();
     expect(
-      screen.getByText(`${newUser.etunimi} ${newUser.sukunimi} (${newUser.sahkoposti})`),
-    ).toBeInTheDocument();
+      screen.getAllByText(`${newUser.etunimi} ${newUser.sukunimi} (${newUser.sahkoposti})`),
+    ).toHaveLength(2);
   });
 
   test('Should not be able to create new user and show validation errors if info is not filled', async () => {
@@ -931,7 +931,7 @@ describe('New contact person form and contact person dropdown', () => {
     await user.click(screen.getByRole('button', { name: /lisää uusi yhteyshenkilö/i }));
     await user.click(screen.getByRole('button', { name: /tallenna ja lisää yhteyshenkilö/i }));
 
-    expect(await screen.findAllByText('Kenttä on pakollinen')).toHaveLength(4);
+    expect(await screen.findAllByText('Kenttä on pakollinen')).toHaveLength(5);
     expect(screen.queryByText('Yhteyshenkilö tallennettu')).not.toBeInTheDocument();
   });
 
@@ -1005,7 +1005,7 @@ describe('New contact person form and contact person dropdown', () => {
     );
 
     const { user } = await setupYhteystiedotPage(<HankeFormContainer hankeTunnus="HAI22-1" />);
-    await user.click(screen.getByRole('button', { name: 'Yhteyshenkilöt: Sulje ja avaa valikko' }));
+    await user.click(screen.getByRole('button', { name: /yhteyshenkilöt/i }));
 
     hankeUsers.forEach((hankeUser) => {
       expect(
@@ -1064,5 +1064,91 @@ describe('Selecting user in user name search input', () => {
 
     expect(screen.getByTestId('muut.0.email')).toHaveValue('matti.meikalainen@test.com');
     expect(screen.getByTestId('muut.0.puhelinnumero')).toHaveValue('0401234567');
+  });
+});
+
+describe('Summary page', () => {
+  test('Should show nuisance management summary', async () => {
+    const hanke = hankkeet[2] as HankeDataFormState;
+    const { user } = render(
+      <HankeForm formData={hanke} onIsDirtyChange={() => ({})} onFormClose={() => ({})}>
+        <></>
+      </HankeForm>,
+    );
+
+    await user.click(screen.getByRole('button', { name: /yhteenveto/i }));
+    expect(await screen.findByText('Vaihe 6/6: Yhteenveto')).toBeInTheDocument();
+    expect(await screen.findAllByText('Haittojen hallinta')).toHaveLength(2);
+    expect(await screen.findAllByText('Hankealue 1')).toHaveLength(2);
+    expect(await screen.findByText('Toimet haittojen hallintaan')).toBeInTheDocument();
+    expect(await screen.findByText('Yleisten haittojen hallintasuunnitelma')).toBeInTheDocument();
+    expect(await screen.findByText('Pyöräliikenteen merkittävyys')).toBeInTheDocument();
+    expect(
+      await screen.findByText('Pyöräliikenteelle koituvien haittojen hallintasuunnitelma'),
+    ).toBeInTheDocument();
+    expect(await screen.findByText('Autoliikenteen ruuhkautuminen')).toBeInTheDocument();
+    expect(
+      await screen.findByText('Autoliikenteelle koituvien haittojen hallintasuunnitelma'),
+    ).toBeInTheDocument();
+    expect(await screen.findByText('Raitioliikenne')).toBeInTheDocument();
+    expect(
+      await screen.findByText('Raitioliikenteelle koituvien haittojen hallintasuunnitelma'),
+    ).toBeInTheDocument();
+    expect(await screen.findByText('Linja-autojen paikallisliikenne')).toBeInTheDocument();
+    expect(await screen.findByText('Muut haittojenhallintatoimet')).toBeInTheDocument();
+    expect(await screen.findByText('Muiden haittojen hallintasuunnitelma')).toBeInTheDocument();
+  });
+});
+
+describe('Yhteystieto ytunnus validation', () => {
+  describe('Draft hanke', () => {
+    test('Should be able to move to next page if ytunnus field is empty', async () => {
+      const { user } = await setupYhteystiedotPage(<HankeFormContainer hankeTunnus="HAI22-1" />);
+      fireEvent.change(screen.getByLabelText(/y-tunnus/i), {
+        target: { value: '' },
+      });
+      await user.tab();
+      await user.click(screen.getByRole('button', { name: /seuraava/i }));
+
+      expect(await screen.findByText('Vaihe 5/6: Liitteet')).toBeInTheDocument();
+    });
+
+    test('Should not be able to move to next page if ytunnus is invalid', async () => {
+      const { user } = await setupYhteystiedotPage(<HankeFormContainer hankeTunnus="HAI22-1" />);
+      fireEvent.change(screen.getByLabelText(/y-tunnus/i), {
+        target: { value: '1234567-8' },
+      });
+      await user.tab();
+      await user.click(screen.getByRole('button', { name: /seuraava/i }));
+
+      expect(screen.getByText('Vaihe 4/6: Yhteystiedot')).toBeInTheDocument();
+      expect(screen.getByLabelText(/y-tunnus/i)).toHaveFocus();
+      expect(screen.getByText('Kentän arvo on virheellinen')).toBeInTheDocument();
+    });
+  });
+
+  describe('Public hanke', () => {
+    test('Should not be able to move to next page if ytunnus is empty or invalid', async () => {
+      const { user } = await setupYhteystiedotPage(<HankeFormContainer hankeTunnus="HAI22-3" />);
+      fireEvent.change(screen.getByLabelText(/y-tunnus/i), {
+        target: { value: '' },
+      });
+      await user.tab();
+      await user.click(screen.getByRole('button', { name: /seuraava/i }));
+
+      expect(screen.getByText('Vaihe 4/6: Yhteystiedot')).toBeInTheDocument();
+      expect(screen.getByLabelText(/y-tunnus/i)).toHaveFocus();
+      expect(screen.getByText('Kenttä on pakollinen')).toBeInTheDocument();
+
+      fireEvent.change(screen.getByLabelText(/y-tunnus/i), {
+        target: { value: '1234567-8' },
+      });
+      await user.tab();
+      await user.click(screen.getByRole('button', { name: /seuraava/i }));
+
+      expect(screen.getByText('Vaihe 4/6: Yhteystiedot')).toBeInTheDocument();
+      expect(screen.getByLabelText(/y-tunnus/i)).toHaveFocus();
+      expect(screen.getByText('Kentän arvo on virheellinen')).toBeInTheDocument();
+    });
   });
 });

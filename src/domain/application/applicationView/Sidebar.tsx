@@ -4,6 +4,8 @@ import { Tab, TabList, TabPanel, Tabs } from 'hds-react';
 import {
   Application,
   ApplicationArea,
+  ApplicationType,
+  JohtoselvitysData,
   KaivuilmoitusAlue,
   KaivuilmoitusData,
 } from '../types/application';
@@ -15,16 +17,28 @@ import ApplicationDates from '../components/ApplicationDates';
 import OwnHankeMapHeader from '../../map/components/OwnHankeMap/OwnHankeMapHeader';
 import OwnHankeMap from '../../map/components/OwnHankeMap/OwnHankeMap';
 import useFilterHankeAlueetByApplicationDates from '../hooks/useFilterHankeAlueetByApplicationDates';
-import { HankeData } from '../../types/hanke';
+import { HankeAlue, HankeData } from '../../types/hanke';
 import CustomAccordion from '../../../common/components/customAccordion/CustomAccordion';
+import { Taydennys } from '../taydennys/types';
+import { Muutosilmoitus } from '../muutosilmoitus/types';
+import React from 'react';
 
-type SidebarTyoalueetProps = {
+function getTyoalueet(
+  applicationType: ApplicationType,
+  areas: ApplicationArea[] | KaivuilmoitusAlue[],
+) {
+  return applicationType === 'CABLE_REPORT'
+    ? (areas as ApplicationArea[])
+    : (areas as KaivuilmoitusAlue[]).flatMap((area) => area.tyoalueet);
+}
+
+type TyoalueetListProps = {
   tyoalueet: ApplicationArea[];
   startTime: Date | null;
   endTime: Date | null;
 };
 
-function SidebarTyoalueet({ tyoalueet, startTime, endTime }: Readonly<SidebarTyoalueetProps>) {
+function TyoalueetList({ tyoalueet, startTime, endTime }: Readonly<TyoalueetListProps>) {
   const { t } = useTranslation();
 
   return tyoalueet.map((tyoalue, index) => {
@@ -78,7 +92,7 @@ function KaivuilmoitusAlueet({
             }
           >
             <Box marginLeft="var(--spacing-s)">
-              <SidebarTyoalueet
+              <TyoalueetList
                 tyoalueet={kaivuilmoitusAlue.tyoalueet}
                 startTime={applicationData.startTime}
                 endTime={applicationData.endTime}
@@ -91,31 +105,98 @@ function KaivuilmoitusAlueet({
   );
 }
 
+type AreaTabsProps = {
+  hanke: HankeData;
+  applicationType: ApplicationType;
+  taydennys?: Taydennys<JohtoselvitysData | KaivuilmoitusData> | null;
+  muutosilmoitus?: Muutosilmoitus<JohtoselvitysData | KaivuilmoitusData> | null;
+  originalHakemusContent: React.ReactNode;
+};
+
+/**
+ * Renders a tabbed interface for displaying täydennys/muutosilmoitus areas and original hakemus areas.
+ */
+function AreaTabs({
+  hanke,
+  applicationType,
+  taydennys,
+  muutosilmoitus,
+  originalHakemusContent,
+}: Readonly<AreaTabsProps>) {
+  const { t } = useTranslation();
+
+  const taydennysTyoalueet = taydennys
+    ? getTyoalueet(applicationType, taydennys.applicationData.areas)
+    : undefined;
+  const muutosilmoitusTyoalueet = muutosilmoitus
+    ? getTyoalueet(applicationType, muutosilmoitus.applicationData.areas)
+    : undefined;
+  const tyoalueet = taydennysTyoalueet ?? muutosilmoitusTyoalueet;
+
+  const taydennysKaivuilmoitusAlueet =
+    applicationType === 'EXCAVATION_NOTIFICATION'
+      ? (taydennys?.applicationData.areas as KaivuilmoitusAlue[] | undefined)
+      : null;
+  const muutosilmoitusKaivuilmoitusAlueet =
+    applicationType === 'EXCAVATION_NOTIFICATION'
+      ? (muutosilmoitus?.applicationData.areas as KaivuilmoitusAlue[] | undefined)
+      : null;
+  const kaivuilmoitusAlueet = taydennysKaivuilmoitusAlueet ?? muutosilmoitusKaivuilmoitusAlueet;
+
+  const applicationData = taydennys?.applicationData ?? muutosilmoitus?.applicationData;
+  const startTime = applicationData?.startTime;
+  const endTime = applicationData?.endTime;
+
+  return (
+    <Tabs>
+      <TabList>
+        <Tab>
+          {taydennys ? t('taydennys:labels:taydennykset') : t('muutosilmoitus:labels:muutokset')}
+        </Tab>
+        <Tab>{t('taydennys:labels:originalInformation')}</Tab>
+      </TabList>
+      <TabPanel>
+        <Box mt="var(--spacing-s)">
+          <Box mb="var(--spacing-s)">
+            <OwnHankeMapHeader hankeTunnus={hanke.hankeTunnus} />
+            <OwnHankeMap hanke={hanke} tyoalueet={tyoalueet} />
+          </Box>
+          {applicationType === 'CABLE_REPORT' && (
+            <TyoalueetList
+              tyoalueet={tyoalueet ?? []}
+              startTime={startTime ?? null}
+              endTime={endTime ?? null}
+            />
+          )}
+          {applicationType === 'EXCAVATION_NOTIFICATION' && (
+            <KaivuilmoitusAlueet
+              kaivuilmoitusAlueet={kaivuilmoitusAlueet}
+              hanke={hanke}
+              applicationData={applicationData as KaivuilmoitusData}
+            />
+          )}
+        </Box>
+      </TabPanel>
+      <TabPanel>
+        <Box mt="var(--spacing-s)">{originalHakemusContent}</Box>
+      </TabPanel>
+    </Tabs>
+  );
+}
+
 type SidebarProps = {
   hanke: HankeData;
   application: Application;
 };
 
 export default function Sidebar({ hanke, application }: Readonly<SidebarProps>) {
-  const { t } = useTranslation();
-  const { applicationType, applicationData, taydennys } = application;
-  const tyoalueet =
-    applicationType === 'CABLE_REPORT'
-      ? (applicationData.areas as ApplicationArea[])
-      : (applicationData.areas as KaivuilmoitusAlue[]).flatMap((area) => area.tyoalueet);
-  const taydennysTyoalueet =
-    applicationType === 'CABLE_REPORT'
-      ? (application.taydennys?.applicationData.areas as ApplicationArea[] | undefined)
-      : (application.taydennys?.applicationData.areas as KaivuilmoitusAlue[] | undefined)?.flatMap(
-          (area) => area.tyoalueet,
-        );
+  const { applicationType, applicationData, taydennys, muutosilmoitus } = application;
+
+  const tyoalueet = getTyoalueet(applicationType, applicationData.areas);
+
   const kaivuilmoitusAlueet =
     applicationType === 'EXCAVATION_NOTIFICATION'
       ? (applicationData.areas as KaivuilmoitusAlue[])
-      : null;
-  const taydennysKaivuilmoitusAlueet =
-    applicationType === 'EXCAVATION_NOTIFICATION'
-      ? (taydennys?.applicationData.areas as KaivuilmoitusAlue[] | undefined)
       : null;
 
   const filterHankeAlueet = useFilterHankeAlueetByApplicationDates({
@@ -128,30 +209,41 @@ export default function Sidebar({ hanke, application }: Readonly<SidebarProps>) 
     applicationEndDate: taydennys?.applicationData.endTime ?? null,
   });
 
-  function getHankeWithAlueetFilteredByDates(hankeData: HankeData): HankeData {
-    return {
-      ...hankeData,
-      // Do not show hanke alueet for generated hanke
-      alueet: !hankeData.generated ? filterHankeAlueet(hankeData.alueet) : [],
-    };
-  }
+  const filterHankeAlueetForMuutosilmoitus = useFilterHankeAlueetByApplicationDates({
+    applicationStartDate: muutosilmoitus?.applicationData.startTime ?? null,
+    applicationEndDate: muutosilmoitus?.applicationData.endTime ?? null,
+  });
 
-  function getHankeWithAlueetFilteredByDatesForTaydennys(hankeData: HankeData): HankeData {
+  function getHankeWithAlueetFilteredByDates(
+    hankeData: HankeData,
+    forTaydennys: boolean = false,
+    forMuutosilmoitus: boolean = false,
+  ): HankeData {
+    let alueet: HankeAlue[] = [];
+    // Only return alueet if the hanke is not generated
+    if (!hankeData.generated) {
+      if (forTaydennys) {
+        alueet = filterHankeAlueetForTaydennys(hankeData.alueet);
+      } else if (forMuutosilmoitus) {
+        alueet = filterHankeAlueetForMuutosilmoitus(hankeData.alueet);
+      } else {
+        alueet = filterHankeAlueet(hankeData.alueet);
+      }
+    }
     return {
       ...hankeData,
-      // Do not show hanke alueet for generated hanke
-      alueet: !hankeData.generated ? filterHankeAlueetForTaydennys(hankeData.alueet) : [],
+      alueet,
     };
   }
 
   const hakemusContent = (
     <>
       <Box mb="var(--spacing-s)">
-        <OwnHankeMapHeader hankeTunnus={hanke.hankeTunnus} showLink={false} />
+        <OwnHankeMapHeader hankeTunnus={hanke.hankeTunnus} />
         <OwnHankeMap hanke={getHankeWithAlueetFilteredByDates(hanke)} tyoalueet={tyoalueet} />
       </Box>
       {applicationType === 'CABLE_REPORT' && (
-        <SidebarTyoalueet
+        <TyoalueetList
           tyoalueet={tyoalueet}
           startTime={applicationData.startTime}
           endTime={applicationData.endTime}
@@ -167,42 +259,19 @@ export default function Sidebar({ hanke, application }: Readonly<SidebarProps>) 
     </>
   );
 
-  if (taydennys) {
+  if (taydennys || muutosilmoitus) {
     return (
-      <Tabs>
-        <TabList>
-          <Tab>{t('taydennys:labels:taydennykset')}</Tab>
-          <Tab>{t('taydennys:labels:originalInformation')}</Tab>
-        </TabList>
-        <TabPanel>
-          <Box mt="var(--spacing-s)">
-            <Box mb="var(--spacing-s)">
-              <OwnHankeMapHeader hankeTunnus={hanke.hankeTunnus} showLink={false} />
-              <OwnHankeMap
-                hanke={getHankeWithAlueetFilteredByDatesForTaydennys(hanke)}
-                tyoalueet={taydennysTyoalueet}
-              />
-            </Box>
-            {applicationType === 'CABLE_REPORT' && (
-              <SidebarTyoalueet
-                tyoalueet={taydennysTyoalueet ?? []}
-                startTime={taydennys.applicationData.startTime}
-                endTime={taydennys.applicationData.endTime}
-              />
-            )}
-            {applicationType === 'EXCAVATION_NOTIFICATION' && (
-              <KaivuilmoitusAlueet
-                kaivuilmoitusAlueet={taydennysKaivuilmoitusAlueet}
-                hanke={hanke}
-                applicationData={applicationData as KaivuilmoitusData}
-              />
-            )}
-          </Box>
-        </TabPanel>
-        <TabPanel>
-          <Box mt="var(--spacing-s)">{hakemusContent}</Box>
-        </TabPanel>
-      </Tabs>
+      <AreaTabs
+        hanke={getHankeWithAlueetFilteredByDates(
+          hanke,
+          Boolean(taydennys),
+          Boolean(muutosilmoitus),
+        )}
+        applicationType={applicationType}
+        taydennys={taydennys}
+        muutosilmoitus={muutosilmoitus}
+        originalHakemusContent={hakemusContent}
+      />
     );
   }
 

@@ -55,7 +55,7 @@ describe('Create new hanke from dialog', () => {
     fillInformation();
     await user.click(screen.getByRole('button', { name: /luo hanke/i }));
 
-    expect(window.location.pathname).toBe('/fi/hanke/HAI22-12/muokkaa');
+    expect(window.location.pathname).toBe('/fi/hanke/HAI22-13/muokkaa');
   });
 
   test('Should show validation errors and not create hanke if information is missing', async () => {

@@ -1,17 +1,16 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import {
-  Pagination,
   SearchInput,
   Table,
   IconEnvelope,
   IconCheckCircleFill,
-  Breadcrumb,
   IconUser,
   IconClock,
   IconMenuDots,
   IconPen,
-  Button,
   IconTrash,
+  IconSize,
+  ButtonVariant,
 } from 'hds-react';
 import { Box, Flex, Grid, Menu, MenuButton, MenuItem, MenuList, Tooltip } from '@chakra-ui/react';
 import {
@@ -26,9 +25,7 @@ import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
 import { useQueryClient } from 'react-query';
 import styles from './AccessRightsView.module.scss';
-import { Language } from '../../../common/types/language';
 import { HankeUser, SignedInUser } from '../hankeUsers/hankeUser';
-import useHankeViewPath from '../hooks/useHankeViewPath';
 import Container from '../../../common/components/container/Container';
 import UserCard from './UserCard';
 import MainHeading from '../../../common/components/mainHeading/MainHeading';
@@ -50,6 +47,8 @@ import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
 import { useGlobalNotification } from '../../../common/components/globalNotification/GlobalNotificationContext';
 import Text from '../../../common/components/text/Text';
 import LoadingSpinner from '../../../common/components/spinner/LoadingSpinner';
+import Button from '../../../common/components/button/Button';
+import Pagination from '../../../common/components/pagination/Pagination';
 
 function UserIcon({
   user,
@@ -63,8 +62,8 @@ function UserIcon({
         <Flex>
           <IconUser
             className={styles.userIcon}
-            ariaHidden={false}
-            ariaLabel={t('hankeUsers:labels:ownInformation')}
+            aria-hidden={false}
+            aria-label={t('hankeUsers:labels:ownInformation')}
           />
         </Flex>
       </Tooltip>
@@ -76,8 +75,8 @@ function UserIcon({
           <IconCheckCircleFill
             color="var(--color-success)"
             className={styles.userIcon}
-            ariaHidden={false}
-            ariaLabel={t('hankeUsers:labels:userIdentified')}
+            aria-hidden={false}
+            aria-label={t('hankeUsers:labels:userIdentified')}
           />
         </Flex>
       </Tooltip>
@@ -90,8 +89,8 @@ function UserIcon({
         <Flex>
           <IconClock
             className={styles.userIcon}
-            ariaHidden={false}
-            ariaLabel={t('hankeUsers:labels:invitationSent', {
+            aria-hidden={false}
+            aria-label={t('hankeUsers:labels:invitationSent', {
               date: formatToFinnishDate(user.kutsuttu),
             })}
           />
@@ -129,16 +128,15 @@ const ACCESS_RIGHT_LEVEL_KEY = 'kayttooikeustaso';
 type Props = {
   hankeUsers: HankeUser[];
   hankeTunnus: string;
-  hankeName: string;
   signedInUser?: SignedInUser;
+  readonly?: boolean;
 };
 
-function AccessRightsView({ hankeUsers, hankeTunnus, hankeName, signedInUser }: Readonly<Props>) {
-  const { t, i18n } = useTranslation();
+function AccessRightsView({ hankeUsers, hankeTunnus, signedInUser, readonly }: Readonly<Props>) {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { HANKEPORTFOLIO } = useLocalizedRoutes();
   const queryClient = useQueryClient();
-  const hankeViewPath = useHankeViewPath(hankeTunnus);
   const getEditUserPath = useLinkPath(ROUTES.EDIT_USER);
   const { setNotification } = useGlobalNotification();
   const [usersData, setUsersData] = useState<HankeUserWithWholeName[]>(() =>
@@ -289,17 +287,17 @@ function AccessRightsView({ hankeUsers, hankeTunnus, hankeName, signedInUser }: 
 
     return (
       <Grid gridTemplateColumns="1fr 1fr 1fr" gap="var(--spacing-s)" justifyContent="flex-end">
-        {canEditUser(args) ? (
+        {!readonly && canEditUser(args) ? (
           <Link to={getEditUserPath({ hankeTunnus, id: args.id })}>
             <IconPen
               style={{ display: 'block' }}
               color="var(--color-bus)"
-              ariaHidden={false}
-              ariaLabel={t('hankeUsers:buttons:edit')}
+              aria-hidden={false}
+              aria-label={t('hankeUsers:buttons:edit')}
             />
           </Link>
         ) : null}
-        {showUserDeleteButton(args, hankeUsers, signedInUser) ? (
+        {!readonly && showUserDeleteButton(args, hankeUsers, signedInUser) ? (
           <button aria-label={t('hankeUsers:buttons:delete')} onClick={() => setDeletedUser(args)}>
             {deleteInfoQueryResult.isLoading && args.id === userToDelete?.id ? (
               <LoadingSpinner small />
@@ -307,7 +305,7 @@ function AccessRightsView({ hankeUsers, hankeTunnus, hankeName, signedInUser }: 
               <IconTrash
                 style={{ display: 'block' }}
                 color="var(--color-error)"
-                ariaHidden={false}
+                aria-hidden={false}
               />
             )}
           </button>
@@ -321,15 +319,15 @@ function AccessRightsView({ hankeUsers, hankeTunnus, hankeName, signedInUser }: 
                 <IconMenuDots
                   style={{ display: 'block' }}
                   color="var(--color-bus)"
-                  ariaHidden={false}
-                  ariaLabel={t('hankeUsers:labels:userMenu')}
+                  aria-hidden={false}
+                  aria-label={t('hankeUsers:labels:userMenu')}
                 />
               )}
             </MenuButton>
             <MenuList>
               <MenuItem onClick={() => sendInvitation(args)} isDisabled={linkSent}>
                 <Flex alignItems="center" gap="var(--spacing-2-xs)" color="var(--color-bus)">
-                  <IconEnvelope size="xs" />
+                  <IconEnvelope size={IconSize.ExtraSmall} />
                   {t('hankeUsers:buttons:resendInvitation')}
                 </Flex>
               </MenuItem>
@@ -383,19 +381,7 @@ function AccessRightsView({ hankeUsers, hankeTunnus, hankeName, signedInUser }: 
     <article className={styles.container}>
       <header className={styles.header}>
         <Container>
-          <div className={styles.breadcrumb}>
-            <Breadcrumb
-              ariaLabel={t('hankeList:breadcrumb:ariaLabel')}
-              list={[
-                { path: hankeViewPath, title: `${hankeName} (${hankeTunnus})` },
-                {
-                  path: null,
-                  title: t('hankeUsers:userManagementTitle'),
-                },
-              ]}
-            />
-          </div>
-          <MainHeading spacingBottom="l">{t('hankeUsers:userManagementTitle')}</MainHeading>
+          <MainHeading>{t('hankeUsers:userManagementTitle')}</MainHeading>
         </Container>
       </header>
 
@@ -423,7 +409,7 @@ function AccessRightsView({ hankeUsers, hankeTunnus, hankeName, signedInUser }: 
             onSort={handleTableSort}
             indexKey="id"
             variant="light"
-            dataTestId="access-right-table"
+            data-testid="access-right-table"
           />
         </div>
         <div className={styles.userCards}>
@@ -444,19 +430,19 @@ function AccessRightsView({ hankeUsers, hankeTunnus, hankeName, signedInUser }: 
                   </p>
                 </Box>
                 <Flex flexWrap="wrap" gap="var(--spacing-s)">
-                  {canEditUser(row.original) && (
+                  {!readonly && canEditUser(row.original) && (
                     <Button
-                      iconLeft={<IconPen />}
-                      variant="secondary"
+                      iconStart={<IconPen />}
+                      variant={ButtonVariant.Secondary}
                       onClick={() => navigateToEditUserView(row.original.id)}
                     >
                       {t('hankeUsers:buttons:edit')}
                     </Button>
                   )}
-                  {showUserDeleteButton(row.original, hankeUsers, signedInUser) && (
+                  {!readonly && showUserDeleteButton(row.original, hankeUsers, signedInUser) && (
                     <Button
-                      iconLeft={<IconTrash />}
-                      variant="danger"
+                      iconStart={<IconTrash />}
+                      variant={ButtonVariant.Danger}
                       isLoading={
                         deleteInfoQueryResult.isLoading && row.original.id === userToDelete?.id
                       }
@@ -476,16 +462,15 @@ function AccessRightsView({ hankeUsers, hankeTunnus, hankeName, signedInUser }: 
           )}
         </div>
 
-        <div className={styles.pagination}>
+        <Box mb="var(--spacing-s)">
           <Pagination
-            language={i18n.language as Language}
             onChange={handleTablePageChange}
             pageHref={() => ''}
             pageCount={pageCount}
             pageIndex={pageIndex}
-            paginationAriaLabel={t('hankeList:paginatioAriaLabel')}
+            paginationAriaLabel={t('common:components:paginationAriaLabel')}
           />
-        </div>
+        </Box>
 
         {resendInvitationMutation.isSuccess && (
           <InvitationSuccessNotification onClose={() => resendInvitationMutation.reset()}>

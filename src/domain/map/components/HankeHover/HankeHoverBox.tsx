@@ -1,16 +1,13 @@
 import React, { useContext } from 'react';
-import { format } from 'date-fns';
-import { Link } from 'hds-react';
+import { Link, LinkSize } from 'hds-react';
 import { useNavigate } from 'react-router-dom';
 import HoverContext from '../../../../common/components/map/interactions/hover/HoverContext';
-import HankkeetContext from '../../HankkeetProviderContext';
 import styles from './HankeHover.module.scss';
-import { HankeData } from '../../../types/hanke';
+import Text from '../../../../common/components/text/Text';
+import { format } from 'date-fns';
 
-const HankeHoverBox: React.FC<React.PropsWithChildren<unknown>> = () => {
-  const { hoveredHankeTunnukset, hoverPosition } = useContext(HoverContext);
-  const { hankkeet } = useContext(HankkeetContext);
-  const foundHankkeet: HankeData[] = [];
+const HankeHoverBox: React.FC<React.PropsWithChildren> = () => {
+  const { hoveredHankeAreaData, hoverPosition } = useContext(HoverContext);
 
   const navigate = useNavigate();
 
@@ -19,38 +16,33 @@ const HankeHoverBox: React.FC<React.PropsWithChildren<unknown>> = () => {
     left: hoverPosition[0] + 2 || 0,
   };
 
-  if (hoveredHankeTunnukset.length > 0) {
-    hoveredHankeTunnukset.forEach((hankeTunnus) => {
-      const hanke = hankkeet.find((HANKE) => HANKE.hankeTunnus === hankeTunnus);
-      if (hanke) {
-        foundHankkeet.push(hanke);
-      }
-    });
-  }
-
-  const openHanke = (e: React.MouseEvent, hankeTunnus: string) => {
+  const openHanke = (
+    e: React.MouseEvent,
+    hankeTunnus?: string | null,
+    hankealueId?: number | null,
+  ) => {
     e.preventDefault();
+    if (!hankeTunnus) return;
     navigate({
-      search: `?hanke=${hankeTunnus}`,
+      search: `?hanke=${hankeTunnus}&hankealue=${hankealueId}`,
     });
   };
 
   return (
     <div className={styles.hankeHover} style={hoverBoxPosition}>
-      {foundHankkeet.map((hanke) => (
-        <div key={hanke.hankeTunnus}>
+      {hoveredHankeAreaData.map((hankeArea) => (
+        <div key={hankeArea.hankeTunnus}>
           <Link
-            href={`/?hanke=${hanke.hankeTunnus}`}
-            size="M"
-            onClick={(e) => openHanke(e, hanke.hankeTunnus)}
+            href={`/?hanke=${hankeArea.hankeTunnus}&hankealue=${hankeArea.areaId}`}
+            size={LinkSize.Medium}
+            onClick={(e) => openHanke(e, hankeArea.hankeTunnus, hankeArea.areaId)}
           >
-            {`${hanke.nimi} (${hanke.hankeTunnus})`}
+            {`${hankeArea.hankeName} (${hankeArea.hankeTunnus})`}
           </Link>
-          {hanke.alkuPvm && hanke.loppuPvm && (
-            <p>
-              {format(new Date(hanke.alkuPvm), 'dd.MM.yyyy')} -{' '}
-              {format(new Date(hanke.loppuPvm), 'dd.MM.yyyy')}
-            </p>
+          <Text tag="p">{hankeArea.areaName}</Text>
+
+          {hankeArea.startDate && hankeArea.endDate && (
+            <Text tag="p">{`${format(new Date(hankeArea.startDate), 'dd.MM.yyyy')} - ${format(new Date(hankeArea.endDate), 'dd.MM.yyyy')}`}</Text>
           )}
         </div>
       ))}

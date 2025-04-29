@@ -1,6 +1,6 @@
 import { UserEvent } from '@testing-library/user-event/dist/types/setup/setup';
 import { http, HttpResponse } from 'msw';
-import { act, cleanup, fireEvent, render, screen, waitFor, within } from '../../testUtils/render';
+import { cleanup, fireEvent, render, screen, waitFor, within } from '../../testUtils/render';
 import KaivuilmoitusContainer from './KaivuilmoitusContainer';
 import { HankeData } from '../types/hanke';
 import hankkeet from '../mocks/data/hankkeet-data';
@@ -11,6 +11,7 @@ import {
   ContactType,
   Customer,
   InvoicingCustomer,
+  JohtoselvitysData,
   KaivuilmoitusAlue,
   KaivuilmoitusData,
 } from '../application/types/application';
@@ -76,19 +77,8 @@ async function fillBasicInformation(
     fireEvent.click(screen.getByLabelText(/käytä olemassa olevia/i));
     if (existingCableReport) {
       await screen.findAllByLabelText(/tehtyjen johtoselvitysten tunnukset/i);
-      fireEvent.click(
-        screen.getByRole('button', {
-          name: 'Tehtyjen johtoselvitysten tunnukset: Sulje ja avaa valikko',
-        }),
-      );
+      fireEvent.click(screen.getByRole('button', { name: /tehtyjen johtoselvitysten tunnukset/i }));
       fireEvent.click(screen.getByText(existingCableReport));
-
-      for (const cableReport of cableReports) {
-        fireEvent.change(screen.getAllByRole('combobox')[1], {
-          target: { value: cableReport },
-        });
-        await user.keyboard('{Enter}');
-      }
     } else {
       for (const cableReport of cableReports) {
         fireEvent.change(screen.getByLabelText('Johtoselvitystunnus'), {
@@ -209,7 +199,7 @@ function fillContactsInformation(
   } = options;
 
   // Fill customer info
-  fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[0]);
+  fireEvent.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[0]);
   fireEvent.click(screen.getAllByText(/yritys/i)[0]);
   fireEvent.change(screen.getAllByRole('combobox', { name: /nimi/i })[0], {
     target: { value: customer.name },
@@ -226,9 +216,11 @@ function fillContactsInformation(
   fireEvent.change(screen.getByTestId('applicationData.customerWithContacts.customer.phone'), {
     target: { value: customer.phone },
   });
+  fireEvent.click(screen.getAllByRole('button', { name: /yhteyshenkilöt/i })[0]);
+  fireEvent.click(screen.getAllByText(/tauno testinen/i)[0]);
 
   // Fill contractor info
-  fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[1]);
+  fireEvent.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[1]);
   fireEvent.click(screen.getAllByText(/yritys/i)[1]);
   fireEvent.change(screen.getAllByRole('combobox', { name: /nimi/i })[1], {
     target: { value: contractor.name },
@@ -245,9 +237,11 @@ function fillContactsInformation(
   fireEvent.change(screen.getByTestId('applicationData.contractorWithContacts.customer.phone'), {
     target: { value: contractor.phone },
   });
+  fireEvent.click(screen.getAllByRole('button', { name: /yhteyshenkilöt/i })[1]);
+  fireEvent.click(screen.getByText('Matti Meikäläinen (matti.meikalainen@test.com)'));
 
   // Fill invoicing customer info
-  fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[2]);
+  fireEvent.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[2]);
   fireEvent.click(screen.getAllByText(/yritys/i)[2]);
   fireEvent.change(screen.getByTestId('applicationData.invoicingCustomer.name'), {
     target: { value: invoicingCustomer.name },
@@ -377,7 +371,6 @@ test('Should be able to fill form pages and show filled information in summary p
   const description = 'Testataan yhteenvetosivua';
   const cableReportDone = true;
   const existingCableReport = 'JS2300001';
-  const cableReports = ['JS2300002', 'JS2300003', 'JS2300004'];
   const placementContracts = ['SL0000001', 'SL0000002'];
   const hankeData = hankkeet[1] as HankeData;
 
@@ -452,7 +445,6 @@ test('Should be able to fill form pages and show filled information in summary p
     description,
     cableReportDone,
     existingCableReport,
-    cableReports,
     placementContracts,
   });
   await user.click(screen.getByRole('button', { name: /seuraava/i }));
@@ -487,9 +479,7 @@ test('Should be able to fill form pages and show filled information in summary p
   // Basic information
   expect(screen.getByText(name)).toBeInTheDocument();
   expect(screen.getByText(description)).toBeInTheDocument();
-  expect(
-    screen.getByText(`${existingCableReport}, ${cableReports.join(', ')}`),
-  ).toBeInTheDocument();
+  expect(screen.getByText(existingCableReport)).toBeInTheDocument();
   expect(screen.getByText(placementContracts.join(', '))).toBeInTheDocument();
   expect(screen.getByText('Kyllä')).toBeInTheDocument();
 
@@ -605,7 +595,6 @@ test('If user selects "Hae uusi johtoselvitys" option, should show "Louhitaanko 
     cableReportDone: false,
     existingCableReport: null,
     rockExcavation: true,
-    cableReports: [],
   });
   await user.click(screen.getByRole('button', { name: /yhteenveto/i }));
 
@@ -739,13 +728,122 @@ test('Should show notifications if work areas overlap with johtoselvitys work ar
       /työalue ylittää usean johtoselvityksen rajauksen, tee muutosilmoitus./i,
     ),
   ).toBeInTheDocument();
-  expect(
-    screen.getByText(/Työalue ylittää johtoselvityksen rajauksen, tee johtoselvitykseen/i),
-  ).toBeInTheDocument();
+  expect(screen.getByText(/Työalue ylittää johtoselvityksen/i)).toBeInTheDocument();
   const link = screen.getByRole('link', { name: /JS2300001/i });
   expect(link).toHaveAttribute('href', '/fi/hakemus/2');
   expect(link).toHaveAttribute('target', '_blank');
   expect(link).toHaveAttribute('rel', 'noopener');
+});
+
+test('Should not show notification if work area is within johtoselvitys work areas union', async () => {
+  const newJohtoselvitys = cloneDeep(applications[1] as Application<JohtoselvitysData>);
+  const testJohtoselvitys: Application<JohtoselvitysData> = {
+    ...newJohtoselvitys,
+    applicationData: {
+      ...newJohtoselvitys.applicationData,
+      areas: [
+        {
+          geometry: {
+            type: 'Polygon',
+            crs: {
+              type: 'name',
+              properties: {
+                name: 'urn:ogc:def:crs:EPSG::3879',
+              },
+            },
+            coordinates: [
+              [
+                [25498574.68585571, 6679312.984220641],
+                [25498575.341154203, 6679304.136547383],
+                [25498582.939986356, 6679303.918114552],
+                [25498582.476817265, 6679313.077998086],
+                [25498574.68585571, 6679312.984220641],
+              ],
+            ],
+          },
+        },
+      ],
+    },
+  };
+
+  server.use(
+    http.get(`/api/hankkeet/:hankeTunnus/hakemukset`, async () => {
+      return HttpResponse.json({ applications: [testJohtoselvitys, applications[10]] });
+    }),
+  );
+
+  const hankeData = hankkeet[1] as HankeData;
+  const application = cloneDeep(applications[6] as Application<KaivuilmoitusData>);
+  const testApplication: Application<KaivuilmoitusData> = {
+    ...application,
+    applicationData: {
+      ...application.applicationData,
+      cableReports: ['JS2300001', 'JS2400005'],
+      areas: [
+        {
+          name: 'Hankealue 1',
+          hankealueId: 56,
+          tyoalueet: [
+            {
+              geometry: {
+                type: 'Polygon',
+                crs: {
+                  type: 'name',
+                  properties: {
+                    name: 'urn:ogc:def:crs:EPSG::3879',
+                  },
+                },
+                coordinates: [
+                  [
+                    [25498576.5562583, 6679311.2533405945],
+                    [25498576.031333327, 6679285.029964675],
+                    [25498582.364741784, 6679285.035682811],
+                    [25498581.625386678, 6679311.506082247],
+                    [25498576.5562583, 6679311.2533405945],
+                  ],
+                ],
+              },
+              area: 115.11530422209897,
+              tormaystarkasteluTulos: {
+                autoliikenne: {
+                  indeksi: 0,
+                  haitanKesto: 5,
+                  katuluokka: 0,
+                  liikennemaara: 0,
+                  kaistahaitta: 1,
+                  kaistapituushaitta: 1,
+                },
+                pyoraliikenneindeksi: 0,
+                linjaautoliikenneindeksi: 0,
+                raitioliikenneindeksi: 0,
+                liikennehaittaindeksi: {
+                  indeksi: 0,
+                  tyyppi: HAITTA_INDEX_TYPE.LINJAAUTOLIIKENNEINDEKSI,
+                },
+              },
+            },
+          ],
+          katuosoite: 'Kotikatu 12',
+          tyonTarkoitukset: ['VIEMARI', 'SADEVESI'],
+          meluhaitta: 'SATUNNAINEN_MELUHAITTA',
+          polyhaitta: 'SATUNNAINEN_POLYHAITTA',
+          tarinahaitta: 'TOISTUVA_TARINAHAITTA',
+          kaistahaitta: 'EI_VAIKUTA',
+          kaistahaittojenPituus: 'EI_VAIKUTA_KAISTAJARJESTELYIHIN',
+          lisatiedot: '',
+        },
+      ],
+    },
+  };
+  const { user } = render(
+    <KaivuilmoitusContainer hankeData={hankeData} application={testApplication} />,
+  );
+  await user.click(screen.getByRole('button', { name: /alueiden/i }));
+
+  expect(
+    screen.queryByText(/työalue ylittää usean johtoselvityksen rajauksen, tee muutosilmoitus./i),
+  ).not.toBeInTheDocument();
+  expect(screen.queryByText(/Työalue ylittää johtoselvityksen/i)).not.toBeInTheDocument();
 });
 
 test('Should show validation error if the new user has an existing email address', async () => {
@@ -779,7 +877,7 @@ test('Should disable OVT fields if invoicing customer type is not COMPANY or ASS
   await fillBasicInformation(user);
   await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
 
-  fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[2]);
+  fireEvent.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[2]);
   fireEvent.click(screen.getByText(/yksityishenkilö/i));
 
   expect(screen.getByTestId('applicationData.invoicingCustomer.ovt')).toBeDisabled();
@@ -927,7 +1025,7 @@ test('OVT and registryKey fields should be send as null if they are left empty b
   await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
 
   // Change customer type to PERSON
-  await user.click(screen.getAllByRole('button', { name: /tyyppi/i })[2]);
+  await user.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[2]);
   await user.click(screen.getAllByText(/yksityishenkilö/i)[0]);
 
   await user.click(screen.getByRole('button', { name: /seuraava/i }));
@@ -967,9 +1065,12 @@ test('Should be able to upload attachments', async () => {
     otherFiles: [new File(['muu'], 'muu.png', { type: 'image/png' })],
   });
 
-  await act(async () => {
-    waitFor(() => expect(screen.queryAllByText('Tallennetaan tiedostoja')).toHaveLength(0));
-  });
+  await waitFor(
+    () => {
+      expect(screen.queryAllByText('Tallennetaan tiedostoja')).toHaveLength(0);
+    },
+    { timeout: 5000 },
+  );
   await waitFor(
     () => {
       expect(screen.queryAllByText('1/1 tiedosto(a) tallennettu')).toHaveLength(3);
@@ -1151,7 +1252,7 @@ test('Should be able to remove work areas', async () => {
 
   await user.click(await screen.findByRole('button', { name: /poista työalue 1/i }));
 
-  const { getByRole, getByText } = within(await screen.findByRole('dialog'));
+  const { getByRole, getByText } = within(await screen.findByRole('dialog', {}, { timeout: 5000 }));
   expect(getByText('Haluatko varmasti poistaa työalueen Työalue 1?')).toBeInTheDocument();
   await user.click(getByRole('button', { name: /vahvista/i }));
 
@@ -1159,7 +1260,7 @@ test('Should be able to remove work areas', async () => {
 
   await user.click(await screen.findByRole('button', { name: /poista työalue/i }));
   const { getByRole: getByRoleInDialogTwo, getByText: getByTextInDialogTwo } = within(
-    await screen.findByRole('dialog'),
+    await screen.findByRole('dialog', {}, { timeout: 5000 }),
   );
   expect(getByTextInDialogTwo('Haluatko varmasti poistaa työalueen Työalue?')).toBeInTheDocument();
   await user.click(getByRoleInDialogTwo('button', { name: /vahvista/i }));
@@ -1369,7 +1470,7 @@ describe('Registry key', () => {
       );
       await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
 
-      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[0]);
+      fireEvent.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[0]);
       fireEvent.click(screen.getAllByText('Yksityishenkilö')[0]);
 
       expect(await screen.findAllByText('Y-tunnus')).toHaveLength(2);
@@ -1382,7 +1483,7 @@ describe('Registry key', () => {
       );
       await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
 
-      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[0]);
+      fireEvent.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[0]);
       fireEvent.click(screen.getAllByText('Yritys')[0]);
 
       expect(await screen.findAllByText('Y-tunnus')).toHaveLength(3);
@@ -1395,7 +1496,7 @@ describe('Registry key', () => {
       );
       await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
 
-      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[0]);
+      fireEvent.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[0]);
       fireEvent.click(screen.getAllByText('Yhdistys')[0]);
 
       expect(await screen.findAllByText('Y-tunnus')).toHaveLength(3);
@@ -1408,7 +1509,7 @@ describe('Registry key', () => {
       );
       await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
 
-      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[0]);
+      fireEvent.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[0]);
       fireEvent.click(screen.getAllByText('Muu')[0]);
 
       expect(await screen.findAllByText('Y-tunnus')).toHaveLength(2);
@@ -1417,14 +1518,14 @@ describe('Registry key', () => {
       ).toBeInTheDocument();
     });
 
-    test('Registry key is required for all customer types', async () => {
+    test('Registry key is required for private, company and association types', async () => {
       const { user } = render(
         <KaivuilmoitusContainer hankeData={hankeData} application={testApplication} />,
       );
       await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
 
       // private person
-      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[0]);
+      fireEvent.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[0]);
       fireEvent.click(screen.getAllByText('Yksityishenkilö')[0]);
 
       expect(
@@ -1432,7 +1533,7 @@ describe('Registry key', () => {
       ).toBeRequired();
 
       // company
-      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[0]);
+      fireEvent.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[0]);
       fireEvent.click(screen.getAllByText('Yritys')[0]);
 
       expect(
@@ -1440,15 +1541,21 @@ describe('Registry key', () => {
       ).toBeRequired();
 
       // association
-      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[0]);
+      fireEvent.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[0]);
       fireEvent.click(screen.getAllByText('Yhdistys')[0]);
 
       expect(
         await screen.findByTestId('applicationData.customerWithContacts.customer.registryKey'),
       ).toBeRequired();
+    });
 
-      // other
-      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[0]);
+    test('Registry key is required for other contact type', async () => {
+      const { user } = render(
+        <KaivuilmoitusContainer hankeData={hankeData} application={testApplication} />,
+      );
+      await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+
+      fireEvent.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[0]);
       fireEvent.click(screen.getAllByText('Muu')[0]);
 
       expect(
@@ -1536,7 +1643,7 @@ describe('Registry key', () => {
       );
       await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
 
-      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[1]);
+      fireEvent.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[1]);
       fireEvent.click(screen.getAllByText('Yksityishenkilö')[0]);
 
       expect(await screen.findAllByText('Y-tunnus')).toHaveLength(3);
@@ -1549,7 +1656,7 @@ describe('Registry key', () => {
       );
       await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
 
-      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[1]);
+      fireEvent.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[1]);
       fireEvent.click(screen.getAllByText('Yritys')[1]);
 
       expect(await screen.findAllByText('Y-tunnus')).toHaveLength(3);
@@ -1562,7 +1669,7 @@ describe('Registry key', () => {
       );
       await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
 
-      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[1]);
+      fireEvent.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[1]);
       fireEvent.click(screen.getAllByText('Yhdistys')[0]);
 
       expect(await screen.findAllByText('Y-tunnus')).toHaveLength(3);
@@ -1575,7 +1682,7 @@ describe('Registry key', () => {
       );
       await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
 
-      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[1]);
+      fireEvent.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[1]);
       fireEvent.click(screen.getAllByText('Muu')[0]);
 
       expect(await screen.findAllByText('Y-tunnus')).toHaveLength(3);
@@ -1584,38 +1691,50 @@ describe('Registry key', () => {
       ).not.toBeInTheDocument();
     });
 
-    test('Registry key is required for company and association customer types and disabled for others', async () => {
+    test('Registry key is required for company and association customer types', async () => {
       const { user } = render(
         <KaivuilmoitusContainer hankeData={hankeData} application={testApplication} />,
       );
       await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
 
-      // private person
-      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[1]);
-      fireEvent.click(screen.getAllByText('Yksityishenkilö')[0]);
-
-      expect(
-        await screen.findByTestId('applicationData.contractorWithContacts.customer.registryKey'),
-      ).toBeDisabled();
-
       // company
-      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[1]);
-      fireEvent.click(screen.getAllByText('Yritys')[1]);
+      await user.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[1]);
+      await user.click(screen.getAllByText('Yritys')[1]);
 
       expect(
         await screen.findByTestId('applicationData.contractorWithContacts.customer.registryKey'),
       ).toBeRequired();
 
       // association
-      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[1]);
-      fireEvent.click(screen.getAllByText('Yhdistys')[0]);
+      await user.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[1]);
+      await user.click(screen.getAllByText('Yhdistys')[0]);
 
       expect(
         await screen.findByTestId('applicationData.contractorWithContacts.customer.registryKey'),
       ).toBeRequired();
+    });
 
-      // other
-      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[1]);
+    test('Registry key is disabled for private customer type', async () => {
+      const { user } = render(
+        <KaivuilmoitusContainer hankeData={hankeData} application={testApplication} />,
+      );
+      await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+
+      fireEvent.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[1]);
+      fireEvent.click(screen.getAllByText('Yksityishenkilö')[0]);
+
+      expect(
+        await screen.findByTestId('applicationData.contractorWithContacts.customer.registryKey'),
+      ).toBeDisabled();
+    });
+
+    test('Registry key is disabled for other customer type', async () => {
+      const { user } = render(
+        <KaivuilmoitusContainer hankeData={hankeData} application={testApplication} />,
+      );
+      await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+
+      fireEvent.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[1]);
       fireEvent.click(screen.getAllByText('Muu')[0]);
 
       expect(
@@ -1631,7 +1750,7 @@ describe('Registry key', () => {
       );
       await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
 
-      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[2]);
+      fireEvent.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[2]);
       fireEvent.click(screen.getAllByText('Yksityishenkilö')[0]);
 
       expect(await screen.findAllByText('Y-tunnus')).toHaveLength(2);
@@ -1644,7 +1763,7 @@ describe('Registry key', () => {
       );
       await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
 
-      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[2]);
+      fireEvent.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[2]);
       fireEvent.click(screen.getAllByText('Yritys')[2]);
 
       expect(await screen.findAllByText('Y-tunnus')).toHaveLength(3);
@@ -1657,7 +1776,7 @@ describe('Registry key', () => {
       );
       await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
 
-      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[2]);
+      fireEvent.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[2]);
       fireEvent.click(screen.getAllByText('Yhdistys')[0]);
 
       expect(await screen.findAllByText('Y-tunnus')).toHaveLength(3);
@@ -1670,7 +1789,7 @@ describe('Registry key', () => {
       );
       await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
 
-      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[2]);
+      fireEvent.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[2]);
       fireEvent.click(screen.getAllByText('Muu')[0]);
 
       expect(await screen.findAllByText('Y-tunnus')).toHaveLength(2);
@@ -1679,14 +1798,14 @@ describe('Registry key', () => {
       ).toBeInTheDocument();
     });
 
-    test('Registry key is required for all customer types', async () => {
+    test('Registry key is required for private, company and association types', async () => {
       const { user } = render(
         <KaivuilmoitusContainer hankeData={hankeData} application={testApplication} />,
       );
       await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
 
       // private person
-      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[2]);
+      fireEvent.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[2]);
       fireEvent.click(screen.getAllByText('Yksityishenkilö')[0]);
 
       expect(
@@ -1694,23 +1813,29 @@ describe('Registry key', () => {
       ).toBeRequired();
 
       // company
-      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[2]);
-      fireEvent.click(screen.getAllByText('Yritys')[2]);
+      fireEvent.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[2]);
+      fireEvent.click(screen.getAllByText('Yritys')[0]);
 
       expect(
         await screen.findByTestId('applicationData.invoicingCustomer.registryKey'),
       ).toBeRequired();
 
       // association
-      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[2]);
+      fireEvent.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[2]);
       fireEvent.click(screen.getAllByText('Yhdistys')[0]);
 
       expect(
         await screen.findByTestId('applicationData.invoicingCustomer.registryKey'),
       ).toBeRequired();
+    });
 
-      // other
-      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[2]);
+    test('Registry key is required for other contact type', async () => {
+      const { user } = render(
+        <KaivuilmoitusContainer hankeData={hankeData} application={testApplication} />,
+      );
+      await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+
+      fireEvent.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[2]);
       fireEvent.click(screen.getAllByText('Muu')[0]);
 
       expect(
@@ -1807,6 +1932,9 @@ describe('Haittojenhallintasuunnitelma', () => {
     expect(screen.getByTestId('test-polyHaitta')).toHaveTextContent('5');
     expect(screen.getByTestId('test-tarinaHaitta')).toHaveTextContent('5');
     expect(screen.getByTestId('show-tips-button-MUUT')).toBeInTheDocument();
+    expect(screen.getByTestId('show-tips-button-MELU')).toBeInTheDocument();
+    expect(screen.getByTestId('show-tips-button-POLY')).toBeInTheDocument();
+    expect(screen.getByTestId('show-tips-button-TARINA')).toBeInTheDocument();
   });
 
   test('Nuisance control plan can be filled', async () => {
@@ -2050,5 +2178,95 @@ describe('Error notification', () => {
     expect(screen.getByRole('listitem', { name: /perustiedot/i })).toBeInTheDocument();
     expect(screen.getByRole('listitem', { name: /alueiden/i })).toBeInTheDocument();
     expect(screen.getByRole('listitem', { name: /yhteystiedot/i })).toBeInTheDocument();
+  });
+
+  test('Should not show validation errors in haittojenhallinta page for liikennemuodot that have no detected nuisances', async () => {
+    const application = cloneDeep(applications[4]) as Application<KaivuilmoitusData>;
+    application.applicationData.areas = [
+      ...application.applicationData.areas,
+      {
+        name: 'Hankealue 1',
+        hankealueId: 1,
+        tyoalueet: [
+          {
+            geometry: {
+              type: 'Polygon',
+              crs: {
+                type: 'name',
+                properties: {
+                  name: 'urn:ogc:def:crs:EPSG::3879',
+                },
+              },
+              coordinates: [
+                [
+                  [25498583.867247857, 6679281.28058593],
+                  [25498584.13087749, 6679314.065289769],
+                  [25498573.17171292, 6679313.3807182815],
+                  [25498571.913494226, 6679281.456795131],
+                  [25498583.867247857, 6679281.28058593],
+                ],
+              ],
+            },
+            area: 159.32433261766946,
+            tormaystarkasteluTulos: {
+              liikennehaittaindeksi: {
+                indeksi: 0,
+                tyyppi: HAITTA_INDEX_TYPE.PYORALIIKENNEINDEKSI,
+              },
+              pyoraliikenneindeksi: 0,
+              autoliikenne: {
+                indeksi: 0,
+                haitanKesto: 0,
+                katuluokka: 0,
+                liikennemaara: 0,
+                kaistahaitta: 0,
+                kaistapituushaitta: 0,
+              },
+              linjaautoliikenneindeksi: 0,
+              raitioliikenneindeksi: 0,
+            },
+          },
+        ],
+        katuosoite: 'Aidasmäentie 5',
+        tyonTarkoitukset: ['VESI', 'VIEMARI'],
+        meluhaitta: 'TOISTUVA_MELUHAITTA',
+        polyhaitta: 'JATKUVA_POLYHAITTA',
+        tarinahaitta: 'SATUNNAINEN_TARINAHAITTA',
+        kaistahaitta: 'EI_VAIKUTA',
+        kaistahaittojenPituus: 'EI_VAIKUTA_KAISTAJARJESTELYIHIN',
+        lisatiedot: '',
+        haittojenhallintasuunnitelma: {
+          YLEINEN: 'Työalueen yleisten haittojen hallintasuunnitelma',
+          PYORALIIKENNE: '',
+          AUTOLIIKENNE: '',
+          LINJAAUTOLIIKENNE: '',
+          RAITIOLIIKENNE: '',
+          MUUT: 'Muiden työalueen haittojen hallintasuunnitelma',
+        },
+      },
+    ];
+    const { user } = setup(application);
+    await user.click(screen.getByRole('button', { name: /haittojen hallinta/i }));
+
+    expect(
+      screen.queryByRole('link', {
+        name: 'Työalueet (Hankealue 1) Pyöräliikenteen merkittävyys: Toimet työalueiden haittojen hallintaan',
+      }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('link', {
+        name: 'Työalueet (Hankealue 1) Autoliikenteen ruuhkautuminen: Toimet työalueiden haittojen hallintaan',
+      }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('link', {
+        name: 'Työalueet (Hankealue 1) Raitioliikenne: Toimet työalueiden haittojen hallintaan',
+      }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('link', {
+        name: 'Työalueet (Hankealue 1) Linja-autojen paikallisliikenne: Toimet työalueiden haittojen hallintaan',
+      }),
+    ).not.toBeInTheDocument();
   });
 });

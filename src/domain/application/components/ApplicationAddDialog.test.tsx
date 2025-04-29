@@ -11,7 +11,7 @@ test('Continue to application button should be disabled if application type is n
 
   expect(screen.getByRole('button', { name: /luo hakemus/i })).toBeDisabled();
 
-  await user.click(screen.getByRole('button', { name: /hakemustyyppi/i }));
+  await user.click(screen.getByRole('combobox', { name: /hakemustyyppi/i }));
   await user.click(screen.getByText('Johtoselvitys'));
 
   expect(screen.getByRole('button', { name: /luo hakemus/i })).not.toBeDisabled();
@@ -23,7 +23,7 @@ test('Navigates to cable application correctly', async () => {
   function handleClose() {}
   const { user } = render(<ApplicationAddDialog hanke={hanke} isOpen onClose={handleClose} />);
 
-  await user.click(screen.getByRole('button', { name: /hakemustyyppi/i }));
+  await user.click(screen.getByRole('combobox', { name: /hakemustyyppi/i }));
   await user.click(screen.getByText('Johtoselvitys'));
   await user.click(screen.getByRole('button', { name: /luo hakemus/i }));
 
@@ -37,7 +37,7 @@ test('Application type labels are correct', async () => {
   function handleClose() {}
   const { user } = render(<ApplicationAddDialog hanke={hanke} isOpen onClose={handleClose} />);
 
-  await user.click(screen.getByRole('button', { name: /hakemustyyppi/i }));
+  await user.click(screen.getByRole('combobox', { name: /hakemustyyppi/i }));
 
   expect(screen.getByText('Johtoselvitys')).toBeInTheDocument();
   expect(screen.getByText('Kaivuilmoitus (ja johtoselvitys)')).toBeInTheDocument();

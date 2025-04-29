@@ -1,10 +1,11 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import {
-  Button,
+  ButtonVariant,
   IconCross,
   IconEnvelope,
   IconSaveDiskette,
   Notification,
+  NotificationSize,
   StepState,
 } from 'hds-react';
 import { FormProvider, useForm, FieldPath } from 'react-hook-form';
@@ -37,7 +38,6 @@ import {
   JohtoselvitysCreateData,
   JohtoselvitysData,
   JohtoselvitysUpdateData,
-  PaperDecisionReceiver,
 } from '../application/types/application';
 import Attachments from './Attachments';
 import ConfirmationDialog from '../../common/components/HDSConfirmationDialog/ConfirmationDialog';
@@ -46,8 +46,8 @@ import { APPLICATION_ID_STORAGE_KEY } from '../application/constants';
 import { usePermissionsForHanke } from '../hanke/hankeUsers/hooks/useUserRightsForHanke';
 import useSaveApplication from '../application/hooks/useSaveApplication';
 import useNavigateToApplicationView from '../application/hooks/useNavigateToApplicationView';
-import useSendApplication from '../application/hooks/useSendApplication';
 import ApplicationSendDialog from '../application/components/ApplicationSendDialog';
+import Button from '../../common/components/button/Button';
 
 type Props = {
   hankeData?: HankeData;
@@ -134,9 +134,6 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
 
   const navigateToApplicationView = useNavigateToApplicationView();
 
-  const [attachmentsUploading, setAttachmentsUploading] = useState(false);
-
-  const [isSendButtonDisabled, setIsSendButtonDisabled] = useState(false);
   const [showSendDialog, setShowSendDialog] = useState(false);
 
   const {
@@ -185,28 +182,13 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
     },
   });
 
-  const applicationSendMutation = useSendApplication({
-    onSuccess(data) {
-      navigateToApplicationView(data.id?.toString());
-    },
-  });
-
-  async function onSendApplication(pdr: PaperDecisionReceiver | undefined | null) {
-    const data = getValues();
-    applicationSendMutation.mutate({
-      id: data.id as number,
-      paperDecisionReceiver: pdr,
-    });
-    setIsSendButtonDisabled(true);
-    setShowSendDialog(false);
-  }
-
   function openSendDialog() {
     setShowSendDialog(true);
   }
 
-  function closeSendDialog() {
+  function closeSendDialog(id?: number | null) {
     setShowSendDialog(false);
+    navigateToApplicationView(id?.toString());
   }
 
   function saveCableApplication(handleSuccess?: (data: Application<JohtoselvitysData>) => void) {
@@ -258,10 +240,6 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
       });
     }
     saveCableApplication(handleSuccess);
-  }
-
-  function handleAttachmentUpload(isUploading: boolean) {
-    setAttachmentsUploading(isUploading);
   }
 
   function closeAttachmentUploadErrorDialog() {
@@ -338,7 +316,6 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
           <Attachments
             existingAttachments={existingAttachments}
             attachmentsLoadError={attachmentsLoadError}
-            onFileUpload={handleAttachmentUpload}
           />
         ),
         label: t('hankePortfolio:tabit:liitteet'),
@@ -374,8 +351,6 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
     return changeFormStep(changeStep, pageFieldsToValidate[stepIndex], trigger);
   }
 
-  const attachmentsUploadingText: string = t('common:components:fileUpload:loadingText');
-
   return (
     <FormProvider {...formContext}>
       {/* Notifications for saving application */}
@@ -396,8 +371,6 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
         heading={t('johtoselvitysForm:pageHeader')}
         subHeading={hankeNameText}
         formSteps={formSteps}
-        isLoading={attachmentsUploading}
-        isLoadingText={attachmentsUploadingText}
         onStepChange={handleStepChange}
         onSubmit={handleSubmit(openSendDialog)}
         stepChangeValidator={validateStepChange}
@@ -420,22 +393,14 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
           const disableSendButton = showSendButton && !isContact;
 
           const saveAndQuitIsLoading =
-            applicationCreateMutation.isLoading ||
-            applicationUpdateMutation.isLoading ||
-            attachmentsUploading;
-          const saveAndQuitLoadingText = attachmentsUploading
-            ? attachmentsUploadingText
-            : t('common:buttons:savingText');
+            applicationCreateMutation.isLoading || applicationUpdateMutation.isLoading;
+          const saveAndQuitLoadingText = t('common:buttons:savingText');
           return (
             <FormActions
               activeStepIndex={activeStepIndex}
               totalSteps={formSteps.length}
               onPrevious={handlePrevious}
               onNext={handleNext}
-              previousButtonIsLoading={attachmentsUploading}
-              previousButtonLoadingText={attachmentsUploadingText}
-              nextButtonIsLoading={attachmentsUploading}
-              nextButtonLoadingText={attachmentsUploadingText}
             >
               <ApplicationCancel
                 applicationId={getValues('id')}
@@ -447,8 +412,8 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
               />
 
               <Button
-                variant="secondary"
-                iconLeft={<IconSaveDiskette aria-hidden="true" />}
+                variant={ButtonVariant.Secondary}
+                iconStart={<IconSaveDiskette />}
                 data-testid="save-form-btn"
                 onClick={handleSaveAndQuit}
                 isLoading={saveAndQuitIsLoading}
@@ -457,18 +422,13 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
                 {t('hankeForm:saveDraftButton')}
               </Button>
               {showSendButton && (
-                <Button
-                  type="submit"
-                  iconLeft={<IconEnvelope aria-hidden="true" />}
-                  loadingText={t('common:buttons:sendingText')}
-                  disabled={disableSendButton || isSendButtonDisabled}
-                >
+                <Button type="submit" iconStart={<IconEnvelope />} disabled={disableSendButton}>
                   {t('hakemus:buttons:sendApplication')}
                 </Button>
               )}
               {disableSendButton && (
                 <Notification
-                  size="small"
+                  size={NotificationSize.Small}
                   style={{ marginTop: 'var(--spacing-xs)' }}
                   type="info"
                   label={t('hakemus:notifications:sendApplicationDisabled')}
@@ -495,11 +455,9 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
       />
 
       <ApplicationSendDialog
-        type="CABLE_REPORT"
+        application={getValues()}
         isOpen={showSendDialog}
-        isLoading={applicationSendMutation.isLoading}
         onClose={closeSendDialog}
-        onSend={onSendApplication}
       />
     </FormProvider>
   );

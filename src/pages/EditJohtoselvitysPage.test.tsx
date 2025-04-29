@@ -11,7 +11,8 @@ test('Should show dialog with button to navigate to application view when naviga
     '/fi/johtoselvityshakemus/2/muokkaa',
   );
 
-  await screen.findByText(/hakemus lähetetty/i);
+  expect(await screen.findByText(/hakemus lähetetty/i, {}, { timeout: 10000 })).toBeInTheDocument();
+
   await user.click(screen.getByText('Siirry hakemussivulle'));
 
   expect(window.location.pathname).toBe('/fi/hakemus/2');

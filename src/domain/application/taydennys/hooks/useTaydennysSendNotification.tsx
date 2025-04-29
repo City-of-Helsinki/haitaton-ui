@@ -1,5 +1,4 @@
-import { Trans, useTranslation } from 'react-i18next';
-import { Link } from 'hds-react';
+import { useTranslation } from 'react-i18next';
 import { useGlobalNotification } from '../../../../common/components/globalNotification/GlobalNotificationContext';
 
 /**
@@ -22,26 +21,5 @@ export default function useTaydennysSendNotification() {
     });
   }
 
-  function showSendError() {
-    const sendErrorMessage = (
-      <Trans i18nKey="taydennys:notifications:sendErrorText">
-        <p>
-          Lähettämisessä tapahtui virhe. Yritä myöhemmin uudelleen tai ota yhteyttä Haitattoman
-          tekniseen tukeen sähköpostiosoitteessa
-          <Link href="mailto:haitatontuki@hel.fi">haitatontuki@hel.fi</Link>.
-        </p>
-      </Trans>
-    );
-
-    setNotification(true, {
-      position: 'top-right',
-      dismissible: true,
-      label: t('taydennys:notifications:sendErrorLabel'),
-      message: sendErrorMessage,
-      type: 'error',
-      closeButtonLabelText: t('common:components:notification:closeButtonLabelText'),
-    });
-  }
-
-  return { showSendSuccess, showSendError };
+  return { showSendSuccess };
 }

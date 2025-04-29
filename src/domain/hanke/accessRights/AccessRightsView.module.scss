@@ -8,16 +8,12 @@
 .header {
   background-color: var(--color-summer-light);
   padding-top: var(--spacing-2-xl);
-  padding-bottom: var(--spacing-xl);
+  padding-bottom: var(--spacing-2-xl);
 }
 
 .mainContent {
   padding-top: var(--spacing-m);
   padding-bottom: var(--spacing-m);
-}
-
-.breadcrumb > nav {
-  margin: 0 !important;
 }
 
 .searchInput {
@@ -54,13 +50,4 @@
 
 .invitationSendButton {
   vertical-align: middle;
-}
-
-.pagination {
-  margin-top: var(--spacing-xs);
-  margin-bottom: var(--spacing-s);
-
-  * {
-    box-sizing: content-box;
-  }
 }

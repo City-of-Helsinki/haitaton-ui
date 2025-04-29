@@ -2,21 +2,11 @@ import React, { useState } from 'react';
 import PageMeta from '../../components/PageMeta';
 import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
 import SideNav from './SideNav';
-import styles from './WorkInstructions.module.scss';
-import BgColorOverride from './BgColorOverride';
-import { Outlet, useOutletContext } from 'react-router-dom';
-import Breadcrumbs from './Breadcrumbs';
-import { BreadcrumbListItem, Container } from 'hds-react';
-
-type ContextType = {
-  breadcrumbs: BreadcrumbListItem[];
-  setBreadcrumbs: React.Dispatch<React.SetStateAction<BreadcrumbListItem[]>>;
-};
-
-// use in child routes to set breadcrumbs
-export function useBreadcrumbs() {
-  return useOutletContext<ContextType>();
-}
+import styles from '../StaticContent.module.scss';
+import BgColorOverride from '../BgColorOverride';
+import { Outlet } from 'react-router-dom';
+import Breadcrumbs from '../../../common/components/breadcrumbs/Breadcrumbs';
+import { Container } from 'hds-react';
 
 const WorkInstructionsPage: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { WORKINSTRUCTIONS } = useLocalizedRoutes();

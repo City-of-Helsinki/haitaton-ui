@@ -76,7 +76,7 @@ test('Pagination works', async () => {
   render(<AccessRightsViewContainer hankeTunnus="HAI22-2" />);
 
   await waitForLoadingToFinish();
-  fireEvent.click(screen.getByTestId('hds-pagination-next-button'));
+  fireEvent.click(screen.getByRole('button', { name: /seuraava/i }));
 
   expect((screen.getByRole('table') as HTMLTableElement).tBodies[0].rows).toHaveLength(2);
   expect(screen.getAllByText(`${users[10].etunimi} ${users[10].sukunimi}`)).toHaveLength(2);
@@ -411,7 +411,6 @@ test('Should not show delete user button for user who is the only with all permi
   render(
     <AccessRightsView
       hankeTunnus="HAI22-2"
-      hankeName="Aidasmäentien vesihuollon rakentaminen"
       hankeUsers={users.slice(0, 2) as HankeUser[]}
       signedInUser={USER_ALL}
     />,
@@ -491,7 +490,6 @@ test('User should be able to delete themselves', async () => {
   const { user } = render(
     <AccessRightsView
       hankeTunnus="HAI22-2"
-      hankeName="Aidasmäentien vesihuollon rakentaminen"
       hankeUsers={hankeUsers}
       signedInUser={{ ...USER_ALL, hankeKayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6' }}
     />,
@@ -512,4 +510,38 @@ test('User should be able to delete themselves', async () => {
   expect(location.pathname).toBe('/fi/hankesalkku');
 
   await reset();
+});
+
+describe('Completed hanke', () => {
+  test('Does not show edit buttons', async () => {
+    render(<AccessRightsViewContainer hankeTunnus="HAI22-12" />);
+    await waitForLoadingToFinish();
+
+    expect(screen.queryByRole('img', { name: 'Muokkaa tietoja' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Muokkaa tietoja' })).not.toBeInTheDocument();
+  });
+
+  test('Does not show delete buttons', async () => {
+    render(<AccessRightsViewContainer hankeTunnus="HAI22-12" />);
+    await waitForLoadingToFinish();
+
+    expect(screen.queryByRole('img', { name: 'Poista käyttäjä' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Poista käyttäjä' })).not.toBeInTheDocument();
+  });
+
+  test('Should show resending invitation button', async () => {
+    const { user } = render(<AccessRightsViewContainer hankeTunnus="HAI22-12" />);
+    await waitForLoadingToFinish();
+
+    const invitationMenus = await screen.findAllByRole('button', {
+      name: 'Käyttäjävalikko',
+    });
+    const invitationMenu = invitationMenus[0];
+    await user.click(invitationMenu);
+    expect(
+      await screen.findByRole('menuitem', {
+        name: 'Lähetä kutsulinkki uudelleen',
+      }),
+    ).toBeInTheDocument();
+  });
 });

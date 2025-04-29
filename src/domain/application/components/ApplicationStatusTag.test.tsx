@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { fireEvent, render, screen } from '../../../testUtils/render';
+import { render, screen } from '../../../testUtils/render';
 import ApplicationStatusTag from './ApplicationStatusTag';
 import { AlluStatusStrings } from '../types/application';
 
@@ -127,13 +127,12 @@ function TestComponent({ changedStatus }: { changedStatus: AlluStatusStrings }) 
 }
 
 test('Should change background color from default to yellow when status changes from null to PENDING', async () => {
-  render(<TestComponent changedStatus="PENDING" />);
-  const tag = screen.getByTestId('application-status-tag');
+  const { user } = render(<TestComponent changedStatus="PENDING" />);
   const button = screen.getByRole('button');
 
-  expect(tag).not.toHaveClass('bgYellow');
+  expect(screen.getByTestId('application-status-tag')).not.toHaveClass('bgYellow');
 
-  fireEvent.click(button);
+  await user.click(button);
 
-  expect(tag).toHaveClass('bgYellow');
+  expect(screen.getByTestId('application-status-tag')).toHaveClass('bgYellow');
 });

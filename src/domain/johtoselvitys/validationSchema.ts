@@ -8,6 +8,7 @@ import {
 } from '../application/yupSchemas';
 import { Taydennys, Taydennyspyynto } from '../application/taydennys/types';
 import { FORM_PAGES } from '../forms/types';
+import { Muutosilmoitus } from '../application/muutosilmoitus/types';
 
 const addressSchema = yup
   .object({
@@ -74,6 +75,7 @@ export const validationSchema: yup.ObjectSchema<JohtoselvitysFormValues> = yup.o
   taydennys: yup.mixed<Taydennys<JohtoselvitysData>>().nullable(),
   selfIntersectingPolygon: yup.boolean().isFalse(),
   geometriesChanged: yup.boolean(),
+  muutosilmoitus: yup.mixed<Muutosilmoitus<JohtoselvitysData>>().nullable(),
 });
 
 export const newJohtoselvitysSchema = yup.object({

@@ -1,7 +1,16 @@
 import React, { useCallback, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
-import { Fieldset, Notification, Tab, TabList, TabPanel, Tabs, Tooltip } from 'hds-react';
+import {
+  Fieldset,
+  Notification,
+  NotificationSize,
+  Tab,
+  TabList,
+  TabPanel,
+  Tabs,
+  Tooltip,
+} from 'hds-react';
 import { Box, Flex, Grid } from '@chakra-ui/react';
 import { Feature } from 'ol';
 import { Geometry, Polygon } from 'ol/geom';
@@ -39,10 +48,9 @@ import Dropdown from '../../common/components/dropdown/Dropdown';
 import DropdownMultiselect from '../../common/components/dropdown/DropdownMultiselect';
 import TextArea from '../../common/components/textArea/TextArea';
 import DrawProvider from '../../common/components/map/modules/draw/DrawProvider';
-import { formatFeaturesToHankeGeoJSON, getTotalSurfaceArea } from '../map/utils';
+import { formatFeaturesToHankeGeoJSON, getTotalSurfaceArea, featureContains } from '../map/utils';
 import TyoalueTable from './components/TyoalueTable';
 import AreaSelectDialog from './components/AreaSelectDialog';
-import booleanContains from '@turf/boolean-contains';
 import { getAreaDefaultName } from '../application/utils';
 import HaittaIndexes from '../common/haittaIndexes/HaittaIndexes';
 import useHaittaIndexes from '../hanke/hooks/useHaittaIndexes';
@@ -278,7 +286,7 @@ export default function Areas({ hankeData, hankkeenHakemukset, originalHakemus }
     // Check if the new tyoalue is contained in any of the existing hanke areas
     const hankeAlueetContainingNewArea = hankeData.alueet.filter((alue) => {
       const hankeAlueFeature = alue.geometriat?.featureCollection.features[0];
-      return hankeAlueFeature && booleanContains(hankeAlueFeature, newAreaPolygon);
+      return hankeAlueFeature && featureContains(hankeAlueFeature, newAreaPolygon);
     });
     setHankeAreasContainingNewArea(hankeAlueetContainingNewArea);
 
@@ -329,6 +337,8 @@ export default function Areas({ hankeData, hankkeenHakemukset, originalHakemus }
             changedTyoalue.tormaystarkasteluTulos = data;
             feature.set('liikennehaittaindeksi', data.liikennehaittaindeksi.indeksi);
             refreshHaittaIndexesChanged(changedApplicationArea);
+            const existingAreaIndex = wathcApplicationAreas.indexOf(changedApplicationArea);
+            setSelectedTabIndex(existingAreaIndex);
           },
         });
       }
@@ -386,18 +396,12 @@ export default function Areas({ hankeData, hankkeenHakemukset, originalHakemus }
             </p>
             <p>
               Jos haluat käyttää koko hankealuetta työalueena, valitse hankealue kartalta
-              aktiviiseksi ja hanketietolaatikosta "Käytä työalueena".
+              aktiviiseksi ja hanketietolaatikosta "Kopioi työalueeksi".
             </p>
             <p>
               Voit lisätä samalle hakemukselle useampia alueita mikäli niiden aikaväli on sama. Jos
               haluat ilmoittaa useamman alueen eri aikaväleillä, tulee sinun tehdä erillinen
               hakemus.
-            </p>
-            <p>
-              Kartan vasemmassa reunassa olevilla kulkumuotovalitsimilla voit tarkastella hanke- ja
-              työalueiden haittaindeksejä tietylle kulkumuodolle. Kaikki kulkumuodot ovat oletuksena
-              aktiivisina, voit vaihtaa näkyvien kulkumuotojen määrää klikkaamalla ikoneja. Kartalla
-              näkyy valittujen kulkumuotojen kriittisin indeksiväri.
             </p>
             <p>
               Kaikki tähdellä * merkityt kentät ovat hakemuksen lähettämisen kannalta pakollisia.
@@ -473,7 +477,10 @@ export default function Areas({ hankeData, hankkeenHakemukset, originalHakemus }
 
         {totalSurfaceArea > 0 && (
           <Box marginBottom="var(--spacing-m)">
-            <Notification label={t('hakemus:labels:totalSurfaceArea')} size="small">
+            <Notification
+              label={t('hakemus:labels:totalSurfaceArea')}
+              size={NotificationSize.Small}
+            >
               {t('hakemus:labels:totalSurfaceAreaLong')} {totalSurfaceArea} m²
             </Notification>
           </Box>
@@ -483,7 +490,7 @@ export default function Areas({ hankeData, hankkeenHakemukset, originalHakemus }
           <Box marginBottom="var(--spacing-m)">
             <Notification
               type="alert"
-              size="small"
+              size={NotificationSize.Small}
               label={t('hanke:alue:haittaIndexesChangedLabel')}
             >
               {t('hanke:alue:haittaIndexesChanged')}

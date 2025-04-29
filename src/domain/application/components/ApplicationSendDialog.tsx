@@ -1,14 +1,22 @@
 import {
-  Button,
+  ButtonVariant,
   Dialog,
   IconCheck,
   IconQuestionCircle,
+  Link,
   Notification,
+  NotificationSize,
   ToggleButton,
 } from 'hds-react';
 import React from 'react';
-import { useTranslation } from 'react-i18next';
-import { ApplicationSendData, ApplicationType, PaperDecisionReceiver } from '../types/application';
+import { Trans, useTranslation } from 'react-i18next';
+import {
+  Application,
+  ApplicationSendData,
+  JohtoselvitysData,
+  KaivuilmoitusData,
+  PaperDecisionReceiver,
+} from '../types/application';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { sendSchema } from '../yupSchemas';
@@ -16,54 +24,109 @@ import { Box, Grid, GridItem } from '@chakra-ui/react';
 import Text from '../../../common/components/text/Text';
 import TextInput from '../../../common/components/textInput/TextInput';
 import { useFeatureFlags } from '../../../common/components/featureFlags/FeatureFlagsContext';
+import useSendApplication from '../hooks/useSendApplication';
+import useApplicationSendNotification from '../hooks/useApplicationSendNotification';
+import { KaivuilmoitusMuutosilmoitusFormValues } from '../../kaivuilmoitusMuutosilmoitus/types';
+import { Muutosilmoitus } from '../muutosilmoitus/types';
+import Button from '../../../common/components/button/Button';
 
 type Props = {
-  type: ApplicationType;
+  application: Application;
+  muutosilmoitus?:
+    | KaivuilmoitusMuutosilmoitusFormValues
+    | Muutosilmoitus<KaivuilmoitusData | JohtoselvitysData>
+    | null;
   isOpen: boolean;
-  isLoading: boolean;
-  onClose: () => void;
-  onSend: (paperDecisionReceiver?: PaperDecisionReceiver | null) => void;
+  onClose: (id?: number | null) => void;
 };
 
-const ApplicationSendDialog: React.FC<Props> = ({ type, isOpen, isLoading, onClose, onSend }) => {
+/**
+ * A dialog for sending an application or muutosilmoitus to Allu.
+ *
+ * @param application
+ * @param muutosilmoitus
+ * @param isOpen
+ * @param onClose
+ * @constructor
+ */
+const ApplicationSendDialog: React.FC<Props> = ({
+  application,
+  muutosilmoitus,
+  isOpen,
+  onClose,
+}) => {
   const { t } = useTranslation();
+  const { applicationType } = application;
+  const { id, applicationData } = muutosilmoitus ?? application;
+  const isMuutosilmoitus = muutosilmoitus != null;
   const features = useFeatureFlags();
+  const [showPaperDecision, setShowPaperDecision] = React.useState(
+    applicationData.paperDecisionReceiver != null,
+  );
+  const [originalPaperDecisionReceiver] = React.useState(
+    applicationData.paperDecisionReceiver || null,
+  );
   const formContext = useForm<ApplicationSendData>({
+    mode: 'onChange',
     resolver: yupResolver(sendSchema),
     defaultValues: {
-      orderPaperDecision: false,
-      paperDecisionReceiver: null,
+      orderPaperDecision: applicationData.paperDecisionReceiver != null,
+      paperDecisionReceiver: applicationData.paperDecisionReceiver ?? null,
     },
   });
 
-  const { handleSubmit, formState, register, watch, setValue, resetField, reset } = formContext;
-  const [orderPaperDecisionChecked] = watch(['orderPaperDecision']);
+  const { handleSubmit, formState, register, setValue, clearErrors } = formContext;
   const isConfirmButtonEnabled = formState.isValid;
-  const dialogTitle = t('hakemus:sendDialog:title');
-  const paperDecisionFeatureEnabled =
-    type === 'EXCAVATION_NOTIFICATION' || features.cableReportPaperDecision;
 
-  async function submitForm(data: ApplicationSendData) {
-    const paperDecisionReceiver = data.orderPaperDecision
-      ? (data.paperDecisionReceiver as PaperDecisionReceiver)
+  const dialogTitle = isMuutosilmoitus
+    ? t('muutosilmoitus:sendDialog:title')
+    : t('hakemus:sendDialog:title');
+  const paperDecisionFeatureEnabled =
+    applicationType === 'EXCAVATION_NOTIFICATION' || features.cableReportPaperDecision;
+
+  const applicationSendMutation = useSendApplication({ isMuutosilmoitus: isMuutosilmoitus });
+  const { showSendSuccess } = useApplicationSendNotification(isMuutosilmoitus);
+
+  async function submitForm(sendData: ApplicationSendData) {
+    const paperDecisionReceiver = sendData.orderPaperDecision
+      ? (sendData.paperDecisionReceiver as PaperDecisionReceiver)
       : null;
-    onSend(paperDecisionReceiver);
-    onClose();
+    applicationSendMutation.mutate(
+      {
+        id: isMuutosilmoitus ? muutosilmoitus.id : (id as number),
+        paperDecisionReceiver: paperDecisionReceiver,
+      },
+      {
+        onSuccess(data) {
+          showSendSuccess();
+          onClose(data.id);
+        },
+      },
+    );
   }
 
   function handleOrderPaperDecisionChange() {
-    const newValue = !orderPaperDecisionChecked;
-    setValue('orderPaperDecision', newValue, {
-      shouldDirty: true,
-    });
+    const newValue = !showPaperDecision;
+    setValue('orderPaperDecision', newValue, { shouldDirty: true, shouldValidate: true });
     if (!newValue) {
-      resetField('paperDecisionReceiver', { defaultValue: null });
+      // Clear the form state value so validation passes
+      setValue('paperDecisionReceiver', null, { shouldDirty: true, shouldValidate: true });
+      clearErrors('paperDecisionReceiver');
+    } else {
+      // Restore the original value if the user toggles back on
+      setValue('paperDecisionReceiver', originalPaperDecisionReceiver, {
+        shouldDirty: true,
+        shouldValidate: true,
+      });
     }
+    setShowPaperDecision(newValue);
   }
 
   function handleClose() {
-    reset();
-    onClose();
+    if (!applicationSendMutation.isLoading) {
+      applicationSendMutation.reset();
+      onClose();
+    }
   }
 
   return (
@@ -72,13 +135,13 @@ const ApplicationSendDialog: React.FC<Props> = ({ type, isOpen, isLoading, onClo
       isOpen={isOpen}
       aria-labelledby={dialogTitle}
       variant="primary"
-      close={onClose}
+      close={handleClose}
       closeButtonLabelText={t('common:ariaLabels:closeButtonLabelText')}
     >
       <Dialog.Header
         id="application-send-title"
         title={dialogTitle}
-        iconLeft={<IconQuestionCircle aria-hidden="true" />}
+        iconStart={<IconQuestionCircle aria-hidden="true" />}
       />
       <FormProvider {...formContext}>
         <form onSubmit={handleSubmit(submitForm)}>
@@ -95,12 +158,13 @@ const ApplicationSendDialog: React.FC<Props> = ({ type, isOpen, isLoading, onClo
                   {...register('orderPaperDecision')}
                   id="orderPaperDecision"
                   label={t('hakemus:sendDialog:orderPaperDecision')}
-                  checked={orderPaperDecisionChecked}
+                  checked={showPaperDecision}
                   onChange={handleOrderPaperDecisionChange}
+                  disabled={applicationSendMutation.isLoading}
                 />
               </Box>
             )}
-            {paperDecisionFeatureEnabled && orderPaperDecisionChecked && (
+            {paperDecisionFeatureEnabled && showPaperDecision && (
               <Box>
                 <Notification label={t('hakemus:sendDialog:paperDecisionNotificationLabel')}>
                   {t('hakemus:sendDialog:paperDecisionNotificationText')}
@@ -117,7 +181,8 @@ const ApplicationSendDialog: React.FC<Props> = ({ type, isOpen, isLoading, onClo
                       {...register('paperDecisionReceiver.name')}
                       name="paperDecisionReceiver.name"
                       label={t('hakemus:sendDialog:name')}
-                      required={orderPaperDecisionChecked}
+                      required={showPaperDecision}
+                      disabled={applicationSendMutation.isLoading}
                     />
                   </GridItem>
                   <GridItem colSpan={2}>
@@ -125,7 +190,8 @@ const ApplicationSendDialog: React.FC<Props> = ({ type, isOpen, isLoading, onClo
                       {...register('paperDecisionReceiver.streetAddress')}
                       name="paperDecisionReceiver.streetAddress"
                       label={t('hakemus:sendDialog:streetAddress')}
-                      required={orderPaperDecisionChecked}
+                      required={showPaperDecision}
+                      disabled={applicationSendMutation.isLoading}
                     />
                   </GridItem>
                   <GridItem colSpan={{ sm: 1, xs: 2 }} colStart={{ sm: 1, xs: 1 }}>
@@ -133,7 +199,8 @@ const ApplicationSendDialog: React.FC<Props> = ({ type, isOpen, isLoading, onClo
                       {...register('paperDecisionReceiver.postalCode')}
                       name="paperDecisionReceiver.postalCode"
                       label={t('hakemus:sendDialog:postalCode')}
-                      required={orderPaperDecisionChecked}
+                      required={showPaperDecision}
+                      disabled={applicationSendMutation.isLoading}
                     />
                   </GridItem>
                   <GridItem colSpan={2} colStart={{ sm: 2, xs: 1 }}>
@@ -141,10 +208,43 @@ const ApplicationSendDialog: React.FC<Props> = ({ type, isOpen, isLoading, onClo
                       {...register('paperDecisionReceiver.city')}
                       name="paperDecisionReceiver.city"
                       label={t('hakemus:sendDialog:city')}
-                      required={orderPaperDecisionChecked}
+                      required={showPaperDecision}
+                      disabled={applicationSendMutation.isLoading}
                     />
                   </GridItem>
                 </Grid>
+              </Box>
+            )}
+            {applicationSendMutation.isError && (
+              <Box paddingTop="var(--spacing-s)">
+                <Notification
+                  type="error"
+                  size={NotificationSize.Small}
+                  label={
+                    isMuutosilmoitus
+                      ? t('muutosilmoitus:notification:sendErrorLabel')
+                      : t('hakemus:notifications:sendErrorLabel')
+                  }
+                >
+                  {isMuutosilmoitus ? (
+                    <Trans i18nKey="muutosilmoitus:notification:sendErrorText">
+                      <p>
+                        Lähettämisessä tapahtui virhe. Yritä myöhemmin uudelleen tai ota yhteyttä
+                        Haitattoman tekniseen tukeen sähköpostiosoitteessa
+                        <Link href="mailto:haitatontuki@hel.fi">haitatontuki@hel.fi</Link>.
+                      </p>
+                    </Trans>
+                  ) : (
+                    <Trans i18nKey="hakemus:notifications:sendErrorText">
+                      <p>
+                        Hakemuksen lähettäminen käsittelyyn epäonnistui. Yritä lähettämistä
+                        myöhemmin uudelleen tai ota yhteyttä Haitattoman tekniseen tukeen
+                        sähköpostiosoitteessa
+                        <Link href="mailto:haitatontuki@hel.fi">haitatontuki@hel.fi</Link>.
+                      </p>
+                    </Trans>
+                  )}
+                </Notification>
               </Box>
             )}
           </Dialog.Content>
@@ -152,14 +252,18 @@ const ApplicationSendDialog: React.FC<Props> = ({ type, isOpen, isLoading, onClo
           <Dialog.ActionButtons>
             <Button
               type="submit"
-              iconLeft={<IconCheck />}
-              isLoading={isLoading}
-              loadingText={t('common:buttons:sendingText')}
+              iconStart={<IconCheck />}
               disabled={!isConfirmButtonEnabled}
+              isLoading={applicationSendMutation.isLoading}
+              loadingText={t('common:buttons:sendingText')}
             >
               {t('common:confirmationDialog:confirmButton')}
             </Button>
-            <Button variant="secondary" onClick={handleClose}>
+            <Button
+              variant={ButtonVariant.Secondary}
+              onClick={handleClose}
+              disabled={applicationSendMutation.isLoading}
+            >
               {t('common:confirmationDialog:cancelButton')}
             </Button>
           </Dialog.ActionButtons>

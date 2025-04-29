@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { Notification } from 'hds-react';
+import { Notification, NotificationSize } from 'hds-react';
 
 type Props = {
   generated?: boolean;
@@ -15,7 +15,7 @@ const HankeGeneratedStateNotification: React.FC<Props> = ({ generated, className
 
   return (
     <Notification
-      size="small"
+      size={NotificationSize.Small}
       className={className}
       label={t('hankePortfolio:generatedStateLabel')}
     >

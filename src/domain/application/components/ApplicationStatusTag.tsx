@@ -13,13 +13,13 @@ function ApplicationStatusTag({ status }: Readonly<{ status: AlluStatusStrings |
   // or finished (valmis) display icon before status text
   let icon = null;
   if (status === null) {
-    icon = <IconAlertCircle style={{ marginRight: 'var(--spacing-2-xs)' }} />;
+    icon = <IconAlertCircle />;
   }
   if (status === AlluStatus.WAITING_INFORMATION) {
-    icon = <IconError style={{ marginRight: 'var(--spacing-2-xs)' }} />;
+    icon = <IconError />;
   }
   if (status === AlluStatus.FINISHED) {
-    icon = <IconCheckCircle style={{ marginRight: 'var(--spacing-2-xs)' }} />;
+    icon = <IconCheckCircle />;
   }
 
   /*
@@ -45,16 +45,19 @@ function ApplicationStatusTag({ status }: Readonly<{ status: AlluStatusStrings |
 
   return (
     <Tag
+      theme={{
+        '--background-color': 'var(--color-black-10)',
+      }}
       className={clsx({
         [styles.bgYellow]: bgYellow,
         [styles.bgGreen]: bgGreen,
         [styles.bgRed]: bgRed,
       })}
       data-testid="application-status-tag"
+      iconStart={icon}
+      placeholder={t('hakemus:labels:applicationState')}
     >
-      <div className={styles.applicationStatusTag}>
-        {icon} {statusText}
-      </div>
+      {statusText}
     </Tag>
   );
 }

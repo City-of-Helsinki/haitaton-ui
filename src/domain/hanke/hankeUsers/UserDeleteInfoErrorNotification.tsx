@@ -1,4 +1,4 @@
-import { Notification } from 'hds-react';
+import { Notification, NotificationSize } from 'hds-react';
 import { useTranslation } from 'react-i18next';
 
 export default function UserDeleteInfoErrorNotification({
@@ -17,7 +17,7 @@ export default function UserDeleteInfoErrorNotification({
       label={t('common:error')}
       closeButtonLabelText={t('common:components:notification:closeButtonLabelText')}
       onClose={onClose}
-      size="small"
+      size={NotificationSize.Small}
     >
       {t('common:error')}
     </Notification>

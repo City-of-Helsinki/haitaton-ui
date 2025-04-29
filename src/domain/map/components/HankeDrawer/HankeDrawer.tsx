@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Vector as VectorSource } from 'ol/source';
 import { VectorSourceEvent } from 'ol/source/Vector';
 import { Feature } from 'ol';
 import Geometry from 'ol/geom/Geometry';
 import { Coordinate } from 'ol/coordinate';
 import { FeatureLike } from 'ol/Feature';
-import { debounce } from 'lodash';
+import { debounce, isEqual } from 'lodash';
 import Map from '../../../../common/components/map/Map';
 import Controls from '../../../../common/components/map/controls/Controls';
 import LayerControl from '../../../../common/components/map/controls/LayerControl';
@@ -24,6 +24,12 @@ import AddressSearchContainer from '../AddressSearch/AddressSearchContainer';
 import OverviewMapControl from '../../../../common/components/map/controls/OverviewMapControl';
 import FitSource from '../interations/FitSource';
 import { styleFunction } from '../../utils/geometryStyle';
+import HakemusLayer from '../Layers/HakemusLayer';
+import { HankkeenHakemus } from '../../../application/types/application';
+import { ModifyEvent } from 'ol/interaction/Modify';
+import { getWorkAreasInsideHankealueFeature } from '../../../hanke/edit/utils';
+import FullScreenControl from '../../../../common/components/map/controls/FullscreenControl';
+import useDrawContext from '../../../../common/components/map/modules/draw/useDrawContext';
 
 type Props = {
   features: Array<Feature | undefined> | undefined;
@@ -32,6 +38,8 @@ type Props = {
   onRemoveFeature?: (feature: Feature<Geometry>) => void;
   center?: Coordinate;
   drawSource?: VectorSource;
+  hankkeenHakemukset: HankkeenHakemus[];
+  restrictDrawingToHakemusAreas?: boolean;
   zoom?: number;
 };
 
@@ -42,11 +50,17 @@ const HankeDrawer: React.FC<React.PropsWithChildren<Props>> = ({
   features,
   center,
   drawSource: existingDrawSource,
+  hankkeenHakemukset,
+  restrictDrawingToHakemusAreas = false,
   zoom = 9,
 }) => {
   const { mapTileLayers, toggleMapTileLayer, handleUpdateGeometryState } = useMapDataLayers();
   const ortoLayerOpacity = mapTileLayers.kantakartta.visible ? 0.5 : 1;
   const [drawSource] = useState<VectorSource>(existingDrawSource || new VectorSource());
+
+  const {
+    actions: { setSelectedFeature },
+  } = useDrawContext();
 
   // Draw existing features
   useEffect(() => {
@@ -100,6 +114,32 @@ const HankeDrawer: React.FC<React.PropsWithChildren<Props>> = ({
     };
   }, [drawSource, handleUpdateGeometryState, onAddFeature, onChangeFeature, onRemoveFeature]);
 
+  const handleModifyEnd = useCallback(
+    (_event: ModifyEvent, originalFeature: Feature | null, modifiedFeature: Feature) => {
+      if (!originalFeature) {
+        return;
+      }
+      const workAreasInsideOriginalHankealueFeature = getWorkAreasInsideHankealueFeature(
+        formatFeaturesToHankeGeoJSON([originalFeature]).features[0],
+        hankkeenHakemukset,
+      );
+      const workAreasInsideModifiedHankealueFeature = getWorkAreasInsideHankealueFeature(
+        formatFeaturesToHankeGeoJSON([modifiedFeature]).features[0],
+        hankkeenHakemukset,
+      );
+      if (
+        !isEqual(workAreasInsideModifiedHankealueFeature, workAreasInsideOriginalHankealueFeature)
+      ) {
+        // If original hankealue feature has different work area features than modified feature,
+        // revert back to original geometry
+        modifiedFeature.setGeometry(originalFeature.getGeometry());
+      } else {
+        setSelectedFeature(modifiedFeature);
+      }
+    },
+    [hankkeenHakemukset, setSelectedFeature],
+  );
+
   return (
     <>
       <div
@@ -112,26 +152,30 @@ const HankeDrawer: React.FC<React.PropsWithChildren<Props>> = ({
           mapClassName={styles.mapContainer__inner}
           showAttribution={false}
         >
-          <AddressSearchContainer position={{ top: '1rem', left: '1rem' }} zIndex={1000} />
+          <AddressSearchContainer position={{ top: '1rem', left: '1rem' }} zIndex={100} />
 
-          <OverviewMapControl className={hankeDrawerStyles.overviewMap} />
+          <FullScreenControl />
+
+          <OverviewMapControl />
 
           {mapTileLayers.kantakartta.visible && <Kantakartta />}
           {mapTileLayers.ortokartta.visible && <Ortokartta opacity={ortoLayerOpacity} />}
-          <VectorLayer
-            source={drawSource}
-            zIndex={100}
-            className="drawLayer"
-            style={styleFunction}
-          />
+          <VectorLayer source={drawSource} zIndex={1} className="drawLayer" style={styleFunction} />
+
+          {hankkeenHakemukset?.map((hakemus) => (
+            <HakemusLayer key={hakemus.id} hakemusId={hakemus.id!} layerStyle={styleFunction} />
+          ))}
 
           <FitSource source={drawSource} />
 
           <Controls>
-            <DrawModule />
+            <DrawModule
+              handleModifyEnd={restrictDrawingToHakemusAreas ? handleModifyEnd : undefined}
+            />
             <LayerControl
               tileLayers={Object.values(mapTileLayers)}
               onClickTileLayer={(id: MapTileLayerId) => toggleMapTileLayer(id)}
+              className={hankeDrawerStyles.layerControl}
             />
           </Controls>
         </Map>
