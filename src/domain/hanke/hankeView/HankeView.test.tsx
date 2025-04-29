@@ -19,9 +19,7 @@ function getViewPermissionForUser() {
 
 test('Draft state notification is rendered when hanke is in draft state', async () => {
   render(<HankeViewContainer hankeTunnus="HAI22-1" />);
-
   await waitForLoadingToFinish();
-  screen.debug(undefined, 1000000);
   const draftStateElement = screen.getByTestId('hankeDraftStateNotification');
   const { getByRole } = within(draftStateElement);
 
