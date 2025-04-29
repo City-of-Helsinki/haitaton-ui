@@ -15,6 +15,7 @@ import { calculateTotalSurfaceArea } from './utils';
 import AttachmentSummary from './components/AttachmentSummary';
 import useHankeAttachments from '../hankeAttachments/useHankeAttachments';
 import AlertBulletin from './components/AlertBulletin';
+import HaittojenhallintaSummary from './components/HaittojenhallintaSummary';
 
 type Props = {
   formData: HankeDataFormState;
@@ -42,7 +43,6 @@ const HankeFormSummary: React.FC<Props> = ({ formData }) => {
       <BasicInformationSummary formData={formData} />
 
       <SectionTitle>{t('form:labels:areas')}</SectionTitle>
-
       {formData.alueet !== undefined && formData.alueet?.length > 0 ? (
         <FormSummarySection>
           <SectionItemTitle>{t('hanke:alue:totalSurfaceArea')}</SectionItemTitle>
@@ -60,8 +60,16 @@ const HankeFormSummary: React.FC<Props> = ({ formData }) => {
         <AlertBulletin info={t('hankeForm:hankkeenYhteenvetoForm:dataNotFound')} />
       )}
 
-      <SectionTitle>{t('form:yhteystiedot:header')}</SectionTitle>
+      <SectionTitle>{t('form:headers:haittojenHallinta')}</SectionTitle>
+      {formData.alueet !== undefined && formData.alueet?.length > 0 ? (
+        <Box mb="var(--spacing-l)">
+          <HaittojenhallintaSummary hankealueet={formData.alueet} />
+        </Box>
+      ) : (
+        <AlertBulletin info={t('hankeForm:hankkeenYhteenvetoForm:dataNotFound')} />
+      )}
 
+      <SectionTitle>{t('form:yhteystiedot:header')}</SectionTitle>
       {contactAmount > 0 ? (
         <FormSummarySection>
           {formData.omistajat.length > 0 && (

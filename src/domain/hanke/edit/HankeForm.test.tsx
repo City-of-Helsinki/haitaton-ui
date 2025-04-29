@@ -1067,6 +1067,39 @@ describe('Selecting user in user name search input', () => {
   });
 });
 
+describe('Summary page', () => {
+  test('Should show nuisance management summary', async () => {
+    const hanke = hankkeet[2] as HankeDataFormState;
+    const { user } = render(
+      <HankeForm formData={hanke} onIsDirtyChange={() => ({})} onFormClose={() => ({})}>
+        <></>
+      </HankeForm>,
+    );
+
+    await user.click(screen.getByRole('button', { name: /yhteenveto/i }));
+    expect(await screen.findByText('Vaihe 6/6: Yhteenveto')).toBeInTheDocument();
+    expect(await screen.findAllByText('Haittojen hallinta')).toHaveLength(2);
+    expect(await screen.findAllByText('Hankealue 1')).toHaveLength(2);
+    expect(await screen.findByText('Toimet haittojen hallintaan')).toBeInTheDocument();
+    expect(await screen.findByText('Yleisten haittojen hallintasuunnitelma')).toBeInTheDocument();
+    expect(await screen.findByText('Pyöräliikenteen merkittävyys')).toBeInTheDocument();
+    expect(
+      await screen.findByText('Pyöräliikenteelle koituvien haittojen hallintasuunnitelma'),
+    ).toBeInTheDocument();
+    expect(await screen.findByText('Autoliikenteen ruuhkautuminen')).toBeInTheDocument();
+    expect(
+      await screen.findByText('Autoliikenteelle koituvien haittojen hallintasuunnitelma'),
+    ).toBeInTheDocument();
+    expect(await screen.findByText('Raitioliikenne')).toBeInTheDocument();
+    expect(
+      await screen.findByText('Raitioliikenteelle koituvien haittojen hallintasuunnitelma'),
+    ).toBeInTheDocument();
+    expect(await screen.findByText('Linja-autojen paikallisliikenne')).toBeInTheDocument();
+    expect(await screen.findByText('Muut haittojenhallintatoimet')).toBeInTheDocument();
+    expect(await screen.findByText('Muiden haittojen hallintasuunnitelma')).toBeInTheDocument();
+  });
+});
+
 describe('Yhteystieto ytunnus validation', () => {
   describe('Draft hanke', () => {
     test('Should be able to move to next page if ytunnus field is empty', async () => {
