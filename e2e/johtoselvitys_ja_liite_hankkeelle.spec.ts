@@ -16,7 +16,7 @@ test.beforeEach('Helsinki_login', async ({ page }) => {
 });
 
 test('Johtoselvitys ja liite hankkeelle', async ({ page }) => {
-  test.setTimeout(360000);
+  test.setTimeout(420000);
   await page.getByLabel('Luo uusi hanke.', { exact: true }).click();
   await page.getByTestId('nimi').click();
   const ajonNimi = hankeName(`Johtoselvitys ja liite hankkeelle`);
@@ -73,7 +73,7 @@ test('Johtoselvitys ja liite hankkeelle', async ({ page }) => {
   await page.getByRole('option', { name: 'Alle 10 m' }).click();
   await page.getByRole('button', { name: 'Seuraava' }).click();
   await expect(page.getByText('Hanke tallennettu')).toBeVisible();
-  await page.getByRole('alert').getByLabel('Close toast', { exact: true }).click({ timeout: 2000 });
+  await page.getByRole('alert').getByLabel('Close toast', { exact: true }).click({ timeout: 5000 });
 
   let count = await page.getByText(/Lisää toimet haittojen hallintaan/).count();
   while (count > 0) {

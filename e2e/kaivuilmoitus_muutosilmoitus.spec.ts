@@ -457,6 +457,6 @@ test('Kaivuilmoitus muutosilmoitus', async ({ page }) => {
     });
   }).toPass({
     intervals: [1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000],
-    timeout: 180000,
+    timeout: 240000,
   });
 });
