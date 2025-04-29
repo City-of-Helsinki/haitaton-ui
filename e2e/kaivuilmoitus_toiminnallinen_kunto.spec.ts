@@ -70,7 +70,7 @@ test('Kaivuilmoitus => toiminnallinen kunto ja valmis', async ({ page }) => {
   await page.getByRole('option', { name: 'Alle 10 m' }).click();
   await page.getByRole('button', { name: 'Seuraava' }).click();
   await expect(page.getByText('Hanke tallennettu')).toBeVisible();
-  await page.getByRole('alert').getByLabel('Close toast', { exact: true }).click({ timeout: 2000 });
+  await page.getByRole('alert').getByLabel('Close toast', { exact: true }).click({ timeout: 5000 });
 
   let count = await page.getByText(/Lisää toimet haittojen hallintaan/).count();
   while (count > 0) {

@@ -21,13 +21,15 @@ test('Toiminnallisia testejä', async ({ page }) => {
   await expect(page.getByLabel('Työmaan luvat ja ohjeet.')).toBeVisible();
   await expect(page.getByLabel('Maksut. Avautuu uudessa vä')).toBeVisible();
   await expect(page.getByLabel('Tilapäisten liikennejä')).toBeVisible();
-  await page.getByRole('button', { name: '1. Tiedotus eri osapuolille' }).click();
+  await page.getByRole('button', { name: '1. Tiedotus eri osapuolille ja palaute' }).click();
   await expect(
     page.getByText(
       'Tiedotus eri osapuolille ja palauteVaadittava perustasoKerro alueen asukkaille',
     ),
   ).toBeVisible();
-  await page.getByRole('button', { name: '2. Esteettömyys sekä' }).click();
+  await page
+    .getByRole('button', { name: '2. Esteettömyys sekä kulkureittien pinnanlaatu' })
+    .click();
   await expect(
     page.getByText(
       'Esteettömyys sekä kulkureittien pinnanlaatuVaadittava perustasoSulkupuomi tai –',
@@ -137,59 +139,94 @@ test('Toiminnallisia testejä', async ({ page }) => {
 
   // testataan ohjeiden linkkien toimivuus
 
-  await page.getByRole('button', { name: 'Kulkuyhteydet kiinteistöihin' }).click();
+  await page
+    .getByRole('button', { name: 'Kulkuyhteydet kiinteistöihin ja joukkoliikennepysäkeille' })
+    .click();
   const page1Promise = page.waitForEvent('popup');
   await page
     .getByTestId('test-common-nuisances')
-    .getByLabel('8. Julkisen liikenteen ja pys')
+    .getByLabel('8. Julkisen liikenteen ja pysäkkien huomioon ottaminen')
     .click();
   const page1 = await page1Promise;
-  await expect(page1.getByRole('heading', { name: '8. Julkisen liikenteen ja pys' })).toBeVisible();
+  await expect(
+    page1.getByRole('heading', { name: '8. Julkisen liikenteen ja pysäkkien huomioon ottaminen' }),
+  ).toBeVisible({ timeout: 30000 });
   await page1.close();
-
   const page2Promise = page.waitForEvent('popup');
-  await page.getByLabel('9. Kiinteistöjen ja').click();
+  await page
+    .getByTestId('test-common-nuisances')
+    .getByLabel('9. Kiinteistöjen ja liikkeenharjoittajien tarpeet')
+    .click();
   const page2 = await page2Promise;
-  await expect(page2.getByRole('heading', { name: '9. Kiinteistöjen ja' })).toBeVisible();
+  await expect(
+    page2.getByRole('heading', { name: '9. Kiinteistöjen ja liikkeenharjoittajien tarpeet' }),
+  ).toBeVisible({ timeout: 30000 });
   await page2.close();
 
-  await page.getByRole('button', { name: 'Jalankulun turvalliset ja' }).click();
+  await page.getByRole('button', { name: 'Jalankulun turvalliset ja esteettömät reitit' }).click();
   const page3Promise = page.waitForEvent('popup');
-  await page.getByTestId('test-common-nuisances').getByLabel('2. Esteettömyys sekä').click();
+  await page
+    .getByTestId('test-common-nuisances')
+    .getByLabel('2. Esteettömyys sekä kulkureittien pinnanlaatu')
+    .click();
   const page3 = await page3Promise;
-  await expect(page3.getByRole('heading', { name: '2. Esteettömyys sekä' })).toBeVisible();
+  await expect(
+    page3.getByRole('heading', { name: '2. Esteettömyys sekä kulkureittien pinnanlaatu' }),
+  ).toBeVisible({ timeout: 30000 });
   await page3.close();
-
   const page4Promise = page.waitForEvent('popup');
-  await page.getByTestId('test-common-nuisances').getByLabel('3. Jalankulun reitit sekä').click();
+  await page
+    .getByTestId('test-common-nuisances')
+    .getByLabel('3. Jalankulun reitit sekä kadun ylitys')
+    .click();
   const page4 = await page4Promise;
-  await expect(page4.getByRole('heading', { name: '3. Jalankulun reitit sekä' })).toBeVisible();
+  await expect(
+    page4.getByRole('heading', { name: '3. Jalankulun reitit sekä kadun ylitys' }),
+  ).toBeVisible({ timeout: 30000 });
   await page4.close();
-
   const page5Promise = page.waitForEvent('popup');
-  await page.getByRole('link', { name: '5. Jalankulun ja pyörä' }).click();
+  await page
+    .getByTestId('test-common-nuisances')
+    .getByRole('link', { name: '5. Jalankulun ja pyöräliikenteen opastaminen' })
+    .click();
   const page5 = await page5Promise;
-  await expect(page5.getByRole('heading', { name: '5. Jalankulun ja pyörä' })).toBeVisible();
+  await expect(
+    page5.getByRole('heading', { name: '5. Jalankulun ja pyöräliikenteen opastaminen' }),
+  ).toBeVisible({ timeout: 30000 });
   await page5.close();
-
   const page6Promise = page.waitForEvent('popup');
-  await page.getByTestId('test-common-nuisances').getByLabel('6. Kaivannot ja sillat.').click();
+  await page.getByTestId('test-common-nuisances').getByLabel('6. Kaivannot ja sillat').click();
   const page6 = await page6Promise;
-  await expect(page6.getByRole('heading', { name: 'Kaivannot ja sillat' })).toBeVisible();
+  await expect(page6.getByRole('heading', { name: '6. Kaivannot ja sillat' })).toBeVisible({
+    timeout: 30000,
+  });
   await page6.close();
-
   const page7Promise = page.waitForEvent('popup');
-  await page.getByRole('link', { name: '7. Työmaa-aidat ja valaistus' }).click();
+  await page
+    .getByTestId('test-common-nuisances')
+    .getByRole('link', { name: '7. Työmaa-aidat ja valaistus' })
+    .click();
   const page7 = await page7Promise;
-  await expect(page7.getByRole('heading', { name: 'Työmaa-aidat ja valaistus' })).toBeVisible();
+  await expect(page7.getByRole('heading', { name: '7. Työmaa-aidat ja valaistus' })).toBeVisible({
+    timeout: 30000,
+  });
   await page7.close();
 
-  await page.getByRole('button', { name: 'Opastus, liikenteenohjaus ja' }).click();
-  await page.getByRole('button', { name: 'Työalueen suunnittelu ja jä' }).click();
+  await page.getByRole('button', { name: 'Opastus, liikenteenohjaus ja valaistus' }).click();
+  await page
+    .getByRole('button', { name: 'Työalueen suunnittelu ja järjestelyiden ylläpito' })
+    .click();
   const page8Promise = page.waitForEvent('popup');
-  await page.getByTestId('test-common-nuisances').getByLabel('10. Melu-, pöly- ja tärinä').click();
+  await page
+    .getByTestId('test-common-nuisances')
+    .getByLabel('10. Melu-, pöly- ja tärinä sekä työmaan siisteys ja järjestelyiden ylläpito')
+    .click();
   const page8 = await page8Promise;
-  await expect(page8.getByRole('heading', { name: '10. Melu-, pöly- ja tärinä' })).toBeVisible();
+  await expect(
+    page8.getByRole('heading', {
+      name: '10. Melu-, pöly- ja tärinä sekä työmaan siisteys ja järjestelyiden ylläpito',
+    }),
+  ).toBeVisible({ timeout: 30000 });
   await page8.close();
 
   await page.getByRole('button', { name: 'Pelastustoimi' }).click();
@@ -202,9 +239,14 @@ test('Toiminnallisia testejä', async ({ page }) => {
 
   await page.getByRole('button', { name: 'Hankeviestintä' }).click();
   const page9Promise = page.waitForEvent('popup');
-  await page.getByTestId('test-common-nuisances').getByLabel('1. Tiedotus eri osapuolille').click();
+  await page
+    .getByTestId('test-common-nuisances')
+    .getByLabel('1. Tiedotus eri osapuolille ja palaute')
+    .click();
   const page9 = await page9Promise;
-  await expect(page9.getByRole('heading', { name: '1. Tiedotus eri osapuolille' })).toBeVisible();
+  await expect(
+    page9.getByRole('heading', { name: '1. Tiedotus eri osapuolille ja palaute' }),
+  ).toBeVisible({ timeout: 10000 });
   await page9.close();
 
   await page.getByRole('button', { name: 'Erikoiskuljetusten reitit' }).click();
@@ -215,7 +257,7 @@ test('Toiminnallisia testejä', async ({ page }) => {
 
   await page.getByRole('button', { name: 'Sähköautojen latauspisteet' }).click();
 
-  await page.getByRole('button', { name: 'Sähköpotkulautojen pysäkö' }).click();
+  await page.getByRole('button', { name: 'Sähköpotkulautojen pysäköintialueet' }).click();
 
   // Käyttöoikeudet
 
@@ -223,7 +265,7 @@ test('Toiminnallisia testejä', async ({ page }) => {
     .locator('div')
     .filter({ hasText: /^4Yhteystiedot$/ })
     .click();
-  await page.getByRole('alert').getByLabel('Close toast', { exact: true }).click({ timeout: 2000 });
+  await page.getByRole('alert').getByLabel('Close toast', { exact: true }).click({ timeout: 5000 });
 
   await page.getByRole('button', { name: /Yhteyshenkilöt/ }).click();
   await page.getByRole('option', { name: `${perustaja.username}` }).click();
@@ -237,40 +279,41 @@ test('Toiminnallisia testejä', async ({ page }) => {
   // Vaihtele käyttöoikeuksia
   await page.getByTestId('save-form-btn').click();
   await page.getByRole('button', { name: 'Käyttäjähallinta' }).click();
-  await expect(page.getByTestId('kayttooikeustaso-1')).toContainText('Katseluoikeus');
+  const row = page.locator('tr:has-text("Testi Automaatio")');
+  await expect(row.filter({ hasText: 'Katseluoikeus' })).toBeVisible();
 
-  await page.getByTestId('actionButtons-1').getByRole('link', { name: 'Muokkaa tietoja' }).click();
+  await row.getByRole('link', { name: 'Muokkaa tietoja' }).click();
   await page.getByLabel('Katseluoikeus').click();
   await page.getByRole('option', { name: 'Kaikki oikeudet' }).click();
   await page.getByRole('button', { name: 'Tallenna muutokset' }).click();
   await expect(page.getByText('Käyttäjätiedot päivitetty', { exact: true })).toBeVisible();
-  await expect(page.getByTestId('kayttooikeustaso-1')).toContainText('Kaikki oikeudet');
+  await expect(row.filter({ hasText: 'Kaikki oikeudet' })).toBeVisible();
 
-  await page.getByTestId('actionButtons-1').getByRole('link', { name: 'Muokkaa tietoja' }).click();
+  await row.getByRole('link', { name: 'Muokkaa tietoja' }).click();
   await page.getByLabel('Kaikki oikeudet').click();
   await page.getByRole('option', { name: 'Hankkeen ja hakemusten' }).click();
   await page.getByRole('button', { name: 'Tallenna muutokset' }).click();
   await expect(page.getByText('Käyttäjätiedot päivitetty', { exact: true })).toBeVisible();
-  await expect(page.getByTestId('kayttooikeustaso-1')).toContainText('Hankkeen ja hakemusten');
+  await expect(row.filter({ hasText: 'Hankkeen ja hakemusten' })).toBeVisible();
 
-  await page.getByTestId('actionButtons-1').getByRole('link', { name: 'Muokkaa tietoja' }).click();
+  await row.getByRole('link', { name: 'Muokkaa tietoja' }).click();
   await page.getByLabel('Hankkeen ja hakemusten').click();
   await page.getByRole('option', { name: 'Hankemuokkaus' }).click();
   await page.getByRole('button', { name: 'Tallenna muutokset' }).click();
   await expect(page.getByText('Käyttäjätiedot päivitetty', { exact: true })).toBeVisible();
-  await expect(page.getByTestId('kayttooikeustaso-1')).toContainText('Hankemuokkaus');
+  await expect(row.filter({ hasText: 'Hankemuokkaus' })).toBeVisible();
 
-  await page.getByTestId('actionButtons-1').getByRole('link', { name: 'Muokkaa tietoja' }).click();
+  await row.getByRole('link', { name: 'Muokkaa tietoja' }).click();
   await page.getByLabel('Hankemuokkaus').click();
   await page.getByRole('option', { name: 'Hakemusasiointi' }).click();
   await page.getByRole('button', { name: 'Tallenna muutokset' }).click();
   await expect(page.getByText('Käyttäjätiedot päivitetty', { exact: true })).toBeVisible();
-  await expect(page.getByTestId('kayttooikeustaso-1')).toContainText('Hakemusasiointi');
+  await expect(row.filter({ hasText: 'Hakemusasiointi' })).toBeVisible();
 
-  await page.getByTestId('actionButtons-1').getByRole('link', { name: 'Muokkaa tietoja' }).click();
+  await row.getByRole('link', { name: 'Muokkaa tietoja' }).click();
   await page.getByLabel('Hakemusasiointi').click();
   await page.getByRole('option', { name: 'Katseluoikeus' }).click();
   await page.getByRole('button', { name: 'Tallenna muutokset' }).click();
   await expect(page.getByText('Käyttäjätiedot päivitetty', { exact: true })).toBeVisible();
-  await expect(page.getByTestId('kayttooikeustaso-1')).toContainText('Katseluoikeus');
+  await expect(row.filter({ hasText: 'Katseluoikeus' })).toBeVisible();
 });
