@@ -30,7 +30,10 @@ const Card1Basic: React.FC = () => {
         {t('workInstructions:cards:basicLevel')}
       </Text>
       <Puff>
-        <Trans i8nKey="workInstructions:cards:card1:puff">
+        <Trans
+          i18nKey="workInstructions:cards:card1:puff"
+          components={{ strong: <strong />, li: <li />, ul: <ul /> }}
+        >
           <p>
             <strong>
               Kerro alueen asukkaille, yrityksille ja muille toimijoille työmaasta vähintään viikkoa
@@ -285,16 +288,18 @@ const Card2Basic: React.FC = () => {
         </Trans>
       </div>
       <Puff>
-        <p>
-          <strong>
-            Jalankulku- ja pyöräilyreittien pinnoitteen tulee olla tasainen ja reittien riittävän
-            loivia,
-          </strong>{' '}
-          jotta esimerkiksi pyörätuolilla tai lastenvaunujen kanssa pääsee kulkemaan mahdollisimman
-          sujuvasti. Päällystetyllä jalkakäytävällä tai pyörätiellä ei saa olla murskepintaisia
-          osuuksia, jotka vaikeuttavat esimerkiksi pyörätuolilla liikkumista. Väliaikaisella
-          reitillä sallitaan myös tiivistetty kivituhkapäällyste.
-        </p>
+        <Trans i18nKey="workInstructions:cards:card2:puff" components={{ strong: <strong /> }}>
+          <p>
+            <strong>
+              Jalankulku- ja pyöräilyreittien pinnoitteen tulee olla tasainen ja reittien riittävän
+              loivia,
+            </strong>{' '}
+            jotta esimerkiksi pyörätuolilla tai lastenvaunujen kanssa pääsee kulkemaan
+            mahdollisimman sujuvasti. Päällystetyllä jalkakäytävällä tai pyörätiellä ei saa olla
+            murskepintaisia osuuksia, jotka vaikeuttavat esimerkiksi pyörätuolilla liikkumista.
+            Väliaikaisella reitillä sallitaan myös tiivistetty kivituhkapäällyste.
+          </p>
+        </Trans>
       </Puff>
       <div className={styles.content}>
         <Trans
@@ -304,7 +309,7 @@ const Card2Basic: React.FC = () => {
             h3: <h3 />,
             a1: (
               <Link
-                href="https://www.hel.fi/static/hki4all/ohjeet/2022/suraku-kortti-1.pdf"
+                href={t('workInstructions:cards:card2:link1Url')}
                 external
                 openInNewTab
                 openInNewTabAriaLabel={t('common:components:link:openInNewTabAriaLabel')}
@@ -366,7 +371,7 @@ const Card2Basic: React.FC = () => {
             <li>Esteettömän reitin kartta</li>
             <li>Esteettömyyskävely</li>
             <li>Pohja-asfaltointi</li>
-            <li>Täristävät hidastetarrat pyöräilijöille </li>
+            <li>Täristävät hidastetarrat pyöräilijöille</li>
             <li>Piilotetut johdot ja kaapelit</li>
             <li>Talvikunnossapidon huomiointi</li>
             <li>Tiedotus tilapäisistä reiteistä</li>
@@ -486,7 +491,7 @@ const Card3Basic: React.FC = () => {
             br: <br />,
             a1: (
               <Link
-                href="https://www.hel.fi/static/hki4all/ohjeet/2022/suraku-kortti-1.pdf"
+                href={t('workInstructions:cards:card2:link1Url')}
                 external
                 openInNewTab
                 openInNewTabAriaLabel={t('common:components:link:openInNewTabAriaLabel')}
@@ -1654,7 +1659,7 @@ const Card10Basic: React.FC = () => {
             h3: <h3 />,
             a: (
               <Link
-                href="https://www.hel.fi/fi/kaupunkiymparisto-ja-liikenne/ympariston-ja-luonnon-suojelu/ymparistohaittojen-ehkaisy/ymparistonsuojelumaaraykset"
+                href={t('workInstructions:cards:card10:linkUrl')}
                 external
                 openInNewTab
                 openInNewTabAriaLabel={t('common:components:link:openInNewTabAriaLabel')}
