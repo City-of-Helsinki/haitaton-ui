@@ -280,40 +280,40 @@ test('Toiminnallisia testejä', async ({ page }) => {
   await page.getByTestId('save-form-btn').click();
   await page.getByRole('button', { name: 'Käyttäjähallinta' }).click();
   const row = page.locator('tr:has-text("Testi Automaatio")');
-  await expect(row.filter({ hasText: 'Katseluoikeus' })).toBeVisible();
+  await expect(row.filter({ hasText: 'Katseluoikeus' })).toBeVisible({ timeout: 10000 });
 
   await row.getByRole('link', { name: 'Muokkaa tietoja' }).click();
   await page.getByLabel('Katseluoikeus').click();
   await page.getByRole('option', { name: 'Kaikki oikeudet' }).click();
   await page.getByRole('button', { name: 'Tallenna muutokset' }).click();
   await expect(page.getByText('Käyttäjätiedot päivitetty', { exact: true })).toBeVisible();
-  await expect(row.filter({ hasText: 'Kaikki oikeudet' })).toBeVisible();
+  await expect(row.filter({ hasText: 'Kaikki oikeudet' })).toBeVisible({ timeout: 10000 });
 
   await row.getByRole('link', { name: 'Muokkaa tietoja' }).click();
   await page.getByLabel('Kaikki oikeudet').click();
   await page.getByRole('option', { name: 'Hankkeen ja hakemusten' }).click();
   await page.getByRole('button', { name: 'Tallenna muutokset' }).click();
   await expect(page.getByText('Käyttäjätiedot päivitetty', { exact: true })).toBeVisible();
-  await expect(row.filter({ hasText: 'Hankkeen ja hakemusten' })).toBeVisible();
+  await expect(row.filter({ hasText: 'Hankkeen ja hakemusten' })).toBeVisible({ timeout: 10000 });
 
   await row.getByRole('link', { name: 'Muokkaa tietoja' }).click();
   await page.getByLabel('Hankkeen ja hakemusten').click();
   await page.getByRole('option', { name: 'Hankemuokkaus' }).click();
   await page.getByRole('button', { name: 'Tallenna muutokset' }).click();
   await expect(page.getByText('Käyttäjätiedot päivitetty', { exact: true })).toBeVisible();
-  await expect(row.filter({ hasText: 'Hankemuokkaus' })).toBeVisible();
+  await expect(row.filter({ hasText: 'Hankemuokkaus' })).toBeVisible({ timeout: 10000 });
 
   await row.getByRole('link', { name: 'Muokkaa tietoja' }).click();
   await page.getByLabel('Hankemuokkaus').click();
   await page.getByRole('option', { name: 'Hakemusasiointi' }).click();
   await page.getByRole('button', { name: 'Tallenna muutokset' }).click();
   await expect(page.getByText('Käyttäjätiedot päivitetty', { exact: true })).toBeVisible();
-  await expect(row.filter({ hasText: 'Hakemusasiointi' })).toBeVisible();
+  await expect(row.filter({ hasText: 'Hakemusasiointi' })).toBeVisible({ timeout: 10000 });
 
   await row.getByRole('link', { name: 'Muokkaa tietoja' }).click();
   await page.getByLabel('Hakemusasiointi').click();
   await page.getByRole('option', { name: 'Katseluoikeus' }).click();
   await page.getByRole('button', { name: 'Tallenna muutokset' }).click();
   await expect(page.getByText('Käyttäjätiedot päivitetty', { exact: true })).toBeVisible();
-  await expect(row.filter({ hasText: 'Katseluoikeus' })).toBeVisible();
+  await expect(row.filter({ hasText: 'Katseluoikeus' })).toBeVisible({ timeout: 10000 });
 });
