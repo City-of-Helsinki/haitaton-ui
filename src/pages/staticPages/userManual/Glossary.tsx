@@ -37,8 +37,8 @@ const Glossary: React.FC = () => {
     returnObjects: true,
   });
 
-  const queryExpanded = 'div[role="button"][aria-expanded="true"]';
-  const queryClosed = 'div[role="button"][aria-expanded="false"]';
+  const queryExpanded = 'div[role=heading] > button[aria-expanded="true"]';
+  const queryClosed = 'div[role=heading] > button[aria-expanded="false"]';
   const buttonText = isAllOpen
     ? t('staticPages:manualPage:glossary:closeAll')
     : t('staticPages:manualPage:glossary:openAll');

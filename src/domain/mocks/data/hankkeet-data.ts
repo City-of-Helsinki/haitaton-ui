@@ -731,6 +731,85 @@ const hankkeet: HankeDataDraft[] = [
     ],
     deletionDate: '2024-04-16',
   },
+  {
+    id: 13,
+    hankeTunnus: 'HAI22-13',
+    onYKTHanke: false,
+    nimi: 'Mannerheimintien katutyöt',
+    kuvaus:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum',
+    alkuPvm: '2022-11-26T00:00:00Z',
+    loppuPvm: '2022-12-17T00:00:00Z',
+    vaihe: 'OHJELMOINTI',
+    version: 0,
+    createdBy: '1',
+    createdAt: '2020-11-27T11:33:17.0875Z',
+    modifiedBy: null,
+    modifiedAt: null,
+    status: 'DRAFT',
+    omistajat: [],
+    rakennuttajat: [],
+    toteuttajat: [],
+    muut: [],
+    tyomaaTyyppi: [],
+    alueet: [
+      {
+        id: 1,
+        hankeId: 13,
+        haittaAlkuPvm: new Date('2022-11-26T00:00:00Z'),
+        haittaLoppuPvm: new Date('2022-12-17T00:00:00Z'),
+        kaistaHaitta: null,
+        kaistaPituusHaitta: null,
+        meluHaitta: null,
+        polyHaitta: null,
+        tarinaHaitta: null,
+        nimi: 'Hankealue 1',
+        geometriat: {
+          id: 37,
+          version: 0,
+          createdByUserId: null,
+          modifiedByUserId: null,
+          createdAt: '2022-11-27T11:43:43.481215Z',
+          modifiedAt: null,
+          featureCollection: {
+            type: 'FeatureCollection',
+            crs: {
+              type: 'name',
+              properties: {
+                name: 'urn:ogc:def:crs:EPSG::3879',
+              },
+            },
+            features: [
+              {
+                type: 'Feature',
+                properties: {
+                  hankeTunnus: 'HAI22-13',
+                },
+                geometry: {
+                  type: 'Polygon',
+                  crs: {
+                    type: 'name',
+                    properties: {
+                      name: 'EPSG:3879',
+                    },
+                  },
+                  coordinates: [
+                    [
+                      [25498583.867247857, 6679281.28058593],
+                      [25498584.13087749, 6679314.065289769],
+                      [25498573.17171292, 6679313.3807182815],
+                      [25498571.913494226, 6679281.456795131],
+                      [25498583.867247857, 6679281.28058593],
+                    ],
+                  ],
+                },
+              },
+            ],
+          },
+        },
+      },
+    ],
+  },
 ];
 
 export default hankkeet;
