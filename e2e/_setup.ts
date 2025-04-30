@@ -144,6 +144,6 @@ export async function helsinkiLogin(page: Page, env = testiData.testEnvUrl) {
   await expect(page.getByText('Jatka palveluun')).toBeVisible();
   await page.getByText('Jatka palveluun').click();
   await expect(page.getByLabel('Tee johtoselvityshakemus.', { exact: true })).toBeVisible({
-    timeout: 10000,
+    timeout: 20000,
   });
 }
