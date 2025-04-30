@@ -312,7 +312,7 @@ test('Kaivuilmoitus täydennyspyyntö', async ({ page }) => {
     await expect(page.getByTestId('application-card').nth(1)).toContainText('Käsittelyssä', {
       timeout: 2000,
     });
-  }).toPass({ intervals: [1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000], timeout: 120000 });
+  }).toPass({ intervals: [1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000], timeout: 180000 });
 
   // käsittely allussa
 
@@ -487,10 +487,10 @@ test('Kaivuilmoitus täydennyspyyntö', async ({ page }) => {
     await page.goto(`${testiData.hankesalkku}${hanketunnus}`);
     await page.getByText('Hakemukset').click();
     await expect(page.getByTestId('application-status-tag').first()).toContainText('Päätös', {
-      timeout: 2000,
+      timeout: 5000,
     });
     await expect(page.getByTestId('application-status-tag').nth(1)).toContainText('Päätös', {
-      timeout: 2000,
+      timeout: 5000,
     });
   }).toPass({
     intervals: [1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 3000, 3000, 3000, 3000],

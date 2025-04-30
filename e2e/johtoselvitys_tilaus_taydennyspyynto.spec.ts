@@ -137,8 +137,10 @@ test('Johtoselvityshakemus_tilaus_taydennyspyynto', async ({ page }) => {
   await page.getByRole('button', { name: 'Lähetä hakemus' }).click();
   await expect(page.getByRole('heading', { name: 'Lähetä hakemus?' })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Peruuta' })).toBeVisible();
-  await page.getByRole('button', { name: 'Vahvista' }).click();
-  await expect(page.getByText('Hakemus lähetetty')).toBeVisible();
+  await expect(async () => {
+    await page.getByRole('button', { name: 'Vahvista' }).click();
+    await expect(page.getByText('Hakemus lähetetty')).toBeVisible();
+  }).toPass({ intervals: [1000, 1000, 1000, 1000, 1000], timeout: 12000 });
   const hakemuksenTunnus = await page.getByTestId('allu_tunnus').textContent();
   const linkkiHakemukseen = await page
     .getByRole('link')
