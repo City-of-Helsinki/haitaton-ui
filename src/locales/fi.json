@@ -538,6 +538,7 @@
       "VAIHTOLAVA": "Vaihtolava"
     },
     "kaistaHaitta": {
+      "null": "-",
       "EI_VAIKUTA": "Ei vaikuta",
       "YKSI_KAISTA_VAHENEE": "Yksi autokaista vähenee - ajosuunta vielä käytössä",
       "YKSI_KAISTA_VAHENEE_KAHDELLA_AJOSUUNNALLA": "Yksi autokaista vähenee kahdella ajosuunnalla - ajosuunnat vielä käytössä",
@@ -546,6 +547,7 @@
       "USEITA_AJOSUUNTIA_POISTUU_KAYTOSTA": "Useita autoliikenteen ajosuuntia poistuu käytöstä"
     },
     "kaistaPituusHaitta": {
+      "null": "-",
       "EI_VAIKUTA_KAISTAJARJESTELYIHIN": "Ei vaikuta",
       "PITUUS_ALLE_10_METRIA": "Alle 10 m",
       "PITUUS_10_99_METRIA": "10-99 m",
@@ -553,18 +555,21 @@
       "PITUUS_500_METRIA_TAI_ENEMMAN": "500 m tai enemmän"
     },
     "meluHaitta": {
+      "null": "-",
       "EI_MELUHAITTAA": "Ei meluhaittaa",
       "SATUNNAINEN_MELUHAITTA": "Satunnainen meluhaitta",
       "TOISTUVA_MELUHAITTA": "Toistuva meluhaitta",
       "JATKUVA_MELUHAITTA": "Jatkuva meluhaitta"
     },
     "polyHaitta": {
+      "null": "-",
       "EI_POLYHAITTAA": "Ei pölyhaittaa",
       "SATUNNAINEN_POLYHAITTA": "Satunnainen pölyhaitta",
       "TOISTUVA_POLYHAITTA": "Toistuva pölyhaitta",
       "JATKUVA_POLYHAITTA": "Jatkuva pölyhaitta"
     },
     "tarinaHaitta": {
+      "null": "-",
       "EI_TARINAHAITTAA": "Ei tärinähaittaa",
       "SATUNNAINEN_TARINAHAITTA": "Satunnainen tärinähaitta",
       "TOISTUVA_TARINAHAITTA": "Toistuva tärinähaitta",
