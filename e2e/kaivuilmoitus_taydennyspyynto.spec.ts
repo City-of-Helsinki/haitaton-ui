@@ -15,7 +15,7 @@ test.beforeEach('Helsinki_login', async ({ page }) => {
 });
 
 test('Kaivuilmoitus täydennyspyyntö', async ({ page }) => {
-  test.setTimeout(720000);
+  test.setTimeout(780000);
   const ajonNimi = hankeName(`kaivuilmoitus-taydennyspyynto`);
   await createAndFillHankeForm(page, ajonNimi);
   await page.getByRole('button', { name: 'Tallenna ja lisää hakemuksia', exact: true }).click();

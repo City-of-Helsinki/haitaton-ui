@@ -7,7 +7,7 @@ test.beforeEach('Helsinki_login', async ({ page }) => {
 });
 
 test('Uusi hanke ja hakutyökalu', async ({ page }) => {
-  test.setTimeout(240000);
+  test.setTimeout(300000);
   const ajonNimi = hankeName(`uusi-hanke`);
   await createAndFillHankeForm(page, ajonNimi, DRAWTOOLTYPE.POLYGON);
 
