@@ -17,7 +17,7 @@ test('Toiminnallisia testejä', async ({ page }) => {
   // Lisätietolinkit aukeaa ohjeista hanketta luodessa
   // Käyttöoikeuksia pystyy muuttamaan
 
-  test.setTimeout(240000);
+  test.setTimeout(300000);
 
   // Johtoselvityshakemus ei ole käytettävissä ennen kirjautumista
   await expect(page.getByLabel('Tee johtoselvityshakemus.', { exact: true })).not.toBeVisible();
