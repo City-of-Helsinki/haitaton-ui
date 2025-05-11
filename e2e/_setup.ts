@@ -160,7 +160,7 @@ export async function nextAndCloseToast(
     networkIdleTimeout = 30_000,
     visibleTimeout = 10_000,
     closeTimeout = 10_000,
-    hiddenTimeout = 5_000,
+    hiddenTimeout = 10_000,
   } = opts ?? {};
 
   // 1. click “Next” and wait for network‐idle
