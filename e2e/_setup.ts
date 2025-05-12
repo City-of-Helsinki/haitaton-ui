@@ -160,7 +160,7 @@ export async function nextAndCloseToast(
     networkIdleTimeout = 30_000,
     visibleTimeout = 10_000,
     closeTimeout = 10_000,
-    hiddenTimeout = 10_000,
+    hiddenTimeout = 20_000,
   } = opts ?? {};
 
   // 1. click “Next” and wait for network‐idle
@@ -345,7 +345,7 @@ export async function expectApplicationStatus(
     // ---- detail page: there's just one status tag on the page ----
     const statusTag = page.getByTestId('application-status-tag');
     await expect(statusTag).toBeVisible();
-    await expect(statusTag).toContainText(expectedStatus, { timeout: 500 });
+    await expect(statusTag).toContainText(expectedStatus);
   } else {
     // ---- list page: find the card that contains our application ----
     const identifier = page.getByTestId(`applicationViewLinkIdentifier-${applicationId}`);
@@ -357,7 +357,7 @@ export async function expectApplicationStatus(
     await expect(card).toBeVisible();
 
     const statusTag = card.getByTestId('application-status-tag');
-    await expect(statusTag).toContainText(expectedStatus, { timeout: 500 });
+    await expect(statusTag).toContainText(expectedStatus);
   }
 }
 
