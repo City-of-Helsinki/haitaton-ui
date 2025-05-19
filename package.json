@@ -41,7 +41,7 @@
     "@turf/kinks": "^7.1.0",
     "@turf/union": "^7.2.0",
     "@types/geojson": "^7946.0.14",
-    "@types/jest": "^29.5.12",
+    "@types/jest": "^29.5.14",
     "@types/node": "^22.15.19",
     "@types/react": "^18.3.11",
     "@types/react-dom": "^18.3.0",
