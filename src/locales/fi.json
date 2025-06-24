@@ -1701,7 +1701,8 @@
     },
     "hanke": {
       "title": "Luo uusi hanke",
-      "description": "Luomalla Haitaton-hankkeen pystyt suunnittelemaan etukäteen yleisellä alueella tapahtuvaa työtä sekä tekemään hakemuksia, kuten johtoselvityksiä.",
+      "title2": "Asiointi yleisellä alueella",
+      "description": "Luomalla Haitaton-hankkeen pystyt suunnittelemaan etukäteen yleisellä alueella tapahtuvaa työtä sekä tekemään hakemuksia, kuten johtoselvityksiä ja kaivuilmoituksia.",
       "actionText": "Luo uusi hanke"
     },
     "hakemus": {
@@ -1711,7 +1712,8 @@
     },
     "johtotietoselvitys": {
       "title": "Tee johtoselvityshakemus",
-      "description": "Mikäli teet pelkkää johtoselvitystä yksityiselle alueelle, täytä hakemus.",
+      "title2": "Asiointi yksityisellä alueella",
+      "description": "Mikäli teet pelkkää johtoselvitystä yksityiselle alueelle, täytä hakemus. Yksityiselle alueelle ei tehdä kaivuilmoituksia.",
       "actionText": "Tee johtoselvityshakemus"
     },
     "valmistelu": {
@@ -1721,11 +1723,13 @@
     },
     "hankesalkku": {
       "title": "Omat hankkeet",
+      "title2": "Omat hankkeet",
       "description": "Omista hankkeista löydät aiemmin luomasi hankkeet ja hakemukset.",
       "actionText": "Avaa omat hankkeet"
     },
     "kartta": {
       "title": "Tutustu hankkeisiin",
+      "title2": "Tutustu hankkeisiin",
       "description": "Tutustu käynnissä oleviin ja tuleviin Haitattomassa luotuihin hankkeisiin kartalla.",
       "actionText": "Tutustu hankkeisiin kartalla"
     },
@@ -1741,6 +1745,7 @@
     },
     "ohjeet": {
       "title": "Työohjeet",
+      "title2": "Työohjeet",
       "description": "Tutustu yleisten alueiden hankkeita koskeviin ohjeistuksiin.",
       "actionText": "Tutustu ohjeisiin"
     },

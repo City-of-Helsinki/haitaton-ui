@@ -1680,7 +1680,8 @@
     },
     "hanke": {
       "title": "Create a new project",
-      "description": "By creating a Haitaton project, you can plan work in the public domain in advance and make applications such as cabling surveys.",
+      "title2": "Services in a public area",
+      "description": "By creating a Haitaton project, you can plan work in the public domain in advance and make applications such as cable reports and excavation notices.",
       "actionText": "Create a new project"
     },
     "hakemus": {
@@ -1690,7 +1691,8 @@
     },
     "johtotietoselvitys": {
       "title": "Cable report",
-      "description": "A request for clarification on cable location information for a specific area. Required as an attachment to the excavation notice.",
+      "title2": "Service in a private area",
+      "description": "A request for clarification on cable location information for a specific area. Required as an attachment to the excavation notice. No excavation notices are made in the private area",
       "actionText": "Submit a cable report"
     },
     "valmistelu": {
@@ -1700,11 +1702,13 @@
     },
     "hankesalkku": {
       "title": "Own projects",
+      "title2": "Own projects",
       "description": "In your own projects, you will find the projects and applications that you have previously created.",
       "actionText": "Open your own projects"
     },
     "kartta": {
       "title": "View the projects",
+      "title2": "View the projects",
       "description": "View a map of ongoing and upcoming projects created in Haitaton.",
       "actionText": "View projects on a map"
     },
@@ -1720,6 +1724,7 @@
     },
     "ohjeet": {
       "title": "Work instructions",
+      "title2": "Work instructions",
       "description": "See the guidelines for projects in public areas.",
       "actionText": "Read the instructions"
     },

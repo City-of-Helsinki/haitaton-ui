@@ -1680,7 +1680,8 @@
     },
     "hanke": {
       "title": "Skapa nytt projekt",
-      "description": "Genom att skapa ett Haitaton-projekt kan du i förväg planera arbete som görs på allmänt område samt göra ansökningar, såsom ledningsutredningar.",
+      "title2": "Årenden på ett allmänt område",
+      "description": "Genom att skapa ett Haitaton-projekt kan du i förväg planera arbete som görs på allmänt område samt göra ansökningar, såsom ledningsutredningar och grävanmelningar.",
       "actionText": "Skapa nytt projekt"
     },
     "hakemus": {
@@ -1690,7 +1691,8 @@
     },
     "johtotietoselvitys": {
       "title": "Ledningsutredning",
-      "description": "Begäran om utredning av ledningsuppgifter för visst område. Behövs som bilaga till anmälan om grävning.",
+      "title2": "Ärenden på ett privat område",
+      "description": "Begäran om utredning av ledningsuppgifter för visst område. Behövs som bilaga till anmälan om grävning. Grävanmälningar görs inte på privat område.",
       "actionText": "Gör en ledningsutredning"
     },
     "valmistelu": {
@@ -1700,11 +1702,13 @@
     },
     "hankesalkku": {
       "title": "Egna projekt",
+      "title2": "Egna projekt",
       "description": "Under egna projekt hittar du de projekt och ansökningar du skapat tidigare.",
       "actionText": "Öppna egna projekt"
     },
     "kartta": {
       "title": "Bekanta dig med projekten",
+      "title2": "Bekanta dig med projekten",
       "description": "Bekanta dig med pågående och kommande projekt skapade i Haitaton på en karta.",
       "actionText": "Bekanta dig med projekten på en karta"
     },
@@ -1720,6 +1724,7 @@
     },
     "ohjeet": {
       "title": "Arbetsanvisningar",
+      "title2": "Arbetsanvisningar",
       "description": "Bekanta dig med allmänna anvisningar för projekt på allmänna områden.",
       "actionText": "Bekanta dig med anvisningarna"
     },
