@@ -20,7 +20,9 @@ test('Toiminnallisia testejä', async ({ page }) => {
   test.setTimeout(300000);
 
   // Johtoselvityshakemus ei ole käytettävissä ennen kirjautumista
-  await expect(page.getByLabel('Tee johtoselvityshakemus.', { exact: true })).not.toBeVisible();
+  await expect(
+    page.getByLabel('Asiointi yksityisellä alueella.', { exact: true }),
+  ).not.toBeVisible();
   await helsinkiLogin(page);
 
   // ohjeet ja lisätietokortit
@@ -89,7 +91,7 @@ test('Toiminnallisia testejä', async ({ page }) => {
   await page.getByRole('banner').getByRole('link', { name: 'Helsingin kaupunki' }).click();
 
   // Lisätietokortit hankkeen luonnin yhteydessä
-  await page.getByLabel('Luo uusi hanke.', { exact: true }).click();
+  await page.getByLabel('Asiointi yleisellä alueella.', { exact: true }).click();
   await page.getByTestId('nimi').click();
   const ajonNimi = hankeName(`toiminnallinen_testi`);
   await page.getByTestId('nimi').fill(ajonNimi);
