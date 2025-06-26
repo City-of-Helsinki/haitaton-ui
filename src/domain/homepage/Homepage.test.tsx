@@ -36,7 +36,7 @@ describe('Create new hanke from dialog', () => {
         </I18nextProvider>
       ),
     });
-    const createElement = await screen.findByText('Luo uusi hanke');
+    const createElement = await screen.findByText('Asiointi yleisellä alueella');
     await user.click(createElement);
     return user;
   }
@@ -116,7 +116,7 @@ describe('Create johtoselvitys from dialog', () => {
     await screen.findByRole('heading', {
       name: 'Auta meitä tekemään Haitattomasta vielä parempi!',
     });
-    await user.click(screen.getByText('Tee johtoselvityshakemus'));
+    await user.click(screen.getByText('Asiointi yksityisellä alueella'));
     return user;
   }
 
