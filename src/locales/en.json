@@ -1680,7 +1680,7 @@
     },
     "hanke": {
       "title": "Create a new project",
-      "title2": "E-services for the public area",
+      "titlePublicArea": "E-services for the public area",
       "description": "By creating a Haitaton project, you can plan work in the public areas in advance and make applications such as cable reports and excavation notifications.",
       "actionText": "E-services for the public area"
     },
@@ -1690,8 +1690,7 @@
       "actionText": "Create an application"
     },
     "johtotietoselvitys": {
-      "title": "Cable report",
-      "title2": "E-services for the private area",
+      "title": "E-services for the private area",
       "description": "A request for clarification on cable location information for a specific private area. No excavation notifications are made in the private area.",
       "actionText": "E-services for the private area"
     },

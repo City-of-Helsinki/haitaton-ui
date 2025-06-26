@@ -169,7 +169,7 @@ function HaitatonHeader() {
           )}
           {features.hanke && (
             <Header.Link
-              label={t('homepage:hanke:title2')}
+              label={t('homepage:hanke:titlePublicArea')}
               as={NavLink}
               to="#"
               onClick={openHankeCreateDialog}
@@ -177,7 +177,7 @@ function HaitatonHeader() {
             />
           )}
           <Header.Link
-            label={t('homepage:johtotietoselvitys:title2')}
+            label={t('homepage:johtotietoselvitys:title')}
             as={NavLink}
             to="#"
             onClick={openJohtoselvitysCreateDialog}

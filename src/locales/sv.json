@@ -1680,7 +1680,7 @@
     },
     "hanke": {
       "title": "Skapa nytt projekt",
-      "title2": "Utföra ärenden på de allmänna områdena",
+      "titlePublicArea": "Utföra ärenden på de allmänna områdena",
       "description": "Genom att skapa ett Haitaton-projekt kan du i förväg planera arbete som görs på allmänt område samt göra ansökningar, såsom ledningsutredningar och grävanmälningar.",
       "actionText": "Utföra ärenden på de allmänna områdena"
     },
@@ -1690,8 +1690,7 @@
       "actionText": "Skapa en ansökan"
     },
     "johtotietoselvitys": {
-      "title": "Ledningsutredning",
-      "title2": "Utföra ärenden på de privata områdena",
+      "title": "Utföra ärenden på de privata områdena",
       "description": "Begäran om utredning av ledningsuppgifter för visst privat område. Grävanmälningar görs inte på privat område.",
       "actionText": "Utföra ärenden på de privata områdena"
     },

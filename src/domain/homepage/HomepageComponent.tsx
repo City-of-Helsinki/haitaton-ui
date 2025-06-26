@@ -251,7 +251,7 @@ const Homepage: React.FC<React.PropsWithChildren<unknown>> = () => {
                       )}`}
                       linkAriaLabel={t(`homepage:${item.key}:actionText`)}
                       href={item.actionLink}
-                      heading={t(`homepage:${item.key}:title2`, {
+                      heading={t(`homepage:${item.key}:titlePublicArea`, {
                         defaultValue: t(`homepage:${item.key}:title`),
                       })}
                       text={t(`homepage:${item.key}:description`)}

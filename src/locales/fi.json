@@ -1701,7 +1701,7 @@
     },
     "hanke": {
       "title": "Luo uusi hanke",
-      "title2": "Asiointi yleisellä alueella",
+      "titlePublicArea": "Asiointi yleisellä alueella",
       "description": "Luomalla Haitaton-hankkeen pystyt suunnittelemaan etukäteen yleisellä alueella tapahtuvaa työtä sekä tekemään hakemuksia, kuten johtoselvityksiä.",
       "actionText": "Asiointi yleisellä alueella"
     },
@@ -1711,8 +1711,7 @@
       "actionText": "Luo hakemus"
     },
     "johtotietoselvitys": {
-      "title": "Tee johtoselvityshakemus",
-      "title2": "Asiointi yksityisellä alueella",
+      "title": "Asiointi yksityisellä alueella",
       "description": "Mikäli teet pelkkää johtoselvitystä yksityiselle alueelle, täytä hakemus. Yksityiselle alueelle ei tehdä kaivuilmoituksia.",
       "actionText": "Asiointi yksityisellä alueella"
     },
