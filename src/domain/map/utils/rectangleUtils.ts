@@ -14,7 +14,9 @@ export function calculateMissingViewportAreas(
   minAreaSize: number = 100,
 ): ViewportBounds[] {
   if (cachedBounds.length === 0) {
-    return [requestedBounds];
+    return [requestedBounds].filter(
+      (area) => (area.maxX - area.minX) * (area.maxY - area.minY) >= minAreaSize,
+    );
   }
 
   // Start with the full requested area as "missing"
