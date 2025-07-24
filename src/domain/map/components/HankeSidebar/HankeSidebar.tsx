@@ -12,6 +12,7 @@ import useHankeViewPath from '../../../hanke/hooks/useHankeViewPath';
 import { ROUTES } from '../../../../common/types/route';
 import useHankkeet from '../../../hanke/hooks/useHankkeet';
 import { Link } from 'react-router-dom';
+import LoadingSpinner from '../../../../common/components/spinner/LoadingSpinner';
 
 function omistajaNimet(
   omistajat: HankeYhteystieto[],
@@ -52,6 +53,7 @@ type Props = {
   hankealueId: number;
   isOpen: boolean;
   handleClose: () => void;
+  loading?: boolean;
 };
 
 const HankeSidebar: React.FC<React.PropsWithChildren<Props>> = ({
@@ -59,6 +61,7 @@ const HankeSidebar: React.FC<React.PropsWithChildren<Props>> = ({
   hankealueId,
   isOpen,
   handleClose,
+  loading = false,
 }) => {
   const { t } = useTranslation();
   const { data: hankkeet } = useHankkeet();
@@ -93,65 +96,71 @@ const HankeSidebar: React.FC<React.PropsWithChildren<Props>> = ({
           >
             <IconCross aria-hidden />
           </button>
-          <Text tag="h2" weight="bold" styleAs="h4" spacing="2-xs">
-            {hanke.nimi}: {hankealue.nimi}
-          </Text>
-          <SidebarSection
-            title={t('hankeSidebar:labels:hankealueenAjankohta')}
-            content={`${formatToFinnishDate(hankealue.haittaAlkuPvm)} - ${formatToFinnishDate(hankealue.haittaLoppuPvm)}`}
-          />
-          <SidebarSection
-            title={t('hankeSidebar:labels:hanke')}
-            content={
-              isUsersHanke ? (
-                <Link
-                  to={hankeViewPath}
-                  aria-label={
-                    // eslint-disable-next-line
-                    t(`routes:${ROUTES.HANKE}.meta.title`) +
-                    ` ${hanke.nimi} - ${hanke.hankeTunnus} `
-                  }
-                  data-testid="hankeViewLink"
-                  className={styles.hankeSidebar__hankeLink}
-                >
-                  {hanke.nimi} ({hanke.hankeTunnus})
-                </Link>
-              ) : (
-                `${hanke.nimi} (${hanke.hankeTunnus})`
-              )
-            }
-          />
-          <SidebarSection
-            title={t('hankeSidebar:labels:hankkeenAjankohta')}
-            content={`${formatToFinnishDate(hanke.alkuPvm)} - ${formatToFinnishDate(hanke.loppuPvm)}`}
-          />
-          <SidebarSection
-            title={t('hankeSidebar:labels.omistaja')}
-            content={omistajaNimet(hanke.omistajat, t)}
-          />
-          <SidebarSection
-            title={t('hankeForm:labels.vaihe')}
-            content={t(`hanke:vaihe:${hanke.vaihe}`)}
-          />
-          <SidebarSection
-            title={t('hankeForm:labels.tyomaaTyyppi')}
-            content={tyomaaTyyppiContent}
-          />
-          <SidebarSection
-            title={t('hankeForm:labels.kuvaus')}
-            content={
-              <Box whiteSpace="pre-wrap" wordBreak="break-word">
-                {hanke.kuvaus ?? ''}
-              </Box>
-            }
-          />
+          {loading ? (
+            <LoadingSpinner />
+          ) : (
+            <>
+              <Text tag="h2" weight="bold" styleAs="h4" spacing="2-xs">
+                {hanke.nimi}: {hankealue.nimi}
+              </Text>
+              <SidebarSection
+                title={t('hankeSidebar:labels:hankealueenAjankohta')}
+                content={`${formatToFinnishDate(hankealue.haittaAlkuPvm)} - ${formatToFinnishDate(hankealue.haittaLoppuPvm)}`}
+              />
+              <SidebarSection
+                title={t('hankeSidebar:labels:hanke')}
+                content={
+                  isUsersHanke ? (
+                    <Link
+                      to={hankeViewPath}
+                      aria-label={
+                        // eslint-disable-next-line
+                        t(`routes:${ROUTES.HANKE}.meta.title`) +
+                        ` ${hanke.nimi} - ${hanke.hankeTunnus} `
+                      }
+                      data-testid="hankeViewLink"
+                      className={styles.hankeSidebar__hankeLink}
+                    >
+                      {hanke.nimi} ({hanke.hankeTunnus})
+                    </Link>
+                  ) : (
+                    `${hanke.nimi} (${hanke.hankeTunnus})`
+                  )
+                }
+              />
+              <SidebarSection
+                title={t('hankeSidebar:labels:hankkeenAjankohta')}
+                content={`${formatToFinnishDate(hanke.alkuPvm)} - ${formatToFinnishDate(hanke.loppuPvm)}`}
+              />
+              <SidebarSection
+                title={t('hankeSidebar:labels.omistaja')}
+                content={omistajaNimet(hanke.omistajat, t)}
+              />
+              <SidebarSection
+                title={t('hankeForm:labels.vaihe')}
+                content={t(`hanke:vaihe:${hanke.vaihe}`)}
+              />
+              <SidebarSection
+                title={t('hankeForm:labels.tyomaaTyyppi')}
+                content={tyomaaTyyppiContent}
+              />
+              <SidebarSection
+                title={t('hankeForm:labels.kuvaus')}
+                content={
+                  <Box whiteSpace="pre-wrap" wordBreak="break-word">
+                    {hanke.kuvaus ?? ''}
+                  </Box>
+                }
+              />
 
-          <HaittaIndexes
-            heading={`${t('hanke:alue:liikennehaittaIndeksit')} (0-5)`}
-            haittaIndexData={hankealue.tormaystarkasteluTulos}
-            className={styles.hankeSidebar__areaIndexes}
-            initiallyOpen
-          />
+              <HaittaIndexes
+                heading={`${t('hanke:alue:liikennehaittaIndeksit')} (0-5)`}
+                haittaIndexData={hankealue.tormaystarkasteluTulos}
+                className={styles.hankeSidebar__areaIndexes}
+                initiallyOpen
+              />
+            </>
+          )}
         </DrawerBody>
       </DrawerContent>
     </Drawer>

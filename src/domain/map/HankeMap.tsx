@@ -31,7 +31,6 @@ const HankeMap: React.FC<React.PropsWithChildren<unknown>> = () => {
     setHankeFilterStartDate,
     setHankeFilterEndDate,
   } = useDateRangeFilter();
-
   const filterHankeAlueet = useCallback(
     (alueet: HankeAlue[]) => {
       return alueet.filter((alue) =>

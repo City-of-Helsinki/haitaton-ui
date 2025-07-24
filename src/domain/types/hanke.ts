@@ -207,6 +207,23 @@ type DraftRequiredFields = 'nimi' | 'kuvaus' | 'vaihe';
 
 export type HankeDataDraft = PartialExcept<HankeData, DraftRequiredFields>;
 
+export interface PublicHankeMinimal {
+  id: number;
+  hankeTunnus: string;
+  nimi: string;
+  alueet: PublicHankeAlueMinimal[];
+}
+
+type PublicHankeAlueMinimal = {
+  id: number | null;
+  hankeId: number | null;
+  nimi: string;
+  haittaAlkuPvm: Date | null;
+  haittaLoppuPvm: Date | null;
+  geometriat?: HankeGeometria;
+  tormaystarkastelu?: HaittaIndexData | null;
+};
+
 export interface PublicHanke {
   id: number;
   hankeTunnus: string;
@@ -239,6 +256,23 @@ type PublicHankeAlue = {
   tormaystarkastelu?: HaittaIndexData | null;
 };
 
+function toHankeAlueMinimal(alue: PublicHankeAlueMinimal): HankeAlue {
+  return {
+    id: alue.id,
+    hankeId: alue.hankeId ?? undefined,
+    haittaAlkuPvm: alue.haittaAlkuPvm,
+    haittaLoppuPvm: alue.haittaLoppuPvm,
+    geometriat: alue.geometriat,
+    kaistaHaitta: null,
+    kaistaPituusHaitta: null,
+    meluHaitta: null,
+    polyHaitta: null,
+    tarinaHaitta: null,
+    nimi: alue.nimi,
+    tormaystarkasteluTulos: alue.tormaystarkastelu,
+  };
+}
+
 function toHankeAlue(alue: PublicHankeAlue): HankeAlue {
   return {
     id: alue.id,
@@ -253,6 +287,28 @@ function toHankeAlue(alue: PublicHankeAlue): HankeAlue {
     tarinaHaitta: alue.tarinaHaitta,
     nimi: alue.nimi,
     tormaystarkasteluTulos: alue.tormaystarkastelu,
+  };
+}
+
+export function toHankeDataMinimal(publicHanke: PublicHankeMinimal): HankeData {
+  return {
+    id: publicHanke.id,
+    hankeTunnus: publicHanke.hankeTunnus,
+    onYKTHanke: null,
+    nimi: publicHanke.nimi,
+    kuvaus: null,
+    alkuPvm: null,
+    loppuPvm: null,
+    vaihe: null,
+    tyomaaKatuosoite: null,
+    tyomaaTyyppi: [],
+    alueet: publicHanke.alueet.map(toHankeAlueMinimal),
+    omistajat: [],
+    rakennuttajat: [],
+    toteuttajat: [],
+    muut: [],
+    tormaystarkasteluTulos: null,
+    status: HANKE_STATUS.PUBLIC,
   };
 }
 
