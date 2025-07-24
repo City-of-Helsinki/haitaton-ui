@@ -64,19 +64,17 @@ describe('rectangleUtils', () => {
     });
 
     test('returns requested area when no intersection with cached areas', () => {
-      const requested: ViewportBounds = { minX: 0, maxX: 5, minY: 0, maxY: 5 };
-      const cached: ViewportBounds[] = [{ minX: 10, maxX: 15, minY: 10, maxY: 15 }];
+      const requested: ViewportBounds = { minX: 0, maxX: 10, minY: 0, maxY: 10 };
+      const cached: ViewportBounds[] = [{ minX: 15, maxX: 25, minY: 15, maxY: 25 }];
 
       const result = calculateMissingViewportAreas(requested, cached);
-      console.log('No intersection test - result:', result);
-      console.log('No intersection test - requested area:', calculateRectangleArea(requested));
 
       expect(result).toEqual([requested]);
     });
 
     test('calculates missing areas when cached area is in the center', () => {
-      const requested: ViewportBounds = { minX: 0, maxX: 10, minY: 0, maxY: 10 };
-      const cached: ViewportBounds[] = [{ minX: 3, maxX: 7, minY: 3, maxY: 7 }];
+      const requested: ViewportBounds = { minX: 0, maxX: 50, minY: 0, maxY: 50 };
+      const cached: ViewportBounds[] = [{ minX: 15, maxX: 35, minY: 15, maxY: 35 }];
 
       const result = calculateMissingViewportAreas(requested, cached);
 
@@ -84,18 +82,18 @@ describe('rectangleUtils', () => {
       expect(result).toHaveLength(4);
 
       // Left rectangle
-      expect(result).toContainEqual({ minX: 0, maxX: 3, minY: 0, maxY: 10 });
+      expect(result).toContainEqual({ minX: 0, maxX: 15, minY: 0, maxY: 50 });
       // Right rectangle
-      expect(result).toContainEqual({ minX: 7, maxX: 10, minY: 0, maxY: 10 });
+      expect(result).toContainEqual({ minX: 35, maxX: 50, minY: 0, maxY: 50 });
       // Top rectangle
-      expect(result).toContainEqual({ minX: 3, maxX: 7, minY: 0, maxY: 3 });
+      expect(result).toContainEqual({ minX: 15, maxX: 35, minY: 35, maxY: 50 });
       // Bottom rectangle
-      expect(result).toContainEqual({ minX: 3, maxX: 7, minY: 7, maxY: 10 });
+      expect(result).toContainEqual({ minX: 15, maxX: 35, minY: 0, maxY: 15 });
     });
 
     test('calculates missing areas when cached area overlaps left side', () => {
-      const requested: ViewportBounds = { minX: 0, maxX: 10, minY: 0, maxY: 10 };
-      const cached: ViewportBounds[] = [{ minX: -5, maxX: 5, minY: 2, maxY: 8 }];
+      const requested: ViewportBounds = { minX: 0, maxX: 50, minY: 0, maxY: 50 };
+      const cached: ViewportBounds[] = [{ minX: -5, maxX: 5, minY: 22, maxY: 28 }];
 
       const result = calculateMissingViewportAreas(requested, cached);
 
@@ -103,29 +101,30 @@ describe('rectangleUtils', () => {
       expect(result).toHaveLength(3);
 
       // Right rectangle
-      expect(result).toContainEqual({ minX: 5, maxX: 10, minY: 0, maxY: 10 });
+      expect(result).toContainEqual({ minX: 5, maxX: 50, minY: 0, maxY: 50 });
       // Top rectangle
-      expect(result).toContainEqual({ minX: 0, maxX: 5, minY: 0, maxY: 2 });
+      expect(result).toContainEqual({ minX: 0, maxX: 5, minY: 28, maxY: 50 });
       // Bottom rectangle
-      expect(result).toContainEqual({ minX: 0, maxX: 5, minY: 8, maxY: 10 });
+      expect(result).toContainEqual({ minX: 0, maxX: 5, minY: 0, maxY: 22 });
     });
 
     test('handles multiple cached areas', () => {
-      const requested: ViewportBounds = { minX: 0, maxX: 20, minY: 0, maxY: 10 };
+      const requested: ViewportBounds = { minX: 0, maxX: 50, minY: 0, maxY: 50 };
       const cached: ViewportBounds[] = [
-        { minX: 2, maxX: 8, minY: 2, maxY: 8 },
-        { minX: 12, maxX: 18, minY: 2, maxY: 8 },
+        { minX: 10, maxX: 20, minY: 20, maxY: 30 },
+        { minX: 30, maxX: 40, minY: 20, maxY: 30 },
       ];
 
       const result = calculateMissingViewportAreas(requested, cached);
 
       // Should have multiple missing areas
-      expect(result.length).toBeGreaterThan(0);
+      expect(result.length).toBe(7);
 
       // Total area of result should be less than original requested area
       const totalMissingArea = result.reduce((sum, area) => sum + calculateRectangleArea(area), 0);
       const requestedArea = calculateRectangleArea(requested);
       expect(totalMissingArea).toBeLessThan(requestedArea);
+      expect(totalMissingArea).toBe(2300); // 50 * 50 - (10 * 10 + 10 * 10) = 2500 - 200 = 2300
     });
 
     test('filters out areas smaller than minimum size', () => {

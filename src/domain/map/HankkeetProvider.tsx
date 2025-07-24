@@ -46,8 +46,6 @@ const HankkeetProvider: React.FC<HankkeetProviderProps> = ({ children }) => {
   useEffect(() => {
     if (!viewportBounds) return;
 
-    console.log('Cache stats:', cacheStats);
-
     // Get cached data for current viewport immediately
     const cachedData = getCachedDataForViewport(viewportBounds);
     setCombinedData(cachedData);
@@ -56,18 +54,14 @@ const HankkeetProvider: React.FC<HankkeetProviderProps> = ({ children }) => {
     const missingAreas = getMissingViewportAreas(viewportBounds);
 
     if (missingAreas.length === 0) {
-      console.log('Viewport fully cached, no API call needed');
       return;
     }
-
-    console.log('Fetching missing areas:', missingAreas);
 
     // Fetch missing areas (for now, just the first one since we return max 1 area)
     const fetchMissingData = async () => {
       try {
         for (const area of missingAreas) {
           const newData = await fetchPublicHankkeet(area);
-          console.log(`Fetched ${newData.length} hanke for area:`, area);
 
           // Add to cache
           addToCache(area, newData);
