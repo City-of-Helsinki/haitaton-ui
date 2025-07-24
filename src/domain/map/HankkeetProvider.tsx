@@ -1,8 +1,12 @@
-import React, { useMemo } from 'react';
-import { useQuery } from 'react-query';
+import React, { useMemo, useEffect, useState } from 'react';
 import api from '../api/api';
 import HankkeetContext from './HankkeetProviderContext';
-import { PublicHanke, toHankeData } from '../types/hanke';
+import { PublicHankeMinimal, toHankeDataMinimal } from '../types/hanke';
+import {
+  useMapViewportBounds,
+  ViewportBounds,
+} from '../../common/components/map/hooks/useMapViewportBounds';
+import { useHankeCache } from './hooks/useHankeCache';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const convertArrayToObject = (array: any[], key: string) => {
@@ -15,23 +19,77 @@ const convertArrayToObject = (array: any[], key: string) => {
   }, initialValue);
 };
 
-const HankkeetProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
-  const getPublicHankkeet = async () => {
-    return await api.get<PublicHanke[]>('/public-hankkeet');
+type HankkeetProviderProps = {
+  children: React.ReactNode;
+};
+
+const HankkeetProvider: React.FC<HankkeetProviderProps> = ({ children }) => {
+  const viewportBounds = useMapViewportBounds();
+  const { getMissingViewportAreas, addToCache, getCachedDataForViewport, cacheStats } =
+    useHankeCache();
+
+  const [combinedData, setCombinedData] = useState<PublicHankeMinimal[]>([]);
+
+  // Function to fetch data for specific bounds
+  const fetchPublicHankkeet = async (bounds: ViewportBounds): Promise<PublicHankeMinimal[]> => {
+    const params = new URLSearchParams({
+      minX: bounds.minX.toString(),
+      maxX: bounds.maxX.toString(),
+      minY: bounds.minY.toString(),
+      maxY: bounds.maxY.toString(),
+    });
+    const response = await api.get<PublicHankeMinimal[]>(`/public-hankkeet?${params.toString()}`);
+    return response.data;
   };
 
-  const usePublicHankkeet = () =>
-    useQuery(['projectsWithGeometry'], getPublicHankkeet, {
-      refetchOnWindowFocus: false,
-      retry: false,
-    });
+  // Effect to handle viewport changes and cache management
+  useEffect(() => {
+    if (!viewportBounds) return;
 
-  const { data } = usePublicHankkeet();
-  const hankeData = useMemo(() => (data?.data ? data.data.map(toHankeData) : []), [data]);
-  const hankkeetObject = useMemo(
-    () => (data?.data ? convertArrayToObject(hankeData, 'hankeTunnus') : {}),
-    [data?.data, hankeData],
-  );
+    console.log('Cache stats:', cacheStats);
+
+    // Get cached data for current viewport immediately
+    const cachedData = getCachedDataForViewport(viewportBounds);
+    setCombinedData(cachedData);
+
+    // Check what areas need to be fetched
+    const missingAreas = getMissingViewportAreas(viewportBounds);
+
+    if (missingAreas.length === 0) {
+      console.log('Viewport fully cached, no API call needed');
+      return;
+    }
+
+    console.log('Fetching missing areas:', missingAreas);
+
+    // Fetch missing areas (for now, just the first one since we return max 1 area)
+    const fetchMissingData = async () => {
+      try {
+        for (const area of missingAreas) {
+          const newData = await fetchPublicHankkeet(area);
+          console.log(`Fetched ${newData.length} hanke for area:`, area);
+
+          // Add to cache
+          addToCache(area, newData);
+
+          // Update combined data with all cached data
+          const updatedCachedData = getCachedDataForViewport(viewportBounds);
+          setCombinedData(updatedCachedData);
+        }
+      } catch (error) {
+        console.error('Error fetching missing hanke data:', error);
+      }
+    };
+
+    fetchMissingData().catch((error) => {
+      console.error('Failed to fetch missing hanke data:', error);
+    });
+  }, [viewportBounds, getMissingViewportAreas, addToCache, getCachedDataForViewport, cacheStats]);
+
+  // Convert to the expected format
+  const hankeData = useMemo(() => combinedData.map(toHankeDataMinimal), [combinedData]);
+  const hankkeetObject = useMemo(() => convertArrayToObject(hankeData, 'hankeTunnus'), [hankeData]);
+
   const value = useMemo(
     () => ({ hankkeet: hankeData, hankkeetObject }),
     [hankeData, hankkeetObject],
