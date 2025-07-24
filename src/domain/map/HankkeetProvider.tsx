@@ -48,7 +48,18 @@ const HankkeetProvider: React.FC<HankkeetProviderProps> = ({ children }) => {
 
     // Get cached data for current viewport immediately
     const cachedData = getCachedDataForViewport(viewportBounds);
-    setCombinedData(cachedData);
+    // Only update state if data has actually changed
+    setCombinedData((prevData) => {
+      // Compare lengths first for quick check
+      if (prevData.length === cachedData.length) {
+        // Compare by hankeTunnus (unique id)
+        const prevIds = prevData.map((h) => h.hankeTunnus).sort();
+        const cachedIds = cachedData.map((h) => h.hankeTunnus).sort();
+        const isSame = prevIds.every((id, i) => id === cachedIds[i]);
+        if (isSame) return prevData;
+      }
+      return cachedData;
+    });
 
     // Check what areas need to be fetched
     const missingAreas = getMissingViewportAreas(viewportBounds);
@@ -68,7 +79,16 @@ const HankkeetProvider: React.FC<HankkeetProviderProps> = ({ children }) => {
 
           // Update combined data with all cached data
           const updatedCachedData = getCachedDataForViewport(viewportBounds);
-          setCombinedData(updatedCachedData);
+          setCombinedData((prevData) => {
+            // Compare lengths first for quick check
+            if (prevData.length === updatedCachedData.length) {
+              const prevIds = prevData.map((h) => h.hankeTunnus).sort();
+              const updatedIds = updatedCachedData.map((h) => h.hankeTunnus).sort();
+              const isSame = prevIds.every((id, i) => id === updatedIds[i]);
+              if (isSame) return prevData;
+            }
+            return updatedCachedData;
+          });
         }
       } catch (error) {
         console.error('Error fetching missing hanke data:', error);
