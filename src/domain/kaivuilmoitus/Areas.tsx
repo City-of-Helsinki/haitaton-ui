@@ -199,6 +199,22 @@ export default function Areas({ hankeData, hankkeenHakemukset, originalHakemus }
           ta: Tyoalue,
           tyoalueIndex: number,
         ) => {
+          const startDate = applicationData.startTime;
+          const endDate = applicationData.endTime;
+
+          // prevent calculation if dates are empty
+          if (
+            !startDate ||
+            !endDate ||
+            isNaN(new Date(startDate).getTime()) ||
+            isNaN(new Date(endDate).getTime())
+          ) {
+            console.warn('Haittaindeksien laskenta estetty: virheelliset päivämäärät', {
+              startDate,
+              endDate,
+            });
+            return;
+          }
           const request = {
             geometriat: {
               featureCollection: formatFeaturesToHankeGeoJSON([ta.openlayersFeature!]),
