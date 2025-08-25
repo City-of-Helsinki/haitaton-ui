@@ -22,6 +22,7 @@ const ProcedureTips: React.FC<Props> = memo(({ haittojenhallintaTyyppi, haittaIn
   const { CARD } = useLocalizedRoutes();
   const isOther = ['MUUT', 'MELU', 'POLY', 'TARINA'].includes(haittojenhallintaTyyppi);
 
+  // @ts-expect-error: TS lint does not understand the $SpecialObject to Tip[] conversion
   const tips: Tip[] = useMemo(() => {
     return t(`hankeForm:haittojenHallintaForm:procedureTips:${haittojenhallintaTyyppi}`, {
       returnObjects: true,

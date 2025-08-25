@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet';
 
 const BgColorOverride = () => {
   return (
+    // @ts-expect-error For some reason TSLint does not understand the react-helmet
     <Helmet>
       <style>
         {`

@@ -79,6 +79,7 @@ const OverviewMapControl: React.FC<React.PropsWithChildren<Props>> = ({ classNam
     map.once('rendercomplete', initOverview);
 
     return () => {
+      // @ts-expect-error: overviewCtrl is assigned in function lint does not know it
       if (overviewCtrl) {
         const ov = overviewCtrl.getOverviewMap();
         ov.un('click', overviewMapClick);
