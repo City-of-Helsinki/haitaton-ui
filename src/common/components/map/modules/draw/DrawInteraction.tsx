@@ -9,6 +9,7 @@ import Geometry from 'ol/geom/Geometry';
 import Polygon from 'ol/geom/Polygon';
 import Style from 'ol/style/Style';
 import { ModifyEvent } from 'ol/interaction/Modify';
+import { useTranslation } from 'react-i18next';
 import { DRAWTOOLTYPE } from './types';
 import MapContext from '../../MapContext';
 import useDrawContext from './useDrawContext';
@@ -19,6 +20,7 @@ import {
 } from '../../utils';
 import { styleFunction } from '../../../../../domain/map/utils/geometryStyle';
 import { Map, MapBrowserEvent } from 'ol';
+import { useGlobalNotification } from '../../../globalNotification/GlobalNotificationContext';
 
 type Props = {
   features?: Collection<Feature>;
@@ -42,6 +44,8 @@ const DrawInteraction: React.FC<React.PropsWithChildren<Props>> = ({
   drawStyleFunction,
   handleModifyEnd,
 }) => {
+  const { t } = useTranslation();
+  const { setNotification } = useGlobalNotification();
   const selection = useRef<null | Select>(null);
   const { map } = useContext(MapContext);
   const { state, actions, source } = useDrawContext();
@@ -122,7 +126,16 @@ const DrawInteraction: React.FC<React.PropsWithChildren<Props>> = ({
           intersecting = areLinesInPolygonIntersecting(currentCoordinates);
           if (intersecting) {
             drawInstance.removeLastPoint();
-            alert('Itsensäleikkaavat kuviot eivät ole sallittuja');
+            setNotification(true, {
+              position: 'top-right',
+              dismissible: true,
+              autoClose: true,
+              autoCloseDuration: 1000,
+              label: t('map:notifications:selfIntersectingLabel'),
+              message: t('map:notifications:selfIntersectingText'),
+              type: 'alert',
+              closeButtonLabelText: t('common:components:notification:closeButtonLabelText'),
+            });
           } else {
             drawnFeature.current = changeEvent.target;
           }
@@ -158,6 +171,8 @@ const DrawInteraction: React.FC<React.PropsWithChildren<Props>> = ({
       drawCondition,
       drawFinishCondition,
       drawStyleFunction,
+      t,
+      setNotification,
     ],
   );
 
@@ -179,8 +194,18 @@ const DrawInteraction: React.FC<React.PropsWithChildren<Props>> = ({
       const modifiedPolygon: Polygon = modifiedFeature.getGeometry() as Polygon;
 
       if (isPolygonSelfIntersecting(modifiedPolygon)) {
-        alert('Itsensäleikkaavat kuviot eivät ole sallittuja');
         modifiedPolygon.setCoordinates(originalGeometry.getCoordinates());
+        // Show notification for self-intersecting polygon
+        setNotification(true, {
+          position: 'top-right',
+          dismissible: true,
+          autoClose: true,
+          autoCloseDuration: 1000,
+          label: t('map:notifications:selfIntersectingLabel'),
+          message: t('map:notifications:selfIntersectingText'),
+          type: 'alert',
+          closeButtonLabelText: t('common:components:notification:closeButtonLabelText'),
+        });
       } else {
         handleModifyEnd?.(event, originalModifiedFeature.current, modifiedFeature);
       }
@@ -230,7 +255,7 @@ const DrawInteraction: React.FC<React.PropsWithChildren<Props>> = ({
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [map, source]);
+  }, [map, source, t, setNotification]);
 
   useEffect(() => {
     removeAllInteractions();

@@ -873,23 +873,17 @@
           {
             "heading": "Åtskiljning av cykeltrafiken från andra färdsätt",
             "tip": "Planera och genomför de tillfälliga arrangemangen för cykeltrafiken i regel i enlighet med de ursprungliga permanenta arrangemangen (t.ex. enkelriktade cykelvägar/cykelbanor eller dubbelriktade cykelvägar). Försök att bevara lösningen för cykeltrafiken åtskild från gångtrafiken, om sådan finns i nuläget. När mängden biltrafik överstiger 7 000 fordon per dygn, ska cykeltrafik i allmänhet avskiljas också från biltrafiken. Det är nödvändigt att göra en åtskiljning på de huvudsakliga rutterna för cykeltrafik även i fråga om mindre trafikmängder inom biltrafiken. Det är endast möjligt att föreslå att arrangemang för cykeltrafiken i en riktning ersätts i fråga om en arbetsplats med en blandad trafiklösning, och då anvisas en hastighetsbegränsning på 30 km/h för gatan.",
-            "cardLinks": [
-              4
-            ]
+            "cardLinks": [4]
           },
           {
             "heading": "Korsningsarrangemang",
             "tip": "Planera och genomför tillfälliga korsningar inom cykeltrafiken särskilt i trafikljusstyrda anslutningar när det gäller hur olika körriktningar fungerar, men i synnerhet när det gäller vänstersvängning samt sikt och belysning.",
-            "cardLinks": [
-              4
-            ]
+            "cardLinks": [4]
           },
           {
             "heading": "Omvägar",
             "tip": "Planera och genomför tydlig handledning för omvägar som beaktar cykeltrafik separat och som installerats tryggt. Definiera cykeltrafikens konsekvenser och behövliga övriga åtgärder för omväg.",
-            "cardLinks": [
-              5
-            ]
+            "cardLinks": [5]
           },
           {
             "heading": "Tillgänglighet",
@@ -902,17 +896,12 @@
           {
             "heading": "Förhandsinformation och information om ändringar",
             "tip": "Informera de olika parterna om betydande arbeten och eventuella ändringar av cykeltrafikens rutt redan i planeringsfasen och i god tid före genomförandet av de nya arrangemangen (allmänna meddelanden, lokala meddelanden). Markera omvägen i terrängen innan arbetet inleds. Informera de olika parterna om eventuella ändringar i rutterna i god tid före genomförandet av de nya arrangemangen.",
-            "cardLinks": [
-              1
-            ]
+            "cardLinks": [1]
           },
           {
             "heading": "Skydd av cykeltrafiken från byggplatsen",
             "tip": "Genomför genast skyddet av cykeltrafiken från byggplatsområdet med räcken och spärranordningar.",
-            "cardLinks": [
-              6,
-              7
-            ]
+            "cardLinks": [6, 7]
           },
           {
             "heading": "Underhåll",
@@ -921,9 +910,7 @@
           {
             "heading": "Kvaliteten på cykelvägarnas yta",
             "tip": "Bygg och underhåll hårda och rena ytor på cykelvägarna (tillfällig vägbeläggning) samt sluttande nivåbyten.",
-            "cardLinks": [
-              2
-            ]
+            "cardLinks": [2]
           },
           {
             "heading": "Anvisningar om trafikarrangemangen under arbetet",
@@ -973,9 +960,7 @@
           {
             "heading": "Förhandsinformation och information om ändringar",
             "tip": "Informera de olika parterna om betydande arbeten och eventuella ändringar av biltrafikens rutter redan i planeringsfasen och i god tid före genomförandet (allmänna meddelanden, lokala meddelanden). Informera de olika parterna om eventuella ändringar i rutterna i god tid före genomförandet av de nya arrangemangen.",
-            "cardLinks": [
-              1
-            ]
+            "cardLinks": [1]
           },
           {
             "heading": "Skyltning",
@@ -988,10 +973,7 @@
           {
             "heading": "Åtskiljning av färdmedel",
             "tip": "Hänvisa inte fotgängare till körbanan, om inte en egen säker och tillräckligt bred förbindelseled från körbanan har avskilts för dem. Hänvisa inte cykeltrafiken till körbanan bland biltrafiken, utom i motiverade situationer (se åtgärdstipsen för cykeltrafik).",
-            "cardLinks": [
-              3,
-              4
-            ]
+            "cardLinks": [3, 4]
           },
           {
             "heading": "Körbanebeläggningar och -markeringar",
@@ -1016,23 +998,17 @@
           {
             "heading": "Kontakt på förhand och trafikeringsarrangemang att avtala",
             "tip": "<p>Kontakta HRT (<mailto href=\"mailto:infra@hsl.fi\"> infra@hsl.fi</mailto>) i planeringsskedet när ditt projekt är beläget längs HRT:s busstrafikrutter och ställ fast om ditt projekt medför olägenheter för HRT:s busstrafik, såsom minskning av körfält, dröjsmål, förlängning av restiden, omvägar, parkeringar osv. Planera eventuella omvägar för busstrafiken och skyltningen till omvägar samt behövliga kollektivtrafikförmåner i tid. Säkerställ att rutten fungerar med HRT och kom överens om ljusstyrningen med huvudstadsregionens trafikledningscentral (<mailto href=\"mailto:liikenteenhallintakeskus@hel.fi\">liikenteenhallintakeskus@hel.fi</mailto>, tfn 09 310 37555) (även tillfällig ljusstyrning). Kom vid behov överens med HRT om provkörning för att säkerställa smidig trafik.</p><br><p>Om byggplatsen ligger vid ändhållplatsen för en buss eller om den hindrar busstrafik på gatan i fråga, ta kontakt minst 2,5 månader innan arbetena börjar. Om arbetsplatsen inte är akut, t.ex. på grund av rörbrott, ta kontakt minst 2 veckor innan arbetena börjar. Mer information: <external href=\"https://www.hsl.fi/hsl/urakoitsijat\">Urakoitsija - ota joukkoliikenne huomioon työmaalla <span className=\"hds-icon icon hds-icon--link-external hds-icon--size-s vertical-align-medium-icon\" aria-hidden=\"true\"></span></external>.</p>",
-            "cardLinks": [
-              8
-            ]
+            "cardLinks": [8]
           },
           {
             "heading": "Hållplatsarrangemang och passage till hållplatserna",
             "tip": "Genomför tillgänglig passage till de nuvarande hållplatserna eller planera och genomför flytten av hållplatserna, skyltningen och tillgängliga förbindelser för fotgängare. Järnvägs - och busshållplatser får inte flyttas eller tas ur bruk utan tillstånd av HRT (<mailto href=\"mailto:infra@hsl.fi\">infra@hsl.fi</mailto>). Mer information: <external href=\"https://www.hsl.fi/hsl/urakoitsijat\">Urakoitsija - ota joukkoliikenne huomioon työmaalla <span className=\"hds-icon icon hds-icon--link-external hds-icon--size-s vertical-align-medium-icon\" aria-hidden=\"true\"></span></external>.",
-            "cardLinks": [
-              8
-            ]
+            "cardLinks": [8]
           },
           {
             "heading": "Förhandsinformation och information om ändringar",
             "tip": "Informera de olika parterna om betydande arbeten och eventuella ändringar av busstrafikens rutt redan i planeringsfasen och i god tid före genomförandet (allmänna meddelanden, lokala meddelanden). Informera de olika parterna om eventuella ändringar i rutterna i god tid före genomförandet av de nya arrangemangen.",
-            "cardLinks": [
-              1
-            ]
+            "cardLinks": [1]
           },
           {
             "heading": "Skyltning",
@@ -1060,9 +1036,7 @@
           {
             "heading": "Kontakt på förhand och trafikeringsarrangemang att avtala",
             "tip": "<p>Bedöm i god tid tidpunkten för projektets enskilda arbeten och kontakta HRT på förhand (trafikering:<mailto href=\"mailto:infra@hsl.fi\">infra@hsl.fi</mailto>) och Stadstrafik Ab:s (baninfo och system: <mailto href=\"mailto:urakoitsijaohjeistus@kaupunkiliikenne.fi\">entreprenörsanvisningar @kaupunkiliikenne.fi</mailto>) för att samordna eventuella undantagsarrangemang med andra. Planera eventuella omvägar för spårbunden trafik och kollektivtrafikförmåner samt försäkra dig om att rutten fungerar med HRT, Stadstrafik Ab samt i fråga om trafikljus med Huvudstadsregionens trafikledningscentral (<mailto href=\"mailto:liikenteenhallintakeskus@hel.fi\">liikenteenhallintakeskus@hel.fi</mailto>, tfn 09 310 37555).</p><br><p>I fråga om undantagsrutter för spårbunden trafik ska du göra en anmälan till HRT 8 veckor före arbetets början då arbetet varar högst 3 dygn och 5 månader före arbetets början då arbetet varar mer än 3 dygn. I fråga om busstrafik som ersätter spårtrafik ska du göra en anmälan till HRT 3 månader innan arbetena börjar för arbeten som varar högst 3 dygn och 5 månader innan arbetena börjar för arbeten som varar i mer än 3 dygn. Mer information: <external href=\"https://www.hsl.fi/hsl/urakoitsijat\">Entreprenör – beakta kollektivtrafiken på byggarbetsplatsen <span className=\"hds-icon icon hds-icon--link-external hds-icon--size-s vertical-align-medium-icon\" aria-hidden=\"true\"></span></external> samt <external href=\"https://kaupunkiliikenne.fi/kaupunkiraidehankkeet-ja-kunnossapito/urakoitsijalle/tyot-raitiotieradan-laheisyydessa/”Arbeten nära spårbanan – Stadstrafik Ab <span className=\"hds-icon icon hds-icon--link-external hds-icon--size-s vertical-align-medium-icon\" aria-hidden=\"true\"></span></external></p>",
-            "cardLinks": [
-              8
-            ]
+            "cardLinks": [8]
           },
           {
             "heading": "Spårvägens konstruktioner och arbeten i närheten av banområdet",
@@ -1071,16 +1045,12 @@
           {
             "heading": "Hållplatsarrangemang och passage till hållplatserna",
             "tip": "Genomför tillgänglig passage till de nuvarande hållplatserna eller planera och genomför flytten av hållplatserna, skyltningen och tillgängliga förbindelser för fotgängare. Järnvägs - och busshållplatser får inte flyttas eller tas ur bruk utan tillstånd av HRT (<mailto href=\"mailto:infra@hsl.fi\">infra@hsl.fi</mailto>). Mer information: <external href=\"http://hsl.fi/hsl/urakoitsijat\">Urakoitsija - ota joukkoliikenne huomioon työmaalla <span className=\"hds-icon icon hds-icon--link-external hds-icon--size-s vertical-align-medium-icon\" aria-hidden=\"true\"></span></external>.",
-            "cardLinks": [
-              8
-            ]
+            "cardLinks": [8]
           },
           {
             "heading": "Förhandsinformation och information om ändringar",
             "tip": "Informera de olika parterna om betydande arbeten och eventuella ändringar av spårvägstrafikens rutt redan i planeringsfasen och i god tid före genomförandet (allmänna meddelanden, lokala meddelanden). Informera de olika parterna om eventuella ändringar i rutterna i god tid före genomförandet av de nya arrangemangen.",
-            "cardLinks": [
-              1
-            ]
+            "cardLinks": [1]
           },
           {
             "heading": "Trafikljusstyrning",
@@ -1095,16 +1065,12 @@
           {
             "heading": "Förhandsinformation och information om ändringar",
             "tip": "Informera aktörerna och fastigheterna minst en vecka före eller genast när tidpunkten för arbetena är känd, när arbete som medför buller-, damm- eller vibrationsolägenhet utförs. Anmälan om mycket störande arbete ska göras senast 30 dygn innan arbetet inleds. Ge invånarna och olika aktörer tid att på förhand förbereda sig på kända störningar och förhandla särskilt med aktörerna om olägenheter nära känsliga funktioner.",
-            "cardLinks": [
-              1
-            ]
+            "cardLinks": [1]
           },
           {
             "heading": "Tidtabell för arbetet och arbetsmetoder",
             "tip": "Utred möjligheterna att planera ditt arbete och arbetsmetoderna för att minimera olägenheterna för utsläppen från funktionerna.",
-            "cardLinks": [
-              10
-            ]
+            "cardLinks": [10]
           }
         ],
         "MELU": [
@@ -1119,9 +1085,7 @@
           {
             "heading": "Lösningar som minskar bullret",
             "tip": "Genomför lösningar som minskar bullereffekterna, såsom flyttbara bullerstängsel.",
-            "cardLinks": [
-              10
-            ]
+            "cardLinks": [10]
           }
         ],
         "POLY": [
@@ -1927,7 +1891,11 @@
     },
     "attribution": "Material &copy; <a href='https://kartta.hel.fi'>Helsingin kaupunki</a>",
     "drawSquareButtonAria": "Rita en fyrkant på kartan",
-    "drawPolygonButtonAria": "Rita en polygon på kartan"
+    "drawPolygonButtonAria": "Rita en polygon på kartan",
+    "notifications": {
+      "selfIntersectingLabel": "Felaktig geometri",
+      "selfIntersectingText": "Monopolyt kan inte skära sig själv. Ändringarna har återkallats."
+    }
   },
   "staticPages": {
     "infoPage": {
