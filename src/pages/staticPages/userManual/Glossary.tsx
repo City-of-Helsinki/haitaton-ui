@@ -33,10 +33,9 @@ const Glossary: React.FC = () => {
     updateBreadcrumbs();
   }, [setBreadcrumbs]);
 
-  // @ts-expect-error For some reason TSLinting does not understand $SpecialObject
-  const words: Word[] = t('staticPages:manualPage:glossary:words', {
+  const words = t('staticPages:manualPage:glossary:words', {
     returnObjects: true,
-  });
+  }) as Word[];
 
   const queryExpanded = 'div[role=heading] > button[aria-expanded="true"]';
   const queryClosed = 'div[role=heading] > button[aria-expanded="false"]';

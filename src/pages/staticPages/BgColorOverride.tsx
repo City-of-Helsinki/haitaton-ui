@@ -1,9 +1,9 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
 
-const BgColorOverride = () => {
+const BgColorOverride: React.FC = () => {
   return (
-    // @ts-expect-error For some reason TSLint does not understand the react-helmet
+    // @ts-expect-error - Known compatibility issue between react-helmet and React 18
     <Helmet>
       <style>
         {`

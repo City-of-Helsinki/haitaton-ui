@@ -22,11 +22,10 @@ const ProcedureTips: React.FC<Props> = memo(({ haittojenhallintaTyyppi, haittaIn
   const { CARD } = useLocalizedRoutes();
   const isOther = ['MUUT', 'MELU', 'POLY', 'TARINA'].includes(haittojenhallintaTyyppi);
 
-  // @ts-expect-error: TS lint does not understand the $SpecialObject to Tip[] conversion
-  const tips: Tip[] = useMemo(() => {
+  const tips = useMemo(() => {
     return t(`hankeForm:haittojenHallintaForm:procedureTips:${haittojenhallintaTyyppi}`, {
       returnObjects: true,
-    });
+    }) as Tip[];
   }, [t, haittojenhallintaTyyppi]);
 
   // If tip has indexTreshold, show the tip only if haittaIndex is greater or equal to the treshold,
