@@ -2,10 +2,11 @@ import React from 'react';
 import { Helmet } from 'react-helmet';
 
 const BgColorOverride: React.FC = () => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const HelmetComponent = Helmet as any;
+
   return (
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error - Known compatibility issue between react-helmet and React 18
-    <Helmet>
+    <HelmetComponent>
       <style>
         {`
         html, #root {
@@ -13,7 +14,7 @@ const BgColorOverride: React.FC = () => {
         }
       `}
       </style>
-    </Helmet>
+    </HelmetComponent>
   );
 };
 
