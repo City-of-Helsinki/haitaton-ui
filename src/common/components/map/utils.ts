@@ -56,7 +56,7 @@ function linesIntersect(
  * The Open layers Polygon has coordinates in circle, expand each edge to individual lines
  * @param coordinates
  */
-function getLinesFromCoordinates(coordinates: Coordinate[][]): Array<Array<Coordinate>> {
+export function getLinesFromCoordinates(coordinates: Coordinate[][]): Array<Array<Coordinate>> {
   const edgeCoordsList: Array<Array<Coordinate>> = [];
   for (let i = 0; i < coordinates[0].length - 1; i++) {
     // Take adjoining point to form lines
@@ -65,7 +65,7 @@ function getLinesFromCoordinates(coordinates: Coordinate[][]): Array<Array<Coord
   return edgeCoordsList;
 }
 
-function getCoordinateNumbersFromCoordinate(coordinate: Coordinate): [number, number] {
+export function getCoordinateNumbersFromCoordinate(coordinate: Coordinate): [number, number] {
   return [coordinate[0], coordinate[1]];
 }
 
@@ -73,7 +73,7 @@ function getCoordinateNumbersFromCoordinate(coordinate: Coordinate): [number, nu
  * Calculate if two lines intersect and get intersection point if they do
  * @param coordinates
  */
-function getLineIntersection(
+export function getLineIntersection(
   line1start: [number, number],
   line1end: [number, number],
   line2start: [number, number],
@@ -119,7 +119,7 @@ export function areLinesInPolygonIntersecting(coordinates: Coordinate[][]): bool
     const latest_line_end: [number, number] = getCoordinateNumbersFromCoordinate(latest_line[1]);
     // if the first coordinate and last coordinate is the same we are ending the polygon
     // thus not intersecting
-    if (!(coordinates[0][0] === latest_line[1])) {
+    if (coordinates[0][0] !== latest_line[1]) {
       // Check that the latest inserted line does not intersect with other lines
       // The previous line before the latest cannot intersect with it, so do not check that
       // break on first intersection
@@ -150,6 +150,7 @@ export function isPolygonSelfIntersectingByCoordinates(coordinates: Coordinate[]
     const selfIntersectionPoints = kinks(turfPolygon);
     return selfIntersectionPoints.features.length > 0;
   } catch (error) {
+    console.log('Polygon self-intersection check error');
     return false;
   }
 }
@@ -158,9 +159,5 @@ export function isPolygonSelfIntersectingByCoordinates(coordinates: Coordinate[]
  * Check if polygon is self-intersecting
  */
 export function isPolygonSelfIntersecting(polygonToCheck: Polygon): boolean {
-  try {
-    return isPolygonSelfIntersectingByCoordinates(polygonToCheck.getCoordinates());
-  } catch (error) {
-    return false;
-  }
+  return isPolygonSelfIntersectingByCoordinates(polygonToCheck.getCoordinates());
 }
