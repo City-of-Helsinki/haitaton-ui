@@ -29,11 +29,11 @@ export function getSurfaceArea(geometry: Geometry) {
  * Calculate if two lines intersect and return true if they do
  */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-function linesIntersect(
+export function linesIntersect(
   line1start: [number, number],
   line1end: [number, number],
   line2start: [number, number],
-  Line2end: [number, number],
+  line2end: [number, number],
 ): boolean {
   // orientation of 3 coordinates
   const orientation = (a: [number, number], b: [number, number], c: [number, number]) => {
@@ -43,9 +43,9 @@ function linesIntersect(
   };
 
   const o1 = orientation(line1start, line1end, line2start);
-  const o2 = orientation(line1start, line1end, Line2end);
-  const o3 = orientation(line2start, Line2end, line1start);
-  const o4 = orientation(line2start, Line2end, line1end);
+  const o2 = orientation(line1start, line1end, line2end);
+  const o3 = orientation(line2start, line2end, line1start);
+  const o4 = orientation(line2start, line2end, line1end);
 
   if (o1 !== o2 && o3 !== o4) return true;
 

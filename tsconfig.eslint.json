@@ -1,5 +1,11 @@
 {
   "exclude": ["./build"],
   "extends": "./tsconfig.json",
-  "include": ["src/**/*", "e2e/**/*", "playwright.config.ts"]
+  "include": [
+    "src/**/*",
+    "src/**/*.test.tsx",
+    "src/**/*.test.ts",
+    "e2e/**/*",
+    "playwright.config.ts"
+  ]
 }

@@ -1,10 +1,13 @@
 import { Point, Polygon } from 'ol/geom';
-import { getSurfaceArea, isPolygonSelfIntersecting } from './utils';
 import {
+  getSurfaceArea,
+  isPolygonSelfIntersecting,
   getLinesFromCoordinates,
   getCoordinateNumbersFromCoordinate,
   getLineIntersection,
   isPolygonSelfIntersectingByCoordinates,
+  areLinesInPolygonIntersecting,
+  linesIntersect,
 } from './utils';
 
 describe('surface area', () => {
@@ -150,5 +153,52 @@ describe('isPolygonSelfIntersectingByCoordinates', () => {
   });
   test('should return false for invalid input', () => {
     expect(isPolygonSelfIntersectingByCoordinates([])).toBe(false);
+  });
+});
+
+describe('areLinesInPolygonIntersecting', () => {
+  test('returns false for non-intersecting polygon', () => {
+    const coordinates = [
+      [
+        [0, 0],
+        [0, 10],
+        [10, 10],
+        [10, 0],
+      ],
+    ];
+    expect(areLinesInPolygonIntersecting(coordinates)).toBe(false);
+  });
+  test('returns true for self-intersecting polygon', () => {
+    const coordinates = [
+      [
+        [0, 0],
+        [2, 2],
+        [0, 2],
+        [2, 0],
+      ],
+    ];
+    expect(areLinesInPolygonIntersecting(coordinates)).toBe(true);
+  });
+  test('returns false for polygon with less than 3 lines', () => {
+    const coordinates = [
+      [
+        [0, 0],
+        [1, 1],
+        [0, 0],
+      ],
+    ];
+    expect(areLinesInPolygonIntersecting(coordinates)).toBe(false);
+  });
+});
+
+describe('linesIntersect', () => {
+  test('returns true for intersecting lines', () => {
+    expect(linesIntersect([0, 0], [2, 2], [0, 2], [2, 0])).toBe(true);
+  });
+  test('returns false for parallel lines', () => {
+    expect(linesIntersect([0, 0], [1, 0], [0, 1], [1, 1])).toBe(false);
+  });
+  test('returns false for colinear but non-overlapping lines', () => {
+    expect(linesIntersect([0, 0], [1, 1], [2, 2], [3, 3])).toBe(false);
   });
 });
