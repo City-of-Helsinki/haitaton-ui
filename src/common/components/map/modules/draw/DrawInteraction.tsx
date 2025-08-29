@@ -9,12 +9,18 @@ import Geometry from 'ol/geom/Geometry';
 import Polygon from 'ol/geom/Polygon';
 import Style from 'ol/style/Style';
 import { ModifyEvent } from 'ol/interaction/Modify';
+import { useTranslation } from 'react-i18next';
 import { DRAWTOOLTYPE } from './types';
 import MapContext from '../../MapContext';
 import useDrawContext from './useDrawContext';
-import { getSurfaceArea, isPolygonSelfIntersecting } from '../../utils';
+import {
+  areLinesInPolygonIntersecting,
+  getSurfaceArea,
+  isPolygonSelfIntersecting,
+} from '../../utils';
 import { styleFunction } from '../../../../../domain/map/utils/geometryStyle';
 import { Map, MapBrowserEvent } from 'ol';
+import { useGlobalNotification } from '../../../globalNotification/GlobalNotificationContext';
 
 type Props = {
   features?: Collection<Feature>;
@@ -38,6 +44,8 @@ const DrawInteraction: React.FC<React.PropsWithChildren<Props>> = ({
   drawStyleFunction,
   handleModifyEnd,
 }) => {
+  const { t } = useTranslation();
+  const { setNotification } = useGlobalNotification();
   const selection = useRef<null | Select>(null);
   const { map } = useContext(MapContext);
   const { state, actions, source } = useDrawContext();
@@ -104,11 +112,33 @@ const DrawInteraction: React.FC<React.PropsWithChildren<Props>> = ({
           return true;
         },
       });
-
       drawInstance.on('drawstart', (event) => {
         selection.current?.setActive(false);
         event.feature.on('change', (changeEvent) => {
-          drawnFeature.current = changeEvent.target;
+          const currentFeature = event.feature;
+          const modifiedPolygon: Polygon = currentFeature.getGeometry() as Polygon;
+          const currentCoordinates = modifiedPolygon.getCoordinates();
+          let intersecting: boolean = false;
+          // OpenLayers creates minimum set of 3 coordinates when draw starts for polygon
+          // We are interested only with set of coordinates where there are only those
+          // that we have drawn. Discard the 2 coordinates the polygon inheritly gets.
+          currentCoordinates[0].splice(currentCoordinates[0].length - 2, 2);
+          intersecting = areLinesInPolygonIntersecting(currentCoordinates);
+          if (intersecting) {
+            drawInstance.removeLastPoint();
+            setNotification(true, {
+              position: 'top-right',
+              dismissible: true,
+              autoClose: true,
+              autoCloseDuration: 1000,
+              label: t('map:notifications:selfIntersectingLabel'),
+              message: t('map:notifications:selfIntersectingText'),
+              type: 'alert',
+              closeButtonLabelText: t('common:components:notification:closeButtonLabelText'),
+            });
+          } else {
+            drawnFeature.current = changeEvent.target;
+          }
         });
       });
 
@@ -141,32 +171,43 @@ const DrawInteraction: React.FC<React.PropsWithChildren<Props>> = ({
       drawCondition,
       drawFinishCondition,
       drawStyleFunction,
+      t,
+      setNotification,
     ],
   );
 
   useEffect(() => {
     if (!map || !source || process.env.NODE_ENV === 'test') return;
-
+    let originalGeometry: Polygon;
     modify.current = new Modify({ source });
     map.addInteraction(modify.current);
 
     modify.current.on('modifystart', (event) => {
-      originalModifiedFeature.current = event.features.getArray()[0].clone();
+      const currentFeature = event.features.item(0) as Feature<Polygon>;
+      originalGeometry = currentFeature.getGeometry()?.clone() as Polygon;
+      originalModifiedFeature.current = currentFeature.clone();
     });
 
     modify.current.on('modifyend', (event) => {
-      handleModifyEnd?.(event, originalModifiedFeature.current, event.features.getArray()[0]);
+      // if modify would result into self intersecting polygon, revert to original geometry
+      const modifiedFeature = event.features.item(0) as Feature<Polygon>;
+      const modifiedPolygon: Polygon = modifiedFeature.getGeometry() as Polygon;
 
-      const selfIntersectingFeature = source
-        .getFeatures()
-        .find((feature) => isPolygonSelfIntersecting(feature.getGeometry() as Polygon));
-
-      if (onSelfIntersectingPolygon) {
-        if (selfIntersectingFeature) {
-          onSelfIntersectingPolygon(selfIntersectingFeature);
-        } else {
-          onSelfIntersectingPolygon(null);
-        }
+      if (isPolygonSelfIntersecting(modifiedPolygon)) {
+        modifiedPolygon.setCoordinates(originalGeometry.getCoordinates());
+        // Show notification for self-intersecting polygon
+        setNotification(true, {
+          position: 'top-right',
+          dismissible: true,
+          autoClose: true,
+          autoCloseDuration: 1000,
+          label: t('map:notifications:selfIntersectingLabel'),
+          message: t('map:notifications:selfIntersectingText'),
+          type: 'alert',
+          closeButtonLabelText: t('common:components:notification:closeButtonLabelText'),
+        });
+      } else {
+        handleModifyEnd?.(event, originalModifiedFeature.current, modifiedFeature);
       }
     });
 
@@ -214,7 +255,7 @@ const DrawInteraction: React.FC<React.PropsWithChildren<Props>> = ({
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [map, source]);
+  }, [map, source, t, setNotification]);
 
   useEffect(() => {
     removeAllInteractions();

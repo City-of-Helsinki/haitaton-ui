@@ -1927,7 +1927,11 @@
     },
     "attribution": "Materials &copy; <a href='https://kartta.hel.fi'>Helsingin kaupunki</a>",
     "drawSquareButtonAria": "Draw a square on the map",
-    "drawPolygonButtonAria": "Draw a polygon on the map"
+    "drawPolygonButtonAria": "Draw a polygon on the map",
+    "notifications": {
+      "selfIntersectingLabel": "Invalid Geometry",
+      "selfIntersectingText": "The polygon cannot intersect with itself. Changes have been reverted."
+    }
   },
   "staticPages": {
     "infoPage": {
