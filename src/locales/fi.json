@@ -631,6 +631,10 @@
       "titleText": "Peru hanke?",
       "bodyText": "Haluatko varmasti perua hankkeen? Hanke poistetaan kokonaan järjestelmästä."
     },
+    "validationError": {
+      "header": "Tietoja puuttuu",
+      "haittojenHallintaRequired": "Täydennä hankealueen haittojenhallintatoimet ja muut pakolliset tiedot, jotta voit tallentaa hankkeen."
+    },
     "labels": {
       "hankeTunnus": "Hankkeen tunnus",
       "nimi": "Hankkeen nimi",

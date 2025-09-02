@@ -109,6 +109,8 @@ function fillBasicInformation(
   fireEvent.change(screen.getByLabelText(/katuosoite/i), {
     target: { value: address },
   });
+  // Following settings have side effect:
+  // if value is already set to some value these will clear it if the new value is same
   fireEvent.click(screen.getByRole('radio', { name: phase }));
   if (isYKT) {
     fireEvent.click(screen.getByRole('checkbox', { name: 'Hanke on YKT-hanke' }));
@@ -459,6 +461,33 @@ describe('HankeForm', () => {
   test('Should be able to save and quit', async () => {
     const hanke = cloneDeep(hankkeet[0]);
     const hankeName = hanke.nimi;
+
+    // Ensure hanke has all required fields for validation to pass
+    hanke.kuvaus = hanke.kuvaus || 'Test description';
+    hanke.tyomaaKatuosoite = hanke.tyomaaKatuosoite || 'Test address';
+    hanke.vaihe = 'SUUNNITTELU'; // Force suunnittelu as the fillBasicInformation will set it to 'OHJELMOINTI'
+
+    if (hanke?.alueet && hanke.alueet.length < 1) {
+      // Ensure that atleast one area is in the hanke to fulfill validation
+      hanke.alueet.push({
+        id: 1,
+        nimi: 'Alue 1',
+        haittaAlkuPvm: new Date('2024-01-01'),
+        haittaLoppuPvm: new Date('2024-12-31'),
+        geometriat: {
+          featureCollection: {
+            type: 'FeatureCollection',
+            features: [],
+            crs: { type: 'name', properties: { name: 'EPSG:4326' } },
+          },
+        },
+        kaistaHaitta: 'EI_VAIKUTA',
+        kaistaPituusHaitta: 'EI_VAIKUTA_KAISTAJARJESTELYIHIN',
+        meluHaitta: 'EI_MELUHAITTAA',
+        polyHaitta: 'EI_POLYHAITTAA',
+        tarinaHaitta: 'EI_TARINAHAITTAA',
+      });
+    }
 
     const { user } = render(
       <HankeForm

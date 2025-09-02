@@ -626,6 +626,10 @@
       "titleText": "Återta projektet?",
       "bodyText": "Är du säker på att du vill återta projektet? Det raderas helt ur systemet."
     },
+    "validationError": {
+      "header": "Uppgifter saknas",
+      "haittojenHallintaRequired": "Fyll i åtgärderna för hantering av olägenheter för projektområdet och övriga obligatoriska uppgifter för att kunna spara projektet."
+    },
     "labels": {
       "hankeTunnus": "Projektets kod",
       "nimi": "Projektets namn",

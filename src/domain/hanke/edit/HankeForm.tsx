@@ -141,27 +141,6 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
     hankeMutation.mutate(getValues());
   }
 
-  function saveAndQuit() {
-    hankeMutation.mutate(getValues(), {
-      onSuccess(data) {
-        setNotification(true, {
-          position: 'top-right',
-          dismissible: true,
-          autoClose: true,
-          autoCloseDuration: 8000,
-          label: t('hankeForm:saveAndQuitSuccessHeader'),
-          message: t('hankeForm:saveAndQuitSuccessText', {
-            name: data.nimi,
-            hankeTunnus: data.hankeTunnus,
-          }),
-          type: 'success',
-          closeButtonLabelText: t('common:components:notification:closeButtonLabelText'),
-        });
-        navigate(`${HANKEPORTFOLIO.path}/${data.hankeTunnus}`);
-      },
-    });
-  }
-
   function saveAndAddApplication() {
     save();
     setShowAddApplicationDialog(true);
@@ -258,6 +237,48 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
     [],
     [],
   ];
+
+  const saveAndQuit = () => {
+    if (
+      haittojenHallintaErrors.length > 0 ||
+      perustiedotErrors.length > 0 ||
+      alueetErrors.length > 0
+    ) {
+      // Set notification for validation errors
+      setNotification(true, {
+        position: 'bottom-right',
+        dismissible: true,
+        autoClose: false,
+        label: t('hankeForm:validationError:header'),
+        message: t('hankeForm:validationError:haittojenHallintaRequired'),
+        type: 'error',
+        closeButtonLabelText: t('common:components:notification:closeButtonLabelText'),
+      });
+
+      // Navigate to the haittojen hallinta step (step index 2)
+      setActiveStepIndex(2);
+      return;
+    }
+
+    hankeMutation.mutate(getValues(), {
+      onSuccess(data) {
+        setNotification(true, {
+          position: 'top-right',
+          dismissible: true,
+          autoClose: true,
+          autoCloseDuration: 8000,
+          label: t('hankeForm:saveAndQuitSuccessHeader'),
+          message: t('hankeForm:saveAndQuitSuccessText', {
+            name: data.nimi,
+            hankeTunnus: data.hankeTunnus,
+          }),
+          type: 'success',
+          closeButtonLabelText: t('common:components:notification:closeButtonLabelText'),
+        });
+        navigate(`${HANKEPORTFOLIO.path}/${data.hankeTunnus}`);
+      },
+    });
+  };
 
   const formErrorsNotification =
     (activeStepIndex === 5 && (

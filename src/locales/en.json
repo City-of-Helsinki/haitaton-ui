@@ -626,6 +626,10 @@
       "titleText": "Cancel project?",
       "bodyText": "Are you sure you want to cancel the project? The project will be completely removed from the system."
     },
+    "validationError": {
+      "title": "The form contains errors",
+      "text": "Please check the information you entered and correct any errors."
+    },
     "labels": {
       "hankeTunnus": "Project identifier",
       "nimi": "Project name",
