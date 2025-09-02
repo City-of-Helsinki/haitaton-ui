@@ -47,9 +47,7 @@ export function linesIntersect(
   const o3 = orientation(line2start, line2end, line1start);
   const o4 = orientation(line2start, line2end, line1end);
 
-  if (o1 !== o2 && o3 !== o4) return true;
-
-  return false; // No intersections
+  return o1 !== o2 && o3 !== o4;
 }
 
 /**
