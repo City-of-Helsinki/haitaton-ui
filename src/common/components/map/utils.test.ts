@@ -1,5 +1,14 @@
 import { Point, Polygon } from 'ol/geom';
-import { getSurfaceArea, isPolygonSelfIntersecting } from './utils';
+import {
+  getSurfaceArea,
+  isPolygonSelfIntersecting,
+  getLinesFromCoordinates,
+  getCoordinateNumbersFromCoordinate,
+  getLineIntersection,
+  isPolygonSelfIntersectingByCoordinates,
+  areLinesInPolygonIntersecting,
+  linesIntersect,
+} from './utils';
 
 describe('surface area', () => {
   test('should return correct surface area for a polygon', () => {
@@ -58,5 +67,138 @@ describe('self-intersecting polygon', () => {
     const result = isPolygonSelfIntersecting(polygonToCheck);
 
     expect(result).toBe(false);
+  });
+});
+
+describe('getLinesFromCoordinates', () => {
+  test('should return correct lines from coordinates', () => {
+    const coordinates = [
+      [
+        [0, 0],
+        [1, 0],
+        [1, 1],
+        [0, 1],
+        [0, 0],
+      ],
+    ];
+    const result = getLinesFromCoordinates(coordinates);
+    expect(result).toEqual([
+      [
+        [0, 0],
+        [1, 0],
+      ],
+      [
+        [1, 0],
+        [1, 1],
+      ],
+      [
+        [1, 1],
+        [0, 1],
+      ],
+      [
+        [0, 1],
+        [0, 0],
+      ],
+    ]);
+  });
+});
+
+describe('getCoordinateNumbersFromCoordinate', () => {
+  test('should return numbers from coordinate', () => {
+    const coordinate = [5, 10];
+    const result = getCoordinateNumbersFromCoordinate(coordinate);
+    expect(result).toEqual([5, 10]);
+  });
+});
+
+describe('getLineIntersection', () => {
+  test('should return intersection point for crossing lines', () => {
+    const result = getLineIntersection([0, 0], [2, 2], [0, 2], [2, 0]);
+    expect(result).toEqual([1, 1]);
+  });
+  test('should return null for parallel lines', () => {
+    const result = getLineIntersection([0, 0], [1, 0], [0, 1], [1, 1]);
+    expect(result).toBeNull();
+  });
+  test('should return null for non-intersecting segments', () => {
+    const result = getLineIntersection([0, 0], [1, 0], [2, 2], [3, 3]);
+    expect(result).toBeNull();
+  });
+});
+
+describe('isPolygonSelfIntersectingByCoordinates', () => {
+  test('should return true for self-intersecting coordinates', () => {
+    const coordinates = [
+      [
+        [0, 0],
+        [2, 2],
+        [0, 2],
+        [2, 0],
+        [0, 0],
+      ],
+    ];
+    expect(isPolygonSelfIntersectingByCoordinates(coordinates)).toBe(true);
+  });
+  test('should return false for non-self-intersecting coordinates', () => {
+    const coordinates = [
+      [
+        [0, 0],
+        [1, 0],
+        [1, 1],
+        [0, 1],
+        [0, 0],
+      ],
+    ];
+    expect(isPolygonSelfIntersectingByCoordinates(coordinates)).toBe(false);
+  });
+  test('should return false for invalid input', () => {
+    expect(isPolygonSelfIntersectingByCoordinates([])).toBe(false);
+  });
+});
+
+describe('areLinesInPolygonIntersecting', () => {
+  test('returns false for non-intersecting polygon', () => {
+    const coordinates = [
+      [
+        [0, 0],
+        [0, 10],
+        [10, 10],
+        [10, 0],
+      ],
+    ];
+    expect(areLinesInPolygonIntersecting(coordinates)).toBe(false);
+  });
+  test('returns true for self-intersecting polygon', () => {
+    const coordinates = [
+      [
+        [0, 0],
+        [2, 2],
+        [0, 2],
+        [2, 0],
+      ],
+    ];
+    expect(areLinesInPolygonIntersecting(coordinates)).toBe(true);
+  });
+  test('returns false for polygon with less than 3 lines', () => {
+    const coordinates = [
+      [
+        [0, 0],
+        [1, 1],
+        [0, 0],
+      ],
+    ];
+    expect(areLinesInPolygonIntersecting(coordinates)).toBe(false);
+  });
+});
+
+describe('linesIntersect', () => {
+  test('returns true for intersecting lines', () => {
+    expect(linesIntersect([0, 0], [2, 2], [0, 2], [2, 0])).toBe(true);
+  });
+  test('returns false for parallel lines', () => {
+    expect(linesIntersect([0, 0], [1, 0], [0, 1], [1, 1])).toBe(false);
+  });
+  test('returns false for colinear but non-overlapping lines', () => {
+    expect(linesIntersect([0, 0], [1, 1], [2, 2], [3, 3])).toBe(false);
   });
 });
