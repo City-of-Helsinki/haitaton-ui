@@ -24,6 +24,8 @@
     "lint:css": "stylelint 'src/**/*.scss'",
     "locales:export": "ts-node -P ./scripts/tsconfig.json ./scripts/translate-json-to-excel.ts",
     "locales:import": "ts-node -P ./scripts/tsconfig.json ./scripts/translate-excel-to-json.ts",
+    "sonar": "sonar-scanner",
+    "sonar:analyze": "yarn test:ci && sonar-scanner",
     "prepare": "husky"
   },
   "dependencies": {
@@ -173,5 +175,46 @@
   },
   "msw": {
     "workerDirectory": "public"
+  },
+  "sonarjs": {
+    "ignorePatterns": [
+      "src/jest.polyfills.js",
+      "src/setupTests.ts",
+      "src/**/__mocks__/**",
+      "src/**/mocks/**"
+    ]
+  },
+  "sonarqube": {
+    "organization": "city-of-helsinki",
+    "projectKey": "City-of-Helsinki_haitaton-ui",
+    "sources": "src",
+    "tests": "src",
+    "testInclusions": [
+      "src/**/*.test.tsx",
+      "src/**/*.test.ts", 
+      "src/**/*.spec.tsx",
+      "src/**/*.spec.ts"
+    ],
+    "exclusions": [
+      "src/**/*.test.tsx",
+      "src/**/*.test.ts",
+      "src/**/*.spec.tsx", 
+      "src/**/*.spec.ts"
+    ],
+    "coverageExclusions": [
+      "src/index.tsx",
+      "src/serviceWorker.ts",
+      "src/setupTests.ts",
+      "src/jest.polyfills.js",
+      "src/**/__mocks__/**",
+      "src/**/mocks/**",
+      "src/**/*.d.ts",
+      "src/testUtils/**"
+    ],
+    "typescriptLcovReportPaths": "coverage/lcov.info",
+    "javascriptLcovReportPaths": "coverage/lcov.info",
+    "cpdExclusions": [
+      "src/**/*.d.ts"
+    ]
   }
 }
