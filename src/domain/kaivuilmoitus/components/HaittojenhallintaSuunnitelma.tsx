@@ -151,7 +151,6 @@ export default function KaivuilmoitusHaittojenhallintaSuunnitelma({
                 hankeAlue={hankeAlue}
                 kaivuilmoitusAlue={kaivuilmoitusAlue}
                 haittojenHallintaTyyppi={haitta}
-                mb="var(--spacing-m)"
               />
               <HankeNuisanceControl
                 haitta={haitta}

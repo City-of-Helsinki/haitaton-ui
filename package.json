@@ -25,10 +25,13 @@
   },
   "dependencies": {
     "@axe-core/react": "^4.10.1",
+    "@chakra-ui/layout": "^2.3.1",
     "@chakra-ui/react": "^2.8.2",
+    "@chakra-ui/utils": "^2.2.2",
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.14.0",
     "@hookform/resolvers": "^3.9.1",
+    "@jridgewell/resolve-uri": "^3.1.2",
     "@popperjs/core": "^2.11.8",
     "@reduxjs/toolkit": "^2.4.0",
     "@sentry/react": "^8.42.0",
@@ -61,7 +64,7 @@
     "i18next-browser-languagedetector": "^8.0.0",
     "jest-fetch-mock": "^3.0.3",
     "lodash": "^4.17.21",
-    "msw": "^2.4.2",
+    "msw": "^2.5.2",
     "ol": "^8.2.0",
     "proj4": "^2.14.0",
     "react": "^18.3.1",
@@ -76,30 +79,37 @@
     "react-table": "^7.8.0",
     "sass": "^1.77.6",
     "ts-enum-util": "^4.0.2",
-    "typescript": "^5.3.3",
+    "typescript": "^5.9.2",
     "undici": "^6.21.0",
     "yup": "^1.4.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.28.3",
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@babel/preset-env": "^7.28.3",
     "@faker-js/faker": "^9.6.0",
+    "@mswjs/interceptors": "^0.39.6",
     "@playwright/test": "^1.52.0",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
-    "@testing-library/react": "^16.2.0",
+    "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^14.5.2",
     "@types/proj4": "^2.5.5",
     "@typescript-eslint/eslint-plugin": "^7.14.1",
     "@typescript-eslint/parser": "^7.14.1",
+    "babel-jest": "^30.0.0",
     "eslint-import-resolver-typescript": "^3.6.1",
     "eslint-plugin-jest": "^28.8.3",
     "husky": "^9.1.7",
+    "jest": "^30.0.5",
     "jest-canvas-mock": "^2.5.2",
+    "jest-environment-jsdom": "^30.1.2",
     "lint-staged": "^15.2.7",
     "prettier": "^3.2.5",
     "resize-observer-polyfill": "^1.5.1",
     "stylelint": "^16.11.0",
     "stylelint-config-standard-scss": "^13.1.0",
+    "ts-jest": "^29.4.1",
     "ts-node": "^10.9.2",
     "xlsx": "^0.18.5"
   },
@@ -137,7 +147,11 @@
   "jest": {
     "transformIgnorePatterns": [
       "<rootDir>/node_modules/(?!ol)/"
-    ]
+    ],
+    "moduleNameMapper": {
+      "^@chakra-ui/utils/context$": "<rootDir>/node_modules/@chakra-ui/utils/dist/cjs/context.cjs",
+      "^@chakra-ui/layout$": "<rootDir>/node_modules/@chakra-ui/react/dist/cjs/index.cjs"
+    }
   },
   "msw": {
     "workerDirectory": "public"
