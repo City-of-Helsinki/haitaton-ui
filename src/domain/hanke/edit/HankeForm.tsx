@@ -248,15 +248,23 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
       setNotification(true, {
         position: 'bottom-right',
         dismissible: true,
-        autoClose: false,
+        autoClose: true,
+        autoCloseDuration: 5000,
         label: t('hankeForm:validationError:header'),
         message: t('hankeForm:validationError:haittojenHallintaRequired'),
         type: 'error',
         closeButtonLabelText: t('common:components:notification:closeButtonLabelText'),
       });
-
-      // Navigate to the haittojen hallinta step (step index 2)
-      setActiveStepIndex(2);
+      if (perustiedotErrors.length > 0) {
+        // Navigate to the perustiedot step (step index 0)
+        setActiveStepIndex(0);
+      } else if (haittojenHallintaErrors.length > 0) {
+        // Navigate to the haittojen hallinta step (step index 2)
+        setActiveStepIndex(2);
+      } else if (alueetErrors.length > 0) {
+        // Navigate to the alueet step (step index 1)
+        setActiveStepIndex(1);
+      }
       return;
     }
 
