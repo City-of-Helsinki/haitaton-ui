@@ -10,8 +10,11 @@
     "build": "react-scripts build",
     "build-and-serve": "yarn run build && yarn run serve",
     "update-runtime-env": "ts-node -P ./scripts/tsconfig.json --files scripts/update-runtime-env.ts",
-    "test": "TEST=true yarn run update-runtime-env && DEBUG_PRINT_LIMIT=50000 react-scripts test",
-    "testCI": "TEST=true yarn run update-runtime-env && CI=TRUE DEBUG_PRINT_LIMIT=50000 react-scripts test",
+    "test": "TEST=true yarn run update-runtime-env && react-scripts test",
+    "testCI": "TEST=true yarn run update-runtime-env && CI=true react-scripts test --watchAll=false --coverage --maxWorkers=2",
+    "test:ci": "TEST=true yarn run update-runtime-env && CI=true react-scripts test --watchAll=false --coverage --maxWorkers=2",
+    "test:watch": "TEST=true yarn run update-runtime-env && react-scripts test --watch",
+    "test:debug": "TEST=true yarn run update-runtime-env && react-scripts test --verbose --no-cache",
     "e2e": "playwright test --retries=1 --project=chromium --workers=3",
     "eject": "react-scripts eject",
     "type-check": "tsc --pretty --noEmit",
@@ -102,9 +105,11 @@
     "eslint-import-resolver-typescript": "^3.6.1",
     "eslint-plugin-jest": "^28.8.3",
     "husky": "^9.1.7",
+    "identity-obj-proxy": "^3.0.0",
     "jest": "^30.0.5",
     "jest-canvas-mock": "^2.5.2",
     "jest-environment-jsdom": "^30.1.2",
+    "jest-junit": "^16.0.0",
     "lint-staged": "^15.2.7",
     "prettier": "^3.2.5",
     "resize-observer-polyfill": "^1.5.1",
@@ -150,8 +155,21 @@
     ],
     "moduleNameMapper": {
       "^@chakra-ui/utils/context$": "<rootDir>/node_modules/@chakra-ui/utils/dist/cjs/context.cjs",
-      "^@chakra-ui/layout$": "<rootDir>/node_modules/@chakra-ui/react/dist/cjs/index.cjs"
-    }
+      "^@chakra-ui/layout$": "<rootDir>/node_modules/@chakra-ui/react/dist/cjs/index.cjs",
+      "\\.(css|less|scss)$": "identity-obj-proxy"
+    },
+    "clearMocks": true,
+    "restoreMocks": true,
+    "collectCoverageFrom": [
+      "src/**/*.{js,jsx,ts,tsx}",
+      "!src/**/*.d.ts",
+      "!src/index.tsx",
+      "!src/serviceWorker.ts",
+      "!src/setupTests.ts",
+      "!src/jest.polyfills.js",
+      "!src/**/__mocks__/**",
+      "!src/**/mocks/**"
+    ]
   },
   "msw": {
     "workerDirectory": "public"
