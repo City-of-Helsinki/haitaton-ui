@@ -2,6 +2,7 @@
 // allows you to do things like:
 // expect(element).toHaveTextContent(/react/i)
 // learn more: https://github.com/testing-library/jest-dom
+
 import '@testing-library/jest-dom';
 import './jest.polyfills';
 import { GlobalWithFetchMock } from 'jest-fetch-mock';
@@ -26,9 +27,11 @@ const originalConsoleWarn = console.warn;
 beforeAll(() => {
   // Suppress known CSS parsing errors from HDS React components
   console.error = (...args: unknown[]) => {
+    const errorMessage = args[0]?.toString() || '';
     if (
-      args[0]?.toString().includes('Could not parse CSS stylesheet') ||
-      args[0]?.toString().includes('Warning: React.createElement')
+      errorMessage.includes('Could not parse CSS stylesheet') ||
+      errorMessage.includes('Error: Could not parse CSS stylesheet') ||
+      errorMessage.includes('Warning: React.createElement')
     ) {
       return;
     }
