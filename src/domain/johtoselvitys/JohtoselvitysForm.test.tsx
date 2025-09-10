@@ -1,5 +1,6 @@
 import { http, HttpResponse } from 'msw';
 import { render, cleanup, fireEvent, screen, waitFor, within } from '../../testUtils/render';
+import { UserEvent } from '@testing-library/user-event';
 import Johtoselvitys from '../../pages/Johtoselvitys';
 import JohtoselvitysContainer from './JohtoselvitysContainer';
 import { waitForLoadingToFinish } from '../../testUtils/helperFunctions';
@@ -97,42 +98,66 @@ function fillAreasInformation(options: DateOptions = {}) {
   });
 }
 
-async function fillContactsInformation() {
+async function fillContactsInformation(user: UserEvent) {
   // Fill customer info
-  fireEvent.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[0]);
-  fireEvent.click(screen.getAllByText(/yksityishenkilö/i)[0]);
-  fireEvent.change(screen.getAllByRole('combobox', { name: /nimi/i })[0], {
-    target: { value: 'Veera Vastaava' },
-  });
-  fireEvent.change(screen.getByTestId('applicationData.customerWithContacts.customer.email'), {
-    target: { value: 'veera.vastaava@test.com' },
-  });
-  fireEvent.change(screen.getByTestId('applicationData.customerWithContacts.customer.phone'), {
-    target: { value: '0000000000' },
-  });
-  fireEvent.click(screen.getAllByRole('button', { name: /yhteyshenkilöt/i })[0]);
-  fireEvent.click(screen.getAllByText(/tauno testinen/i)[0]);
+  await user.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[0]);
+  await user.click(screen.getAllByText(/yksityishenkilö/i)[0]);
+
+  const customerNameInput = screen.getAllByRole('combobox', { name: /nimi/i })[0];
+  await user.clear(customerNameInput);
+  await user.type(customerNameInput, 'Veera Vastaava');
+
+  const customerEmailInput = screen.getByTestId(
+    'applicationData.customerWithContacts.customer.email',
+  );
+  await user.clear(customerEmailInput);
+  await user.type(customerEmailInput, 'veera.vastaava@test.com');
+
+  const customerPhoneInput = screen.getByTestId(
+    'applicationData.customerWithContacts.customer.phone',
+  );
+  await user.clear(customerPhoneInput);
+  await user.type(customerPhoneInput, '0000000000');
+
+  await user.click(screen.getAllByRole('button', { name: /yhteyshenkilöt/i })[0]);
+  await user.click(screen.getAllByText(/tauno testinen/i)[0]);
 
   // Fill contractor info
-  fireEvent.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[1]);
-  fireEvent.click(screen.getAllByText(/yritys/i)[1]);
-  fireEvent.change(screen.getAllByRole('combobox', { name: /nimi/i })[1], {
-    target: { value: 'Yritys 2 Oy' },
-  });
-  fireEvent.change(
-    screen.getByTestId('applicationData.contractorWithContacts.customer.registryKey'),
-    {
-      target: { value: '7126070-7' },
-    },
+  await user.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[1]);
+  await user.click(screen.getAllByText(/yritys/i)[1]);
+
+  const contractorNameInput = screen.getAllByRole('combobox', { name: /nimi/i })[1];
+  await user.clear(contractorNameInput);
+  await user.type(contractorNameInput, 'Yritys 2 Oy');
+
+  const registryKeyInput = screen.getByTestId(
+    'applicationData.contractorWithContacts.customer.registryKey',
   );
-  fireEvent.change(screen.getByTestId('applicationData.contractorWithContacts.customer.email'), {
-    target: { value: 'yritys2@test.com' },
-  });
-  fireEvent.change(screen.getByTestId('applicationData.contractorWithContacts.customer.phone'), {
-    target: { value: '0000000000' },
-  });
-  fireEvent.click(screen.getAllByRole('button', { name: /yhteyshenkilöt/i })[1]);
-  fireEvent.click(screen.getByText('Matti Meikäläinen (matti.meikalainen@test.com)'));
+  await user.clear(registryKeyInput);
+  await user.type(registryKeyInput, '7126070-7');
+
+  const contractorEmailInput = screen.getByTestId(
+    'applicationData.contractorWithContacts.customer.email',
+  );
+  await user.clear(contractorEmailInput);
+  await user.type(contractorEmailInput, 'yritys2@test.com');
+
+  const contractorPhoneInput = screen.getByTestId(
+    'applicationData.contractorWithContacts.customer.phone',
+  );
+  await user.clear(contractorPhoneInput);
+  await user.type(contractorPhoneInput, '0000000000');
+
+  await user.click(screen.getAllByRole('button', { name: /yhteyshenkilöt/i })[1]);
+
+  // Wait for the dropdown to open and populate, then select the contact
+  await waitFor(
+    async () => {
+      const contact = await screen.findByText('Matti Meikäläinen (matti.meikalainen@test.com)');
+      await user.click(contact);
+    },
+    { timeout: 5000 },
+  );
 }
 
 test('Cable report application form can be filled', async () => {
@@ -175,7 +200,7 @@ test('Cable report application form can be filled', async () => {
   expect(await screen.findByText('Vaihe 3/5: Yhteystiedot')).toBeInTheDocument();
 
   // Fill contacts page
-  await fillContactsInformation();
+  await fillContactsInformation(user);
 
   // Move to attachments page
   await user.click(screen.getByRole('button', { name: /seuraava/i }));

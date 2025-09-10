@@ -3,7 +3,8 @@ import { FORMFIELD, HankeDataFormState } from './types';
 import HankeForm from './HankeForm';
 import HankeFormContainer from './HankeFormContainer';
 import { HANKE_VAIHE, HANKE_TYOMAATYYPPI, HankeData } from '../../types/hanke';
-import { render, cleanup, fireEvent, waitFor, screen, within } from '../../../testUtils/render';
+import { render, cleanup, waitFor, screen, within } from '../../../testUtils/render';
+import type { UserEvent } from '@testing-library/user-event';
 import hankkeet from '../../mocks/data/hankkeet-data';
 import { server } from '../../mocks/test-server';
 import { HankeAttachmentMetadata } from '../hankeAttachments/types';
@@ -85,7 +86,8 @@ const hankkeenKuvaus = 'Tässä on kuvaus';
 const hankkeenOsoite = 'Sankaritie 3';
 const updatedHaittojenhallintasuunnitelma = ', johon on lisätty tekstiä.';
 
-function fillBasicInformation(
+async function fillBasicInformation(
+  user: UserEvent,
   options: {
     name?: string;
     description?: string;
@@ -102,16 +104,15 @@ function fillBasicInformation(
     isYKT = false,
   } = options;
 
-  fireEvent.change(screen.getByLabelText(/hankkeen nimi/i), {
-    target: { value: name },
-  });
-  fireEvent.change(screen.getByLabelText(/hankkeen kuvaus/i), { target: { value: description } });
-  fireEvent.change(screen.getByLabelText(/katuosoite/i), {
-    target: { value: address },
-  });
-  fireEvent.click(screen.getByRole('radio', { name: phase }));
+  await user.clear(screen.getByLabelText(/hankkeen nimi/i));
+  await user.type(screen.getByLabelText(/hankkeen nimi/i), name);
+  await user.clear(screen.getByLabelText(/hankkeen kuvaus/i));
+  await user.type(screen.getByLabelText(/hankkeen kuvaus/i), description);
+  await user.clear(screen.getByLabelText(/katuosoite/i));
+  await user.type(screen.getByLabelText(/katuosoite/i), address);
+  await user.click(screen.getByRole('radio', { name: phase }));
   if (isYKT) {
-    fireEvent.click(screen.getByRole('checkbox', { name: 'Hanke on YKT-hanke' }));
+    await user.click(screen.getByRole('checkbox', { name: 'Hanke on YKT-hanke' }));
   }
 }
 
@@ -193,13 +194,15 @@ describe('HankeForm', () => {
   });
 
   test('HankeFormContainer integration should work ', async () => {
-    render(<HankeFormContainer />);
-    fireEvent.change(screen.getByTestId(FORMFIELD.NIMI), { target: { value: nimi } });
-    fireEvent.change(screen.getByTestId(FORMFIELD.KUVAUS), { target: { value: hankkeenKuvaus } });
-    screen.queryAllByText('Hankkeen vaihe')[0].click();
-    screen.queryAllByText('Ohjelmointi')[0].click();
+    const { user } = render(<HankeFormContainer />);
+    await user.clear(screen.getByTestId(FORMFIELD.NIMI));
+    await user.type(screen.getByTestId(FORMFIELD.NIMI), nimi);
+    await user.clear(screen.getByTestId(FORMFIELD.KUVAUS));
+    await user.type(screen.getByTestId(FORMFIELD.KUVAUS), hankkeenKuvaus);
+    await user.click(screen.queryAllByText('Hankkeen vaihe')[0]);
+    await user.click(screen.queryAllByText('Ohjelmointi')[0]);
 
-    screen.getByText('Tallenna ja keskeytä').click();
+    await user.click(screen.getByText('Tallenna ja keskeytä'));
 
     await waitFor(() => expect(screen.queryByText('Luonnos tallennettu')));
 
@@ -218,9 +221,8 @@ describe('HankeForm', () => {
 
   test('Should allow next page if hanke name is set', async () => {
     const { user } = render(<HankeFormContainer />);
-    fireEvent.change(screen.getByRole('textbox', { name: /hankkeen nimi/i }), {
-      target: { value: nimi },
-    });
+    await user.clear(screen.getByRole('textbox', { name: /hankkeen nimi/i }));
+    await user.type(screen.getByRole('textbox', { name: /hankkeen nimi/i }), nimi);
 
     await user.click(screen.getByRole('button', { name: /seuraava/i }));
     await user.click(screen.getByRole('button', { name: /seuraava/i }));
@@ -232,9 +234,8 @@ describe('HankeForm', () => {
     const { user } = render(<HankeFormContainer />);
     const initialName = 'b'.repeat(90);
 
-    fireEvent.change(screen.getByRole('textbox', { name: /hankkeen nimi/i }), {
-      target: { value: initialName },
-    });
+    await user.clear(screen.getByRole('textbox', { name: /hankkeen nimi/i }));
+    await user.type(screen.getByRole('textbox', { name: /hankkeen nimi/i }), initialName);
 
     await user.type(
       screen.getByRole('textbox', { name: /hankkeen nimi/i }),
@@ -424,18 +425,14 @@ describe('HankeForm', () => {
     await user.click(screen.getByRole('combobox', { name: /tyyppi/i }));
     await user.click(screen.getByText(/yhteisö/i));
 
-    fireEvent.change(screen.getAllByRole('combobox', { name: /nimi/i })[0], {
-      target: { value: 'Omistaja Yritys' },
-    });
-    fireEvent.change(screen.getByLabelText(/y-tunnus/i), {
-      target: { value: 'y-tunnus' },
-    });
-    fireEvent.change(screen.getByTestId('omistajat.0.email'), {
-      target: { value: 'test@mail.com' },
-    });
-    fireEvent.change(screen.getByTestId('omistajat.0.puhelinnumero'), {
-      target: { value: '0401234567' },
-    });
+    await user.clear(screen.getAllByRole('combobox', { name: /nimi/i })[0]);
+    await user.type(screen.getAllByRole('combobox', { name: /nimi/i })[0], 'Omistaja Yritys');
+    await user.clear(screen.getByLabelText(/y-tunnus/i));
+    await user.type(screen.getByLabelText(/y-tunnus/i), 'y-tunnus');
+    await user.clear(screen.getByTestId('omistajat.0.email'));
+    await user.type(screen.getByTestId('omistajat.0.email'), 'test@mail.com');
+    await user.clear(screen.getByTestId('omistajat.0.puhelinnumero'));
+    await user.type(screen.getByTestId('omistajat.0.puhelinnumero'), '0401234567');
 
     // Rakennuttaja
     await user.click(screen.getByText(/lisää rakennuttaja/i));
@@ -470,7 +467,7 @@ describe('HankeForm', () => {
       </HankeForm>,
     );
 
-    fillBasicInformation({ name: hankeName });
+    await fillBasicInformation(user, { name: hankeName });
     await user.click(screen.getByRole('button', { name: 'Tallenna ja keskeytä' }));
 
     expect(window.location.pathname).toBe('/fi/hankesalkku/HAI22-1');
@@ -674,12 +671,10 @@ describe('HankeForm', () => {
     expect(screen.getByRole('link', { name: /katuosoite/i })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /hankkeen vaihe/i })).toBeInTheDocument();
 
-    fireEvent.change(screen.getByLabelText(/hankkeen kuvaus/i), {
-      target: { value: 'Kuvaus' },
-    });
-    fireEvent.change(screen.getByLabelText(/katuosoite/i), {
-      target: { value: 'Katu 1' },
-    });
+    await user.clear(screen.getByLabelText(/hankkeen kuvaus/i));
+    await user.type(screen.getByLabelText(/hankkeen kuvaus/i), 'Kuvaus');
+    await user.clear(screen.getByLabelText(/katuosoite/i));
+    await user.type(screen.getByLabelText(/katuosoite/i), 'Katu 1');
     await user.click(screen.getByRole('radio', { name: 'Ohjelmointi' }));
 
     expect(screen.queryByText(draftStateText)).not.toBeInTheDocument();
@@ -751,12 +746,8 @@ describe('HankeForm', () => {
       </HankeForm>,
     );
 
-    fireEvent.change(screen.getByLabelText(/hankkeen kuvaus/i), {
-      target: { value: '' },
-    });
-    fireEvent.change(screen.getByLabelText(/katuosoite/i), {
-      target: { value: '' },
-    });
+    await user.clear(screen.getByLabelText(/hankkeen kuvaus/i));
+    await user.clear(screen.getByLabelText(/katuosoite/i));
     await user.click(screen.getByRole('button', { name: /seuraava/i }));
 
     expect(screen.queryByText('Vaihe 1/6: Perustiedot')).toBeInTheDocument();
@@ -802,9 +793,8 @@ describe('HankeForm', () => {
 
     const { user } = await setupAlueetPage(hanke);
 
-    fireEvent.change(screen.getByLabelText(/haittojen alkupäivä/i), {
-      target: { value: '1.9.2024' },
-    });
+    await user.clear(screen.getByLabelText(/haittojen alkupäivä/i));
+    await user.type(screen.getByLabelText(/haittojen alkupäivä/i), '1.9.2024');
     await user.click(screen.getByRole('button', { name: /seuraava/i }));
 
     expect(screen.queryByText('Vaihe 2/6: Alueiden piirto')).toBeInTheDocument();
@@ -946,7 +936,7 @@ describe('New contact person form and contact person dropdown', () => {
     await user.click(screen.getByRole('button', { name: /lisää uusi yhteyshenkilö/i }));
     fillNewContactPersonForm(newUser);
     await user.click(screen.getByRole('button', { name: /tallenna ja lisää yhteyshenkilö/i }));
-    fireEvent.click(screen.getByRole('button', { name: /sulje ilmoitus/i }));
+    await user.click(screen.getByRole('button', { name: /sulje ilmoitus/i }));
     await user.click(screen.getByRole('button', { name: /lisää uusi yhteyshenkilö/i }));
     fillNewContactPersonForm(newUser);
     await user.click(screen.getByRole('button', { name: /tallenna ja lisää yhteyshenkilö/i }));
@@ -1104,9 +1094,7 @@ describe('Yhteystieto ytunnus validation', () => {
   describe('Draft hanke', () => {
     test('Should be able to move to next page if ytunnus field is empty', async () => {
       const { user } = await setupYhteystiedotPage(<HankeFormContainer hankeTunnus="HAI22-1" />);
-      fireEvent.change(screen.getByLabelText(/y-tunnus/i), {
-        target: { value: '' },
-      });
+      await user.clear(screen.getByLabelText(/y-tunnus/i));
       await user.tab();
       await user.click(screen.getByRole('button', { name: /seuraava/i }));
 
@@ -1115,9 +1103,10 @@ describe('Yhteystieto ytunnus validation', () => {
 
     test('Should not be able to move to next page if ytunnus is invalid', async () => {
       const { user } = await setupYhteystiedotPage(<HankeFormContainer hankeTunnus="HAI22-1" />);
-      fireEvent.change(screen.getByLabelText(/y-tunnus/i), {
-        target: { value: '1234567-8' },
-      });
+
+      const ytunnusInput = screen.getByLabelText(/y-tunnus/i);
+      await user.clear(ytunnusInput);
+      await user.type(ytunnusInput, '1234567-8');
       await user.tab();
       await user.click(screen.getByRole('button', { name: /seuraava/i }));
 
@@ -1130,9 +1119,9 @@ describe('Yhteystieto ytunnus validation', () => {
   describe('Public hanke', () => {
     test('Should not be able to move to next page if ytunnus is empty or invalid', async () => {
       const { user } = await setupYhteystiedotPage(<HankeFormContainer hankeTunnus="HAI22-3" />);
-      fireEvent.change(screen.getByLabelText(/y-tunnus/i), {
-        target: { value: '' },
-      });
+
+      const ytunnusInput = screen.getByLabelText(/y-tunnus/i);
+      await user.clear(ytunnusInput);
       await user.tab();
       await user.click(screen.getByRole('button', { name: /seuraava/i }));
 
@@ -1140,9 +1129,8 @@ describe('Yhteystieto ytunnus validation', () => {
       expect(screen.getByLabelText(/y-tunnus/i)).toHaveFocus();
       expect(screen.getByText('Kenttä on pakollinen')).toBeInTheDocument();
 
-      fireEvent.change(screen.getByLabelText(/y-tunnus/i), {
-        target: { value: '1234567-8' },
-      });
+      await user.clear(ytunnusInput);
+      await user.type(ytunnusInput, '1234567-8');
       await user.tab();
       await user.click(screen.getByRole('button', { name: /seuraava/i }));
 
