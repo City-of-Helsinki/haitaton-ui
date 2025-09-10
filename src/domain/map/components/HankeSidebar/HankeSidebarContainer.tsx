@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import HankeSidebar from './HankeSidebar';
-import HankkeetContext from '../../HankkeetProviderContext';
 import { usePublicHanke } from '../../../hanke/hooks/usePublicHanke';
 import { useGlobalNotification } from '../../../../common/components/globalNotification/GlobalNotificationContext';
 import { useTranslation } from 'react-i18next';
@@ -17,9 +16,6 @@ const HankeSidebarContainer: React.FC<React.PropsWithChildren<Props>> = ({ hanke
   const hankkeenTunnus = hankeTunnus || new URLSearchParams(location.search).get('hanke');
   const { data: publicHanke, isLoading: hankeLoading, error } = usePublicHanke(hankkeenTunnus);
   const hanke = publicHanke ? toHankeData(publicHanke) : null;
-  const { hankkeetObject } = useContext(HankkeetContext);
-  const minimalHanke = hankkeetObject[hankkeenTunnus || ''];
-  const hankeToShow = hanke || minimalHanke;
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const navigate = useNavigate();
   const hankealueId = Number.parseInt(new URLSearchParams(location.search).get('hankealue')!);
@@ -51,13 +47,13 @@ const HankeSidebarContainer: React.FC<React.PropsWithChildren<Props>> = ({ hanke
     return null;
   }
 
-  if (!hankkeenTunnus || !hankkeetObject[hankkeenTunnus]) {
+  if (!hankkeenTunnus) {
     return null;
   }
 
   return (
     <HankeSidebar
-      hanke={hankeToShow}
+      hanke={hanke}
       loading={hankeLoading}
       hankealueId={hankealueId}
       isOpen={isOpen}

@@ -49,7 +49,7 @@ const SidebarSection: React.FC<React.PropsWithChildren<SectionProps>> = ({ title
   ) : null;
 
 type Props = {
-  hanke: HankeData;
+  hanke: HankeData | null;
   hankealueId: number;
   isOpen: boolean;
   handleClose: () => void;
@@ -65,12 +65,12 @@ const HankeSidebar: React.FC<React.PropsWithChildren<Props>> = ({
 }) => {
   const { t } = useTranslation();
   const { data: hankkeet } = useHankkeet();
-  const isUsersHanke = hankkeet?.some((h) => h.hankeTunnus === hanke.hankeTunnus);
-  const tyomaaTyyppiContent = hanke.tyomaaTyyppi.length
+  const isUsersHanke = hanke && hankkeet?.some((h) => h.hankeTunnus === hanke.hankeTunnus);
+  const tyomaaTyyppiContent = hanke?.tyomaaTyyppi?.length
     ? hanke.tyomaaTyyppi.map((tyyppi) => t(`hanke:tyomaaTyyppi:${tyyppi}`)).join(', ')
     : '-';
-  const hankealue = hanke.alueet.find((ha) => ha.id === hankealueId)!;
-  const hankeViewPath = useHankeViewPath(hanke?.hankeTunnus);
+  const hankealue = hanke?.alueet.find((ha) => ha.id === hankealueId);
+  const hankeViewPath = useHankeViewPath(hanke?.hankeTunnus || null);
 
   return (
     <Drawer
@@ -96,7 +96,7 @@ const HankeSidebar: React.FC<React.PropsWithChildren<Props>> = ({
           >
             <IconCross aria-hidden />
           </button>
-          {loading ? (
+          {loading || !hanke || !hankealue ? (
             <LoadingSpinner />
           ) : (
             <>

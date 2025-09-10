@@ -12,8 +12,7 @@ api.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
     if (
       (config.url && publicEndpoints.includes(config.url)) ||
-      config.url?.startsWith('/public-hankkeet/') ||
-      config.url?.startsWith('/public-hankkeet?')
+      config.url?.startsWith('/public-hankkeet/')
     ) {
       return config;
     }
