@@ -214,7 +214,7 @@ export interface PublicHankeMinimal {
   alueet: PublicHankeAlueMinimal[];
 }
 
-type PublicHankeAlueMinimal = {
+export type PublicHankeAlueMinimal = {
   id: number | null;
   hankeId: number | null;
   nimi: string;

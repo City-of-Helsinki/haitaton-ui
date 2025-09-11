@@ -32,6 +32,67 @@ interface MockHanke {
   alueet: MockHankeAlue[];
 }
 
+// Helper function for expected hanke area structure
+const createExpectedHankeArea = (startDate: string, endDate: string) =>
+  expect.objectContaining({
+    id: expect.any(Number),
+    nimi: expect.stringContaining('Test Area'),
+    haittaAlkuPvm: startDate,
+    haittaLoppuPvm: endDate,
+    geometriat: expect.objectContaining({
+      featureCollection: expect.objectContaining({
+        type: 'FeatureCollection',
+        features: expect.any(Array),
+      }),
+    }),
+    tormaystarkastelu: expect.objectContaining({
+      liikennehaittaindeksi: expect.objectContaining({
+        indeksi: expect.any(Number),
+      }),
+    }),
+  });
+
+// Helper function for expected hanke structure
+const createExpectedHanke = (startDate: string, endDate: string) =>
+  expect.objectContaining({
+    hankeTunnus: expect.stringMatching(/^HAI22-/),
+    nimi: expect.stringContaining('Test Hanke'),
+    alueet: expect.arrayContaining([createExpectedHankeArea(startDate, endDate)]),
+  });
+
+// Helper function to validate GeoJSON structure
+const validateGeoJSONStructure = (alue: MockHankeAlue) => {
+  expect(alue.geometriat.featureCollection).toMatchObject({
+    type: 'FeatureCollection',
+    features: expect.arrayContaining([
+      expect.objectContaining({
+        type: 'Feature',
+        geometry: expect.objectContaining({
+          type: expect.any(String),
+          coordinates: expect.any(Array),
+        }),
+        properties: expect.any(Object),
+      }),
+    ]),
+  });
+};
+
+// Helper function to validate all areas in a hanke
+const validateHankeAreas = (hanke: MockHanke) => {
+  hanke.alueet.forEach(validateGeoJSONStructure);
+};
+
+// Helper function to validate date parameters
+const validateDateParameters = (startDate: string, endDate: string) => (alue: MockHankeAlue) => {
+  expect(alue.haittaAlkuPvm).toBe(startDate);
+  expect(alue.haittaLoppuPvm).toBe(endDate);
+};
+
+// Helper function to validate all areas in a hanke for date parameters
+const validateHankeDateParameters = (startDate: string, endDate: string) => (hanke: MockHanke) => {
+  hanke.alueet.forEach(validateDateParameters(startDate, endDate));
+};
+
 describe('Grid API Integration', () => {
   describe('Grid Metadata API', () => {
     test('successfully fetches grid metadata', async () => {
@@ -61,29 +122,7 @@ describe('Grid API Integration', () => {
       const response = await api.post('/public-hankkeet/grid', requestData);
 
       expect(response.data).toHaveLength(2);
-      expect(response.data[0]).toMatchObject({
-        hankeTunnus: expect.stringMatching(/^HAI22-/),
-        nimi: expect.stringContaining('Test Hanke'),
-        alueet: expect.arrayContaining([
-          expect.objectContaining({
-            id: expect.any(Number),
-            nimi: expect.stringContaining('Test Area'),
-            haittaAlkuPvm: '2023-01-01',
-            haittaLoppuPvm: '2023-12-31',
-            geometriat: expect.objectContaining({
-              featureCollection: expect.objectContaining({
-                type: 'FeatureCollection',
-                features: expect.any(Array),
-              }),
-            }),
-            tormaystarkastelu: expect.objectContaining({
-              liikennehaittaindeksi: expect.objectContaining({
-                indeksi: expect.any(Number),
-              }),
-            }),
-          }),
-        ]),
-      });
+      expect(response.data[0]).toMatchObject(createExpectedHanke('2023-01-01', '2023-12-31'));
     });
 
     test('returns empty array when no cells provided', async () => {
@@ -139,23 +178,7 @@ describe('Grid API Integration', () => {
       const response = await api.post('/public-hankkeet/grid', requestData);
 
       // Verify GeoJSON structure
-      response.data.forEach((hanke: MockHanke) => {
-        hanke.alueet.forEach((alue: MockHankeAlue) => {
-          expect(alue.geometriat.featureCollection).toMatchObject({
-            type: 'FeatureCollection',
-            features: expect.arrayContaining([
-              expect.objectContaining({
-                type: 'Feature',
-                geometry: expect.objectContaining({
-                  type: expect.any(String),
-                  coordinates: expect.any(Array),
-                }),
-                properties: expect.any(Object),
-              }),
-            ]),
-          });
-        });
-      });
+      response.data.forEach(validateHankeAreas);
     });
   });
 
@@ -187,12 +210,7 @@ describe('Grid API Integration', () => {
         cells: [{ x: 10, y: 10 }],
       });
 
-      response.data.forEach((hanke: MockHanke) => {
-        hanke.alueet.forEach((alue: MockHankeAlue) => {
-          expect(alue.haittaAlkuPvm).toBe(startDate);
-          expect(alue.haittaLoppuPvm).toBe(endDate);
-        });
-      });
+      response.data.forEach(validateHankeDateParameters(startDate, endDate));
     });
   });
 });

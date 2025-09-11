@@ -1,5 +1,87 @@
 import { ViewportBounds } from '../../../common/components/map/hooks/useMapViewportBounds';
 
+// Helper function to calculate rectangle intersection bounds
+function calculateIntersection(area: ViewportBounds, cached: ViewportBounds) {
+  return {
+    minX: Math.max(area.minX, cached.minX),
+    maxX: Math.min(area.maxX, cached.maxX),
+    minY: Math.max(area.minY, cached.minY),
+    maxY: Math.min(area.maxY, cached.maxY),
+  };
+}
+
+// Helper function to check if intersection exists
+function hasIntersection(intersection: { minX: number; maxX: number; minY: number; maxY: number }) {
+  return intersection.minX < intersection.maxX && intersection.minY < intersection.maxY;
+}
+
+// Helper function to create non-overlapping rectangles from area subtraction
+function createNonOverlappingRectangles(
+  area: ViewportBounds,
+  intersection: { minX: number; maxX: number; minY: number; maxY: number },
+): ViewportBounds[] {
+  const rectangles: ViewportBounds[] = [];
+
+  // Left rectangle (if exists)
+  if (area.minX < intersection.minX) {
+    rectangles.push({
+      minX: area.minX,
+      maxX: intersection.minX,
+      minY: area.minY,
+      maxY: area.maxY,
+    });
+  }
+
+  // Right rectangle (if exists)
+  if (area.maxX > intersection.maxX) {
+    rectangles.push({
+      minX: intersection.maxX,
+      maxX: area.maxX,
+      minY: area.minY,
+      maxY: area.maxY,
+    });
+  }
+
+  // Top rectangle (if exists) - only the middle part not covered by left/right
+  if (area.minY < intersection.minY) {
+    rectangles.push({
+      minX: intersection.minX,
+      maxX: intersection.maxX,
+      minY: area.minY,
+      maxY: intersection.minY,
+    });
+  }
+
+  // Bottom rectangle (if exists) - only the middle part not covered by left/right
+  if (area.maxY > intersection.maxY) {
+    rectangles.push({
+      minX: intersection.minX,
+      maxX: intersection.maxX,
+      minY: intersection.maxY,
+      maxY: area.maxY,
+    });
+  }
+
+  return rectangles;
+}
+
+// Helper function to process single area against cached bounds
+function subtractCachedFromArea(area: ViewportBounds, cached: ViewportBounds): ViewportBounds[] {
+  const intersection = calculateIntersection(area, cached);
+
+  if (hasIntersection(intersection)) {
+    return createNonOverlappingRectangles(area, intersection);
+  }
+
+  // No intersection - keep the original area
+  return [area];
+}
+
+// Helper function to filter areas by minimum size
+function filterAreasBySize(areas: ViewportBounds[], minAreaSize: number): ViewportBounds[] {
+  return areas.filter((area) => (area.maxX - area.minX) * (area.maxY - area.minY) >= minAreaSize);
+}
+
 /**
  * Calculates the missing rectangular areas that are not covered by cached viewports.
  *
@@ -14,9 +96,7 @@ export function calculateMissingViewportAreas(
   minAreaSize: number = 100,
 ): ViewportBounds[] {
   if (cachedBounds.length === 0) {
-    return [requestedBounds].filter(
-      (area) => (area.maxX - area.minX) * (area.maxY - area.minY) >= minAreaSize,
-    );
+    return filterAreasBySize([requestedBounds], minAreaSize);
   }
 
   // Start with the full requested area as "missing"
@@ -27,68 +107,13 @@ export function calculateMissingViewportAreas(
     const newMissingAreas: ViewportBounds[] = [];
 
     for (const area of missingAreas) {
-      // Calculate the intersection between the area and cached bounds
-      const intersectionMinX = Math.max(area.minX, cached.minX);
-      const intersectionMaxX = Math.min(area.maxX, cached.maxX);
-      const intersectionMinY = Math.max(area.minY, cached.minY);
-      const intersectionMaxY = Math.min(area.maxY, cached.maxY);
-
-      // Check if there's an actual intersection
-      if (intersectionMinX < intersectionMaxX && intersectionMinY < intersectionMaxY) {
-        // There's an intersection - split the area into up to 4 non-overlapping rectangles
-
-        // Left rectangle (if exists)
-        if (area.minX < intersectionMinX) {
-          newMissingAreas.push({
-            minX: area.minX,
-            maxX: intersectionMinX,
-            minY: area.minY,
-            maxY: area.maxY,
-          });
-        }
-
-        // Right rectangle (if exists)
-        if (area.maxX > intersectionMaxX) {
-          newMissingAreas.push({
-            minX: intersectionMaxX,
-            maxX: area.maxX,
-            minY: area.minY,
-            maxY: area.maxY,
-          });
-        }
-
-        // Top rectangle (if exists) - only the middle part not covered by left/right
-        if (area.minY < intersectionMinY) {
-          newMissingAreas.push({
-            minX: intersectionMinX,
-            maxX: intersectionMaxX,
-            minY: area.minY,
-            maxY: intersectionMinY,
-          });
-        }
-
-        // Bottom rectangle (if exists) - only the middle part not covered by left/right
-        if (area.maxY > intersectionMaxY) {
-          newMissingAreas.push({
-            minX: intersectionMinX,
-            maxX: intersectionMaxX,
-            minY: intersectionMaxY,
-            maxY: area.maxY,
-          });
-        }
-      } else {
-        // No intersection - keep the original area
-        newMissingAreas.push(area);
-      }
+      newMissingAreas.push(...subtractCachedFromArea(area, cached));
     }
 
     missingAreas = newMissingAreas;
   }
 
-  // Filter out very small areas to avoid excessive API calls
-  return missingAreas.filter(
-    (area) => (area.maxX - area.minX) * (area.maxY - area.minY) >= minAreaSize,
-  );
+  return filterAreasBySize(missingAreas, minAreaSize);
 }
 
 /**
