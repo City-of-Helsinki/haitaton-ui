@@ -239,12 +239,12 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
   ];
 
   const saveAndQuit = () => {
+    // Check if there is missing data in alueet
+    // Do not bother with perustiedotErrors, haittojenHallintaErrors or yhteystiedotErrors
     if (
-      haittojenHallintaErrors.length > 0 ||
-      perustiedotErrors.length > 0 ||
       alueetErrors.length > 0
     ) {
-      // Set notification for validation errors
+      // Set notification for validation errors 
       setNotification(true, {
         position: 'bottom-right',
         dismissible: true,
@@ -255,16 +255,7 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
         type: 'error',
         closeButtonLabelText: t('common:components:notification:closeButtonLabelText'),
       });
-      if (perustiedotErrors.length > 0) {
-        // Navigate to the perustiedot step (step index 0)
-        setActiveStepIndex(0);
-      } else if (haittojenHallintaErrors.length > 0) {
-        // Navigate to the haittojen hallinta step (step index 2)
-        setActiveStepIndex(2);
-      } else if (alueetErrors.length > 0) {
-        // Navigate to the alueet step (step index 1)
-        setActiveStepIndex(1);
-      }
+      setActiveStepIndex(2);
       return;
     }
 
