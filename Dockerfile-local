@@ -49,5 +49,6 @@ RUN chmod +x /opt/nginx-env.sh
 USER default
 
 ENV REACT_APP_DISABLE_SENTRY=1
+ENV NGINX_SENTRY="https://o4508126783602688.ingest.de.sentry.io"
 
 CMD ["/bin/bash", "-c", "/opt/env.sh /opt /usr/share/nginx/html && /opt/nginx-env.sh && nginx -g \"daemon off;\""]
