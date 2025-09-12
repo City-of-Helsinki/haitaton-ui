@@ -221,11 +221,8 @@ async function fillBasicInformation(
   await user.type(screen.getByLabelText(/hankkeen kuvaus/i), description);
   await user.clear(screen.getByLabelText(/katuosoite/i));
   await user.type(screen.getByLabelText(/katuosoite/i), address);
-<<<<<<< HEAD
   // Following settings have side effect:
   // if value is already set to some value these will clear it if the new value is same
-=======
->>>>>>> dev
   await user.click(screen.getByRole('radio', { name: phase }));
   if (isYKT) {
     await user.click(screen.getByRole('checkbox', { name: 'Hanke on YKT-hanke' }));
