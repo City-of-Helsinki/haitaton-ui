@@ -94,7 +94,6 @@ const performDataLoad = async (
   startDate: string,
   endDate: string,
   source: React.MutableRefObject<VectorSource>,
-  setFeatureCount: (count: number) => void,
 ) => {
   try {
     // Get grid cells for current viewport (increased limit for full coverage)
@@ -103,7 +102,6 @@ const performDataLoad = async (
     if (cells.length === 0) {
       console.warn('No grid cells generated - clearing map');
       source.current.clear();
-      setFeatureCount(0);
       return;
     }
 
@@ -120,18 +118,15 @@ const performDataLoad = async (
     // Update source with new features
     source.current.clear();
     source.current.addFeatures(allFeatures);
-    setFeatureCount(allFeatures.length);
   } catch (error) {
     console.error('Failed to load hanke data:', error);
     source.current.clear();
-    setFeatureCount(0);
   }
 };
 
 function SimpleHankeLayer({ startDate, endDate }: Props) {
   const source = useRef(new VectorSource());
   const [metadata, setMetadata] = useState<GridMetadata | null>(null);
-  const [featureCount, setFeatureCount] = useState(0);
   const bounds = useMapViewportBounds();
   const loadTimer = useRef<NodeJS.Timeout | null>(null);
 
@@ -162,7 +157,7 @@ function SimpleHankeLayer({ startDate, endDate }: Props) {
 
     // Debounce the loading
     loadTimer.current = setTimeout(async () => {
-      await performDataLoad(bounds, metadata, startDate, endDate, source, setFeatureCount);
+      await performDataLoad(bounds, metadata, startDate, endDate, source);
     }, 300); // 300ms debounce
   }, [metadata, startDate, endDate, bounds]);
 
@@ -182,9 +177,6 @@ function SimpleHankeLayer({ startDate, endDate }: Props) {
 
   return (
     <>
-      <div style={{ display: 'none' }} data-testid="countOfFilteredHankeAlueet">
-        {featureCount}
-      </div>
       <VectorLayer
         source={source.current}
         zIndex={1}

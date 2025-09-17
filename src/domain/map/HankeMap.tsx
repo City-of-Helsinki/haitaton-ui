@@ -19,7 +19,7 @@ import OverviewMapControl from '../../common/components/map/controls/OverviewMap
 import AddressSearchContainer from './components/AddressSearch/AddressSearchContainer';
 
 const HankeMap: React.FC<React.PropsWithChildren<unknown>> = () => {
-  const [zoom] = useState(9);
+  const [zoom] = useState(8);
   const { mapTileLayers, toggleMapTileLayer } = useMapDataLayers();
   const ortoLayerOpacity = mapTileLayers.kantakartta.visible ? 0.5 : 1;
   const {
