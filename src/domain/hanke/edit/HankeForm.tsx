@@ -241,10 +241,8 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
   const saveAndQuit = () => {
     // Check if there is missing data in alueet
     // Do not bother with perustiedotErrors, haittojenHallintaErrors or yhteystiedotErrors
-    if (
-      alueetErrors.length > 0
-    ) {
-      // Set notification for validation errors 
+    if (alueetErrors.length > 0) {
+      // Set notification for validation errors
       setNotification(true, {
         position: 'bottom-right',
         dismissible: true,

@@ -1,8 +1,7 @@
-import React, { useEffect, useContext, useRef, useState, useCallback } from 'react';
+import { useEffect, useContext, useRef, useState, useCallback } from 'react';
 import Feature, { FeatureLike } from 'ol/Feature';
 import Select from 'ol/interaction/Select';
 import { createBox } from 'ol/interaction/Draw';
-import Collection from 'ol/Collection';
 import { Draw, Snap, Modify } from 'ol/interaction';
 import { Condition } from 'ol/events/condition';
 import Geometry from 'ol/geom/Geometry';
@@ -10,7 +9,7 @@ import Polygon from 'ol/geom/Polygon';
 import Style from 'ol/style/Style';
 import { ModifyEvent } from 'ol/interaction/Modify';
 import { useTranslation } from 'react-i18next';
-import { DRAWTOOLTYPE } from './types';
+import { DRAWTOOLTYPE, DrawSegmentGuard } from './types';
 import MapContext from '../../MapContext';
 import useDrawContext from './useDrawContext';
 import {
@@ -23,11 +22,11 @@ import { Map, MapBrowserEvent } from 'ol';
 import { useGlobalNotification } from '../../../globalNotification/GlobalNotificationContext';
 
 type Props = {
-  features?: Collection<Feature>;
   onSelfIntersectingPolygon?: (feature: Feature<Geometry> | null) => void;
   drawCondition?: Condition;
   drawFinishCondition?: (event: MapBrowserEvent<UIEvent>, feature: Feature) => boolean;
   drawStyleFunction?: (map: Map, feature: FeatureLike) => Style | Style[];
+  drawSegmentGuard?: DrawSegmentGuard;
   handleModifyEnd?: (
     event: ModifyEvent,
     originalFeature: Feature | null,
@@ -37,13 +36,14 @@ type Props = {
 
 type Interaction = Draw | Snap | Modify;
 
-const DrawInteraction: React.FC<React.PropsWithChildren<Props>> = ({
+export default function DrawInteraction({
   onSelfIntersectingPolygon,
   drawCondition,
   drawFinishCondition,
   drawStyleFunction,
+  drawSegmentGuard,
   handleModifyEnd,
-}) => {
+}: Readonly<Props>) {
   const { t } = useTranslation();
   const { setNotification } = useGlobalNotification();
   const selection = useRef<null | Select>(null);
@@ -54,6 +54,7 @@ const DrawInteraction: React.FC<React.PropsWithChildren<Props>> = ({
 
   const drawnFeature = useRef<null | Feature>(null);
   const originalModifiedFeature = useRef<null | Feature>(null);
+  const lastCoordinateCount = useRef<number>(0);
 
   const clearSelection = useCallback(() => {
     if (selection.current) selection.current.getFeatures().clear();
@@ -114,18 +115,54 @@ const DrawInteraction: React.FC<React.PropsWithChildren<Props>> = ({
       });
       drawInstance.on('drawstart', (event) => {
         selection.current?.setActive(false);
+        lastCoordinateCount.current = 0; // Reset coordinate count for new drawing
         event.feature.on('change', (changeEvent) => {
           const currentFeature = event.feature;
           const modifiedPolygon: Polygon = currentFeature.getGeometry() as Polygon;
           const currentCoordinates = modifiedPolygon.getCoordinates();
-          let intersecting: boolean = false;
+
+          // Only validate when a new point is actually added (not just cursor movement)
+          const actualPointCount = currentCoordinates[0].length - 1; // Exclude cursor position
+          // Only process change events that are triggered by user interaction (mouse clicks i.e. new point is added)
+          if (actualPointCount <= lastCoordinateCount.current) {
+            return; // No new point added, just cursor movement
+          }
+          lastCoordinateCount.current = actualPointCount;
+
+          // NEW: Guard against leaving the hanke area while drawing
+          if (drawSegmentGuard && actualPointCount >= 2) {
+            const ring = currentCoordinates[0];
+            // Get the actual segment between the last two fixed points (including cursor)
+            const start = ring[actualPointCount - 1];
+            const end = ring[actualPointCount];
+            const ok = drawSegmentGuard(map, [start, end]);
+            if (!ok) {
+              // Disallow this segment: revert last point
+              drawInstance.removeLastPoint();
+              lastCoordinateCount.current = actualPointCount - 1; // Update count after removal
+              // Show notification for not allowed to draw outside hanke area
+              setNotification(true, {
+                position: 'top-right',
+                dismissible: true,
+                autoClose: true,
+                autoCloseDuration: 5000,
+                label: t('map:notifications:drawingOutsideHankeAreaLabel'),
+                message: t('map:notifications:drawingOutsideHankeAreaText'),
+                type: 'error',
+                closeButtonLabelText: t('common:components:notification:closeButtonLabelText'),
+              });
+              return;
+            }
+          }
+          // Check for self-intersection with the actual drawn points (excluding cursor position)
           // OpenLayers creates minimum set of 3 coordinates when draw starts for polygon
           // We are interested only with set of coordinates where there are only those
           // that we have drawn. Discard the 2 coordinates the polygon inheritly gets.
           currentCoordinates[0].splice(currentCoordinates[0].length - 2, 2);
-          intersecting = areLinesInPolygonIntersecting(currentCoordinates);
+          const intersecting: boolean = areLinesInPolygonIntersecting(currentCoordinates);
           if (intersecting) {
             drawInstance.removeLastPoint();
+            lastCoordinateCount.current = actualPointCount - 1; // Update count after removal
             setNotification(true, {
               position: 'top-right',
               dismissible: true,
@@ -136,9 +173,9 @@ const DrawInteraction: React.FC<React.PropsWithChildren<Props>> = ({
               type: 'alert',
               closeButtonLabelText: t('common:components:notification:closeButtonLabelText'),
             });
-          } else {
-            drawnFeature.current = changeEvent.target;
+            return;
           }
+          drawnFeature.current = changeEvent.target;
         });
       });
 
@@ -171,6 +208,7 @@ const DrawInteraction: React.FC<React.PropsWithChildren<Props>> = ({
       drawCondition,
       drawFinishCondition,
       drawStyleFunction,
+      drawSegmentGuard,
       t,
       setNotification,
     ],
@@ -288,6 +326,4 @@ const DrawInteraction: React.FC<React.PropsWithChildren<Props>> = ({
   }, []);
 
   return null;
-};
-
-export default DrawInteraction;
+}

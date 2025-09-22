@@ -1919,7 +1919,9 @@
     "drawPolygonButtonAria": "Piirrä monikulmio kartalle",
     "notifications": {
       "selfIntersectingLabel": "Virheellinen geometria",
-      "selfIntersectingText": "Monikulmio ei voi leikata itseään. Muutokset on peruutettu."
+      "selfIntersectingText": "Monikulmio ei voi leikata itseään. Muutokset on peruutettu.",
+      "drawingOutsideHankeAreaLabel": "Piirtäminen estetty",
+      "drawingOutsideHankeAreaText": "Piirtäminen hankkeen alueen ulkopuolelle ei ole sallittua."
     }
   },
   "staticPages": {

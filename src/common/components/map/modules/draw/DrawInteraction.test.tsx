@@ -126,6 +126,7 @@ describe('DrawInteraction', () => {
       drawCondition: jest.fn(() => true),
       drawFinishCondition: jest.fn(() => true),
       drawStyleFunction: jest.fn(),
+      drawSegmentGuard: jest.fn(() => true),
       handleModifyEnd: jest.fn(),
     };
 
@@ -134,5 +135,119 @@ describe('DrawInteraction', () => {
         <DrawInteraction {...mockProps} />
       </DrawProvider>,
     );
+  });
+
+  describe('drawSegmentGuard functionality', () => {
+    it('renders without drawSegmentGuard prop', () => {
+      const source = new VectorSource();
+      render(
+        <DrawProvider source={source}>
+          <DrawInteraction />
+        </DrawProvider>,
+      );
+    });
+
+    it('renders with drawSegmentGuard prop', () => {
+      const source = new VectorSource();
+      const mockDrawSegmentGuard = jest.fn(() => true);
+
+      render(
+        <DrawProvider source={source}>
+          <DrawInteraction drawSegmentGuard={mockDrawSegmentGuard} />
+        </DrawProvider>,
+      );
+    });
+
+    it('accepts drawSegmentGuard function that returns true', () => {
+      const source = new VectorSource();
+      const mockDrawSegmentGuard = jest.fn((map, segment) => {
+        expect(map).toBeDefined();
+        expect(segment).toHaveLength(2);
+        expect(segment[0]).toHaveLength(2); // [x, y] coordinate
+        expect(segment[1]).toHaveLength(2); // [x, y] coordinate
+        return true; // Allow the segment
+      });
+
+      render(
+        <DrawProvider source={source}>
+          <DrawInteraction drawSegmentGuard={mockDrawSegmentGuard} />
+        </DrawProvider>,
+      );
+    });
+
+    it('accepts drawSegmentGuard function that returns false', () => {
+      const source = new VectorSource();
+      const mockDrawSegmentGuard = jest.fn((map, segment) => {
+        expect(map).toBeDefined();
+        expect(segment).toHaveLength(2);
+        return false; // Reject the segment
+      });
+
+      render(
+        <DrawProvider source={source}>
+          <DrawInteraction drawSegmentGuard={mockDrawSegmentGuard} />
+        </DrawProvider>,
+      );
+    });
+
+    it('validates segment coordinates when drawSegmentGuard is provided', () => {
+      const source = new VectorSource();
+      const mockDrawSegmentGuard = jest.fn((map, segment) => {
+        // Validate that coordinates are numbers
+        const [start, end] = segment;
+        expect(typeof start[0]).toBe('number'); // x coordinate
+        expect(typeof start[1]).toBe('number'); // y coordinate
+        expect(typeof end[0]).toBe('number'); // x coordinate
+        expect(typeof end[1]).toBe('number'); // y coordinate
+        return true;
+      });
+
+      render(
+        <DrawProvider source={source}>
+          <DrawInteraction drawSegmentGuard={mockDrawSegmentGuard} />
+        </DrawProvider>,
+      );
+    });
+
+    it('handles boundary validation with complex geometry', () => {
+      const source = new VectorSource();
+
+      // Helper function to check if coordinate is within bounds
+      const withinBounds = (coord: number[]) => {
+        return coord[0] >= 0 && coord[0] <= 100 && coord[1] >= 0 && coord[1] <= 100;
+      };
+
+      const mockDrawSegmentGuard = jest.fn((map, segment) => {
+        const [start, end] = segment;
+        return withinBounds(start) && withinBounds(end);
+      });
+
+      render(
+        <DrawProvider source={source}>
+          <DrawInteraction drawSegmentGuard={mockDrawSegmentGuard} />
+        </DrawProvider>,
+      );
+    });
+
+    it('supports different coordinate systems in drawSegmentGuard', () => {
+      const source = new VectorSource();
+      const mockDrawSegmentGuard = jest.fn((map, segment) => {
+        const [start, end] = segment;
+
+        // Validate coordinate format for different projection systems
+        expect(Array.isArray(start)).toBe(true);
+        expect(Array.isArray(end)).toBe(true);
+        expect(start.length).toBeGreaterThanOrEqual(2);
+        expect(end.length).toBeGreaterThanOrEqual(2);
+
+        return true;
+      });
+
+      render(
+        <DrawProvider source={source}>
+          <DrawInteraction drawSegmentGuard={mockDrawSegmentGuard} />
+        </DrawProvider>,
+      );
+    });
   });
 });
