@@ -8,6 +8,7 @@ import {
   isPolygonSelfIntersectingByCoordinates,
   areLinesInPolygonIntersecting,
   linesIntersect,
+  isSegmentWithinHankeArea,
 } from './utils';
 
 describe('surface area', () => {
@@ -200,5 +201,103 @@ describe('linesIntersect', () => {
   });
   test('returns false for colinear but non-overlapping lines', () => {
     expect(linesIntersect([0, 0], [1, 1], [2, 2], [3, 3])).toBe(false);
+  });
+});
+
+describe('isSegmentWithinHankeArea', () => {
+  const squareCoords = [
+    [
+      [0, 0],
+      [0, 1],
+      [1, 1],
+      [1, 0],
+      [0, 0],
+    ],
+  ];
+
+  const mockFeatureWithGeom = (coords: number[][][]) => ({
+    getGeometry: () => ({
+      getCoordinates: () => coords,
+    }),
+  });
+
+  test('returns false when no hanke features under cursor', () => {
+    const getPixelFromCoordinate = jest.fn(() => [0, 0]);
+    const getFeaturesAtPixel = jest.fn(() => []);
+    const map = {
+      getPixelFromCoordinate,
+      getFeaturesAtPixel,
+    } as unknown as import('ol').Map;
+
+    const latestLine: [[number, number], [number, number]] = [
+      [0.2, 0.2],
+      [0.8, 0.2],
+    ];
+    const result = isSegmentWithinHankeArea(
+      map,
+      latestLine,
+      // layer filter can be a no-op for this test
+      () => true,
+    );
+    expect(result).toBe(false);
+    expect(getPixelFromCoordinate).toHaveBeenCalled();
+    expect(getFeaturesAtPixel).toHaveBeenCalled();
+  });
+
+  test('returns false when topmost hanke feature has no geometry', () => {
+    const map = {
+      getPixelFromCoordinate: jest.fn(() => [0, 0]),
+      getFeaturesAtPixel: jest.fn(() => [{ getGeometry: () => undefined }]),
+    } as unknown as import('ol').Map;
+
+    const latestLine: [[number, number], [number, number]] = [
+      [0.2, 0.2],
+      [0.8, 0.2],
+    ];
+    expect(isSegmentWithinHankeArea(map, latestLine, () => true)).toBe(false);
+  });
+
+  test('returns false when segment crosses the polygon boundary (not at endpoints)', () => {
+    const map = {
+      getPixelFromCoordinate: jest.fn(() => [0, 0]),
+      getFeaturesAtPixel: jest.fn(() => [mockFeatureWithGeom(squareCoords)]),
+    } as unknown as import('ol').Map;
+
+    // Start inside the square and end outside, crossing mid-edge (y = 0.5)
+    const latestLine: [[number, number], [number, number]] = [
+      [0.5, 0.5], // inside
+      [1.5, 0.5], // outside -> crosses edge between [1,0] and [1,1]
+    ];
+
+    expect(isSegmentWithinHankeArea(map, latestLine, () => true)).toBe(false);
+  });
+
+  test('returns true when segment is entirely inside the polygon', () => {
+    const map = {
+      getPixelFromCoordinate: jest.fn(() => [0, 0]),
+      getFeaturesAtPixel: jest.fn(() => [mockFeatureWithGeom(squareCoords)]),
+    } as unknown as import('ol').Map;
+
+    const latestLine: [[number, number], [number, number]] = [
+      [0.2, 0.2],
+      [0.8, 0.2],
+    ];
+
+    expect(isSegmentWithinHankeArea(map, latestLine, () => true)).toBe(true);
+  });
+
+  test('returns true when intersection occurs exactly at an endpoint', () => {
+    const map = {
+      getPixelFromCoordinate: jest.fn(() => [0, 0]),
+      getFeaturesAtPixel: jest.fn(() => [mockFeatureWithGeom(squareCoords)]),
+    } as unknown as import('ol').Map;
+
+    // From inside to a corner point (0,0) -> intersection at the endpoint should be allowed
+    const latestLine: [[number, number], [number, number]] = [
+      [0.5, 0.5],
+      [0, 0],
+    ];
+
+    expect(isSegmentWithinHankeArea(map, latestLine, () => true)).toBe(true);
   });
 });
