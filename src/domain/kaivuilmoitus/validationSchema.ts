@@ -120,7 +120,7 @@ export const applicationDataSchema = yup.object().shape(
       .when('endTime', (endTime: Date[], schema: yup.DateSchema) => {
         try {
           return endTime ? schema.max(endTime[0]) : schema;
-        } catch (error) {
+        } catch {
           return schema;
         }
       })
@@ -132,7 +132,7 @@ export const applicationDataSchema = yup.object().shape(
       .when('startTime', (startTime: Date[], schema: yup.DateSchema) => {
         try {
           return startTime ? schema.min(startTime) : schema;
-        } catch (error) {
+        } catch {
           return schema;
         }
       })

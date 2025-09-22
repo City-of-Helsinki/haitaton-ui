@@ -13,7 +13,7 @@ function isValidDate(day: string, month: string, year: string, century: number):
     const parsedDate = parse(fullDate, 'yyyy-MM-dd', new Date());
 
     return isValid(parsedDate) && parsedDate > new Date('1850-01-01') && parsedDate < new Date();
-  } catch (e) {
+  } catch {
     return false;
   }
 }

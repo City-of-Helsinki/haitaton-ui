@@ -63,8 +63,8 @@ const hankkeet: HankeDataDraft[] = [
       raitioliikenneindeksi: 2,
       liikennehaittaindeksi: {
         indeksi: 4,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        tyyppi: 'LINJAAUTOLIIKENNEINDEKSI' as any,
+
+        tyyppi: HAITTA_INDEX_TYPE.LINJAAUTOLIIKENNEINDEKSI,
       },
     },
     omistajat: [
@@ -167,8 +167,8 @@ const hankkeet: HankeDataDraft[] = [
           raitioliikenneindeksi: 2,
           liikennehaittaindeksi: {
             indeksi: 4,
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            tyyppi: 'LINJAAUTOLIIKENNEINDEKSI' as any,
+
+            tyyppi: HAITTA_INDEX_TYPE.LINJAAUTOLIIKENNEINDEKSI,
           },
         },
         geometriat: {
@@ -194,12 +194,6 @@ const hankkeet: HankeDataDraft[] = [
                 },
                 geometry: {
                   type: 'Polygon',
-                  crs: {
-                    type: 'name',
-                    properties: {
-                      name: 'EPSG:3879',
-                    },
-                  },
                   coordinates: [
                     [
                       [25498583.867247857, 6679281.28058593],
@@ -248,8 +242,8 @@ const hankkeet: HankeDataDraft[] = [
           raitioliikenneindeksi: 2,
           liikennehaittaindeksi: {
             indeksi: 3,
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            tyyppi: 'LINJAAUTOLIIKENNEINDEKSI' as any,
+
+            tyyppi: HAITTA_INDEX_TYPE.LINJAAUTOLIIKENNEINDEKSI,
           },
         },
         geometriat: {
@@ -340,8 +334,8 @@ const hankkeet: HankeDataDraft[] = [
       raitioliikenneindeksi: 2,
       liikennehaittaindeksi: {
         indeksi: 3.5,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        tyyppi: 'PYORALIIKENNEINDEKSI' as any,
+
+        tyyppi: HAITTA_INDEX_TYPE.PYORALIIKENNEINDEKSI,
       },
     },
     alueet: [
@@ -655,8 +649,8 @@ const hankkeet: HankeDataDraft[] = [
       raitioliikenneindeksi: 2,
       liikennehaittaindeksi: {
         indeksi: 3.5,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        tyyppi: 'PYORALIIKENNEINDEKSI' as any,
+
+        tyyppi: HAITTA_INDEX_TYPE.PYORALIIKENNEINDEKSI,
       },
     },
     alueet: [
@@ -787,12 +781,6 @@ const hankkeet: HankeDataDraft[] = [
                 },
                 geometry: {
                   type: 'Polygon',
-                  crs: {
-                    type: 'name',
-                    properties: {
-                      name: 'EPSG:3879',
-                    },
-                  },
                   coordinates: [
                     [
                       [25498583.867247857, 6679281.28058593],

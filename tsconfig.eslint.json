@@ -1,11 +1,14 @@
 {
-  "exclude": ["./build"],
   "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "jsx": "react-jsx"
+  },
   "include": [
     "src/**/*",
     "src/**/*.test.tsx",
     "src/**/*.test.ts",
     "e2e/**/*",
     "playwright.config.ts"
-  ]
+  ],
+  "exclude": ["./build", "eslint.config.mjs"]
 }

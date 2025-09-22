@@ -135,7 +135,6 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke, signedInUser, 
             <Link
               to={hankeViewPath}
               aria-label={
-                // eslint-disable-next-line
                 t(`routes:${ROUTES.HANKE}.meta.title`) + ` ${hanke.nimi} - ${hanke.hankeTunnus} `
               }
               data-testid="hankeViewLink"
@@ -148,7 +147,6 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke, signedInUser, 
                   <Link
                     to={getEditHankePath({ hankeTunnus: hanke.hankeTunnus })}
                     aria-label={
-                      // eslint-disable-next-line
                       t(`routes:${ROUTES.EDIT_HANKE}.meta.title`) +
                       ` ${hanke.nimi} - ${hanke.hankeTunnus} `
                     }
@@ -284,8 +282,10 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke, signedInUser, 
 
 export type Column = {
   Header: string;
-  // eslint-disable-next-line
-  accessor: any;
+  id: string;
+  accessor: string | ((row: HankeData) => unknown);
+  // Add other properties as needed by react-table
+  [key: string]: unknown;
 };
 
 export interface PagedRowsProps {
@@ -410,7 +410,7 @@ const PaginatedPortfolio: React.FC<React.PropsWithChildren<PagedRowsProps>> = ({
     rows,
   } = useTable(
     {
-      columns,
+      columns: columns as never, // Type assertion to work around react-table complex typing
       data: hankkeet,
       initialState: {
         pageSize: 10,
@@ -428,18 +428,20 @@ const PaginatedPortfolio: React.FC<React.PropsWithChildren<PagedRowsProps>> = ({
   const [selectedHankeVaiheet, setSelectedHankeVaiheet] = useState<string[]>([]);
 
   // Initial setup for hankevaihe <Select /> options on first render
-  // Using any: <Select /> component of HDS typing seems incorrect.
+  // Using OptionType: <Select /> component of HDS typing seems incorrect.
   // Would require OptionType[][] although the component takes in OptionType[]
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const hankeVaiheOptions: any = Object.keys(HANKE_VAIHE).map((hankeVaihe) => ({
+
+  type OptionType = { label: string; value: string };
+
+  const hankeVaiheOptions: OptionType[] = Object.keys(HANKE_VAIHE).map((hankeVaihe) => ({
     label: t(`hanke:vaihe:${hankeVaihe}`),
     value: hankeVaihe,
   }));
 
-  // Using any: <Select /> component of HDS typing seems incorrect.
+  // Using OptionType: <Select /> component of HDS typing seems incorrect.
   // Would require OptionType[][] although the component takes in OptionType[]
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const updateHankeVaihe = (changedHankeVaiheet: any[]) =>
+
+  const updateHankeVaihe = (changedHankeVaiheet: OptionType[]) =>
     setSelectedHankeVaiheet(changedHankeVaiheet.map((hankeVaihe) => hankeVaihe.value));
 
   useEffect(() => {
@@ -448,14 +450,12 @@ const PaginatedPortfolio: React.FC<React.PropsWithChildren<PagedRowsProps>> = ({
 
   const [selectedHankeTyypit, setSelectedHankeTyypit] = useState<string[]>([]);
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const hankeTyyppiOptions: any = Object.keys(HANKE_TYOMAATYYPPI).map((hankeTyyppi) => ({
+  const hankeTyyppiOptions: OptionType[] = Object.keys(HANKE_TYOMAATYYPPI).map((hankeTyyppi) => ({
     label: t(`hanke:tyomaaTyyppi:${hankeTyyppi}`),
     value: hankeTyyppi,
   }));
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const updateHankeTyyppi = (changedHankeTyypit: any[]) =>
+  const updateHankeTyyppi = (changedHankeTyypit: OptionType[]) =>
     setSelectedHankeTyypit(changedHankeTyypit.map((hankeTyyppi) => hankeTyyppi.value));
 
   useEffect(() => {

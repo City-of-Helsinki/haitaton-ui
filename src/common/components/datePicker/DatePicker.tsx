@@ -72,7 +72,9 @@ const DatePicker: React.FC<React.PropsWithChildren<PropTypes>> = ({
                 onChange={(date) => {
                   const convertedDateString = convertFinnishDate(date);
                   onChange(toEndOfDayUTCISO(new Date(convertedDateString)));
-                  onValueChange && onValueChange(date);
+                  if (onValueChange) {
+                    onValueChange(date);
+                  }
                 }}
                 crossOrigin=""
                 onPointerEnterCapture={() => {}}

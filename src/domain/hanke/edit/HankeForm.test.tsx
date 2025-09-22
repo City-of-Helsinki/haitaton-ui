@@ -174,7 +174,7 @@ async function setupYhteystiedotPage(jsx: JSX.Element) {
 }
 
 describe('HankeForm', () => {
-  test('Form should be populated correctly ', () => {
+  test('Form should be populated correctly', () => {
     render(
       <HankeForm
         formData={{
@@ -193,7 +193,7 @@ describe('HankeForm', () => {
     expect(screen.getByText('Ohjelmointi')).toBeInTheDocument();
   });
 
-  test('HankeFormContainer integration should work ', async () => {
+  test('HankeFormContainer integration should work', async () => {
     const { user } = render(<HankeFormContainer />);
     await user.clear(screen.getByTestId(FORMFIELD.NIMI));
     await user.type(screen.getByTestId(FORMFIELD.NIMI), nimi);
@@ -204,7 +204,7 @@ describe('HankeForm', () => {
 
     await user.click(screen.getByText('Tallenna ja keskeytä'));
 
-    await waitFor(() => expect(screen.queryByText('Luonnos tallennettu')));
+    await waitFor(() => expect(screen.queryByText('Luonnos tallennettu')).toBeInTheDocument());
 
     expect(screen.getByTestId(FORMFIELD.NIMI)).toHaveValue(nimi);
     expect(screen.getByTestId(FORMFIELD.KUVAUS)).toHaveValue(hankkeenKuvaus);
@@ -471,7 +471,9 @@ describe('HankeForm', () => {
     await user.click(screen.getByRole('button', { name: 'Tallenna ja keskeytä' }));
 
     expect(window.location.pathname).toBe('/fi/hankesalkku/HAI22-1');
-    expect(screen.getByText(`Hanke ${hankeName} (HAI22-1) tallennettu omiin hankkeisiin.`));
+    expect(
+      screen.getByText(`Hanke ${hankeName} (HAI22-1) tallennettu omiin hankkeisiin.`),
+    ).toBeInTheDocument();
   });
 
   test('Should be able to save hanke in the last page', async () => {
@@ -495,7 +497,7 @@ describe('HankeForm', () => {
       await screen.findByText(
         `Hanke ${hanke.nimi} (${hanke.hankeTunnus}) tallennettu omiin hankkeisiin.`,
       ),
-    );
+    ).toBeInTheDocument();
   });
 
   test('Should be able to upload attachments', async () => {

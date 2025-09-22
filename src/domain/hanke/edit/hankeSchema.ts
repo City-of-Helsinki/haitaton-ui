@@ -68,7 +68,7 @@ export const hankeAlueetSchema = yup.object({
     .when(FORMFIELD.HAITTA_ALKU_PVM, (alkuPvm: Date[], schema: yup.DateSchema) => {
       try {
         return alkuPvm ? schema.min(alkuPvm) : schema;
-      } catch (error) {
+      } catch {
         return schema;
       }
     })

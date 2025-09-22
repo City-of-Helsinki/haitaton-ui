@@ -1,8 +1,7 @@
-import React, { useEffect, useContext, useRef, useState, useCallback } from 'react';
+import { useEffect, useContext, useRef, useState, useCallback } from 'react';
 import Feature, { FeatureLike } from 'ol/Feature';
 import Select from 'ol/interaction/Select';
 import { createBox } from 'ol/interaction/Draw';
-import Collection from 'ol/Collection';
 import { Draw, Snap, Modify } from 'ol/interaction';
 import { Condition } from 'ol/events/condition';
 import Geometry from 'ol/geom/Geometry';
@@ -23,7 +22,6 @@ import { Map, MapBrowserEvent } from 'ol';
 import { useGlobalNotification } from '../../../globalNotification/GlobalNotificationContext';
 
 type Props = {
-  features?: Collection<Feature>;
   onSelfIntersectingPolygon?: (feature: Feature<Geometry> | null) => void;
   drawCondition?: Condition;
   drawFinishCondition?: (event: MapBrowserEvent<UIEvent>, feature: Feature) => boolean;
@@ -37,13 +35,13 @@ type Props = {
 
 type Interaction = Draw | Snap | Modify;
 
-const DrawInteraction: React.FC<React.PropsWithChildren<Props>> = ({
+export default function DrawInteraction({
   onSelfIntersectingPolygon,
   drawCondition,
   drawFinishCondition,
   drawStyleFunction,
   handleModifyEnd,
-}) => {
+}: Readonly<Props>) {
   const { t } = useTranslation();
   const { setNotification } = useGlobalNotification();
   const selection = useRef<null | Select>(null);
@@ -58,8 +56,7 @@ const DrawInteraction: React.FC<React.PropsWithChildren<Props>> = ({
   const clearSelection = useCallback(() => {
     if (selection.current) selection.current.getFeatures().clear();
     actions.setSelectedFeature(null);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [actions]);
 
   const removeDrawInteractions = useCallback(() => {
     instances.forEach((i: Interaction) => {
@@ -78,8 +75,7 @@ const DrawInteraction: React.FC<React.PropsWithChildren<Props>> = ({
       }
 
       let geometryFunction;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      let geometryType: any = type;
+      let geometryType: 'Polygon' | 'Circle' = type as 'Polygon';
       if (type === DRAWTOOLTYPE.SQUARE) {
         geometryFunction = createBox();
         geometryType = 'Circle';
@@ -245,7 +241,6 @@ const DrawInteraction: React.FC<React.PropsWithChildren<Props>> = ({
       }
     });
 
-    // eslint-disable-next-line consistent-return
     return function cleanUp() {
       if (modify.current) {
         map.removeInteraction(modify.current);
@@ -254,8 +249,17 @@ const DrawInteraction: React.FC<React.PropsWithChildren<Props>> = ({
         map.removeInteraction(selection.current);
       }
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [map, source, t, setNotification]);
+  }, [
+    map,
+    source,
+    t,
+    setNotification,
+    clearSelection,
+    actions,
+    onSelfIntersectingPolygon,
+    handleModifyEnd,
+    state.selectedFeature,
+  ]);
 
   useEffect(() => {
     removeAllInteractions();
@@ -266,8 +270,7 @@ const DrawInteraction: React.FC<React.PropsWithChildren<Props>> = ({
     } else {
       modify.current?.setActive(true);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.selectedDrawtoolType]);
+  }, [state.selectedDrawtoolType, removeAllInteractions, startDraw]);
 
   useEffect(() => {
     // When selected feature changes, clear selection and push new selected feature
@@ -282,12 +285,8 @@ const DrawInteraction: React.FC<React.PropsWithChildren<Props>> = ({
   useEffect(() => {
     if (!map) return;
 
-    // eslint-disable-next-line
     return () => removeAllInteractions();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [removeAllInteractions, map]);
 
   return null;
-};
-
-export default DrawInteraction;
+}

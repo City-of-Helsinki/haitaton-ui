@@ -11,9 +11,15 @@ import {
   useNavigationType,
 } from 'react-router-dom';
 
-if (window._env_.REACT_APP_DISABLE_SENTRY !== '1') {
+// Ensure window._env_ exists to prevent runtime errors
+if (!window._env_) {
+  console.warn('window._env_ not found, using defaults');
+  window._env_ = {};
+}
+
+if (String(window._env_.REACT_APP_DISABLE_SENTRY || '') !== '1') {
   Sentry.init({
-    dsn: window._env_.REACT_APP_SENTRY_DSN,
+    dsn: String(window._env_.REACT_APP_SENTRY_DSN || ''),
     integrations: [
       Sentry.browserTracingIntegration(),
       Sentry.reactRouterV6BrowserTracingIntegration({
@@ -27,19 +33,19 @@ if (window._env_.REACT_APP_DISABLE_SENTRY !== '1') {
     ],
     tracesSampleRate:
       // no traces if not in prod or test
-      window._env_.REACT_APP_DISABLE_SENTRY === '1' ? 0.0 : 1.0,
+      String(window._env_.REACT_APP_DISABLE_SENTRY || '') === '1' ? 0.0 : 1.0,
     environment: process.env.NODE_ENV,
   });
 }
 
-const matomoEnabled = window._env_.REACT_APP_MATOMO_ENABLED === '1';
+const matomoEnabled = String(window._env_.REACT_APP_MATOMO_ENABLED || '') === '1';
 
 const container = document.getElementById('root');
-// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+
 const root = createRoot(container!);
 
 async function enableMocking() {
-  if (window._env_.REACT_APP_MOCK_API !== 'use') {
+  if (String(window._env_.REACT_APP_MOCK_API || '') !== 'use') {
     return;
   }
   const { worker } = await import('./domain/mocks/browser');
@@ -60,10 +66,15 @@ if (process.env.NODE_ENV !== 'production') {
 
 declare global {
   interface Window {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    _env_: any;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    _paq: [string, ...any[]][];
+    _env_: {
+      REACT_APP_DISABLE_SENTRY?: string;
+      REACT_APP_SENTRY_DSN?: string;
+      REACT_APP_MATOMO_ENABLED?: string;
+      REACT_APP_MOCK_API?: string;
+      [key: string]: string | number | undefined;
+    };
+
+    _paq: [string, ...(string | number | boolean)[]][];
   }
 }
 

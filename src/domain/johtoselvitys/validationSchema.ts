@@ -52,7 +52,7 @@ export const johtoselvitysApplicationDataSchema = yup.object({
     .when('startTime', (startTime: Date[], schema: yup.DateSchema) => {
       try {
         return startTime ? schema.min(startTime) : schema;
-      } catch (error) {
+      } catch {
         return schema;
       }
     })

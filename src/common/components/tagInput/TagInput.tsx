@@ -42,14 +42,18 @@ export default function TagInput({
   function addTag() {
     setInputSubmitted(true);
     if (inputValue !== '' && inputValid) {
-      onChange && onChange(tags.concat(inputValue));
+      if (onChange) {
+        onChange(tags.concat(inputValue));
+      }
       setInputValue('');
       setInputSubmitted(false);
     }
   }
 
   function deleteTag(deletedTag: string) {
-    onChange && onChange(tags.filter((tag) => tag !== deletedTag));
+    if (onChange) {
+      onChange(tags.filter((tag) => tag !== deletedTag));
+    }
   }
 
   return (

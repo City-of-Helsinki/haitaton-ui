@@ -13,7 +13,9 @@ api.interceptors.request.use(
     if (config.url && publicEndpoints.includes(config.url)) {
       return config;
     }
-    const token = getApiTokenFromStorage(window._env_.REACT_APP_OIDC_AUDIENCE_BACKEND);
+    const token = getApiTokenFromStorage(
+      String(window._env_.REACT_APP_OIDC_AUDIENCE_BACKEND || ''),
+    );
     if (config.headers && token) {
       // eslint-disable-next-line no-param-reassign
       config.headers.Authorization = `Bearer ${token}`;
@@ -25,8 +27,7 @@ api.interceptors.request.use(
 );
 
 api.interceptors.response.use(
-  // eslint-disable-next-line
-  async (response: AxiosResponse): Promise<any> => {
+  async (response: AxiosResponse): Promise<AxiosResponse> => {
     if (response.status >= 200 && response.status < 300) {
       return response;
     }
@@ -42,12 +43,10 @@ api.interceptors.response.use(
     } = error;
     if (response) {
       if (response.status >= 400 && response.status < 500) {
-        // eslint-disable-next-line
         console.error(response.data?.data?.message);
         return Promise.reject(error);
       }
     } else if (request) {
-      // eslint-disable-next-line
       // console.error('Request failed. Please try again.');
       return Promise.reject(new Error('Request failed. Please try again.'));
     }

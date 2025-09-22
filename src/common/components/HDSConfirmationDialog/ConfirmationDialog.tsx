@@ -88,8 +88,7 @@ const ConfirmationDialog: React.FC<React.PropsWithChildren<Props>> = ({
       aria-describedby={typeof description === 'string' ? description : title}
       targetElement={document.getElementById('root') || undefined}
       variant={variant}
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      close={showCloseButton ? (close as any) : undefined}
+      close={showCloseButton ? close || (() => {}) : () => {}}
       closeButtonLabelText={t('common:ariaLabels:closeButtonLabelText')}
     >
       <Dialog.Header id="dialog-title" title={title} iconStart={headerIcon} />

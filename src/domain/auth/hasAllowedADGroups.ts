@@ -5,6 +5,8 @@
  * @returns {boolean} - Returns `true` if the user belongs to at least one of the allowed AD groups, otherwise `false`.
  */
 export default function hasAllowedADGroups(ad_groups: string[]): boolean {
-  const ALLOWED_AD_GROUPS = window._env_?.REACT_APP_ALLOWED_AD_GROUPS?.split(';') ?? [];
+  const ALLOWED_AD_GROUPS = String(window._env_?.REACT_APP_ALLOWED_AD_GROUPS || '')
+    .split(';')
+    .filter(Boolean);
   return ad_groups.some((group) => ALLOWED_AD_GROUPS.includes(group));
 }

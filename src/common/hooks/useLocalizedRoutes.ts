@@ -30,7 +30,7 @@ export const getRouteLocalization = ({
 
 // Resolves and return ROUTE enum by path
 export const getMatchingRouteKey = (i18n: i18nInstance, language: Language, path: string) => {
-  // eslint-disable-next-line
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const res: any = i18n.getDataByLanguage(language);
   let pathWithoutLocale = path.length > 3 ? path.substring(3) : path;
   pathWithoutLocale = pathWithoutLocale

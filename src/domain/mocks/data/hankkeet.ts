@@ -4,6 +4,7 @@ import {
   getAreasMinStartDate,
 } from '../../hanke/edit/utils';
 import { HankeDataDraft } from '../../types/hanke';
+import { HAITTA_INDEX_TYPE } from '../../common/haittaIndexes/types';
 import ApiError from '../apiError';
 import hankkeetData from './hankkeet-data';
 import * as hakemuksetDB from './hakemukset';
@@ -44,7 +45,7 @@ export async function update(hankeTunnus: string, updates: HankeDataDraft) {
     alkuPvm = getAreasMinStartDate(updates.alueet)?.toISOString();
     loppuPvm = getAreasMaxEndDate(updates.alueet)?.toISOString();
     // eslint-disable-next-line no-empty
-  } catch (error) {}
+  } catch {}
   hanke = Object.assign(hanke, {
     ...updates,
     alkuPvm: alkuPvm,
@@ -60,8 +61,8 @@ export async function update(hankeTunnus: string, updates: HankeDataDraft) {
       raitioliikenneindeksi: 2,
       liikennehaittaindeksi: {
         indeksi: 3.5,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        tyyppi: 'PYORALIIKENNEINDEKSI' as any,
+
+        tyyppi: HAITTA_INDEX_TYPE.PYORALIIKENNEINDEKSI,
       },
     },
   });

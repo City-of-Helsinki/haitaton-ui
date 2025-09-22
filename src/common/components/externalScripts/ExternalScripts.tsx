@@ -4,7 +4,7 @@ type Props = {
   matomoEnabled: boolean;
 };
 
-function MatomoScript(): JSX.Element | null {
+function MatomoScript(): React.JSX.Element | null {
   useEffect(() => {
     // Create and configure the script element
     const script = document.createElement('script');
@@ -23,7 +23,7 @@ function MatomoScript(): JSX.Element | null {
   return null;
 }
 
-export function ExternalScripts({ matomoEnabled }: Readonly<Props>): JSX.Element | null {
+export function ExternalScripts({ matomoEnabled }: Readonly<Props>): React.JSX.Element | null {
   if (!matomoEnabled) {
     return null;
   }

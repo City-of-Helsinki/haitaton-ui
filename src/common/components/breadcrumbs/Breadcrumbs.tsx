@@ -15,9 +15,9 @@ type BreadcrumbName =
   | 'manual'
   | 'glossary';
 
-type Breadcrumb = BreadcrumbListItem & { skipTranslate?: boolean };
+type localBreadcrumb = BreadcrumbListItem & { skipTranslate?: boolean };
 
-export const BREADCRUMBS: Record<BreadcrumbName, Breadcrumb> = {
+export const BREADCRUMBS: Record<BreadcrumbName, localBreadcrumb> = {
   homePage: {
     title: 'common:components:header:frontPageLabel',
     path: 'routes:HOME:path',
@@ -66,7 +66,7 @@ export function useBreadcrumbs() {
   return useOutletContext<ContextType>();
 }
 
-const Breadcrumbs: React.FC<React.PropsWithChildren<{ breadcrumbs: Breadcrumb[] }>> = ({
+const Breadcrumbs: React.FC<React.PropsWithChildren<{ breadcrumbs: localBreadcrumb[] }>> = ({
   breadcrumbs,
 }) => {
   const { t, i18n } = useTranslation();

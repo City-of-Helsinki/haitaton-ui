@@ -145,7 +145,7 @@ export function calculateTotalSurfaceArea(areas?: HankeAlueFormState[]) {
     }, 0);
 
     return areasTotalSurfaceArea;
-  } catch (error) {
+  } catch {
     return null;
   }
 }
@@ -231,9 +231,10 @@ export function getApplicationsInsideHankealue(
     return [];
   }
   const hankeFeature = hankeAlue.geometriat?.featureCollection.features[0];
-  if (!hankeFeature) {
+  if (!hankeFeature || hankeFeature.geometry.type !== 'Polygon') {
     return [];
   }
+  const hankePolygonFeature = hankeFeature as GeoJSONFeature<GeoJSONPolygon>;
   const johtoselvitysApplications = applications.filter(
     (hakemus) => hakemus.applicationType == 'CABLE_REPORT',
   );
@@ -243,14 +244,16 @@ export function getApplicationsInsideHankealue(
   const johtoselvitysApplicationInsideHankealue: HankkeenHakemus[] =
     johtoselvitysApplications.filter((hakemus) =>
       ((hakemus.applicationData.areas || []) as ApplicationArea[]).some(
-        (area) => area.geometry && featureContains(hankeFeature, feature(area.geometry)),
+        (area) => area.geometry && featureContains(hankePolygonFeature, feature(area.geometry)),
       ),
     );
   const kaivuilmoitusApplicationInsideHankealue: HankkeenHakemus[] =
     kaivuilmoitusApplications.filter((hakemus) =>
       ((hakemus.applicationData.areas || []) as KaivuilmoitusAlue[])
         .flatMap((area) => area.tyoalueet)
-        .some((area) => area.geometry && featureContains(hankeFeature, feature(area.geometry))),
+        .some(
+          (area) => area.geometry && featureContains(hankePolygonFeature, feature(area.geometry)),
+        ),
     );
   return [...johtoselvitysApplicationInsideHankealue, ...kaivuilmoitusApplicationInsideHankealue];
 }

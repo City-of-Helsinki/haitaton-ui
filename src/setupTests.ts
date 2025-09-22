@@ -9,14 +9,16 @@ import { GlobalWithFetchMock } from 'jest-fetch-mock';
 import 'jest-canvas-mock';
 import { server } from './domain/mocks/test-server';
 import api from './domain/api/api';
+import fetchMock from 'jest-fetch-mock';
+import ResizeObserver from 'resize-observer-polyfill';
 
 const customGlobal: GlobalWithFetchMock = global as unknown as GlobalWithFetchMock;
 
-customGlobal.fetch = require('jest-fetch-mock');
+customGlobal.fetch = fetchMock;
 
 customGlobal.fetchMock = customGlobal.fetch;
 
-global.ResizeObserver = require('resize-observer-polyfill');
+global.ResizeObserver = ResizeObserver;
 
 window.scrollTo = function () {};
 

@@ -126,22 +126,13 @@ test.each([['PERSON'], ['OTHER'], ['COMPANY'], ['ASSOCIATION']])(
     const developerDiv = await screen.findByTestId('developer');
     const representativeDiv = await screen.findByTestId('representative');
 
-    switch (customerType) {
-      case 'COMPANY':
-      case 'ASSOCIATION':
-        {
-          expect(contractorDiv).toHaveTextContent(registryKey!);
-          expect(developerDiv).toHaveTextContent(registryKey!);
-          expect(representativeDiv).toHaveTextContent(registryKey!);
-        }
-        break;
-      case 'PERSON':
-      case 'OTHER': {
-        expect(contractorDiv).toHaveTextContent('');
-        expect(developerDiv).toHaveTextContent('');
-        expect(representativeDiv).toHaveTextContent('');
-      }
-    }
+    // Calculate expected values based on customer type
+    const expectedRegistryText =
+      customerType === 'COMPANY' || customerType === 'ASSOCIATION' ? registryKey! : '';
+
+    expect(contractorDiv).toHaveTextContent(expectedRegistryText);
+    expect(developerDiv).toHaveTextContent(expectedRegistryText);
+    expect(representativeDiv).toHaveTextContent(expectedRegistryText);
   },
 );
 
@@ -195,23 +186,13 @@ test.each([['PERSON'], ['OTHER'], ['COMPANY'], ['ASSOCIATION']])(
     const developerDiv = screen.getByTestId('developer');
     const representativeDiv = screen.getByTestId('representative');
 
-    switch (customerType) {
-      case 'COMPANY':
-      case 'ASSOCIATION':
-        {
-          expect(customerDiv).toHaveTextContent(registryKey!);
-          expect(contractorDiv).toHaveTextContent(registryKey!);
-          expect(developerDiv).toHaveTextContent(registryKey!);
-          expect(representativeDiv).toHaveTextContent(registryKey!);
-        }
-        break;
-      case 'PERSON':
-      case 'OTHER': {
-        expect(customerDiv).toHaveTextContent('');
-        expect(contractorDiv).toHaveTextContent('');
-        expect(developerDiv).toHaveTextContent('');
-        expect(representativeDiv).toHaveTextContent('');
-      }
-    }
+    // Calculate expected values based on customer type
+    const expectedRegistryText =
+      customerType === 'COMPANY' || customerType === 'ASSOCIATION' ? registryKey! : '';
+
+    expect(customerDiv).toHaveTextContent(expectedRegistryText);
+    expect(contractorDiv).toHaveTextContent(expectedRegistryText);
+    expect(developerDiv).toHaveTextContent(expectedRegistryText);
+    expect(representativeDiv).toHaveTextContent(expectedRegistryText);
   },
 );

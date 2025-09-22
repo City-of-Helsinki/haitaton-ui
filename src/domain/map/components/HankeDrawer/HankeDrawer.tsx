@@ -3,6 +3,7 @@ import { Vector as VectorSource } from 'ol/source';
 import { VectorSourceEvent } from 'ol/source/Vector';
 import { Feature } from 'ol';
 import Geometry from 'ol/geom/Geometry';
+import { Feature as GeoJSONFeature, Polygon as GeoJSONPolygon } from 'geojson';
 import { Coordinate } from 'ol/coordinate';
 import { FeatureLike } from 'ol/Feature';
 import { debounce, isEqual } from 'lodash';
@@ -119,12 +120,24 @@ const HankeDrawer: React.FC<React.PropsWithChildren<Props>> = ({
       if (!originalFeature) {
         return;
       }
+
+      const originalGeoJSONFeature = formatFeaturesToHankeGeoJSON([originalFeature]).features[0];
+      const modifiedGeoJSONFeature = formatFeaturesToHankeGeoJSON([modifiedFeature]).features[0];
+
+      // Only proceed if both features are polygons
+      if (
+        originalGeoJSONFeature.geometry.type !== 'Polygon' ||
+        modifiedGeoJSONFeature.geometry.type !== 'Polygon'
+      ) {
+        return;
+      }
+
       const workAreasInsideOriginalHankealueFeature = getWorkAreasInsideHankealueFeature(
-        formatFeaturesToHankeGeoJSON([originalFeature]).features[0],
+        originalGeoJSONFeature as GeoJSONFeature<GeoJSONPolygon>,
         hankkeenHakemukset,
       );
       const workAreasInsideModifiedHankealueFeature = getWorkAreasInsideHankealueFeature(
-        formatFeaturesToHankeGeoJSON([modifiedFeature]).features[0],
+        modifiedGeoJSONFeature as GeoJSONFeature<GeoJSONPolygon>,
         hankkeenHakemukset,
       );
       if (

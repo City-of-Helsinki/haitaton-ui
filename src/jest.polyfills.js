@@ -1,3 +1,4 @@
+/* eslint-env node, browser */
 /**
  * This is compiled from a few sources to get MWS 2 to work with jest and create-react-app.
  *

@@ -2,15 +2,14 @@ import React, { useMemo } from 'react';
 import { useQuery } from 'react-query';
 import api from '../api/api';
 import HankkeetContext from './HankkeetProviderContext';
-import { PublicHanke, toHankeData } from '../types/hanke';
+import { PublicHanke, toHankeData, HankeData } from '../types/hanke';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const convertArrayToObject = (array: any[], key: string) => {
-  const initialValue = {};
+const convertArrayToObject = (array: HankeData[], key: string): { [key: string]: HankeData } => {
+  const initialValue: { [key: string]: HankeData } = {};
   return array.reduce((obj, item) => {
     return {
       ...obj,
-      [item[key]]: item,
+      [(item as unknown as Record<string, unknown>)[key] as string]: item,
     };
   }, initialValue);
 };

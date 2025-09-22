@@ -46,20 +46,20 @@ describe('HankePortfolioComponent', () => {
       'Mannerheimintie autottomaksi',
     );
     await waitFor(() => {
-      expect(screen.getByText('2 hakutulosta'));
+      expect(screen.getByText('2 hakutulosta')).toBeInTheDocument();
     });
     expect(screen.getByTestId('numberOfFilteredRows')).toHaveTextContent('2');
 
     await user.type(screen.getByPlaceholderText(SEARCH_PLACEHOLDER), 'elielin');
     await waitFor(() => {
-      expect(screen.getByText('0 hakutulosta'));
+      expect(screen.getByText('0 hakutulosta')).toBeInTheDocument();
     });
     expect(screen.getByTestId('numberOfFilteredRows')).toHaveTextContent('0');
     expect(screen.queryByText(EMPTY_HANKE_LIST_TEXT)).toBeInTheDocument();
 
     await user.click(screen.getByRole('button', { name: /tyhjennä hakuehdot/i }));
     await waitFor(() => {
-      expect(screen.getByText('3 hakutulosta'));
+      expect(screen.getByText('3 hakutulosta')).toBeInTheDocument();
     });
     expect(screen.getByTestId('numberOfFilteredRows')).toHaveTextContent('3');
   });
@@ -125,7 +125,7 @@ describe('HankePortfolioComponent', () => {
 
     const { getByRole } = within(screen.getByText('Tarkista hakuehdot', { exact: false }));
     await user.click(getByRole('link', { name: 'luo uusi hanke' }));
-    expect(screen.getByRole('heading', { name: 'Luo uusi hanke' }));
+    expect(screen.getByRole('heading', { name: 'Luo uusi hanke' })).toBeInTheDocument();
   });
 
   test('Having no projects renders correct text without a link to new hanke when Hanke feature is not enabled', async () => {

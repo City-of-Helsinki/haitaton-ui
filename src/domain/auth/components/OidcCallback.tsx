@@ -71,7 +71,7 @@ const OidcCallback = () => {
 
   function onSuccess(user: User) {
     const { ad_groups, given_name, family_name } = user.profile;
-    const useADFilter = window._env_.REACT_APP_USE_AD_FILTER === '1';
+    const useADFilter = String(window._env_.REACT_APP_USE_AD_FILTER || '') === '1';
     const amr = oidcClient.getAmr();
     const helsinkiADUsed = amr?.includes('helsinkiad');
 

@@ -30,17 +30,19 @@ const DrawModule: React.FC<React.PropsWithChildren<Props>> = ({
   drawFinishCondition,
   drawStyleFunction,
   handleModifyEnd,
-}) => (
-  <>
-    <DrawIntercation
-      onSelfIntersectingPolygon={onSelfIntersectingPolygon}
-      drawCondition={drawCondition}
-      drawFinishCondition={drawFinishCondition}
-      drawStyleFunction={drawStyleFunction}
-      handleModifyEnd={handleModifyEnd}
-    />
-    <DrawControl />
-  </>
-);
+}) => {
+  return (
+    <>
+      <DrawIntercation
+        onSelfIntersectingPolygon={onSelfIntersectingPolygon}
+        drawCondition={drawCondition}
+        drawFinishCondition={drawFinishCondition}
+        drawStyleFunction={drawStyleFunction}
+        handleModifyEnd={handleModifyEnd}
+      />
+      <DrawControl />
+    </>
+  );
+};
 
 export default DrawModule;

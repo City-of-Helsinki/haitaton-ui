@@ -3,8 +3,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { render, screen } from '../../../testUtils/render';
 import DatePicker from './DatePicker';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const Form: React.FC<React.PropsWithChildren<{ defaultValues: any }>> = ({
+const Form: React.FC<React.PropsWithChildren<{ defaultValues: Record<string, unknown> }>> = ({
   children,
   defaultValues,
 }) => {

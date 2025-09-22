@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box } from '@chakra-ui/react';
 import clsx from 'clsx';
 
@@ -6,7 +6,7 @@ function useDelayedUnmount(isMounted: boolean, delayTime: number) {
   const [shouldRender, setShouldRender] = useState(false);
 
   useEffect(() => {
-    let timeoutId: NodeJS.Timeout;
+    let timeoutId: ReturnType<typeof setTimeout>;
     if (isMounted) {
       setShouldRender(true);
     } else {

@@ -1,4 +1,4 @@
-import { FieldErrors } from 'react-hook-form';
+import { FieldErrors, UseFormRegister } from 'react-hook-form';
 import { Feature } from 'ol';
 import Geometry from 'ol/geom/Geometry';
 import { PartialExcept } from '../../../common/types/utils';
@@ -73,8 +73,7 @@ export interface HankeDataFormState extends PartialExcept<HankeData, HankeContac
 export interface FormProps {
   hanke: HankeDataFormState;
   errors: FieldErrors;
-  // eslint-disable-next-line
-  register: any;
+  register: UseFormRegister<HankeDataFormState>;
 }
 
 export interface HankePostYhteystieto extends Omit<HankeYhteystieto, 'yhteyshenkilot'> {

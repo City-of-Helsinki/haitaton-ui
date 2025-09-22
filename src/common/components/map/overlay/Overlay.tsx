@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import { Overlay } from 'ol';
 import { Coordinate } from 'ol/coordinate';
 import MapContext from '../MapContext';
