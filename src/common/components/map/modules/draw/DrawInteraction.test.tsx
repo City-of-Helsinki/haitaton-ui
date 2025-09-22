@@ -8,9 +8,11 @@ import Feature from 'ol/Feature';
 import * as utils from '../../utils';
 // Create mock MapContext as a React context
 jest.mock('../../MapContext', () => {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const ReactLib = require('react');
   return {
     __esModule: true,
-    default: React.createContext({
+    default: ReactLib.createContext({
       map: {
         addInteraction: jest.fn(),
         removeInteraction: jest.fn(),
