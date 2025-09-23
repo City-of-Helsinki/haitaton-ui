@@ -121,8 +121,16 @@ export default function DrawInteraction({
           const modifiedPolygon: Polygon = currentFeature.getGeometry() as Polygon;
           const currentCoordinates = modifiedPolygon.getCoordinates();
 
+          // current coordinates contain always 3 points.
+          // When starting drawing polygon, OL adds 2 coordinates to form a polygon
+          //    1. point is start point for the polygon
+          //    a minimum of 3 coordinates are needed to form a polygon
+          // Number of actual drawn points is array length - 2 because
+          //    2. last point is the cursor position (that is in this context same as last drawn point)
+          //    last point is to link the starting point to get full polygon
+
           // Only validate when a new point is actually added (not just cursor movement)
-          const actualPointCount = currentCoordinates[0].length - 1; // Exclude cursor position
+          const actualPointCount = currentCoordinates[0].length - 2; // Exclude cursor position and starting point link
           // Only process change events that are triggered by user interaction (mouse clicks i.e. new point is added)
           if (actualPointCount <= lastCoordinateCount.current) {
             return; // No new point added, just cursor movement
@@ -132,9 +140,9 @@ export default function DrawInteraction({
           // NEW: Guard against leaving the hanke area while drawing
           if (drawSegmentGuard && actualPointCount >= 2) {
             const ring = currentCoordinates[0];
-            // Get the actual segment between the last two fixed points (including cursor)
-            const start = ring[actualPointCount - 1];
-            const end = ring[actualPointCount];
+            // Get the actual segment between the last two fixed points (ignoring cursor)
+            const start = ring[actualPointCount - 2];
+            const end = ring[actualPointCount - 1];
             const ok = drawSegmentGuard(map, [start, end]);
             if (!ok) {
               // Disallow this segment: revert last point
