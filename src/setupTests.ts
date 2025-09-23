@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-require-imports*/
 // jest-dom adds custom jest matchers for asserting on DOM nodes.
 // allows you to do things like:
 // expect(element).toHaveTextContent(/react/i)
@@ -7,49 +8,53 @@ import '@testing-library/jest-dom';
 import './jest.polyfills';
 import { GlobalWithFetchMock } from 'jest-fetch-mock';
 import 'jest-canvas-mock';
-import { server } from './domain/mocks/test-server';
-import api from './domain/api/api';
-import fetchMock from 'jest-fetch-mock';
-import ResizeObserver from 'resize-observer-polyfill';
 
-const customGlobal: GlobalWithFetchMock = global as unknown as GlobalWithFetchMock;
-
-customGlobal.fetch = fetchMock;
-
-customGlobal.fetchMock = customGlobal.fetch;
-
-global.ResizeObserver = ResizeObserver;
-
-window.scrollTo = function () {};
-
-// Suppress console errors in tests to improve performance
+// Suppress console errors/warnings as early as possible to catch messages
+// emitted during module import (e.g., hds-react CSS injection via jsdom)
 const originalConsoleError = console.error;
 const originalConsoleWarn = console.warn;
 
+console.error = (...args: unknown[]) => {
+  const msg = args[0]?.toString?.() ?? '';
+  if (
+    msg.includes('Could not parse CSS stylesheet') ||
+    msg.includes('Error: Could not parse CSS stylesheet') ||
+    // Some libraries may emit noisy element warnings we don't care about in tests
+    msg.includes('Warning: React.createElement')
+  ) {
+    return;
+  }
+  originalConsoleError(...(args as Parameters<typeof originalConsoleError>));
+};
+
+console.warn = (...args: unknown[]) => {
+  const msg = args[0]?.toString?.() ?? '';
+  if (
+    msg.includes('React Router Future Flag Warning') ||
+    msg.includes('componentWillReceiveProps has been renamed')
+  ) {
+    return;
+  }
+  originalConsoleWarn(...(args as Parameters<typeof originalConsoleWarn>));
+};
+
+// Require heavy modules after console overrides so their import-time logs are filtered
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const { server } = require('./domain/mocks/test-server');
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const api = require('./domain/api/api').default;
+
+const customGlobal: GlobalWithFetchMock = global as unknown as GlobalWithFetchMock;
+
+customGlobal.fetch = require('jest-fetch-mock');
+
+customGlobal.fetchMock = customGlobal.fetch;
+
+global.ResizeObserver = require('resize-observer-polyfill');
+
+window.scrollTo = function () {};
+
 beforeAll(() => {
-  // Suppress known CSS parsing errors from HDS React components
-  console.error = (...args: unknown[]) => {
-    const errorMessage = args[0]?.toString() || '';
-    if (
-      errorMessage.includes('Could not parse CSS stylesheet') ||
-      errorMessage.includes('Error: Could not parse CSS stylesheet') ||
-      errorMessage.includes('Warning: React.createElement')
-    ) {
-      return;
-    }
-    originalConsoleError(...args);
-  };
-
-  console.warn = (...args: unknown[]) => {
-    if (
-      args[0]?.toString().includes('React Router Future Flag Warning') ||
-      args[0]?.toString().includes('componentWillReceiveProps has been renamed')
-    ) {
-      return;
-    }
-    originalConsoleWarn(...args);
-  };
-
   server.listen({ onUnhandledRequest: 'error' });
 });
 

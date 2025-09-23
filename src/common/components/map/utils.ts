@@ -159,3 +159,50 @@ export function isPolygonSelfIntersectingByCoordinates(coordinates: Coordinate[]
 export function isPolygonSelfIntersecting(polygonToCheck: Polygon): boolean {
   return isPolygonSelfIntersectingByCoordinates(polygonToCheck.getCoordinates());
 }
+
+/**
+ * Check if a drawing segment is within hanke area boundaries
+ * @param map OpenLayers map instance
+ * @param latestLine Segment coordinates [start, end]
+ * @param hankeLayerFilter Function to identify hanke layers
+ * @returns true if segment is within boundaries, false otherwise
+ */
+export function isSegmentWithinHankeArea(
+  map: import('ol').Map,
+  latestLine: [Coordinate, Coordinate],
+  hankeLayerFilter: (layer: import('ol/layer').Layer<import('ol/source').Source>) => boolean,
+): boolean {
+  const endPixel = map.getPixelFromCoordinate(latestLine[1]);
+  const hankeFeatures = map.getFeaturesAtPixel(endPixel, { layerFilter: hankeLayerFilter });
+
+  // If no hanke feature is under the cursor, disallow
+  if (!hankeFeatures || hankeFeatures.length === 0) return false;
+
+  // Use the topmost hanke polygon under cursor
+  const hankeGeom = (hankeFeatures[0] as import('ol').Feature<Polygon>)?.getGeometry();
+  if (!hankeGeom) return false;
+
+  const edges = getLinesFromCoordinates(hankeGeom.getCoordinates());
+  const [sx, sy] = getCoordinateNumbersFromCoordinate(latestLine[0]);
+  const [ex, ey] = getCoordinateNumbersFromCoordinate(latestLine[1]);
+
+  const eps = 1e-6;
+  const almost = (a: number, b: number) => Math.abs(a - b) < eps;
+
+  for (const edge of edges) {
+    const [ax, ay] = getCoordinateNumbersFromCoordinate(edge[0]);
+    const [bx, by] = getCoordinateNumbersFromCoordinate(edge[1]);
+    const cross = getLineIntersection([sx, sy], [ex, ey], [ax, ay], [bx, by]);
+    if (
+      cross &&
+      !(
+        (almost(cross[0], sx) && almost(cross[1], sy)) ||
+        (almost(cross[0], ex) && almost(cross[1], ey))
+      )
+    ) {
+      // Segment crosses the boundary -> disallow this point
+      return false;
+    }
+  }
+  return true;
+}

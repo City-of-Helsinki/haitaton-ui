@@ -12,7 +12,7 @@ import {
   Tooltip,
 } from 'hds-react';
 import { Box, Flex, Grid } from '@chakra-ui/react';
-import { Feature } from 'ol';
+import { Feature, Map as OlMap } from 'ol';
 import { Geometry, Polygon } from 'ol/geom';
 import VectorSource from 'ol/source/Vector';
 import { polygon } from '@turf/helpers';
@@ -62,6 +62,9 @@ import HakemusLayer from '../map/components/Layers/HakemusLayer';
 import { OverlayProps } from '../../common/components/map/types';
 import { LIIKENNEHAITTA_STATUS } from '../common/utils/liikennehaittaindeksi';
 import useFieldArrayWithStateUpdate from '../../common/hooks/useFieldArrayWithStateUpdate';
+import { Coordinate } from 'ol/coordinate';
+import { Layer } from 'ol/layer';
+import { isSegmentWithinHankeArea } from '../../common/components/map/utils';
 
 function getEmptyArea(
   hankeData: HankeData,
@@ -393,6 +396,25 @@ export default function Areas({ hankeData, hankkeenHakemukset, originalHakemus }
     });
   }
 
+  // Identify Hanke polygons on the map for hit-testing
+  const hankeLayerFilter = useCallback((layer: Layer) => {
+    // HankeLayer sets a recognizable source name
+    return layer?.getSource()?.get('sourceName') === 'hankeSource';
+  }, []);
+
+  // Reuse OL hit-testing to pick the hanke polygon under the cursor and prevent crossing its boundary
+  const segmentWithinHankeAreaGuard = useCallback(
+    (map: OlMap, latestLine: [Coordinate, Coordinate]) => {
+      // Ensure we have hanke data and map is available
+      if (!hankeData || !map) {
+        return false;
+      }
+
+      return isSegmentWithinHankeArea(map, latestLine, hankeLayerFilter);
+    },
+    [hankeLayerFilter, hankeData],
+  );
+
   return (
     <DrawProvider source={drawSource}>
       <div>
@@ -468,6 +490,7 @@ export default function Areas({ hankeData, hankkeenHakemukset, originalHakemus }
           onCopyArea={handleCopyArea}
           restrictDrawingToHankeAreas
           workTimesSet={Boolean(workTimesSet)}
+          drawSegmentGuard={hankeData ? segmentWithinHankeAreaGuard : undefined}
         >
           {/* Hanke areas */}
           <HankeLayer
