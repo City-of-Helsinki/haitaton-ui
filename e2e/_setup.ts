@@ -140,7 +140,7 @@ export async function helsinkiLogin(page: Page, env = testiData.testEnvUrl) {
   await page.getByRole('button', { name: 'Tunnistaudu' }).click();
   await expect(page.getByText('Jatka palveluun')).toBeVisible();
   await page.getByText('Jatka palveluun').click();
-  await expect(page.getByLabel('Tee johtoselvityshakemus.', { exact: true })).toBeVisible({
+  await expect(page.getByLabel('Asiointi yksityisellä alueella.', { exact: true })).toBeVisible({
     timeout: 20000,
   });
 }
@@ -195,7 +195,7 @@ export async function createAndFillHankeForm(
   nimi: string,
   drawTool: DRAWTOOLTYPE = DRAWTOOLTYPE.SQUARE,
 ) {
-  await page.getByLabel('Luo uusi hanke.', { exact: true }).click();
+  await page.getByLabel('Asiointi yleisellä alueella.', { exact: true }).click();
   await page.getByTestId('nimi').fill(nimi);
   await page.getByTestId('perustaja.sahkoposti').fill(perustaja.email);
   await page.getByTestId('perustaja.puhelinnumero').fill(perustaja.phonenumber);
@@ -362,7 +362,7 @@ export async function expectApplicationStatus(
 }
 
 export async function createAndFillJohtoselvityshakemusForm(page: Page, nimi: string) {
-  await page.getByLabel('Tee johtoselvityshakemus.', { exact: true }).click();
+  await page.getByLabel('Asiointi yksityisellä alueella.', { exact: true }).click();
   await page.getByTestId('perustaja.sahkoposti').fill(perustaja.email);
   await page.getByTestId('perustaja.puhelinnumero').click();
   await page.getByTestId('perustaja.puhelinnumero').fill(perustaja.phonenumber);
