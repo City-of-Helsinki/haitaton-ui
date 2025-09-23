@@ -1,5 +1,7 @@
 import Feature from 'ol/Feature';
 import { Vector as VectorSource } from 'ol/source';
+import { Map } from 'ol';
+import { Coordinate } from 'ol/coordinate';
 
 export enum ACTION {
   SELECT_FEATURE = 'selectFeature',
@@ -13,6 +15,7 @@ export enum DRAWTOOLTYPE {
 
 export type SelectedDrawToolType = DRAWTOOLTYPE | null;
 export type SelectedFeature = Feature | null;
+export type DrawSegmentGuard = (map: Map, latestLine: [Coordinate, Coordinate]) => boolean;
 
 export type State = {
   selectedFeature: SelectedFeature;

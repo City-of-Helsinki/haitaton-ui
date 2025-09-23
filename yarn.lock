@@ -2213,11 +2213,11 @@
   integrity sha512-fsLxt0CHx2HCV9EL8lDoVkwHffsA0snUpddYjdLyXcG5E41xaamn9ZyQqOE9TUJdrRlH8/hjIf+UdOdDeKCUgg==
 
 "@keyv/bigmap@^1.0.0":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@keyv/bigmap/-/bigmap-1.0.1.tgz#fa673178ff6515cc908af95b49c94f96aca1fb0d"
-  integrity sha512-dZ7TMshK6brpuGPPRoq4pHNzNH4KTWaxVPB7KEnPErlgJpc+jG1Oyx3sw6nBFiZ0OCKwC1zU6skMEG7H421f9g==
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@keyv/bigmap/-/bigmap-1.0.2.tgz#9480d168c99a4a6c2fd3b677387cd922aa82a470"
+  integrity sha512-KR03xkEZlAZNF4IxXgVXb+uNIVNvwdh8UwI0cnc7WI6a+aQcDp8GL80qVfeB4E5NpsKJzou5jU0r6yLSSbMOtA==
   dependencies:
-    hookified "^1.12.0"
+    hookified "^1.12.1"
 
 "@keyv/serialize@^1.1.1":
   version "1.1.1"
@@ -7487,7 +7487,7 @@ hoist-non-react-statics@^3.3.0, hoist-non-react-statics@^3.3.1, hoist-non-react-
   dependencies:
     react-is "^16.7.0"
 
-hookified@^1.12.0:
+hookified@^1.12.0, hookified@^1.12.1:
   version "1.12.1"
   resolved "https://registry.yarnpkg.com/hookified/-/hookified-1.12.1.tgz#b0de0116ca346fd6c4e55db901f52d5cd728ef00"
   integrity sha512-xnKGl+iMIlhrZmGHB729MqlmPoWBznctSQTYCpFKqNsCgimJQmithcW0xSQMMFzYnV2iKUh25alswn6epgxS0Q==
