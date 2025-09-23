@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { Tab, TabList, TabPanel, Tabs } from 'hds-react';
-import { Box } from '@chakra-ui/layout';
+import { Box } from '@chakra-ui/react';
 import {
   Application,
   ApplicationAttachmentMetadata,
@@ -66,7 +66,8 @@ export default function ReviewAndSend({
           />
           <HaittojenhallintaSummary
             hankealueet={hankealueet}
-            kaivuilmoitusAlueet={muutosilmoitus.applicationData.areas}
+            data={muutosilmoitus.applicationData}
+            originalData={originalApplication.applicationData}
             muutokset={muutosilmoitus.muutokset}
           />
           <ContactsSummary

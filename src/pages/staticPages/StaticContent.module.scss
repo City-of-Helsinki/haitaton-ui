@@ -79,3 +79,34 @@
     list-style-position: inside;
   }
 }
+
+.infopage {
+  font-size: var(--fontsize-body-l);
+  margin-bottom: var(--spacing-xl);
+
+  p,
+  a {
+    font-size: var(--fontsize-body-l);
+  }
+
+  p {
+    margin-bottom: var(--spacing-m);
+  }
+
+  a {
+    text-decoration: underline;
+  }
+
+  ul {
+    list-style-position: inside;
+    margin-bottom: var(--spacing-m);
+  }
+
+  h2 {
+    margin-bottom: var(--spacing-s);
+  }
+
+  h3 {
+    margin-bottom: var(--spacing-xs);
+  }
+}

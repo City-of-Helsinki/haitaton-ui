@@ -1,4 +1,4 @@
-import { cloneDeep, findKey } from 'lodash';
+import { cloneDeep } from 'lodash';
 import { Feature } from 'ol';
 import Geometry from 'ol/geom/Geometry';
 import Polygon from 'ol/geom/Polygon';
@@ -7,27 +7,11 @@ import {
   ApplicationArea,
   ApplicationGeometry,
   ApplicationUpdateCustomerWithContacts,
-  CustomerType,
-  isCustomerWithContacts,
   JohtoselvitysData,
   JohtoselvitysUpdateData,
 } from '../application/types/application';
 import { JohtoselvitysArea, JohtoselvitysFormValues } from './types';
 import { JohtoselvitysTaydennysFormValues } from '../johtoselvitysTaydennys/types';
-
-/**
- * Find the contact key that has orderer field true
- */
-export function findOrdererKey(data: JohtoselvitysData): CustomerType {
-  const ordererRole = findKey(data, (value) => {
-    if (isCustomerWithContacts(value)) {
-      return value.contacts[0]?.orderer;
-    }
-    return false;
-  });
-
-  return ordererRole as CustomerType;
-}
 
 export function getAreaGeometry(area: JohtoselvitysArea): Geometry {
   if (area.feature) {
@@ -58,20 +42,19 @@ export function convertFormStateToJohtoselvitysUpdateData(
 
   const applicationData: JohtoselvitysUpdateData = cloneDeep(formState.applicationData);
 
-  const updatedAreas: ApplicationArea[] = formState.applicationData.areas.map(
-    function mapToApplicationArea({ geometry, feature }): ApplicationArea {
-      const coordinates = feature
-        ? (feature.getGeometry() as Polygon).getCoordinates()
-        : geometry.coordinates;
+  applicationData.areas = formState.applicationData.areas.map(function mapToApplicationArea({
+    geometry,
+    feature,
+  }): ApplicationArea {
+    const coordinates = feature
+      ? (feature.getGeometry() as Polygon).getCoordinates()
+      : geometry.coordinates;
 
-      return {
-        name: '',
-        geometry: new ApplicationGeometry(coordinates),
-      };
-    },
-  );
-
-  applicationData.areas = updatedAreas;
+    return {
+      name: '',
+      geometry: new ApplicationGeometry(coordinates),
+    };
+  });
 
   applicationData.customerWithContacts = ApplicationUpdateCustomerWithContacts.Create(
     formState.applicationData.customerWithContacts,
@@ -105,9 +88,7 @@ export function convertApplicationDataToFormState(
 
   const data = cloneDeep(application);
 
-  const updatedAreas = application.applicationData.areas.map(mapToJohtoselvitysArea);
-
-  data.applicationData.areas = updatedAreas;
+  data.applicationData.areas = application.applicationData.areas.map(mapToJohtoselvitysArea);
 
   return data;
 }

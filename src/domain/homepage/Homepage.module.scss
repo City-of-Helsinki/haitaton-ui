@@ -1,40 +1,5 @@
 @import 'src/assets/styles/layout';
 
-.heroContainer {
-  position: relative;
-  z-index: 1;
-
-  .hero {
-    background: var(--color-summer);
-    padding-top: var(--spacing-3-xl);
-    padding-bottom: var(--spacing-3-xl);
-    padding-left: var(--spacing-m);
-    padding-right: var(--spacing-m);
-
-    @include respond-below(m) {
-      padding-top: var(--spacing-l);
-      padding-bottom: var(--spacing-l);
-    }
-
-    @include respond-below(s) {
-      padding-top: var(--spacing-s);
-      padding-bottom: var(--spacing-s);
-    }
-
-    h1,
-    h2 {
-      text-align: center;
-    }
-  }
-
-  .koros {
-    fill: var(--color-summer);
-    position: absolute;
-    bottom: -15px;
-    z-index: -1;
-  }
-}
-
 .container {
   max-width: var(--breakpoint-xl);
   margin-top: var(--spacing-2-xl);

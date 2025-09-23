@@ -33,12 +33,12 @@ const Glossary: React.FC = () => {
     updateBreadcrumbs();
   }, [setBreadcrumbs]);
 
-  const words: Word[] = t('staticPages:manualPage:glossary:words', {
+  const words = t('staticPages:manualPage:glossary:words', {
     returnObjects: true,
-  });
+  }) as Word[];
 
-  const queryExpanded = 'div[role="button"][aria-expanded="true"]';
-  const queryClosed = 'div[role="button"][aria-expanded="false"]';
+  const queryExpanded = 'div[role=heading] > button[aria-expanded="true"]';
+  const queryClosed = 'div[role=heading] > button[aria-expanded="false"]';
   const buttonText = isAllOpen
     ? t('staticPages:manualPage:glossary:closeAll')
     : t('staticPages:manualPage:glossary:openAll');

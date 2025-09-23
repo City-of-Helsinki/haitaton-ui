@@ -16,8 +16,8 @@ const CommonProcedureTips: React.FC = memo(() => {
     for (let i = 1; i <= 14; i++) {
       tipContents.push({
         number: i,
-        heading: t(`hankeForm:haittojenHallintaForm:procedureTips:common:${i}:heading`),
-        content: t(`hankeForm:haittojenHallintaForm:procedureTips:common:${i}:content`),
+        heading: t(`hankeForm:haittojenHallintaForm:procedureTips:common:tip${i}:heading`),
+        content: t(`hankeForm:haittojenHallintaForm:procedureTips:common:tip${i}:content`),
         cardLinks: [],
       });
     }
@@ -40,7 +40,7 @@ const CommonProcedureTips: React.FC = memo(() => {
       >
         <Box as="p" mb="var(--spacing-s)">
           <Trans
-            i18nKey={`hankeForm:haittojenHallintaForm:procedureTips:common:${tip.number}:text`}
+            i18nKey={`hankeForm:haittojenHallintaForm:procedureTips:common:tip${tip.number}:text`}
             components={{
               a: (
                 <a
@@ -75,7 +75,7 @@ const CommonProcedureTips: React.FC = memo(() => {
                 openInNewTab
                 openInNewTabAriaLabel={t('common:components:link:openInNewTabAriaLabel')}
               >
-                {t(`workInstructions:cards:${linkId}:header`)}
+                {t(`workInstructions:cards:card${linkId}:header`)}
               </Link>
             ))}
           </Box>

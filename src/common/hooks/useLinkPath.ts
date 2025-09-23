@@ -60,6 +60,7 @@ const useLinkPath = (route: ROUTES): ((routeParams: RouteParams) => string) => {
     [ROUTES.WORKINSTRUCTIONS]: defaultReturnFunc,
     [ROUTES.CARDS_INDEX]: defaultReturnFunc,
     [ROUTES.CARD]: defaultReturnFunc,
+    [ROUTES.COOKIE_CONSENT]: defaultReturnFunc,
   });
 };
 

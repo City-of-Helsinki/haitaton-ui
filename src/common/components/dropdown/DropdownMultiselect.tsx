@@ -38,6 +38,7 @@ function DropdownMultiselect<T>({
       name={name}
       control={control}
       rules={rules}
+      defaultValue={[]}
       render={({ field: { onChange, onBlur, value, ref }, fieldState: { error } }) => {
         return (
           <Select

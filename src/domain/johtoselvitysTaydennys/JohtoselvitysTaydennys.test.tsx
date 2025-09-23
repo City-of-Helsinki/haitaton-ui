@@ -90,9 +90,8 @@ describe('Saving the form', () => {
 
   test('Should save on page change', async () => {
     const { user } = setup();
-    fireEvent.change(screen.getByLabelText(/työn kuvaus/i), {
-      target: { value: 'Muuttunut kuvaus' },
-    });
+    await user.clear(screen.getByLabelText(/työn kuvaus/i));
+    await user.type(screen.getByLabelText(/työn kuvaus/i), 'Muuttunut kuvaus');
     await user.click(screen.getByRole('button', { name: /seuraava/i }));
 
     expect(screen.getByText(/hakemus tallennettu/i)).toBeInTheDocument();
@@ -100,9 +99,8 @@ describe('Saving the form', () => {
 
   test('Should show error message if saving fails', async () => {
     const { user } = setup({ responseStatus: 500 });
-    fireEvent.change(screen.getByLabelText(/työn kuvaus/i), {
-      target: { value: 'Muuttunut kuvaus' },
-    });
+    await user.clear(screen.getByLabelText(/työn kuvaus/i));
+    await user.type(screen.getByLabelText(/työn kuvaus/i), 'Muuttunut kuvaus');
     await user.click(screen.getByRole('button', { name: /seuraava/i }));
 
     expect(screen.getAllByText(/tallentaminen epäonnistui/i)[0]).toBeInTheDocument();
@@ -112,11 +110,12 @@ describe('Saving the form', () => {
     const { user, application } = setup({ responseStatus: 500 });
     await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
     // Change registry key to invalid value
-    fireEvent.change(
+    await user.clear(
       screen.getByTestId('applicationData.customerWithContacts.customer.registryKey'),
-      {
-        target: { value: '2182' },
-      },
+    );
+    await user.type(
+      screen.getByTestId('applicationData.customerWithContacts.customer.registryKey'),
+      '2182',
     );
     await user.click(screen.getByRole('button', { name: /tallenna ja keskeytä/i }));
 

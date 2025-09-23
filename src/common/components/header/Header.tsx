@@ -169,7 +169,7 @@ function HaitatonHeader() {
           )}
           {features.hanke && (
             <Header.Link
-              label={t('homepage:hanke:title')}
+              label={t('homepage:hanke:titlePublicArea')}
               as={NavLink}
               to="#"
               onClick={openHankeCreateDialog}

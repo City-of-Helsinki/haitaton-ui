@@ -32,6 +32,7 @@ import UserManualPage from '../../pages/staticPages/userManual/UserManualPage';
 import UserManualMain from '../../pages/staticPages/userManual/UserManualMain';
 import Glossary from '../../pages/staticPages/userManual/Glossary';
 import ManualPage from '../../pages/staticPages/userManual/ManualPages';
+import CookieSettingsPage from '../../pages/CookieSettingsPage';
 
 const LocaleRoutes = () => {
   const { t } = useTranslation();
@@ -105,6 +106,7 @@ const LocaleRoutes = () => {
         <Route path={t('routes:GLOSSARY:path')} element={<Glossary />} />
       </Route>
       <Route path={t('routes:IDENTIFY_USER:path')} element={<UserIdentify />} />
+      <Route path={t('routes:COOKIE_CONSENT:path')} element={<CookieSettingsPage />} />
       <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );

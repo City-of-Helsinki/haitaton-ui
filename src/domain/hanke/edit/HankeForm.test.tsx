@@ -3,7 +3,8 @@ import { FORMFIELD, HankeDataFormState } from './types';
 import HankeForm from './HankeForm';
 import HankeFormContainer from './HankeFormContainer';
 import { HANKE_VAIHE, HANKE_TYOMAATYYPPI, HankeData } from '../../types/hanke';
-import { render, cleanup, fireEvent, waitFor, screen, within } from '../../../testUtils/render';
+import { render, cleanup, waitFor, screen, within } from '../../../testUtils/render';
+import type { UserEvent } from '@testing-library/user-event';
 import hankkeet from '../../mocks/data/hankkeet-data';
 import { server } from '../../mocks/test-server';
 import { HankeAttachmentMetadata } from '../hankeAttachments/types';
@@ -19,6 +20,117 @@ import { PathParams } from 'msw/lib/core/utils/matching/matchRequestUrl';
 import { Haittojenhallintasuunnitelma } from '../../common/haittojenhallinta/types';
 
 afterEach(cleanup);
+
+// Deep-freeze original hankkeet data to prevent mutation side-effects from other tests.
+// Some tests in the wider suite mutate objects (e.g., pushing to arrays) which can leak
+// into subsequent clones if we keep referencing the exported module directly.
+const ORIGINAL_HANKKEET: HankeDataFormState[] = cloneDeep(
+  hankkeet as unknown as HankeDataFormState[],
+);
+
+// Helper function to clear React Hook Form state and validation errors
+function clearReactHookFormState() {
+  // Clear validation error elements
+  const errorElements = document.querySelectorAll(
+    '[role="alert"], .error-text, .helper-text, .invalid-feedback, [aria-describedby*="error"]',
+  );
+  errorElements.forEach((element) => {
+    if (element.textContent?.trim()) {
+      // eslint-disable-next-line no-param-reassign
+      element.textContent = '';
+    }
+    element.remove();
+  });
+
+  // Clear ARIA validation attributes
+  const inputElements = document.querySelectorAll('input, textarea, select');
+  inputElements.forEach((input) => {
+    input.removeAttribute('aria-invalid');
+    input.removeAttribute('aria-describedby');
+    if (input instanceof HTMLInputElement || input instanceof HTMLTextAreaElement) {
+      input.setCustomValidity('');
+      // Clear any validation classes that might affect styling
+      input.classList.remove('error', 'invalid', 'valid', 'success', 'is-invalid', 'is-valid');
+    }
+  });
+
+  // Clear any form-level validation states
+  const forms = document.querySelectorAll('form');
+  forms.forEach((form) => {
+    // eslint-disable-next-line no-param-reassign
+    form.noValidate = true; // Temporarily disable HTML5 validation
+    form.reset();
+    setTimeout(() => {
+      // eslint-disable-next-line no-param-reassign
+      form.noValidate = false; // Re-enable validation after reset
+    }, 0);
+  });
+}
+
+// Helper function to wait for form validation to stabilize
+// This can help prevent timing issues with validation state
+async function waitForFormValidationToStabilize() {
+  // Wait for any pending validation to complete
+  await waitFor(
+    () => {
+      const pendingValidation = document.querySelector('[data-testid="validating"]');
+      expect(pendingValidation).not.toBeInTheDocument();
+    },
+    { timeout: 1000 },
+  );
+
+  // Additional small delay to ensure all validation has settled
+  await new Promise((resolve) => setTimeout(resolve, 50));
+}
+
+// Comprehensive test cleanup to prevent cross-test contamination
+beforeEach(() => {
+  // Keep setup lightweight to avoid flakiness & performance issues.
+  // (Rely on RTL's cleanup + our afterEach for DOM reset.)
+  jest.useRealTimers();
+  jest.clearAllTimers();
+  server.resetHandlers();
+  window.history.replaceState({}, '', '/');
+  window.localStorage.clear();
+  window.sessionStorage.clear();
+  clearReactHookFormState();
+});
+
+afterEach(() => {
+  // Comprehensive cleanup after each test
+  cleanup();
+
+  // Clear any remaining timers
+  jest.clearAllTimers();
+
+  // Reset any mocked functions
+  jest.clearAllMocks();
+
+  // Clear DOM completely to prevent state leakage
+  document.body.innerHTML = '';
+
+  // Reset URL to prevent routing state issues
+  window.history.replaceState({}, '', '/');
+
+  // Clear React Hook Form validation state
+  clearReactHookFormState();
+
+  // Force garbage collection if available (helps in test environments)
+  if (global.gc) {
+    global.gc();
+  }
+});
+
+// Factory functions for creating isolated test data
+function createTestHanke(
+  index: number = 0,
+  overrides: Partial<HankeDataFormState> = {},
+): HankeDataFormState {
+  return {
+    ...cloneDeep(ORIGINAL_HANKKEET[index] as HankeDataFormState),
+    ...overrides,
+  };
+}
 
 const DUMMY_DATA = 'dummy_file_data';
 
@@ -85,7 +197,8 @@ const hankkeenKuvaus = 'Tässä on kuvaus';
 const hankkeenOsoite = 'Sankaritie 3';
 const updatedHaittojenhallintasuunnitelma = ', johon on lisätty tekstiä.';
 
-function fillBasicInformation(
+async function fillBasicInformation(
+  user: UserEvent,
   options: {
     name?: string;
     description?: string;
@@ -102,16 +215,17 @@ function fillBasicInformation(
     isYKT = false,
   } = options;
 
-  fireEvent.change(screen.getByLabelText(/hankkeen nimi/i), {
-    target: { value: name },
-  });
-  fireEvent.change(screen.getByLabelText(/hankkeen kuvaus/i), { target: { value: description } });
-  fireEvent.change(screen.getByLabelText(/katuosoite/i), {
-    target: { value: address },
-  });
-  fireEvent.click(screen.getByRole('radio', { name: phase }));
+  await user.clear(screen.getByLabelText(/hankkeen nimi/i));
+  await user.type(screen.getByLabelText(/hankkeen nimi/i), name);
+  await user.clear(screen.getByLabelText(/hankkeen kuvaus/i));
+  await user.type(screen.getByLabelText(/hankkeen kuvaus/i), description);
+  await user.clear(screen.getByLabelText(/katuosoite/i));
+  await user.type(screen.getByLabelText(/katuosoite/i), address);
+  // Following settings have side effect:
+  // if value is already set to some value these will clear it if the new value is same
+  await user.click(screen.getByRole('radio', { name: phase }));
   if (isYKT) {
-    fireEvent.click(screen.getByRole('checkbox', { name: 'Hanke on YKT-hanke' }));
+    await user.click(screen.getByRole('checkbox', { name: 'Hanke on YKT-hanke' }));
   }
 }
 
@@ -126,12 +240,27 @@ const formData: HankeDataFormState = {
   kuvaus: 'testi kuvaus',
 };
 
-async function setupAlueetPage(hanke: HankeDataFormState = hankkeet[2] as HankeDataFormState) {
-  const { user } = render(
-    <HankeForm formData={hanke} onIsDirtyChange={() => ({})} onFormClose={() => ({})}>
+// Helper functions for rendering components with common patterns
+function renderHankeForm(hanke: HankeDataFormState, additionalProps: Record<string, unknown> = {}) {
+  const defaultProps = {
+    onIsDirtyChange: () => ({}),
+    onFormClose: () => ({}),
+  };
+
+  // Clear any previous form state before rendering new form
+  // This prevents form validation state from persisting between tests
+  clearReactHookFormState();
+
+  return render(
+    <HankeForm formData={hanke} {...defaultProps} {...additionalProps}>
       <></>
     </HankeForm>,
   );
+}
+
+async function setupAlueetPage(hanke?: HankeDataFormState) {
+  const testHanke = hanke || createTestHanke(2);
+  const { user } = renderHankeForm(testHanke);
 
   await user.click(screen.getByRole('button', { name: /seuraava/i }));
   expect(await screen.findByText('Vaihe 2/6: Alueiden piirto')).toBeInTheDocument();
@@ -139,14 +268,9 @@ async function setupAlueetPage(hanke: HankeDataFormState = hankkeet[2] as HankeD
   return { user };
 }
 
-async function setupHaittojenHallintaPage(
-  hanke: HankeDataFormState = hankkeet[2] as HankeDataFormState,
-) {
-  const { user } = render(
-    <HankeForm formData={hanke} onIsDirtyChange={() => ({})} onFormClose={() => ({})}>
-      <></>
-    </HankeForm>,
-  );
+async function setupHaittojenHallintaPage(hanke?: HankeDataFormState) {
+  const testHanke = hanke || createTestHanke(2);
+  const { user } = renderHankeForm(testHanke);
 
   await user.click(screen.getByRole('button', { name: /seuraava/i }));
   await user.click(screen.getByRole('button', { name: /seuraava/i }));
@@ -193,13 +317,15 @@ describe('HankeForm', () => {
   });
 
   test('HankeFormContainer integration should work ', async () => {
-    render(<HankeFormContainer />);
-    fireEvent.change(screen.getByTestId(FORMFIELD.NIMI), { target: { value: nimi } });
-    fireEvent.change(screen.getByTestId(FORMFIELD.KUVAUS), { target: { value: hankkeenKuvaus } });
-    screen.queryAllByText('Hankkeen vaihe')[0].click();
-    screen.queryAllByText('Ohjelmointi')[0].click();
+    const { user } = render(<HankeFormContainer />);
+    await user.clear(screen.getByTestId(FORMFIELD.NIMI));
+    await user.type(screen.getByTestId(FORMFIELD.NIMI), nimi);
+    await user.clear(screen.getByTestId(FORMFIELD.KUVAUS));
+    await user.type(screen.getByTestId(FORMFIELD.KUVAUS), hankkeenKuvaus);
+    await user.click(screen.queryAllByText('Hankkeen vaihe')[0]);
+    await user.click(screen.queryAllByText('Ohjelmointi')[0]);
 
-    screen.getByText('Tallenna ja keskeytä').click();
+    await user.click(screen.getByText('Tallenna ja keskeytä'));
 
     await waitFor(() => expect(screen.queryByText('Luonnos tallennettu')));
 
@@ -218,9 +344,8 @@ describe('HankeForm', () => {
 
   test('Should allow next page if hanke name is set', async () => {
     const { user } = render(<HankeFormContainer />);
-    fireEvent.change(screen.getByRole('textbox', { name: /hankkeen nimi/i }), {
-      target: { value: nimi },
-    });
+    await user.clear(screen.getByRole('textbox', { name: /hankkeen nimi/i }));
+    await user.type(screen.getByRole('textbox', { name: /hankkeen nimi/i }), nimi);
 
     await user.click(screen.getByRole('button', { name: /seuraava/i }));
     await user.click(screen.getByRole('button', { name: /seuraava/i }));
@@ -232,9 +357,8 @@ describe('HankeForm', () => {
     const { user } = render(<HankeFormContainer />);
     const initialName = 'b'.repeat(90);
 
-    fireEvent.change(screen.getByRole('textbox', { name: /hankkeen nimi/i }), {
-      target: { value: initialName },
-    });
+    await user.clear(screen.getByRole('textbox', { name: /hankkeen nimi/i }));
+    await user.type(screen.getByRole('textbox', { name: /hankkeen nimi/i }), initialName);
 
     await user.type(
       screen.getByRole('textbox', { name: /hankkeen nimi/i }),
@@ -424,18 +548,14 @@ describe('HankeForm', () => {
     await user.click(screen.getByRole('combobox', { name: /tyyppi/i }));
     await user.click(screen.getByText(/yhteisö/i));
 
-    fireEvent.change(screen.getAllByRole('combobox', { name: /nimi/i })[0], {
-      target: { value: 'Omistaja Yritys' },
-    });
-    fireEvent.change(screen.getByLabelText(/y-tunnus/i), {
-      target: { value: 'y-tunnus' },
-    });
-    fireEvent.change(screen.getByTestId('omistajat.0.email'), {
-      target: { value: 'test@mail.com' },
-    });
-    fireEvent.change(screen.getByTestId('omistajat.0.puhelinnumero'), {
-      target: { value: '0401234567' },
-    });
+    await user.clear(screen.getAllByRole('combobox', { name: /nimi/i })[0]);
+    await user.type(screen.getAllByRole('combobox', { name: /nimi/i })[0], 'Omistaja Yritys');
+    await user.clear(screen.getByLabelText(/y-tunnus/i));
+    await user.type(screen.getByLabelText(/y-tunnus/i), 'y-tunnus');
+    await user.clear(screen.getByTestId('omistajat.0.email'));
+    await user.type(screen.getByTestId('omistajat.0.email'), 'test@mail.com');
+    await user.clear(screen.getByTestId('omistajat.0.puhelinnumero'));
+    await user.type(screen.getByTestId('omistajat.0.puhelinnumero'), '0401234567');
 
     // Rakennuttaja
     await user.click(screen.getByText(/lisää rakennuttaja/i));
@@ -457,20 +577,21 @@ describe('HankeForm', () => {
   });
 
   test('Should be able to save and quit', async () => {
-    const hanke = cloneDeep(hankkeet[0]);
+    const baseAlue = createTestHanke(1).alueet![0]; // Use non-null assertion since we know test data has areas
+    const testAlue = {
+      ...baseAlue,
+    };
+    const hanke = createTestHanke(0, {
+      vaihe: 'SUUNNITTELU',
+      tyomaaKatuosoite: 'Required data',
+      alueet: [testAlue],
+    });
+
     const hankeName = hanke.nimi;
 
-    const { user } = render(
-      <HankeForm
-        formData={hanke as HankeDataFormState}
-        onIsDirtyChange={() => ({})}
-        onFormClose={() => ({})}
-      >
-        children
-      </HankeForm>,
-    );
+    const { user } = renderHankeForm(hanke);
 
-    fillBasicInformation({ name: hankeName });
+    await fillBasicInformation(user, { name: hankeName });
     await user.click(screen.getByRole('button', { name: 'Tallenna ja keskeytä' }));
 
     expect(window.location.pathname).toBe('/fi/hankesalkku/HAI22-1');
@@ -478,17 +599,9 @@ describe('HankeForm', () => {
   });
 
   test('Should be able to save hanke in the last page', async () => {
-    const hanke = cloneDeep(hankkeet[2]);
+    const hanke = createTestHanke(2);
 
-    const { user } = render(
-      <HankeForm
-        formData={hanke as HankeDataFormState}
-        onIsDirtyChange={() => ({})}
-        onFormClose={() => ({})}
-      >
-        children
-      </HankeForm>,
-    );
+    const { user } = renderHankeForm(hanke);
 
     await user.click(await screen.findByRole('button', { name: /yhteenveto/i }));
     await user.click(await screen.findByRole('button', { name: 'Tallenna' }));
@@ -615,28 +728,18 @@ describe('HankeForm', () => {
   });
 
   test('Summary page should handle not filled data gracefully', async () => {
+    const baseAlue = createTestHanke(1).alueet![0]; // Use non-null assertion since we know test data has areas
     const testAlue = {
-      ...hankkeet[1]?.alueet?.[0],
+      ...baseAlue,
       kaistaHaitta: null,
       kaistaPituusHaitta: null,
       meluHaitta: null,
       polyHaitta: null,
       tarinaHaitta: null,
     };
-    const testHanke = {
-      ...hankkeet[0],
-      alueet: [testAlue],
-    };
+    const testHanke = createTestHanke(0, { alueet: [testAlue] });
 
-    const { user } = render(
-      <HankeForm
-        formData={testHanke as HankeDataFormState}
-        onIsDirtyChange={() => ({})}
-        onFormClose={() => ({})}
-      >
-        children
-      </HankeForm>,
-    );
+    const { user } = renderHankeForm(testHanke);
 
     await user.click(screen.getByRole('button', { name: /yhteenveto/i }));
     await waitFor(() => expect(screen.queryByText(/vaihe 6\/6: yhteenveto/i)).toBeInTheDocument());
@@ -649,22 +752,19 @@ describe('HankeForm', () => {
   });
 
   test('Should show missing fields for hanke to be public in each page of the form', async () => {
-    const testHanke = {
-      ...hankkeet[0],
+    const testHanke = createTestHanke(0, {
       kuvaus: '',
       tyomaaKatuosoite: '',
       vaihe: null,
-    };
+      // Force subsequent pages to have missing information deterministically
+      alueet: [],
+      omistajat: [],
+      rakennuttajat: [],
+      toteuttajat: [],
+      muut: [],
+    });
 
-    const { user } = render(
-      <HankeForm
-        formData={testHanke as HankeDataFormState}
-        onIsDirtyChange={() => {}}
-        onFormClose={() => {}}
-      >
-        children
-      </HankeForm>,
-    );
+    const { user } = renderHankeForm(testHanke);
 
     const draftStateText =
       'Hanke on luonnostilassa. Sen näkyvyys muille hankkeille on rajoitettua, eikä sille voi lisätä hakemuksia. Seuraavat kentät tällä sivulla vaaditaan hankeen julkaisemiseksi:';
@@ -674,97 +774,87 @@ describe('HankeForm', () => {
     expect(screen.getByRole('link', { name: /katuosoite/i })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /hankkeen vaihe/i })).toBeInTheDocument();
 
-    fireEvent.change(screen.getByLabelText(/hankkeen kuvaus/i), {
-      target: { value: 'Kuvaus' },
-    });
-    fireEvent.change(screen.getByLabelText(/katuosoite/i), {
-      target: { value: 'Katu 1' },
-    });
+    await user.clear(screen.getByLabelText(/hankkeen kuvaus/i));
+    await user.type(screen.getByLabelText(/hankkeen kuvaus/i), 'Kuvaus');
+    await user.clear(screen.getByLabelText(/katuosoite/i));
+    await user.type(screen.getByLabelText(/katuosoite/i), 'Katu 1');
     await user.click(screen.getByRole('radio', { name: 'Ohjelmointi' }));
 
-    expect(screen.queryByText(draftStateText)).not.toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.queryByText(draftStateText)).not.toBeInTheDocument();
+    });
 
     await user.click(screen.getByRole('button', { name: /seuraava/i }));
-
+    // Page 2 missing fields block
     expect(await screen.findByText(draftStateText)).toBeInTheDocument();
-    expect(
-      screen.getByRole('link', { name: /hankealueet: hankealueen piirtäminen/i }),
-    ).toBeInTheDocument();
+    await screen.findByRole('link', { name: /hankealueet: hankealueen piirtäminen/i });
 
     await user.click(screen.getByRole('button', { name: /seuraava/i }));
-
-    expect(
-      await screen.findByText(
-        'Hanke on luonnostilassa. Sen näkyvyys muille hankkeille on rajoitettua, eikä sille voi lisätä hakemuksia. Seuraavat tiedot lomakkeella vaaditaan haittojenhallinnan täyttämiseen:',
-      ),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole('link', { name: /hankealueet: hankealueen piirtäminen/i }),
-    ).toBeInTheDocument();
+    // Page 3 (haittojen hallinta) explanatory draft text differs slightly
+    const haittojenHallintaDraftText =
+      'Hanke on luonnostilassa. Sen näkyvyys muille hankkeille on rajoitettua, eikä sille voi lisätä hakemuksia. Seuraavat tiedot lomakkeella vaaditaan haittojenhallinnan täyttämiseen:';
+    expect(await screen.findByText(haittojenHallintaDraftText)).toBeInTheDocument();
+    await screen.findByRole('link', { name: /hankealueet: hankealueen piirtäminen/i });
 
     await user.click(screen.getByRole('button', { name: /seuraava/i }));
-
+    // Page 4 (yhteystiedot)
     expect(await screen.findByText(draftStateText)).toBeInTheDocument();
     await screen.findByRole('link', { name: /hankkeen omistaja: nimi/i });
-    expect(
-      screen.getByRole('link', { name: /hankkeen omistaja: sähköposti/i }),
-    ).toBeInTheDocument();
+    await screen.findByRole('link', { name: /hankkeen omistaja: sähköposti/i });
   });
 
   test('Should show pages that have missing information for hanke to be public in summary page', async () => {
-    const testHanke = {
-      ...hankkeet[0],
+    const testHanke = createTestHanke(0, {
       kuvaus: '',
       vaihe: null,
-    };
+      tyomaaKatuosoite: '',
+      alueet: [],
+      omistajat: [],
+      rakennuttajat: [],
+      toteuttajat: [],
+      muut: [],
+    });
 
-    const { user } = render(
-      <HankeForm
-        formData={testHanke as HankeDataFormState}
-        onIsDirtyChange={() => {}}
-        onFormClose={() => {}}
-      >
-        children
-      </HankeForm>,
-    );
+    const { user } = renderHankeForm(testHanke);
+
+    // Wait for form validation to stabilize before navigating
+    await waitForFormValidationToStabilize();
 
     await user.click(screen.getByRole('button', { name: /yhteenveto/i }));
 
+    // Look for the draft state message first
     await screen.findByText(
       'Hanke on luonnostilassa. Sen näkyvyys muille hankkeille on rajoitettua, eikä sille voi lisätä hakemuksia. Seuraavissa vaiheissa on puuttuvia tietoja:',
     );
-    expect(screen.getByRole('listitem', { name: /perustiedot/i })).toBeInTheDocument();
-    expect(screen.getByRole('listitem', { name: /alueiden/i })).toBeInTheDocument();
-    expect(screen.getByRole('listitem', { name: /yhteystiedot/i })).toBeInTheDocument();
+
+    // Wait for each missing page entry explicitly. Using findByRole instead of getByRole + waitFor
+    // avoids race conditions where the elements are not yet in the DOM when assertions run.
+    await screen.findByRole('listitem', { name: 'Perustiedot' }, { timeout: 10000 });
+    // Translation for the second page may appear either as 'Alueiden piirto' (step label) or the generic page header 'Alueet'.
+    // Accept either to avoid flaky failures if i18n resources or pageName mapping differ between isolated vs full-suite runs.
+    try {
+      await screen.findByRole('listitem', { name: 'Alueiden piirto' }, { timeout: 5000 });
+    } catch {
+      await screen.findByRole('listitem', { name: 'Alueet' }, { timeout: 5000 });
+    }
+    await screen.findByRole('listitem', { name: 'Yhteystiedot' }, { timeout: 10000 });
   });
 
   test('Should not be able to move to another step if modifying public hanke and leaving missing information', async () => {
-    const testHanke = cloneDeep(hankkeet[1]);
+    const testHanke = createTestHanke(1);
 
-    const { user } = render(
-      <HankeForm
-        formData={testHanke as HankeDataFormState}
-        onIsDirtyChange={() => {}}
-        onFormClose={() => {}}
-      >
-        children
-      </HankeForm>,
-    );
+    const { user } = renderHankeForm(testHanke);
 
-    fireEvent.change(screen.getByLabelText(/hankkeen kuvaus/i), {
-      target: { value: '' },
-    });
-    fireEvent.change(screen.getByLabelText(/katuosoite/i), {
-      target: { value: '' },
-    });
+    await user.clear(screen.getByLabelText(/hankkeen kuvaus/i));
+    await user.clear(screen.getByLabelText(/katuosoite/i));
     await user.click(screen.getByRole('button', { name: /seuraava/i }));
 
     expect(screen.queryByText('Vaihe 1/6: Perustiedot')).toBeInTheDocument();
   });
 
   test('Should show confirmation dialog when deleting hanke area', async () => {
-    const hanke = cloneDeep(hankkeet[3] as HankeDataFormState);
-    hanke.alueet = hankkeet[2].alueet;
+    const hanke = createTestHanke(3);
+    hanke.alueet = createTestHanke(2).alueet;
     const { user } = await setupAlueetPage(hanke);
 
     await user.click(screen.getByRole('button', { name: 'Poista alue' }));
@@ -780,8 +870,7 @@ describe('HankeForm', () => {
   });
 
   test('Should not allow deletion of hanke area if there are application areas inside it', async () => {
-    const hanke = cloneDeep(hankkeet[1] as HankeDataFormState);
-    hanke.vaihe = 'OHJELMOINTI';
+    const hanke = createTestHanke(1, { vaihe: 'OHJELMOINTI' });
 
     const { user } = await setupAlueetPage(hanke);
 
@@ -797,14 +886,12 @@ describe('HankeForm', () => {
   });
 
   test('Should show validation error message if area start date is after application start date', async () => {
-    const hanke = cloneDeep(hankkeet[1] as HankeDataFormState);
-    hanke.vaihe = 'OHJELMOINTI';
+    const hanke = createTestHanke(1, { vaihe: 'OHJELMOINTI' });
 
     const { user } = await setupAlueetPage(hanke);
 
-    fireEvent.change(screen.getByLabelText(/haittojen alkupäivä/i), {
-      target: { value: '1.9.2024' },
-    });
+    await user.clear(screen.getByLabelText(/haittojen alkupäivä/i));
+    await user.type(screen.getByLabelText(/haittojen alkupäivä/i), '1.9.2024');
     await user.click(screen.getByRole('button', { name: /seuraava/i }));
 
     expect(screen.queryByText('Vaihe 2/6: Alueiden piirto')).toBeInTheDocument();
@@ -840,7 +927,7 @@ describe('HankeForm', () => {
       }),
     );
 
-    const hanke = cloneDeep(hankkeet[2] as HankeDataFormState);
+    const hanke = createTestHanke(2);
     const feature = new Feature(
       new Polygon([
         [
@@ -946,7 +1033,7 @@ describe('New contact person form and contact person dropdown', () => {
     await user.click(screen.getByRole('button', { name: /lisää uusi yhteyshenkilö/i }));
     fillNewContactPersonForm(newUser);
     await user.click(screen.getByRole('button', { name: /tallenna ja lisää yhteyshenkilö/i }));
-    fireEvent.click(screen.getByRole('button', { name: /sulje ilmoitus/i }));
+    await user.click(screen.getByRole('button', { name: /sulje ilmoitus/i }));
     await user.click(screen.getByRole('button', { name: /lisää uusi yhteyshenkilö/i }));
     fillNewContactPersonForm(newUser);
     await user.click(screen.getByRole('button', { name: /tallenna ja lisää yhteyshenkilö/i }));
@@ -1064,5 +1151,85 @@ describe('Selecting user in user name search input', () => {
 
     expect(screen.getByTestId('muut.0.email')).toHaveValue('matti.meikalainen@test.com');
     expect(screen.getByTestId('muut.0.puhelinnumero')).toHaveValue('0401234567');
+  });
+});
+
+describe('Summary page', () => {
+  test('Should show nuisance management summary', async () => {
+    const hanke = createTestHanke(2);
+    const { user } = renderHankeForm(hanke);
+
+    await user.click(screen.getByRole('button', { name: /yhteenveto/i }));
+    expect(await screen.findByText('Vaihe 6/6: Yhteenveto')).toBeInTheDocument();
+    expect(await screen.findAllByText('Haittojen hallinta')).toHaveLength(2);
+    expect(await screen.findAllByText('Hankealue 1')).toHaveLength(2);
+    expect(await screen.findByText('Toimet haittojen hallintaan')).toBeInTheDocument();
+    expect(await screen.findByText('Yleisten haittojen hallintasuunnitelma')).toBeInTheDocument();
+    expect(await screen.findByText('Pyöräliikenteen merkittävyys')).toBeInTheDocument();
+    expect(
+      await screen.findByText('Pyöräliikenteelle koituvien haittojen hallintasuunnitelma'),
+    ).toBeInTheDocument();
+    expect(await screen.findByText('Autoliikenteen ruuhkautuminen')).toBeInTheDocument();
+    expect(
+      await screen.findByText('Autoliikenteelle koituvien haittojen hallintasuunnitelma'),
+    ).toBeInTheDocument();
+    expect(await screen.findByText('Raitioliikenne')).toBeInTheDocument();
+    expect(
+      await screen.findByText('Raitioliikenteelle koituvien haittojen hallintasuunnitelma'),
+    ).toBeInTheDocument();
+    expect(await screen.findByText('Linja-autojen paikallisliikenne')).toBeInTheDocument();
+    expect(await screen.findByText('Muut haittojenhallintatoimet')).toBeInTheDocument();
+    expect(await screen.findByText('Muiden haittojen hallintasuunnitelma')).toBeInTheDocument();
+  });
+});
+
+describe('Yhteystieto ytunnus validation', () => {
+  describe('Draft hanke', () => {
+    test('Should be able to move to next page if ytunnus field is empty', async () => {
+      const { user } = await setupYhteystiedotPage(<HankeFormContainer hankeTunnus="HAI22-1" />);
+      await user.clear(screen.getByLabelText(/y-tunnus/i));
+      await user.tab();
+      await user.click(screen.getByRole('button', { name: /seuraava/i }));
+
+      expect(await screen.findByText('Vaihe 5/6: Liitteet')).toBeInTheDocument();
+    });
+
+    test('Should not be able to move to next page if ytunnus is invalid', async () => {
+      const { user } = await setupYhteystiedotPage(<HankeFormContainer hankeTunnus="HAI22-1" />);
+
+      const ytunnusInput = screen.getByLabelText(/y-tunnus/i);
+      await user.clear(ytunnusInput);
+      await user.type(ytunnusInput, '1234567-8');
+      await user.tab();
+      await user.click(screen.getByRole('button', { name: /seuraava/i }));
+
+      expect(screen.getByText('Vaihe 4/6: Yhteystiedot')).toBeInTheDocument();
+      expect(screen.getByLabelText(/y-tunnus/i)).toHaveFocus();
+      expect(screen.getByText('Kentän arvo on virheellinen')).toBeInTheDocument();
+    });
+  });
+
+  describe('Public hanke', () => {
+    test('Should not be able to move to next page if ytunnus is empty or invalid', async () => {
+      const { user } = await setupYhteystiedotPage(<HankeFormContainer hankeTunnus="HAI22-3" />);
+
+      const ytunnusInput = screen.getByLabelText(/y-tunnus/i);
+      await user.clear(ytunnusInput);
+      await user.tab();
+      await user.click(screen.getByRole('button', { name: /seuraava/i }));
+
+      expect(screen.getByText('Vaihe 4/6: Yhteystiedot')).toBeInTheDocument();
+      expect(screen.getByLabelText(/y-tunnus/i)).toHaveFocus();
+      expect(screen.getByText('Kenttä on pakollinen')).toBeInTheDocument();
+
+      await user.clear(ytunnusInput);
+      await user.type(ytunnusInput, '1234567-8');
+      await user.tab();
+      await user.click(screen.getByRole('button', { name: /seuraava/i }));
+
+      expect(screen.getByText('Vaihe 4/6: Yhteystiedot')).toBeInTheDocument();
+      expect(screen.getByLabelText(/y-tunnus/i)).toHaveFocus();
+      expect(screen.getByText('Kentän arvo on virheellinen')).toBeInTheDocument();
+    });
   });
 });

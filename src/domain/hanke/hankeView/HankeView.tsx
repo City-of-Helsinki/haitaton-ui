@@ -541,7 +541,7 @@ const HankeView: React.FC<Props> = ({
           </Tabs>
         </InformationViewMainContent>
         <InformationViewSidebar testId="hanke-map">
-          <OwnHankeMapHeader hankeTunnus={hankeData.hankeTunnus} showLink={alueet.length > 0} />
+          <OwnHankeMapHeader hankeTunnus={hankeData.hankeTunnus} />
           {alueet?.length > 0 ? (
             <>
               <OwnHankeMap hanke={hankeData} />

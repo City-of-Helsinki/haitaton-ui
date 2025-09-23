@@ -5,10 +5,10 @@ import MapContext from '../MapContext';
 import './FullscreenControl.scss';
 
 const labelElement = document.createElement('div');
-labelElement.className = 'hds-icon hds-icon--link-external';
+labelElement.className = 'hds-icon hds-icon--link-external full-screen-icon';
 
 const labelActiveElement = document.createElement('div');
-labelActiveElement.className = 'hds-icon hds-icon--collapse';
+labelActiveElement.className = 'hds-icon hds-icon--collapse full-screen-icon';
 
 const FullScreenControl = () => {
   const { map } = useContext(MapContext);

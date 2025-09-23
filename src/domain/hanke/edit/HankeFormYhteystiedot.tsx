@@ -63,6 +63,7 @@ const ContactFields: React.FC<
   const { t } = useTranslation();
   const { watch, setValue } = useFormContext();
   const selectedContactType = watch(`${contactType}.${index}.tyyppi`);
+  const registryKey = watch(`${contactType}.${index}.ytunnus`);
   const isPrivatePerson = selectedContactType === CONTACT_TYYPPI.YKSITYISHENKILO;
   const registryKeyInputDisabled = isPrivatePerson;
 
@@ -73,6 +74,13 @@ const ContactFields: React.FC<
       });
     }
   }, [registryKeyInputDisabled, contactType, index, setValue]);
+
+  useEffect(() => {
+    if (registryKey === '') {
+      // set the registry key to null when it is empty
+      setValue(`${contactType}.${index}.ytunnus`, null);
+    }
+  }, [contactType, index, registryKey, setValue]);
 
   function handleUserSelect(user: HankeUser) {
     setValue(`${contactType}.${index}.${CONTACT_FORMFIELD.EMAIL}`, user.sahkoposti, {

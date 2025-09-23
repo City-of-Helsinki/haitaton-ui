@@ -28,7 +28,6 @@ import {
 } from '../../application/types/application';
 import { isApplicationCancelled, isApplicationPending } from '../../application/utils';
 import { TFunction } from 'i18next';
-import booleanContains from '@turf/boolean-contains';
 import { feature } from '@turf/helpers';
 
 function mapToAreaDates(areas: HankeAlue[] | undefined, key: 'haittaAlkuPvm' | 'haittaLoppuPvm') {
@@ -244,14 +243,14 @@ export function getApplicationsInsideHankealue(
   const johtoselvitysApplicationInsideHankealue: HankkeenHakemus[] =
     johtoselvitysApplications.filter((hakemus) =>
       ((hakemus.applicationData.areas || []) as ApplicationArea[]).some(
-        (area) => area.geometry && booleanContains(hankeFeature, area.geometry),
+        (area) => area.geometry && featureContains(hankeFeature, feature(area.geometry)),
       ),
     );
   const kaivuilmoitusApplicationInsideHankealue: HankkeenHakemus[] =
     kaivuilmoitusApplications.filter((hakemus) =>
       ((hakemus.applicationData.areas || []) as KaivuilmoitusAlue[])
         .flatMap((area) => area.tyoalueet)
-        .some((area) => area.geometry && booleanContains(hankeFeature, area.geometry)),
+        .some((area) => area.geometry && featureContains(hankeFeature, feature(area.geometry))),
     );
   return [...johtoselvitysApplicationInsideHankealue, ...kaivuilmoitusApplicationInsideHankealue];
 }

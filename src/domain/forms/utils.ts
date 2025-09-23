@@ -25,7 +25,13 @@ export function changeFormStep<T extends FieldValues>(
       : fieldsToValidate.every((field) => {
           const message = get(errors, field)?.message as unknown as { key: string } | undefined;
           const errorKey = message?.key;
-          return !errorKey || errorsToIgnore.includes(errorKey);
+          if (!message) {
+            return true;
+          }
+          if (!errorKey) {
+            return false;
+          }
+          return errorsToIgnore.includes(errorKey);
         });
 
   if (ignoreErrors) {

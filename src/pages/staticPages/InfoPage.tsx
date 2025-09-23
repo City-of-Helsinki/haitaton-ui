@@ -23,6 +23,8 @@ const InfoPage: React.FC<React.PropsWithChildren<unknown>> = () => {
           {t('staticPages:infoPage:releaseInfo')}
         </Text>
         <ul style={{ paddingLeft: 'var(--spacing-l)', marginBottom: 'var(--spacing-s)' }}>
+          <li>{t('staticPages:infoPage:releaseVer4')}</li>
+          <li>{t('staticPages:infoPage:releaseVer3')}</li>
           <li>{t('staticPages:infoPage:releaseVer2')}</li>
           <li>{t('staticPages:infoPage:releaseVer1')}</li>
         </ul>

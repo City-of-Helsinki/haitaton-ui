@@ -486,10 +486,10 @@ describe('Error notification', () => {
     expect(screen.getByRole('link', { name: /Työn alkupäivämäärä/i })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /Työn loppupäivämäärä/i })).toBeInTheDocument();
     expect(
-      screen.getByRole('link', { name: 'Työalueet (Hankealue 2): Katuosoite' }),
+      screen.getByRole('link', { name: 'Työalueet (Hankealue 1): Katuosoite' }),
     ).toBeInTheDocument();
     expect(
-      screen.getByRole('link', { name: 'Työalueet (Hankealue 2): Työn tarkoitus' }),
+      screen.getByRole('link', { name: 'Työalueet (Hankealue 1): Työn tarkoitus' }),
     ).toBeInTheDocument();
   });
 
@@ -521,12 +521,12 @@ describe('Error notification', () => {
     ).toBeInTheDocument();
     expect(
       screen.getByRole('link', {
-        name: 'Työalueet (Hankealue 2): Yleiset toimet työalueiden haittojen hallintaan',
+        name: 'Työalueet (Hankealue 1): Yleiset toimet työalueiden haittojen hallintaan',
       }),
     ).toBeInTheDocument();
     expect(
       screen.getByRole('link', {
-        name: 'Työalueet (Hankealue 2) Pyöräliikenteen merkittävyys: Toimet työalueiden haittojen hallintaan',
+        name: 'Työalueet (Hankealue 1) Pyöräliikenteen merkittävyys: Toimet työalueiden haittojen hallintaan',
       }),
     ).toBeInTheDocument();
   });

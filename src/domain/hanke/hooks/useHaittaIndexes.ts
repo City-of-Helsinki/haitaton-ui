@@ -1,4 +1,5 @@
 import { useMutation } from 'react-query';
+import { Polygon } from 'ol/geom';
 import api from '../../api/api';
 import {
   HANKE_KAISTAHAITTA_KEY,
@@ -6,6 +7,7 @@ import {
   HankeGeometria,
 } from '../../types/hanke';
 import { HaittaIndexData } from '../../common/haittaIndexes/types';
+import { isPolygonSelfIntersecting } from '../../../common/components/map/utils';
 
 type HankeAlueData = {
   geometriat: HankeGeometria;
@@ -19,6 +21,12 @@ type HankeAlueData = {
  * Request haittaindeksit for hanke area
  */
 async function calculateHaittaIndexes(data: HankeAlueData) {
+  const polygonToCheck = new Polygon(
+    data.geometriat.featureCollection.features[0].geometry.coordinates,
+  );
+  if (isPolygonSelfIntersecting(polygonToCheck)) {
+    throw new Error('Self-intersecting polygon');
+  }
   const { data: response } = await api.post<HaittaIndexData>('/haittaindeksit', data);
   return response;
 }

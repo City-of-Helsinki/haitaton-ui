@@ -36,7 +36,7 @@ describe('Create new hanke from dialog', () => {
         </I18nextProvider>
       ),
     });
-    const createElement = await screen.findByText('Luo uusi hanke');
+    const createElement = await screen.findByText('Asiointi yleisellä alueella');
     await user.click(createElement);
     return user;
   }
@@ -55,7 +55,7 @@ describe('Create new hanke from dialog', () => {
     fillInformation();
     await user.click(screen.getByRole('button', { name: /luo hanke/i }));
 
-    expect(window.location.pathname).toBe('/fi/hanke/HAI22-13/muokkaa');
+    expect(window.location.pathname).toBe('/fi/hanke/HAI22-14/muokkaa');
   });
 
   test('Should show validation errors and not create hanke if information is missing', async () => {
@@ -116,7 +116,7 @@ describe('Create johtoselvitys from dialog', () => {
     await screen.findByRole('heading', {
       name: 'Auta meitä tekemään Haitattomasta vielä parempi!',
     });
-    await user.click(screen.getByText('Tee johtoselvityshakemus'));
+    await user.click(screen.getByText('Asiointi yksityisellä alueella'));
     return user;
   }
 

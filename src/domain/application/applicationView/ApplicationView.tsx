@@ -202,13 +202,13 @@ function JohtoselvitysAreasInfo({
             })}
           </SectionItemContentAdded>
         )}
-        {areasRemoved && areasRemoved.length === tyoalueet.length && (
+        {areasRemoved && areasRemoved.length > 0 && (
           <SectionItemContentRemoved marginTop="var(--spacing-s)">
             {areasRemoved.map((area, index) => {
               return (
                 <AreaInformation
                   area={area}
-                  areaName={getAreaDefaultName(t, tyoalueet.indexOf(area), tyoalueet.length)}
+                  areaName={getAreaDefaultName(t, index, tyoalueet.length)}
                   key={index}
                 />
               );

@@ -11,7 +11,7 @@ function getHaittaIndexValue(v: number | { indeksi: number }): number {
  * the result will be [[PYORALIIKENNE, 1.3], [AUTOLIIKENNE, 1.0], [LINJAAUTOLIIKENNE, 0.0], [RAITIOLIIKENNE, 0.0]].
  */
 export function sortedLiikenneHaittojenhallintatyyppi(
-  tormaystarkasteluTulos: HaittaIndexData | undefined,
+  tormaystarkasteluTulos: HaittaIndexData | undefined | null,
 ): [HAITTOJENHALLINTATYYPPI, number][] {
   const defaultOrder = Object.values(HAITTOJENHALLINTATYYPPI).filter(
     (type) => type !== HAITTOJENHALLINTATYYPPI.YLEINEN && type !== HAITTOJENHALLINTATYYPPI.MUUT,
@@ -35,7 +35,10 @@ export function sortedLiikenneHaittojenhallintatyyppi(
     .sort((a, b): number => {
       const diff = b.value - a.value;
       if (diff === 0) {
-        return defaultOrder.indexOf(a.type) - defaultOrder.indexOf(b.type);
+        return (
+          defaultOrder.indexOf(a.type as (typeof defaultOrder)[number]) -
+          defaultOrder.indexOf(b.type as (typeof defaultOrder)[number])
+        );
       }
       return diff;
     });

@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { Tab, TabList, TabPanel, Tabs } from 'hds-react';
-import { Box } from '@chakra-ui/layout';
+import { Box } from '@chakra-ui/react';
 import { Taydennys } from '../application/taydennys/types';
 import {
   Application,
@@ -68,7 +68,8 @@ export default function ReviewAndSend({
           />
           <TaydennysHaittojenhallintaSummary
             hankealueet={hankealueet}
-            kaivuilmoitusAlueet={taydennys.applicationData.areas}
+            data={taydennys.applicationData}
+            originalData={originalApplication.applicationData}
             muutokset={muutokset}
           />
           <TaydennysContactsSummary

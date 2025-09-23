@@ -1667,8 +1667,8 @@ const hakemukset: Application[] = [
       placementContracts: ['SL1234567'],
       areas: [
         {
-          name: 'Hankealue 2',
-          hankealueId: 2,
+          name: 'Hankealue 1',
+          hankealueId: 1,
           tyoalueet: [
             {
               geometry: {

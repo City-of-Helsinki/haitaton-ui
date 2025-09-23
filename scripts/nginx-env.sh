@@ -5,6 +5,7 @@ output_file=/etc/nginx/nginx.conf
 
 substitutions=''
 substitutions="$substitutions \$LOGIN_SERVER"
+substitutions="$substitutions \$NGINX_SENTRY"
 
 # Replace the specified environment variables in the configuration file with
 # values from the environment.

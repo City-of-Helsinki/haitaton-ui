@@ -19,9 +19,7 @@ function getViewPermissionForUser() {
 
 test('Draft state notification is rendered when hanke is in draft state', async () => {
   render(<HankeViewContainer hankeTunnus="HAI22-1" />);
-
   await waitForLoadingToFinish();
-
   const draftStateElement = screen.getByTestId('hankeDraftStateNotification');
   const { getByRole } = within(draftStateElement);
 
@@ -213,6 +211,22 @@ test('Correct information about hanke should be displayed', async () => {
   expect(screen.queryByText('5341034-5')).toBeInTheDocument();
   expect(screen.queryByText('toimisto@testi.com')).toBeInTheDocument();
   expect(screen.queryByText('0501234567')).toBeInTheDocument();
+});
+
+test('Shows "-" if nuisance is not given', async () => {
+  const { user } = render(<HankeViewContainer hankeTunnus="HAI22-13" />);
+
+  await waitForLoadingToFinish();
+
+  // Change to areas tab
+  await user.click(screen.getByRole('tab', { name: /alueet/i }));
+
+  // Data in areas tab
+  expect(screen.queryByText('Meluhaitta: -')).toBeInTheDocument();
+  expect(screen.queryByText('Pölyhaitta: -')).toBeInTheDocument();
+  expect(screen.queryByText('Tärinähaitta: -')).toBeInTheDocument();
+  expect(screen.queryByText('Autoliikenteen kaistahaitta: -')).toBeInTheDocument();
+  expect(screen.queryByText('Kaistahaittojen pituus: -')).toBeInTheDocument();
 });
 
 test('It is possible to delete hanke if it has no active applications', async () => {
