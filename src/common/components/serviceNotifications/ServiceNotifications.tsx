@@ -89,7 +89,7 @@ function ServiceNotifications() {
           closeButtonLabelText={`${t('common:components:notification:closeButtonLabelText')}`}
           onClose={() => closeNotification(NotificationType.INFO)}
         >
-          {infoText}
+          <div dangerouslySetInnerHTML={{ __html: infoText }} />
         </Notification>
       )}
 
@@ -103,7 +103,7 @@ function ServiceNotifications() {
           closeButtonLabelText={`${t('common:components:notification:closeButtonLabelText')}`}
           onClose={() => closeNotification(NotificationType.WARNING)}
         >
-          {warningText}
+          <div dangerouslySetInnerHTML={{ __html: warningText }} />
         </Notification>
       )}
 
@@ -117,7 +117,7 @@ function ServiceNotifications() {
           closeButtonLabelText={`${t('common:components:notification:closeButtonLabelText')}`}
           onClose={() => closeNotification(NotificationType.ERROR)}
         >
-          {errorText}
+          <div dangerouslySetInnerHTML={{ __html: errorText }} />
         </Notification>
       )}
     </>

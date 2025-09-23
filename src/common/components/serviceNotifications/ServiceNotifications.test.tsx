@@ -1,5 +1,6 @@
 import React from 'react';
-import { fireEvent, render, screen, waitFor } from '../../../testUtils/render';
+import { render, screen, waitFor } from '../../../testUtils/render';
+import userEvent from '@testing-library/user-event';
 import ServiceNotifications from './ServiceNotifications';
 import { BannerType } from '../../../locales/banners';
 import { server } from '../../../domain/mocks/test-server';
@@ -54,7 +55,7 @@ describe('ServiceNotifications', () => {
       expect(screen.getByText(BANNERS[bannerType].text.fi)).toBeInTheDocument();
 
       const closeButton = screen.getByLabelText('Sulje ilmoitus');
-      fireEvent.click(closeButton);
+      await userEvent.click(closeButton);
 
       await waitFor(() => {
         expect(screen.queryByText(BANNERS[bannerType].label.fi)).not.toBeInTheDocument();

@@ -626,6 +626,10 @@
       "titleText": "Cancel project?",
       "bodyText": "Are you sure you want to cancel the project? The project will be completely removed from the system."
     },
+    "validationError": {
+      "title": "The form contains errors",
+      "text": "Please check the information you entered and correct any errors."
+    },
     "labels": {
       "hankeTunnus": "Project identifier",
       "nimi": "Project name",
@@ -873,23 +877,17 @@
           {
             "heading": "Separating cycling traffic from other modes of transport",
             "tip": "Plan and implement the temporary cycling arrangements primarily in line with the original, permanent arrangements (e.g. one-way routes or passages or a two-way cycling lane). Aim to preserve a cycling traffic solution that is separate from pedestrian traffic if one is currently in use. When the volume of motor traffic exceeds 7,000 vehicles per day, cycling traffic should generally also be separated from motor traffic. On main cycling routes, the separation should also be considered with a lower volume of traffic. One-way cycling traffic arrangements can be proposed to be replaced with a mixed traffic solution next to the worksite, in which case a 30 km/h speed limit will be set for the street.",
-            "cardLinks": [
-              4
-            ]
+            "cardLinks": [4]
           },
           {
             "heading": "Junction arrangements",
             "tip": "Plan and implement the temporary junction arrangements of cycling traffic, especially in traffic light controlled junctions with regard to the functionality of different driving directions, but also in terms of left turns, visibility and lighting, in particular.",
-            "cardLinks": [
-              4
-            ]
+            "cardLinks": [4]
           },
           {
             "heading": "Detours",
             "tip": "Plan and implement clear, safely installed detour signage that separately addresses cycling. Determine cycling traffic’s impacts and the other necessary measures for the detour.",
-            "cardLinks": [
-              5
-            ]
+            "cardLinks": [5]
           },
           {
             "heading": "Accessibility",
@@ -902,17 +900,12 @@
           {
             "heading": "Advance communication and change notifications",
             "tip": "Communicate about major works and potential changes to cycling routes already during the planning stages and well in advance before implementing the new arrangements (public notices, local notices). Mark the detour in the surroundings prior to starting the work. Notify the different parties of potential changes in routes well in advance before implementing the new arrangements.",
-            "cardLinks": [
-              1
-            ]
+            "cardLinks": [1]
           },
           {
             "heading": "Protecting the cycling traffic from the worksite",
             "tip": "As your first measure, use railings and barriers to fence off the worksite in order to protect cycling traffic.",
-            "cardLinks": [
-              6,
-              7
-            ]
+            "cardLinks": [6, 7]
           },
           {
             "heading": "Maintenance",
@@ -921,9 +914,7 @@
           {
             "heading": "Surface quality of cycling routes",
             "tip": "Implement and maintain solid and clean cycling route surfaces (temporary cover) and sloped level changes.",
-            "cardLinks": [
-              2
-            ]
+            "cardLinks": [2]
           },
           {
             "heading": "Guidelines for cycling route arrangements during work at a site",
@@ -973,9 +964,7 @@
           {
             "heading": "Advance communication and change notifications",
             "tip": "Notify the different operators of any notable work and potential changes to motor traffic routes already during the planning stages and well in advance before their implementation (general bulletins, local bulletins). Notify the different parties of potential changes in routes well in advance before implementing the new arrangements.",
-            "cardLinks": [
-              1
-            ]
+            "cardLinks": [1]
           },
           {
             "heading": "Signage",
@@ -988,10 +977,7 @@
           {
             "heading": "Separating different modes of transport",
             "tip": "Do not guide pedestrians to a driving lane unless a safe, wide enough passage has been separated for them from the driving lane. Do not guide cycling traffic onto a driving lane with motor traffic except in well-founded situations (see the suggested measures for cycling traffic).",
-            "cardLinks": [
-              3,
-              4
-            ]
+            "cardLinks": [3, 4]
           },
           {
             "heading": "Driving lane surfaces and markings",
@@ -1016,23 +1002,17 @@
           {
             "heading": "Advance contacts and traffic arrangements to be agreed on in advance",
             "tip": "<p>Contact HSL (<mailto href=\"mailto:infra@hsl.fi\">infra@hsl.fi</mailto>) during the planning stages if your project is located on HSL’s bus route, and determine whether your project will have a detrimental effect on HSL’s bust transport, e.g. reduced lanes, delays, longer travel times, route changes, stop changes, etc. Plan potential detours for bus transport well in advance, along with their signage and the necessary public transport priorities. Make sure that the route is functional with both HSL and the urban traffic control centre of the Helsinki Metropolitan Area (<mailto href=\"mailto:liikenteenhallintakeskus@hel.fi\">liikenteenhallintakeskus@hel.fi</mailto>, tel. 09 310 37555) with regards to traffic light controls, including temporary lights. If necessary, agree on a test drive with HSL to ensure smooth traffic.</p><br><p>If the worksite is on the final stop of a bus route or if it prevents bus transport on the street in question, contact the other parties at least 2.5 months before starting the work. In cases on non-urgent worksites (not one caused by a broken pipe, for example), get in contact at least two weeks prior to starting the work. Further information in Finnish: <external href=\"https://www.hsl.fi/hsl/urakoitsijat\">Urakoitsija - ota joukkoliikenne huomioon työmaalla <span className=\"hds-icon icon hds-icon--link-external hds-icon--size-s vertical-align-medium-icon\" aria-hidden=\"true\"></span></external>.</p>",
-            "cardLinks": [
-              8
-            ]
+            "cardLinks": [8]
           },
           {
             "heading": "Bus and tram stop arrangements and access to stops",
             "tip": "Ensure accessibility to current stops or plan and implement the transfer of stops, signage to them and accessible pedestrian connections. Tram and bus stops cannot be moved or removed from use without an authorisation from HSL (<mailto href=\"mailto:infra@hsl.fi\">infra@hsl.fi</mailto>). Further information in Finnish: <external href=\"https://www.hsl.fi/hsl/urakoitsijat\">Urakoitsija - ota joukkoliikenne huomioon työmaalla <span className=\"hds-icon icon hds-icon--link-external hds-icon--size-s vertical-align-medium-icon\" aria-hidden=\"true\"></span></external>.",
-            "cardLinks": [
-              8
-            ]
+            "cardLinks": [8]
           },
           {
             "heading": "Advance communication and change notifications",
             "tip": "Communicate about major works and potential changes to bus transport routes to the various parties already during the planning stages and well in advance before implementing the new arrangements (public notices, local notices). Notify the different parties of potential changes in routes well in advance before implementing the new arrangements.",
-            "cardLinks": [
-              1
-            ]
+            "cardLinks": [1]
           },
           {
             "heading": "Signage",
@@ -1060,9 +1040,7 @@
           {
             "heading": "Advance contacts and traffic arrangements to be agreed on in advance",
             "tip": "<p>Assess in advance the timing of individual works related to the project and contact in advance both HSL (operations: <mailto href=\"mailto:infra@hsl.fi\">infra@hsl.fi</mailto>) and Metropolitan Area Transport Ltd. (tramline infrastructure and systems: <mailto href=\"mailto:urakoitsijaohjeistus@kaupunkiliikenne.fi\">urakoitsijaohjeistus@kaupunkiliikenne.fi</mailto>), so that the potentially needed exceptional arrangements can be coordinated with other exceptional routes. Plan the potential tram transport detours and public transport priorities and ensure the functionality of these routes together with HSL, the Metropolitan Area Transport Ltd. and with the urban traffic control centre of the Helsinki Metropolitan Area in terms of traffic lights (<mailto href=\"mailto:liikenteenhallintakeskus@hel.fi\">liikenteenhallintakeskus@hel.fi</mailto>, tel. 09 310 37555).</p><br><p>For diversions of tram transport, submit a notification to HSL 8 weeks prior to starting work lasting a maximum of three days, or 5 months prior to starting work lasting more than three days. For diversions of bus transport replacing tram routes, submit a notification to HSL 3 months prior to starting work lasting a maximum of three days, or 5 months prior to starting work lasting more than three days. Further information (in Finnish): <external href=\"https://www.hsl.fi/hsl/urakoitsijat\">Urakoitsija - ota joukkoliikenne huomioon työmaalla <span className=\"hds-icon icon hds-icon--link-external hds-icon--size-s vertical-align-medium-icon\" aria-hidden=\"true\"></span></external>and <external href=\"https://kaupunkiliikenne.fi/kaupunkiraidehankkeet-ja-kunnossapito/urakoitsijalle/tyot-raitiotieradan-laheisyydessa/\">Työt raitiotieradan läheisyydessä - Helsinki Metropolitan Area Transport Ltd <span className=\"hds-icon icon hds-icon--link-external hds-icon--size-s vertical-align-medium-icon\" aria-hidden=\"true\"></span></external></p>",
-            "cardLinks": [
-              8
-            ]
+            "cardLinks": [8]
           },
           {
             "heading": "Tramway structures and working near the track area",
@@ -1071,16 +1049,12 @@
           {
             "heading": "Bus and tram stop arrangements and access to stops",
             "tip": "Ensure accessibility to current stops or plan and implement the transfer of stops, signage to them and accessible pedestrian connections. Tram and bus stops cannot be moved or removed from use without an authorisation from HSL (<mailto href=\"mailto:infra@hsl.fi\">infra@hsl.fi</mailto>). Further information in Finnish: <external href=\"http://hsl.fi/hsl/urakoitsijat\">Urakoitsija - ota joukkoliikenne huomioon työmaalla <span className=\"hds-icon icon hds-icon--link-external hds-icon--size-s vertical-align-medium-icon\" aria-hidden=\"true\"></span></external>.",
-            "cardLinks": [
-              8
-            ]
+            "cardLinks": [8]
           },
           {
             "heading": "Advance communication and change notifications",
             "tip": "Communicate about major works and potential changes to tram transport routes to the various parties already during the planning stages and well in advance before implementing the new arrangements (public notices, local notices). Notify the different parties of potential changes in routes well in advance before implementing the new arrangements.",
-            "cardLinks": [
-              1
-            ]
+            "cardLinks": [1]
           },
           {
             "heading": "Traffic light control",
@@ -1095,16 +1069,12 @@
           {
             "heading": "Advance communication and change notifications",
             "tip": "Inform the operators and properties of any work causing noise, dust or vibration nuisance at least one week before starting the work, or immediately when the work timetable is known. If the work is highly disruptive, it should be announced at least 30 days before starting the work. Give the residents and different operators enough time to prepare for known disruptions and negotiate regarding these disruptions with the operators, especially near sensitive services.",
-            "cardLinks": [
-              1
-            ]
+            "cardLinks": [1]
           },
           {
             "heading": "Scheduling and methods of work",
             "tip": "Assess the scheduling and methods of work for opportunities to minimise emission nuisances to different operations.",
-            "cardLinks": [
-              10
-            ]
+            "cardLinks": [10]
           }
         ],
         "MELU": [
@@ -1119,9 +1089,7 @@
           {
             "heading": "Noise abatement solutions",
             "tip": "Implement solutions that abate the impacts of noise, such as portable noise barriers.",
-            "cardLinks": [
-              10
-            ]
+            "cardLinks": [10]
           }
         ],
         "POLY": [
@@ -1680,8 +1648,9 @@
     },
     "hanke": {
       "title": "Create a new project",
-      "description": "By creating a Haitaton project, you can plan work in the public domain in advance and make applications such as cabling surveys.",
-      "actionText": "Create a new project"
+      "titlePublicArea": "E-services for the public area",
+      "description": "By creating a Haitaton project, you can plan work in the public areas in advance and make applications such as cable reports and excavation notifications.",
+      "actionText": "E-services for the public area"
     },
     "hakemus": {
       "title": "Application/Working phase",
@@ -1689,9 +1658,9 @@
       "actionText": "Create an application"
     },
     "johtotietoselvitys": {
-      "title": "Cable report",
-      "description": "A request for clarification on cable location information for a specific area. Required as an attachment to the excavation notice.",
-      "actionText": "Submit a cable report"
+      "title": "E-services for the private area",
+      "description": "A request for clarification on cable location information for a specific private area. No excavation notifications are made in the private area.",
+      "actionText": "E-services for the private area"
     },
     "valmistelu": {
       "title": "Project in the preparatory phase",
@@ -1926,7 +1895,13 @@
     },
     "attribution": "Materials &copy; <a href='https://kartta.hel.fi'>Helsingin kaupunki</a>",
     "drawSquareButtonAria": "Draw a square on the map",
-    "drawPolygonButtonAria": "Draw a polygon on the map"
+    "drawPolygonButtonAria": "Draw a polygon on the map",
+    "notifications": {
+      "selfIntersectingLabel": "Invalid Geometry",
+      "selfIntersectingText": "The polygon cannot intersect with itself. Changes have been reverted.",
+      "drawingOutsideHankeAreaLabel": "Drawing Prevented",
+      "drawingOutsideHankeAreaText": "Drawing outside the project area is not allowed."
+    }
   },
   "staticPages": {
     "infoPage": {
