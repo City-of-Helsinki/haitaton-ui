@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { Box } from '@chakra-ui/layout';
+import { Box } from '@chakra-ui/react';
 import { Tab, TabList, TabPanel, Tabs } from 'hds-react';
 import {
   Application,
