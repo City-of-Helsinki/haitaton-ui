@@ -7,9 +7,8 @@ import hankkeet from '../mocks/data/hankkeet-data';
 import { KaivuilmoitusFormValues } from './types';
 import { validationSchema } from './validationSchema';
 import { Map as OlMap } from 'ol';
-import { Feature } from 'ol';
 import React from 'react';
-import { Polygon } from 'ol/geom';
+import { Coordinate } from 'ol/coordinate';
 
 // Mock hds-react heavy components to avoid render loops in tests
 jest.mock('hds-react', () => {
@@ -162,6 +161,7 @@ jest.mock('../../common/components/map/utils', () => ({
   ]),
   getLineIntersection: jest.fn(),
   getCoordinateNumbersFromCoordinate: jest.fn().mockImplementation((coord) => coord),
+  isSegmentWithinHankeArea: jest.fn(),
 }));
 
 import * as mapUtils from '../../common/components/map/utils';
@@ -305,70 +305,20 @@ describe('Areas segment containment guard', () => {
 
   describe('segmentWithinHankeAreaGuard', () => {
     let mockMap: Partial<OlMap>;
-    let mockHankeFeature: Partial<Feature<Polygon>>;
-    let mockHankeGeometry: Partial<Polygon>;
 
     beforeEach(() => {
-      mockHankeGeometry = {
-        getCoordinates: jest.fn().mockReturnValue([
-          [
-            [0, 0],
-            [100, 0],
-            [100, 100],
-            [0, 100],
-            [0, 0],
-          ],
-        ]),
-      };
-
-      mockHankeFeature = {
-        getGeometry: jest.fn().mockReturnValue(mockHankeGeometry),
-      };
-
       mockMap = {
         getPixelFromCoordinate: jest.fn().mockReturnValue([50, 50]),
         getFeaturesAtPixel: jest.fn(),
       };
     });
 
-    it('allows segments within hanke area', () => {
-      // Setup: segment is within hanke area (no intersection)
-      (mockMap.getFeaturesAtPixel as jest.Mock).mockReturnValue([mockHankeFeature]);
-      mockUtils.getLineIntersection.mockReturnValue(null);
+    it('returns true when segment is within hanke area', async () => {
+      // Setup: segment is within hanke area
+      mockUtils.isSegmentWithinHankeArea.mockReturnValue(true);
 
       render(
-        <TestWrapper
-          defaultValues={{
-            applicationData: {
-              applicationType: 'EXCAVATION_NOTIFICATION',
-              name: 'Test Application',
-              workDescription: 'Test work description',
-              constructionWork: false,
-              maintenanceWork: true,
-              emergencyWork: false,
-              rockExcavation: null,
-              cableReportDone: null,
-              requiredCompetence: false,
-              areas: [
-                {
-                  hankealueId: 1,
-                  name: 'Test Area',
-                  tyoalueet: [],
-                  katuosoite: 'Test Street 1',
-                  tyonTarkoitukset: null,
-                  meluhaitta: null,
-                  polyhaitta: null,
-                  tarinahaitta: null,
-                  kaistahaitta: null,
-                  kaistahaittojenPituus: null,
-                  lisatiedot: '',
-                },
-              ],
-              startTime: new Date('2024-01-01'),
-              endTime: new Date('2024-12-31'),
-            },
-          }}
-        >
+        <TestWrapper>
           <Areas
             hankeData={hankeData}
             hankkeenHakemukset={hankkeenHakemukset}
@@ -377,13 +327,42 @@ describe('Areas segment containment guard', () => {
         </TestWrapper>,
       );
 
-      expect(screen.getByTestId('mock-application-map')).toBeInTheDocument();
+      // Get the ApplicationMap props to access the drawSegmentGuard
+      type AppMapMockModule = { __getLastAppMapProps: () => Record<string, unknown> | undefined };
+      const appMapMock = jest.requireMock(
+        '../application/components/ApplicationMap',
+      ) as AppMapMockModule;
+
+      await waitFor(() => {
+        // eslint-disable-next-line no-underscore-dangle
+        const props = appMapMock.__getLastAppMapProps();
+        expect(props?.drawSegmentGuard).toBeDefined();
+      });
+
+      // eslint-disable-next-line no-underscore-dangle
+      const props = appMapMock.__getLastAppMapProps();
+      const segmentGuard = props?.drawSegmentGuard as (
+        map: OlMap,
+        segment: [Coordinate, Coordinate],
+      ) => boolean;
+
+      const testSegment: [Coordinate, Coordinate] = [
+        [25, 25],
+        [75, 75],
+      ];
+      const result = segmentGuard(mockMap as OlMap, testSegment);
+
+      expect(result).toBe(true);
+      expect(mockUtils.isSegmentWithinHankeArea).toHaveBeenCalledWith(
+        mockMap,
+        testSegment,
+        expect.any(Function),
+      );
     });
 
-    it('blocks segments that cross hanke boundary', () => {
+    it('returns false when segment crosses hanke boundary', async () => {
       // Setup: segment crosses hanke boundary
-      (mockMap.getFeaturesAtPixel as jest.Mock).mockReturnValue([mockHankeFeature]);
-      mockUtils.getLineIntersection.mockReturnValue([50, 0]); // intersection point
+      mockUtils.isSegmentWithinHankeArea.mockReturnValue(false);
 
       render(
         <TestWrapper>
@@ -395,12 +374,41 @@ describe('Areas segment containment guard', () => {
         </TestWrapper>,
       );
 
-      expect(screen.getByTestId('mock-application-map')).toBeInTheDocument();
+      type AppMapMockModule = { __getLastAppMapProps: () => Record<string, unknown> | undefined };
+      const appMapMock = jest.requireMock(
+        '../application/components/ApplicationMap',
+      ) as AppMapMockModule;
+
+      await waitFor(() => {
+        // eslint-disable-next-line no-underscore-dangle
+        const props = appMapMock.__getLastAppMapProps();
+        expect(props?.drawSegmentGuard).toBeDefined();
+      });
+
+      // eslint-disable-next-line no-underscore-dangle
+      const props = appMapMock.__getLastAppMapProps();
+      const segmentGuard = props?.drawSegmentGuard as (
+        map: OlMap,
+        segment: [Coordinate, Coordinate],
+      ) => boolean;
+
+      const testSegment: [Coordinate, Coordinate] = [
+        [25, 25],
+        [125, 125],
+      ];
+      const result = segmentGuard(mockMap as OlMap, testSegment);
+
+      expect(result).toBe(false);
+      expect(mockUtils.isSegmentWithinHankeArea).toHaveBeenCalledWith(
+        mockMap,
+        testSegment,
+        expect.any(Function),
+      );
     });
 
-    it('blocks segments when no hanke feature found', () => {
+    it('returns false when no hanke feature found under cursor', async () => {
       // Setup: no hanke feature under cursor
-      (mockMap.getFeaturesAtPixel as jest.Mock).mockReturnValue([]);
+      mockUtils.isSegmentWithinHankeArea.mockReturnValue(false);
 
       render(
         <TestWrapper>
@@ -412,20 +420,41 @@ describe('Areas segment containment guard', () => {
         </TestWrapper>,
       );
 
-      expect(screen.getByTestId('mock-application-map')).toBeInTheDocument();
+      type AppMapMockModule = { __getLastAppMapProps: () => Record<string, unknown> | undefined };
+      const appMapMock = jest.requireMock(
+        '../application/components/ApplicationMap',
+      ) as AppMapMockModule;
+
+      await waitFor(() => {
+        // eslint-disable-next-line no-underscore-dangle
+        const props = appMapMock.__getLastAppMapProps();
+        expect(props?.drawSegmentGuard).toBeDefined();
+      });
+
+      // eslint-disable-next-line no-underscore-dangle
+      const props = appMapMock.__getLastAppMapProps();
+      const segmentGuard = props?.drawSegmentGuard as (
+        map: OlMap,
+        segment: [Coordinate, Coordinate],
+      ) => boolean;
+
+      const testSegment: [Coordinate, Coordinate] = [
+        [200, 200],
+        [300, 300],
+      ];
+      const result = segmentGuard(mockMap as OlMap, testSegment);
+
+      expect(result).toBe(false);
+      expect(mockUtils.isSegmentWithinHankeArea).toHaveBeenCalledWith(
+        mockMap,
+        testSegment,
+        expect.any(Function),
+      );
     });
 
-    it('allows segments that touch hanke boundary at endpoints', () => {
-      // Setup: segment touches boundary only at start or end point
-      (mockMap.getFeaturesAtPixel as jest.Mock).mockReturnValue([mockHankeFeature]);
-      mockUtils.getCoordinateNumbersFromCoordinate
-        .mockReturnValueOnce([10, 10]) // start point
-        .mockReturnValueOnce([50, 50]) // end point
-        .mockReturnValueOnce([0, 0]) // edge start
-        .mockReturnValueOnce([100, 0]); // edge end
-
-      // Return intersection at start point (should be allowed)
-      mockUtils.getLineIntersection.mockReturnValue([10, 10]);
+    it('returns true when segment touches hanke boundary at endpoints only', async () => {
+      // Setup: segment touches boundary only at endpoints
+      mockUtils.isSegmentWithinHankeArea.mockReturnValue(true);
 
       render(
         <TestWrapper>
@@ -437,16 +466,41 @@ describe('Areas segment containment guard', () => {
         </TestWrapper>,
       );
 
-      expect(screen.getByTestId('mock-application-map')).toBeInTheDocument();
+      type AppMapMockModule = { __getLastAppMapProps: () => Record<string, unknown> | undefined };
+      const appMapMock = jest.requireMock(
+        '../application/components/ApplicationMap',
+      ) as AppMapMockModule;
+
+      await waitFor(() => {
+        // eslint-disable-next-line no-underscore-dangle
+        const props = appMapMock.__getLastAppMapProps();
+        expect(props?.drawSegmentGuard).toBeDefined();
+      });
+
+      // eslint-disable-next-line no-underscore-dangle
+      const props = appMapMock.__getLastAppMapProps();
+      const segmentGuard = props?.drawSegmentGuard as (
+        map: OlMap,
+        segment: [Coordinate, Coordinate],
+      ) => boolean;
+
+      const testSegment: [Coordinate, Coordinate] = [
+        [10, 10],
+        [50, 50],
+      ];
+      const result = segmentGuard(mockMap as OlMap, testSegment);
+
+      expect(result).toBe(true);
+      expect(mockUtils.isSegmentWithinHankeArea).toHaveBeenCalledWith(
+        mockMap,
+        testSegment,
+        expect.any(Function),
+      );
     });
 
-    it('handles missing hanke geometry gracefully', () => {
-      // Setup: hanke feature exists but has no geometry
-      const featureWithoutGeometry: Partial<Feature<Polygon>> = {
-        getGeometry: jest.fn().mockReturnValue(null),
-      };
-
-      (mockMap.getFeaturesAtPixel as jest.Mock).mockReturnValue([featureWithoutGeometry]);
+    it('returns false when hanke feature has no geometry', async () => {
+      // Setup: hanke feature has no geometry
+      mockUtils.isSegmentWithinHankeArea.mockReturnValue(false);
 
       render(
         <TestWrapper>
@@ -458,7 +512,106 @@ describe('Areas segment containment guard', () => {
         </TestWrapper>,
       );
 
-      expect(screen.getByTestId('mock-application-map')).toBeInTheDocument();
+      type AppMapMockModule = { __getLastAppMapProps: () => Record<string, unknown> | undefined };
+      const appMapMock = jest.requireMock(
+        '../application/components/ApplicationMap',
+      ) as AppMapMockModule;
+
+      await waitFor(() => {
+        // eslint-disable-next-line no-underscore-dangle
+        const props = appMapMock.__getLastAppMapProps();
+        expect(props?.drawSegmentGuard).toBeDefined();
+      });
+
+      // eslint-disable-next-line no-underscore-dangle
+      const props = appMapMock.__getLastAppMapProps();
+      const segmentGuard = props?.drawSegmentGuard as (
+        map: OlMap,
+        segment: [Coordinate, Coordinate],
+      ) => boolean;
+
+      const testSegment: [Coordinate, Coordinate] = [
+        [25, 25],
+        [75, 75],
+      ];
+      const result = segmentGuard(mockMap as OlMap, testSegment);
+
+      expect(result).toBe(false);
+      expect(mockUtils.isSegmentWithinHankeArea).toHaveBeenCalledWith(
+        mockMap,
+        testSegment,
+        expect.any(Function),
+      );
+    });
+
+    it('guard is set even when hanke has no dates', async () => {
+      const minimalHankeData = {
+        id: 1,
+        hankeTunnus: 'TEST-001',
+        alkuPvm: null,
+        loppuPvm: null,
+      } as HankeData;
+
+      render(
+        <TestWrapper>
+          <Areas
+            hankeData={minimalHankeData}
+            hankkeenHakemukset={hankkeenHakemukset}
+            originalHakemus={originalHakemus}
+          />
+        </TestWrapper>,
+      );
+
+      type AppMapMockModule = { __getLastAppMapProps: () => Record<string, unknown> | undefined };
+      const appMapMock = jest.requireMock(
+        '../application/components/ApplicationMap',
+      ) as AppMapMockModule;
+
+      await waitFor(() => {
+        // eslint-disable-next-line no-underscore-dangle
+        const props = appMapMock.__getLastAppMapProps();
+        // Since hankeData is provided, drawSegmentGuard should be defined
+        expect(props?.drawSegmentGuard).toBeDefined();
+      });
+    });
+
+    it('returns false when no map is provided', async () => {
+      render(
+        <TestWrapper>
+          <Areas
+            hankeData={hankeData}
+            hankkeenHakemukset={hankkeenHakemukset}
+            originalHakemus={originalHakemus}
+          />
+        </TestWrapper>,
+      );
+
+      type AppMapMockModule = { __getLastAppMapProps: () => Record<string, unknown> | undefined };
+      const appMapMock = jest.requireMock(
+        '../application/components/ApplicationMap',
+      ) as AppMapMockModule;
+
+      await waitFor(() => {
+        // eslint-disable-next-line no-underscore-dangle
+        const props = appMapMock.__getLastAppMapProps();
+        expect(props?.drawSegmentGuard).toBeDefined();
+      });
+
+      // eslint-disable-next-line no-underscore-dangle
+      const props = appMapMock.__getLastAppMapProps();
+      const segmentGuard = props?.drawSegmentGuard as (
+        map: OlMap,
+        segment: [Coordinate, Coordinate],
+      ) => boolean;
+
+      const testSegment: [Coordinate, Coordinate] = [
+        [25, 25],
+        [75, 75],
+      ];
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const result = segmentGuard(null as any, testSegment);
+
+      expect(result).toBe(false);
     });
   });
 

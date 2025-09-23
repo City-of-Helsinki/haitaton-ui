@@ -171,7 +171,7 @@ describe('DrawInteraction startDraw events', () => {
     const ui = (
       <GlobalNotificationProvider>
         {/* Cast types for test-only mocks */}
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
         <MapContext.Provider value={{ map: map as any, layers: {} as any } as any}>
           {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
           <DrawContext.Provider value={{ state, actions, source } as any}>
@@ -342,6 +342,320 @@ describe('DrawInteraction startDraw events', () => {
 
     expect(actions.setSelectedFeature).toHaveBeenCalledWith(null);
     expect(onSelfIntersectingPolygon).toHaveBeenCalledWith(null);
+  });
+
+  test('drawstart on.change handler allows drawing inside hanke area', async () => {
+    // Arrange
+    const mockDrawSegmentGuardInside = jest.fn(() => true); // Allow segment (inside hanke area)
+
+    function renderWithDrawSegmentGuard() {
+      const actions = {
+        setSelectedFeature: jest.fn(),
+        setSelectedDrawToolType: jest.fn(),
+      };
+
+      const map = {
+        addInteraction: jest.fn(),
+        removeInteraction: jest.fn(),
+        getPixelFromCoordinate: jest.fn(),
+        getFeaturesAtPixel: jest.fn().mockReturnValue([]),
+      } as unknown as Record<string, unknown>;
+
+      const state = {
+        selectedFeature: null,
+        selectedDrawtoolType: DRAWTOOLTYPE.POLYGON,
+      };
+
+      const source = {
+        on: jest.fn(),
+        getFeatures: jest.fn(() => []),
+      } as unknown as Record<string, unknown>;
+
+      const ui = (
+        <GlobalNotificationProvider>
+          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+          <MapContext.Provider value={{ map: map as any, layers: {} as any } as any}>
+            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+            <DrawContext.Provider value={{ state, actions, source } as any}>
+              <DrawInteraction drawSegmentGuard={mockDrawSegmentGuardInside} />
+            </DrawContext.Provider>
+          </MapContext.Provider>
+        </GlobalNotificationProvider>
+      );
+
+      const rendered = rtlRender(ui);
+      return {
+        utils: rendered,
+        actions,
+        map,
+        source,
+        mockDrawSegmentGuard: mockDrawSegmentGuardInside,
+      };
+    }
+
+    const { mockDrawSegmentGuard } = renderWithDrawSegmentGuard();
+
+    // Wait until Draw interaction is created
+    await waitFor(() => expect(__getLastDrawInstance()).toBeDefined());
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const draw = __getLastDrawInstance() as any;
+
+    // Create mock feature with polygon geometry - starting with first 2 points in OL structure
+    const mockGeometry = {
+      getCoordinates: jest.fn(() => [
+        [
+          [10, 10], // Point 1 (index 0)
+          [20, 20], // Point 2 (index 1)
+          [20, 20], // Cursor position (index 2) - same as point 2
+          [10, 10], // Closing point (index 3) - same as point 1
+        ],
+      ]),
+    };
+
+    const mockFeature = {
+      on: jest.fn(),
+      getGeometry: jest.fn(() => mockGeometry),
+    };
+
+    // Simulate drawstart event
+    draw.emit('drawstart', { feature: mockFeature });
+
+    // Get the registered change handler
+    expect(mockFeature.on).toHaveBeenCalledWith('change', expect.any(Function));
+    const changeHandler = mockFeature.on.mock.calls[0][1];
+
+    // Now simulate adding a third point: user clicks at [30, 30]
+    // OpenLayers automatically creates the full polygon structure with cursor and closing point
+    mockGeometry.getCoordinates.mockReturnValue([
+      [
+        [10, 10], // Point 1 (index 0)
+        [20, 20], // Point 2 (index 1)
+        [30, 30], // Point 3 - newly added (index 2)
+        [30, 30], // Cursor position (index 3) - same as point 3
+        [10, 10], // Closing point (index 4) - same as point 1
+      ],
+    ]);
+
+    const changeEvent = { target: mockFeature };
+    changeHandler(changeEvent);
+
+    // Based on the corrected implementation with real OL polygon structure:
+    // actualPointCount = coordinates.length - 2 = 5 - 2 = 3 (excluding cursor and closing point)
+    // start = ring[actualPointCount - 2] = ring[3 - 2] = ring[1] = [20, 20] (Point 2)
+    // end = ring[actualPointCount - 1] = ring[3 - 1] = ring[2] = [30, 30] (Point 3)
+    // So it validates the segment from Point 2 to Point 3 when Point 3 is added
+    expect(mockDrawSegmentGuard).toHaveBeenCalledWith(
+      expect.anything(), // map
+      [
+        [20, 20], // Point 2 (previous point)
+        [30, 30], // Point 3 (newly added point)
+      ],
+    );
+
+    // Assert removeLastPoint was NOT called (segment was allowed)
+    expect(draw.removeLastPoint).not.toHaveBeenCalled();
+  });
+
+  test('drawstart on.change handler prevents drawing outside hanke area', async () => {
+    // Arrange
+    const mockDrawSegmentGuardOutside = jest.fn(() => false); // Reject segment (outside hanke area)
+
+    function renderWithDrawSegmentGuard() {
+      const actions = {
+        setSelectedFeature: jest.fn(),
+        setSelectedDrawToolType: jest.fn(),
+      };
+
+      const map = {
+        addInteraction: jest.fn(),
+        removeInteraction: jest.fn(),
+        getPixelFromCoordinate: jest.fn(),
+        getFeaturesAtPixel: jest.fn().mockReturnValue([]),
+      } as unknown as Record<string, unknown>;
+
+      const state = {
+        selectedFeature: null,
+        selectedDrawtoolType: DRAWTOOLTYPE.POLYGON,
+      };
+
+      const source = {
+        on: jest.fn(),
+        getFeatures: jest.fn(() => []),
+      } as unknown as Record<string, unknown>;
+
+      const ui = (
+        <GlobalNotificationProvider>
+          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+          <MapContext.Provider value={{ map: map as any, layers: {} as any } as any}>
+            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+            <DrawContext.Provider value={{ state, actions, source } as any}>
+              <DrawInteraction drawSegmentGuard={mockDrawSegmentGuardOutside} />
+            </DrawContext.Provider>
+          </MapContext.Provider>
+        </GlobalNotificationProvider>
+      );
+
+      const rendered = rtlRender(ui);
+      return {
+        utils: rendered,
+        actions,
+        map,
+        source,
+        mockDrawSegmentGuard: mockDrawSegmentGuardOutside,
+      };
+    }
+
+    const { mockDrawSegmentGuard } = renderWithDrawSegmentGuard();
+
+    // Wait until Draw interaction is created
+    await waitFor(() => expect(__getLastDrawInstance()).toBeDefined());
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const draw = __getLastDrawInstance() as any;
+
+    // Create mock feature with polygon geometry - starting with first 2 points in OL structure
+    const mockGeometry = {
+      getCoordinates: jest.fn(() => [
+        [
+          [10, 10], // Point 1 (index 0)
+          [20, 20], // Point 2 (index 1)
+          [20, 20], // Cursor position (index 2) - same as point 2
+          [10, 10], // Closing point (index 3) - same as point 1
+        ],
+      ]),
+    };
+
+    const mockFeature = {
+      on: jest.fn(),
+      getGeometry: jest.fn(() => mockGeometry),
+    };
+
+    // Simulate drawstart event
+    draw.emit('drawstart', { feature: mockFeature });
+
+    // Get the registered change handler
+    expect(mockFeature.on).toHaveBeenCalledWith('change', expect.any(Function));
+    const changeHandler = mockFeature.on.mock.calls[0][1];
+
+    // Now simulate adding a third point: user clicks at [100, 100] (outside hanke area)
+    // OpenLayers automatically creates the full polygon structure with cursor and closing point
+    mockGeometry.getCoordinates.mockReturnValue([
+      [
+        [10, 10], // Point 1 (index 0)
+        [20, 20], // Point 2 (index 1)
+        [100, 100], // Point 3 - newly added (index 2)
+        [100, 100], // Cursor position (index 3) - same as point 3
+        [10, 10], // Closing point (index 4) - same as point 1
+      ],
+    ]);
+
+    const changeEvent = { target: mockFeature };
+    changeHandler(changeEvent);
+
+    // Based on the corrected implementation with real OL polygon structure:
+    // actualPointCount = coordinates.length - 2 = 5 - 2 = 3 (excluding cursor and closing point)
+    // start = ring[actualPointCount - 2] = ring[3 - 2] = ring[1] = [20, 20] (Point 2)
+    // end = ring[actualPointCount - 1] = ring[3 - 1] = ring[2] = [100, 100] (Point 3)
+    expect(mockDrawSegmentGuard).toHaveBeenCalledWith(
+      expect.anything(), // map
+      [
+        [20, 20], // Point 2 (previous point)
+        [100, 100], // Point 3 (newly added point outside hanke area)
+      ],
+    );
+
+    // Assert removeLastPoint WAS called (segment was rejected)
+    expect(draw.removeLastPoint).toHaveBeenCalled();
+  });
+
+  test('drawstart on.change handler skips guard check when less than 2 points', async () => {
+    // Arrange
+    const mockDrawSegmentGuardSkip = jest.fn(() => true);
+
+    function renderWithDrawSegmentGuard() {
+      const actions = {
+        setSelectedFeature: jest.fn(),
+        setSelectedDrawToolType: jest.fn(),
+      };
+
+      const map = {
+        addInteraction: jest.fn(),
+        removeInteraction: jest.fn(),
+        getPixelFromCoordinate: jest.fn(),
+        getFeaturesAtPixel: jest.fn().mockReturnValue([]),
+      } as unknown as Record<string, unknown>;
+
+      const state = {
+        selectedFeature: null,
+        selectedDrawtoolType: DRAWTOOLTYPE.POLYGON,
+      };
+
+      const source = {
+        on: jest.fn(),
+        getFeatures: jest.fn(() => []),
+      } as unknown as Record<string, unknown>;
+
+      const ui = (
+        <GlobalNotificationProvider>
+          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+          <MapContext.Provider value={{ map: map as any, layers: {} as any } as any}>
+            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+            <DrawContext.Provider value={{ state, actions, source } as any}>
+              <DrawInteraction drawSegmentGuard={mockDrawSegmentGuardSkip} />
+            </DrawContext.Provider>
+          </MapContext.Provider>
+        </GlobalNotificationProvider>
+      );
+
+      const rendered = rtlRender(ui);
+      return {
+        utils: rendered,
+        actions,
+        map,
+        source,
+        mockDrawSegmentGuard: mockDrawSegmentGuardSkip,
+      };
+    }
+
+    const { mockDrawSegmentGuard } = renderWithDrawSegmentGuard();
+
+    // Wait until Draw interaction is created
+    await waitFor(() => expect(__getLastDrawInstance()).toBeDefined());
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const draw = __getLastDrawInstance() as any;
+
+    // Create mock feature with only one point
+    const mockGeometry = {
+      getCoordinates: jest.fn(() => [
+        [
+          [10, 10], // First point
+          [10, 10], // Cursor position (same as first point)
+        ],
+      ]),
+    };
+
+    const mockFeature = {
+      on: jest.fn(),
+      getGeometry: jest.fn(() => mockGeometry),
+    };
+
+    // Simulate drawstart event
+    draw.emit('drawstart', { feature: mockFeature });
+
+    // Get the registered change handler
+    const changeHandler = mockFeature.on.mock.calls[0][1];
+
+    // Simulate feature change with only one actual point (cursor movement only)
+    const changeEvent = { target: mockFeature };
+    changeHandler(changeEvent);
+
+    // Assert drawSegmentGuard was NOT called (not enough points for a segment)
+    expect(mockDrawSegmentGuard).not.toHaveBeenCalled();
+
+    // Assert removeLastPoint was NOT called
+    expect(draw.removeLastPoint).not.toHaveBeenCalled();
   });
 });
 // Create mock MapContext as a React context
