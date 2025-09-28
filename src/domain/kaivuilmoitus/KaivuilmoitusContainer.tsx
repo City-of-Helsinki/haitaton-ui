@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FieldPath, FormProvider, useForm } from 'react-hook-form';
 import { merge } from 'lodash';
 import {
@@ -126,6 +126,21 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
     formState: { isDirty, isValid, errors },
   } = formContext;
   const watchFormValues = watch();
+
+  // Gating state: controls when the top-level error summary (FormErrorsNotification)
+  // is shown. Initially hidden to satisfy UX & test expectation that errors are
+  // not displayed before the user interacts with the form.
+  const [showErrors, setShowErrors] = useState(false);
+
+  // Turn on error summary once any field is touched (first user interaction)
+  useEffect(() => {
+    if (!showErrors) {
+      const touched = formContext.formState.touchedFields;
+      if (touched && Object.keys(touched).length > 0) {
+        setShowErrors(true);
+      }
+    }
+  }, [formContext.formState.touchedFields, showErrors]);
 
   const { data: existingAttachments, isError: attachmentsLoadError } = useAttachments(
     getValues('id'),
@@ -345,6 +360,10 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
   }
 
   function validateStepChange(changeStep: () => void, stepIndex: number) {
+    // Any attempt to navigate steps constitutes interaction; enable error summary.
+    if (!showErrors) {
+      setShowErrors(true);
+    }
     return changeFormStep(changeStep, pageFieldsToValidate[stepIndex] || [], trigger, errors, [
       'required',
     ]);
@@ -358,17 +377,24 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
         formSteps={formSteps}
         formData={watchFormValues}
         topElement={
-          <FormErrorsNotification
-            data={watchFormValues}
-            validationContext={{ application: watchFormValues }}
-            activeStepIndex={activeStepIndex}
-            lastStep={lastStep}
-          />
+          showErrors && (
+            <FormErrorsNotification
+              data={watchFormValues}
+              validationContext={{ application: watchFormValues }}
+              activeStepIndex={activeStepIndex}
+              lastStep={lastStep}
+            />
+          )
         }
         validationContext={{ application: watchFormValues }}
         onStepChange={handleStepChange}
         stepChangeValidator={validateStepChange}
-        onSubmit={handleSubmit(openSendDialog)}
+        onSubmit={handleSubmit(openSendDialog, () => {
+          // Failed submit attempt (validation errors) -> show summary
+          if (!showErrors) {
+            setShowErrors(true);
+          }
+        })}
       >
         {function renderFormActions(activeStep, handlePrevious, handleNext) {
           async function handleSaveAndQuit() {

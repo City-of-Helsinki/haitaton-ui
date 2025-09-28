@@ -1,6 +1,6 @@
 import { UserEvent } from '@testing-library/user-event/dist/types/setup/setup';
 import { http, HttpResponse } from 'msw';
-import { cleanup, fireEvent, render, screen, waitFor, within } from '../../testUtils/render';
+import { cleanup, render, screen, waitFor, within } from '../../testUtils/render';
 import KaivuilmoitusContainer from './KaivuilmoitusContainer';
 import { HankeData } from '../types/hanke';
 import hankkeet from '../mocks/data/hankkeet-data';
@@ -56,35 +56,35 @@ async function fillBasicInformation(
     requiredCompetence = true,
   } = options;
 
-  fireEvent.change(screen.getByLabelText(/työn nimi/i), {
-    target: { value: name },
-  });
+  await user.type(screen.getByLabelText(/työn nimi/i), name);
+  // blur to mark field touched
+  screen.getByLabelText(/työn nimi/i).blur();
 
-  fireEvent.change(screen.getByLabelText(/työn kuvaus/i), {
-    target: { value: description },
-  });
+  await user.type(screen.getByLabelText(/työn kuvaus/i), description);
+  screen.getByLabelText(/työn kuvaus/i).blur();
 
-  fireEvent.click(screen.getByLabelText(/uuden rakenteen tai johdon rakentamisesta/i));
+  await user.click(screen.getByLabelText(/uuden rakenteen tai johdon rakentamisesta/i));
 
   if (!cableReportDone) {
-    fireEvent.click(screen.getByLabelText(/hae uusi johtoselvitys/i));
+    await user.click(screen.getByLabelText(/hae uusi johtoselvitys/i));
     if (rockExcavation === true) {
-      fireEvent.click(screen.getByLabelText(/kyllä/i));
+      await user.click(screen.getByLabelText(/kyllä/i));
     } else if (rockExcavation === false) {
-      fireEvent.click(screen.getByLabelText(/ei/i));
+      await user.click(screen.getByLabelText(/ei/i));
     }
   } else {
-    fireEvent.click(screen.getByLabelText(/käytä olemassa olevia/i));
+    await user.click(screen.getByLabelText(/käytä olemassa olevia/i));
     if (existingCableReport) {
       await screen.findAllByLabelText(/tehtyjen johtoselvitysten tunnukset/i);
-      fireEvent.click(screen.getByRole('button', { name: /tehtyjen johtoselvitysten tunnukset/i }));
-      fireEvent.click(screen.getByText(existingCableReport));
+      await user.click(
+        screen.getByRole('button', { name: /tehtyjen johtoselvitysten tunnukset/i }),
+      );
+      await user.click(screen.getByText(existingCableReport));
     } else {
       for (const cableReport of cableReports) {
-        fireEvent.change(screen.getByLabelText('Johtoselvitystunnus'), {
-          target: { value: cableReport },
-        });
-        fireEvent.click(
+        await user.clear(screen.getByLabelText('Johtoselvitystunnus'));
+        await user.type(screen.getByLabelText('Johtoselvitystunnus'), cableReport);
+        await user.click(
           within(
             screen.getByRole('group', {
               name: /käytä olemassa olevia johtoselvityksiä/i,
@@ -96,27 +96,28 @@ async function fillBasicInformation(
   }
 
   for (const placementContract of placementContracts) {
-    fireEvent.change(screen.getByLabelText('Sijoitussopimustunnus'), {
-      target: { value: placementContract },
-    });
-    fireEvent.click(screen.getByTestId('placementContract-addButton'));
+    await user.clear(screen.getByLabelText('Sijoitussopimustunnus'));
+    await user.type(screen.getByLabelText('Sijoitussopimustunnus'), placementContract);
+    await user.click(screen.getByTestId('placementContract-addButton'));
   }
 
   if (requiredCompetence) {
     // Check 'Työhön vaadittava pätevyys' checkbox
-    fireEvent.click(screen.getByRole('checkbox', { name: /työstä vastaavana/i }));
+    await user.click(screen.getByRole('checkbox', { name: /työstä vastaavana/i }));
   }
 }
 
-function fillAreasInformation(options: { start?: string; end?: string } = {}) {
+async function fillAreasInformation(
+  user: UserEvent,
+  options: { start?: string; end?: string } = {},
+) {
   const { start = '1.4.2025', end = '1.6.2025' } = options;
-
-  fireEvent.change(screen.getByLabelText(/työn alkupäivämäärä/i), {
-    target: { value: start },
-  });
-  fireEvent.change(screen.getByLabelText(/työn loppupäivämäärä/i), {
-    target: { value: end },
-  });
+  await user.clear(screen.getByLabelText(/työn alkupäivämäärä/i));
+  await user.type(screen.getByLabelText(/työn alkupäivämäärä/i), start);
+  screen.getByLabelText(/työn alkupäivämäärä/i).blur();
+  await user.clear(screen.getByLabelText(/työn loppupäivämäärä/i));
+  await user.type(screen.getByLabelText(/työn loppupäivämäärä/i), end);
+  screen.getByLabelText(/työn loppupäivämäärä/i).blur();
 }
 
 async function fillAttachments(
@@ -154,13 +155,15 @@ async function fillAttachments(
   }
 
   if (additionalInfo) {
-    fireEvent.change(screen.getByLabelText(/lisätietoja hakemuksesta/i), {
-      target: { value: additionalInfo },
-    });
+    const addInfo = screen.getByLabelText(/lisätietoja hakemuksesta/i);
+    await user.clear(addInfo);
+    await user.type(addInfo, additionalInfo);
+    addInfo.blur();
   }
 }
 
-function fillContactsInformation(
+async function fillContactsInformation(
+  user: UserEvent,
   options: {
     customer?: Customer;
     contractor?: Customer;
@@ -199,86 +202,96 @@ function fillContactsInformation(
   } = options;
 
   // Fill customer info
-  fireEvent.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[0]);
-  fireEvent.click(screen.getAllByText(/yritys/i)[0]);
-  fireEvent.change(screen.getAllByRole('combobox', { name: /nimi/i })[0], {
-    target: { value: customer.name },
-  });
-  fireEvent.change(
-    screen.getByTestId('applicationData.customerWithContacts.customer.registryKey'),
-    {
-      target: { value: customer.registryKey },
-    },
-  );
-  fireEvent.change(screen.getByTestId('applicationData.customerWithContacts.customer.email'), {
-    target: { value: customer.email },
-  });
-  fireEvent.change(screen.getByTestId('applicationData.customerWithContacts.customer.phone'), {
-    target: { value: customer.phone },
-  });
-  fireEvent.click(screen.getAllByRole('button', { name: /yhteyshenkilöt/i })[0]);
-  fireEvent.click(screen.getAllByText(/tauno testinen/i)[0]);
+  await user.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[0]);
+  await user.click(screen.getAllByText(/yritys/i)[0]);
+  const custName = screen.getAllByRole('combobox', { name: /nimi/i })[0];
+  await user.clear(custName);
+  await user.type(custName, customer.name);
+  custName.blur();
+  const custReg = screen.getByTestId('applicationData.customerWithContacts.customer.registryKey');
+  await user.clear(custReg);
+  await user.type(custReg, customer.registryKey || '');
+  custReg.blur();
+  const custEmail = screen.getByTestId('applicationData.customerWithContacts.customer.email');
+  await user.clear(custEmail);
+  await user.type(custEmail, customer.email.trim());
+  custEmail.blur();
+  const custPhone = screen.getByTestId('applicationData.customerWithContacts.customer.phone');
+  await user.clear(custPhone);
+  await user.type(custPhone, customer.phone);
+  custPhone.blur();
+  await user.click(screen.getAllByRole('button', { name: /yhteyshenkilöt/i })[0]);
+  await user.click(screen.getAllByText(/tauno testinen/i)[0]);
 
   // Fill contractor info
-  fireEvent.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[1]);
-  fireEvent.click(screen.getAllByText(/yritys/i)[1]);
-  fireEvent.change(screen.getAllByRole('combobox', { name: /nimi/i })[1], {
-    target: { value: contractor.name },
-  });
-  fireEvent.change(
-    screen.getByTestId('applicationData.contractorWithContacts.customer.registryKey'),
-    {
-      target: { value: contractor.registryKey },
-    },
-  );
-  fireEvent.change(screen.getByTestId('applicationData.contractorWithContacts.customer.email'), {
-    target: { value: contractor.email },
-  });
-  fireEvent.change(screen.getByTestId('applicationData.contractorWithContacts.customer.phone'), {
-    target: { value: contractor.phone },
-  });
-  fireEvent.click(screen.getAllByRole('button', { name: /yhteyshenkilöt/i })[1]);
-  fireEvent.click(screen.getByText('Matti Meikäläinen (matti.meikalainen@test.com)'));
+  await user.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[1]);
+  await user.click(screen.getAllByText(/yritys/i)[1]);
+  const contName = screen.getAllByRole('combobox', { name: /nimi/i })[1];
+  await user.clear(contName);
+  await user.type(contName, contractor.name);
+  contName.blur();
+  const contReg = screen.getByTestId('applicationData.contractorWithContacts.customer.registryKey');
+  await user.clear(contReg);
+  await user.type(contReg, contractor.registryKey || '');
+  contReg.blur();
+  const contEmail = screen.getByTestId('applicationData.contractorWithContacts.customer.email');
+  await user.clear(contEmail);
+  await user.type(contEmail, contractor.email.trim());
+  contEmail.blur();
+  const contPhone = screen.getByTestId('applicationData.contractorWithContacts.customer.phone');
+  await user.clear(contPhone);
+  await user.type(contPhone, contractor.phone);
+  contPhone.blur();
+  await user.click(screen.getAllByRole('button', { name: /yhteyshenkilöt/i })[1]);
+  await user.click(screen.getByText('Matti Meikäläinen (matti.meikalainen@test.com)'));
 
   // Fill invoicing customer info
-  fireEvent.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[2]);
-  fireEvent.click(screen.getAllByText(/yritys/i)[2]);
-  fireEvent.change(screen.getByTestId('applicationData.invoicingCustomer.name'), {
-    target: { value: invoicingCustomer.name },
-  });
-  fireEvent.change(screen.getByTestId('applicationData.invoicingCustomer.registryKey'), {
-    target: { value: invoicingCustomer.registryKey },
-  });
-  fireEvent.change(screen.getByTestId('applicationData.invoicingCustomer.ovt'), {
-    target: { value: invoicingCustomer.ovt },
-  });
-  fireEvent.change(screen.getByTestId('applicationData.invoicingCustomer.invoicingOperator'), {
-    target: { value: invoicingCustomer.invoicingOperator },
-  });
-  fireEvent.change(screen.getByTestId('applicationData.invoicingCustomer.customerReference'), {
-    target: { value: invoicingCustomer.customerReference },
-  });
-  fireEvent.change(
-    screen.getByTestId('applicationData.invoicingCustomer.postalAddress.streetAddress.streetName'),
-    {
-      target: { value: invoicingCustomer.postalAddress.streetAddress.streetName },
-    },
+  await user.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[2]);
+  await user.click(screen.getAllByText(/yritys/i)[2]);
+  const invName = screen.getByTestId('applicationData.invoicingCustomer.name');
+  await user.clear(invName);
+  await user.type(invName, invoicingCustomer.name);
+  invName.blur();
+  const invReg = screen.getByTestId('applicationData.invoicingCustomer.registryKey');
+  await user.clear(invReg);
+  await user.type(invReg, invoicingCustomer.registryKey || '');
+  invReg.blur();
+  const invOvt = screen.getByTestId('applicationData.invoicingCustomer.ovt');
+  await user.clear(invOvt);
+  await user.type(invOvt, invoicingCustomer.ovt || '');
+  invOvt.blur();
+  const invOp = screen.getByTestId('applicationData.invoicingCustomer.invoicingOperator');
+  await user.clear(invOp);
+  await user.type(invOp, invoicingCustomer.invoicingOperator || '');
+  invOp.blur();
+  const invRef = screen.getByTestId('applicationData.invoicingCustomer.customerReference');
+  await user.clear(invRef);
+  await user.type(invRef, invoicingCustomer.customerReference || '');
+  invRef.blur();
+  const invStreet = screen.getByTestId(
+    'applicationData.invoicingCustomer.postalAddress.streetAddress.streetName',
   );
-  fireEvent.change(
-    screen.getByTestId('applicationData.invoicingCustomer.postalAddress.postalCode'),
-    {
-      target: { value: invoicingCustomer.postalAddress.postalCode },
-    },
+  await user.clear(invStreet);
+  await user.type(invStreet, invoicingCustomer.postalAddress.streetAddress.streetName || '');
+  invStreet.blur();
+  const invPostal = screen.getByTestId(
+    'applicationData.invoicingCustomer.postalAddress.postalCode',
   );
-  fireEvent.change(screen.getByTestId('applicationData.invoicingCustomer.postalAddress.city'), {
-    target: { value: invoicingCustomer.postalAddress.city },
-  });
-  fireEvent.change(screen.getByTestId('applicationData.invoicingCustomer.email'), {
-    target: { value: invoicingCustomer.email },
-  });
-  fireEvent.change(screen.getByTestId('applicationData.invoicingCustomer.phone'), {
-    target: { value: invoicingCustomer.phone },
-  });
+  await user.clear(invPostal);
+  await user.type(invPostal, invoicingCustomer.postalAddress.postalCode || '');
+  invPostal.blur();
+  const invCity = screen.getByTestId('applicationData.invoicingCustomer.postalAddress.city');
+  await user.clear(invCity);
+  await user.type(invCity, invoicingCustomer.postalAddress.city || '');
+  invCity.blur();
+  const invEmail = screen.getByTestId('applicationData.invoicingCustomer.email');
+  await user.clear(invEmail);
+  await user.type(invEmail, invoicingCustomer.email || '');
+  invEmail.blur();
+  const invPhone = screen.getByTestId('applicationData.invoicingCustomer.phone');
+  await user.clear(invPhone);
+  await user.type(invPhone, invoicingCustomer.phone || '');
+  invPhone.blur();
 }
 
 test('Should be able fill perustiedot and save form', async () => {
@@ -451,16 +464,16 @@ test('Should be able to fill form pages and show filled information in summary p
 
   // Should save form on page change and show notification
   expect(await screen.findByText(/hakemus tallennettu/i)).toBeInTheDocument();
-  fireEvent.click(screen.getByRole('button', { name: /sulje ilmoitus/i }));
+  await user.click(screen.getByRole('button', { name: /sulje ilmoitus/i }));
 
   expect(await screen.findByText('Vaihe 2/6: Alueiden piirto')).toBeInTheDocument();
 
-  fillAreasInformation({ start: startDate, end: endDate });
+  await fillAreasInformation(user, { start: startDate, end: endDate });
   await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
 
   expect(await screen.findByText('Vaihe 4/6: Yhteystiedot')).toBeInTheDocument();
 
-  fillContactsInformation({ customer, contractor, invoicingCustomer });
+  await fillContactsInformation(user, { customer, contractor, invoicingCustomer });
   await user.click(screen.getByRole('button', { name: /seuraava/i }));
 
   expect(await screen.findByText('Vaihe 5/6: Liitteet ja lisätiedot')).toBeInTheDocument();
@@ -877,8 +890,9 @@ test('Should disable OVT fields if invoicing customer type is not COMPANY or ASS
   await fillBasicInformation(user);
   await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
 
-  fireEvent.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[2]);
-  fireEvent.click(screen.getByText(/yksityishenkilö/i));
+  await user.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[2]);
+  // selecting PERSON option
+  await user.click(screen.getByText(/yksityishenkilö/i));
 
   expect(screen.getByTestId('applicationData.invoicingCustomer.ovt')).toBeDisabled();
   expect(screen.getByTestId('applicationData.invoicingCustomer.invoicingOperator')).toBeDisabled();
@@ -898,12 +912,17 @@ test('Postal address fields should be required if OVT fields are empty', async (
   ).toBeRequired();
   expect(screen.getByTestId('applicationData.invoicingCustomer.postalAddress.city')).toBeRequired();
 
-  fireEvent.change(screen.getByTestId('applicationData.invoicingCustomer.ovt'), {
-    target: { value: '123456789012' },
-  });
-  fireEvent.change(screen.getByTestId('applicationData.invoicingCustomer.invoicingOperator'), {
-    target: { value: '12345' },
-  });
+  await user.clear(screen.getByTestId('applicationData.invoicingCustomer.ovt'));
+  await user.type(screen.getByTestId('applicationData.invoicingCustomer.ovt'), '123456789012');
+  (screen.getByTestId('applicationData.invoicingCustomer.ovt') as HTMLInputElement).blur();
+  await user.clear(screen.getByTestId('applicationData.invoicingCustomer.invoicingOperator'));
+  await user.type(
+    screen.getByTestId('applicationData.invoicingCustomer.invoicingOperator'),
+    '12345',
+  );
+  (
+    screen.getByTestId('applicationData.invoicingCustomer.invoicingOperator') as HTMLInputElement
+  ).blur();
 
   expect(
     screen.getByTestId('applicationData.invoicingCustomer.postalAddress.streetAddress.streetName'),
@@ -925,21 +944,38 @@ test('OVT fields should be required if postal address fields are empty', async (
   expect(screen.getByTestId('applicationData.invoicingCustomer.ovt')).toBeRequired();
   expect(screen.getByTestId('applicationData.invoicingCustomer.invoicingOperator')).toBeRequired();
 
-  fireEvent.change(
+  await user.clear(
     screen.getByTestId('applicationData.invoicingCustomer.postalAddress.streetAddress.streetName'),
-    {
-      target: { value: 'Katu 1' },
-    },
   );
-  fireEvent.change(
+  await user.type(
+    screen.getByTestId('applicationData.invoicingCustomer.postalAddress.streetAddress.streetName'),
+    'Katu 1',
+  );
+  (
+    screen.getByTestId(
+      'applicationData.invoicingCustomer.postalAddress.streetAddress.streetName',
+    ) as HTMLInputElement
+  ).blur();
+  await user.clear(
     screen.getByTestId('applicationData.invoicingCustomer.postalAddress.postalCode'),
-    {
-      target: { value: '00100' },
-    },
   );
-  fireEvent.change(screen.getByTestId('applicationData.invoicingCustomer.postalAddress.city'), {
-    target: { value: 'Helsinki' },
-  });
+  await user.type(
+    screen.getByTestId('applicationData.invoicingCustomer.postalAddress.postalCode'),
+    '00100',
+  );
+  (
+    screen.getByTestId(
+      'applicationData.invoicingCustomer.postalAddress.postalCode',
+    ) as HTMLInputElement
+  ).blur();
+  await user.clear(screen.getByTestId('applicationData.invoicingCustomer.postalAddress.city'));
+  await user.type(
+    screen.getByTestId('applicationData.invoicingCustomer.postalAddress.city'),
+    'Helsinki',
+  );
+  (
+    screen.getByTestId('applicationData.invoicingCustomer.postalAddress.city') as HTMLInputElement
+  ).blur();
 
   expect(screen.getByTestId('applicationData.invoicingCustomer.ovt')).not.toBeRequired();
   expect(
@@ -1892,20 +1928,18 @@ describe('Error notification', () => {
   }
 
   test('Should show fields with errors in notification in perustiedot page', async () => {
-    setup();
+    const { user } = setup();
 
     expect(
       screen.queryByText('Seuraavat kentät tällä sivulla vaaditaan hakemuksen lähettämiseksi:'),
     ).not.toBeInTheDocument();
 
-    fireEvent.change(screen.getByLabelText(/työn nimi/i), {
-      target: { value: '' },
-    });
-    fireEvent.change(screen.getByLabelText(/työn kuvaus/i), {
-      target: { value: '' },
-    });
-    fireEvent.click(screen.getByLabelText(/uuden rakenteen tai johdon rakentamisesta/i));
-    fireEvent.click(screen.getByRole('checkbox', { name: /työstä vastaavana/i }));
+    await user.clear(screen.getByLabelText(/työn nimi/i));
+    (screen.getByLabelText(/työn nimi/i) as HTMLInputElement).blur();
+    await user.clear(screen.getByLabelText(/työn kuvaus/i));
+    (screen.getByLabelText(/työn kuvaus/i) as HTMLInputElement).blur();
+    await user.click(screen.getByLabelText(/uuden rakenteen tai johdon rakentamisesta/i));
+    await user.click(screen.getByRole('checkbox', { name: /työstä vastaavana/i }));
 
     expect(
       await screen.findByText(
@@ -1926,16 +1960,13 @@ describe('Error notification', () => {
       screen.queryByText('Seuraavat kentät tällä sivulla vaaditaan hakemuksen lähettämiseksi:'),
     ).not.toBeInTheDocument();
 
-    fireEvent.change(screen.getByLabelText(/työn alkupäivämäärä/i), {
-      target: { value: '' },
-    });
-    fireEvent.change(screen.getByLabelText(/työn loppupäivämäärä/i), {
-      target: { value: '' },
-    });
-    fireEvent.change(screen.getByLabelText(/katuosoite/i), {
-      target: { value: '' },
-    });
-    fireEvent.click(screen.getByRole('button', { name: /poista valittu/i }));
+    await user.clear(screen.getByLabelText(/työn alkupäivämäärä/i));
+    (screen.getByLabelText(/työn alkupäivämäärä/i) as HTMLInputElement).blur();
+    await user.clear(screen.getByLabelText(/työn loppupäivämäärä/i));
+    (screen.getByLabelText(/työn loppupäivämäärä/i) as HTMLInputElement).blur();
+    await user.clear(screen.getByLabelText(/katuosoite/i));
+    (screen.getByLabelText(/katuosoite/i) as HTMLInputElement).blur();
+    await user.click(screen.getByRole('button', { name: /poista valittu/i }));
 
     expect(
       await screen.findByText(
@@ -1960,12 +1991,14 @@ describe('Error notification', () => {
       screen.queryByText('Seuraavat kentät tällä sivulla vaaditaan hakemuksen lähettämiseksi:'),
     ).not.toBeInTheDocument();
 
-    fireEvent.change(
+    await user.clear(
       screen.getByTestId('applicationData.areas.0.haittojenhallintasuunnitelma.YLEINEN'),
-      {
-        target: { value: '' },
-      },
     );
+    (
+      screen.getByTestId(
+        'applicationData.areas.0.haittojenhallintasuunnitelma.YLEINEN',
+      ) as HTMLInputElement
+    ).blur();
 
     expect(
       await screen.findByText(
@@ -1987,22 +2020,29 @@ describe('Error notification', () => {
       screen.queryByText('Seuraavat kentät tällä sivulla vaaditaan hakemuksen lähettämiseksi:'),
     ).not.toBeInTheDocument();
 
-    fireEvent.change(screen.getAllByRole('combobox', { name: /nimi/i })[0], {
-      target: { value: '' },
-    });
-    fireEvent.change(
+    await user.clear(screen.getAllByRole('combobox', { name: /nimi/i })[0]);
+    (screen.getAllByRole('combobox', { name: /nimi/i })[0] as HTMLInputElement).blur();
+    await user.clear(
       screen.getByTestId('applicationData.customerWithContacts.customer.registryKey'),
-      {
-        target: { value: '123' },
-      },
     );
-    fireEvent.change(screen.getByTestId('applicationData.customerWithContacts.customer.email'), {
-      target: { value: '' },
-    });
-    fireEvent.change(screen.getByTestId('applicationData.customerWithContacts.customer.phone'), {
-      target: { value: '' },
-    });
-    fireEvent.click(screen.getAllByRole('button', { name: /poista valittu/i })[0]);
+    await user.type(
+      screen.getByTestId('applicationData.customerWithContacts.customer.registryKey'),
+      '123',
+    );
+    (
+      screen.getByTestId(
+        'applicationData.customerWithContacts.customer.registryKey',
+      ) as HTMLInputElement
+    ).blur();
+    await user.clear(screen.getByTestId('applicationData.customerWithContacts.customer.email'));
+    (
+      screen.getByTestId('applicationData.customerWithContacts.customer.email') as HTMLInputElement
+    ).blur();
+    await user.clear(screen.getByTestId('applicationData.customerWithContacts.customer.phone'));
+    (
+      screen.getByTestId('applicationData.customerWithContacts.customer.phone') as HTMLInputElement
+    ).blur();
+    await user.click(screen.getAllByRole('button', { name: /poista valittu/i })[0]);
 
     expect(
       await screen.findByText(
