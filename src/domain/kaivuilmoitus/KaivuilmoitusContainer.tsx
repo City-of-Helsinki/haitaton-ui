@@ -352,22 +352,74 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
   const [activeStepIndex, setActiveStepIndex] = useState(0);
   const lastStep = activeStepIndex === formSteps.length - 1;
 
+  // Track which steps have had validation errors revealed. Replaces single showErrors flag.
+  const [showErrorsPerStep, setShowErrorsPerStep] = useState<boolean[]>(() =>
+    Array(formSteps.length).fill(false),
+  );
+
+  function markErrorsVisible(stepIndex: number) {
+    setShowErrorsPerStep((prev) => {
+      if (prev[stepIndex]) return prev; // already true
+      const clone = [...prev];
+      clone[stepIndex] = true;
+      return clone;
+    });
+  }
+
   function handleStepChange(stepIndex: number) {
     setActiveStepIndex(stepIndex);
     if (isDirty) {
       saveApplication();
     }
+
+    // If navigating to last step (summary), reveal errors for any prior steps so that
+    // the FormPagesErrorSummary contains all invalid steps immediately.
+    if (stepIndex === formSteps.length - 1) {
+      setShowErrorsPerStep((prev) => {
+        const next = [...prev];
+        for (let i = 0; i < formSteps.length - 1; i++) {
+          // Mark step visible if it currently has validation errors captured in form state
+          if (!next[i]) {
+            // Heuristic: if any error key path starts with a field included in that pageFieldsToValidate entry
+            const pageFields = pageFieldsToValidate[i] || [];
+            const hasPageError = pageFields.some((pf) =>
+              Object.keys(errors).some((errKey) => errKey.startsWith(pf)),
+            );
+            if (hasPageError) {
+              next[i] = true;
+            }
+          }
+        }
+        return next;
+      });
+    }
   }
 
   function validateStepChange(changeStep: () => void, stepIndex: number) {
-    // Any attempt to navigate steps constitutes interaction; enable error summary.
-    if (!showErrors) {
-      setShowErrors(true);
-    }
-    return changeFormStep(changeStep, pageFieldsToValidate[stepIndex] || [], trigger, errors, [
+    // Execute validation side-effect; changeFormStep may navigate or stay depending on errors.
+    const hasErrorsBefore = Object.keys(errors).length > 0;
+    changeFormStep(changeStep, pageFieldsToValidate[stepIndex] || [], trigger, errors, [
       'required',
     ]);
+    // After attempting step change, if there are errors for this step, reveal them.
+    const hasErrorsAfter = Object.keys(errors).length > 0;
+    if (hasErrorsAfter) {
+      markErrorsVisible(stepIndex);
+    } else if (hasErrorsBefore) {
+      // If errors cleared, ensure current step not marked (leave as-is to avoid flicker)
+    }
+    return true; // Allow MultipageForm to rely on internal navigation decision already handled in changeFormStep
   }
+
+  // Auto-reveal current step errors after user interaction (touched + errors)
+  useEffect(() => {
+    if (!showErrorsPerStep[activeStepIndex]) {
+      const touched = formContext.formState.touchedFields;
+      if (Object.keys(touched).length > 0 && Object.keys(errors).length > 0) {
+        markErrorsVisible(activeStepIndex);
+      }
+    }
+  }, [activeStepIndex, errors, showErrorsPerStep, formContext.formState.touchedFields]);
 
   return (
     <FormProvider {...formContext}>
@@ -377,7 +429,7 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
         formSteps={formSteps}
         formData={watchFormValues}
         topElement={
-          showErrors && (
+          (lastStep || showErrorsPerStep[activeStepIndex]) && (
             <FormErrorsNotification
               data={watchFormValues}
               validationContext={{ application: watchFormValues }}
@@ -390,10 +442,8 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
         onStepChange={handleStepChange}
         stepChangeValidator={validateStepChange}
         onSubmit={handleSubmit(openSendDialog, () => {
-          // Failed submit attempt (validation errors) -> show summary
-          if (!showErrors) {
-            setShowErrors(true);
-          }
+          // Failed submit attempt -> mark current step
+          markErrorsVisible(activeStepIndex);
         })}
       >
         {function renderFormActions(activeStep, handlePrevious, handleNext) {
