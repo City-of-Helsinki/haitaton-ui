@@ -48,6 +48,8 @@ import useSaveApplication from '../application/hooks/useSaveApplication';
 import useNavigateToApplicationView from '../application/hooks/useNavigateToApplicationView';
 import ApplicationSendDialog from '../application/components/ApplicationSendDialog';
 import Button from '../../common/components/button/Button';
+import useFormLanguagePersistence from '../../common/hooks/useFormLanguagePersistence';
+// Removed geometry serialization imports because areas are no longer persisted temporarily.
 
 type Props = {
   hankeData?: HankeData;
@@ -69,6 +71,7 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
     alluStatus: null,
     applicationType: 'CABLE_REPORT',
     hankeTunnus: hanke ? hanke.hankeTunnus : null,
+    selfIntersectingPolygon: false,
     applicationData: {
       applicationType: 'CABLE_REPORT',
       name: '',
@@ -98,6 +101,25 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
     resolver: yupResolver(validationSchema),
   });
 
+  // Lightweight persisted shape handled purely by persistence select; no runtime type needed
+
+  const persistence = useFormLanguagePersistence(
+    `application-form-${application?.id || 'new'}-JOHTO`,
+    formContext,
+    {
+      // Temporarily exclude areas to avoid regression issues with geometry persistence.
+      select(values) {
+        return {
+          applicationData: {
+            name: values.applicationData.name,
+            workDescription: values.applicationData.workDescription,
+          },
+        };
+      },
+      debounceMs: 250,
+    },
+  );
+
   const {
     getValues,
     setValue,
@@ -106,6 +128,8 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
     formState: { isDirty },
     reset,
   } = formContext;
+
+  // No geometry hydration needed for Johtoselvitys at this time (areas use ApplicationArea.geometry primitive structure already persisted via defaultValues)
 
   // Set up a callback to save application id to session storage
   // when the page is about to be unloaded if the application
@@ -189,6 +213,9 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
   function closeSendDialog(id?: number | null) {
     setShowSendDialog(false);
     navigateToApplicationView(id?.toString());
+    if (id) {
+      persistence.clearPersisted();
+    }
   }
 
   function saveCableApplication(handleSuccess?: (data: Application<JohtoselvitysData>) => void) {
@@ -212,7 +239,13 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
     } else {
       applicationUpdateMutation.mutate(
         { id: formData.id, data: convertFormStateToJohtoselvitysUpdateData(formData) },
-        { onSuccess: handleSuccess },
+        {
+          onSuccess(data) {
+            handleSuccess?.(data);
+            // Clear after successful save
+            persistence.clearPersisted();
+          },
+        },
       );
     }
   }
@@ -239,7 +272,10 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
         closeButtonLabelText: t('common:components:notification:closeButtonLabelText'),
       });
     }
-    saveCableApplication(handleSuccess);
+    saveCableApplication(function (data) {
+      handleSuccess(data);
+      persistence.clearPersisted();
+    });
   }
 
   function closeAttachmentUploadErrorDialog() {

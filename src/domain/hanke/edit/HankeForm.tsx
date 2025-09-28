@@ -36,6 +36,8 @@ import DrawProvider from '../../../common/components/map/modules/draw/DrawProvid
 import FormPagesErrorSummary from '../../forms/components/FormPagesErrorSummary';
 import FormFieldsErrorSummary from '../../forms/components/FormFieldsErrorSummary';
 import { useApplicationsForHanke } from '../../application/hooks/useApplications';
+// Geometry serialization/hydration intentionally disabled (temporary) – import removed
+import useFormLanguagePersistence from '../../../common/hooks/useFormLanguagePersistence';
 import Button from '../../../common/components/button/Button';
 
 type Props = {
@@ -75,6 +77,46 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
     context: validationContext,
   });
 
+  // Persist draft values so that switching language (which changes route & unmounts) does not lose unsaved edits
+  const persistence = useFormLanguagePersistence(
+    `hanke-form-${formData.hankeTunnus || 'new'}`,
+    formContext,
+    {
+      // Temporarily remove area (alueet) persistence to avoid regression issues with geometry & derived fields.
+      select(values) {
+        const {
+          nimi,
+          kuvaus,
+          tyomaaKatuosoite,
+          vaihe,
+          tyomaaTyyppi,
+          onYKTHanke,
+          alkuPvm,
+          loppuPvm,
+          omistajat,
+          rakennuttajat,
+          toteuttajat,
+          muut,
+        } = values as typeof values & { tyomaaTyyppi?: string[] };
+        return {
+          nimi,
+          kuvaus,
+          tyomaaKatuosoite,
+          vaihe,
+          tyomaaTyyppi,
+          onYKTHanke,
+          alkuPvm,
+          loppuPvm,
+          omistajat,
+          rakennuttajat,
+          toteuttajat,
+          muut,
+        };
+      },
+      debounceMs: 200,
+    },
+  );
+
   const {
     register,
     formState: { errors, isDirty },
@@ -83,6 +125,9 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
     trigger,
     watch,
   } = formContext;
+
+  // Geometry hydration removed because we no longer persist serialized geometries across language change.
+  // When reintroducing geometry persistence, restore a guarded hydration effect here.
 
   const formValues = getValues();
   const watchFormValues = watch();
@@ -128,6 +173,8 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
       setValue('loppuPvm', data.loppuPvm);
       setValue('alueet', data.alueet?.map(convertHankeAlueToFormState));
       setShowNotification('success');
+      // Clear persisted draft after successful save
+      persistence.clearPersisted();
     },
   });
 
@@ -138,10 +185,13 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
   const [drawSource] = useState<VectorSource>(new VectorSource());
 
   function save() {
+    // Ensure snapshot prior to server mutation
+    persistence.saveSnapshot?.();
     hankeMutation.mutate(getValues());
   }
 
   function saveAndAddApplication() {
+    persistence.saveSnapshot?.();
     save();
     setShowAddApplicationDialog(true);
   }
@@ -259,6 +309,7 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
 
     hankeMutation.mutate(getValues(), {
       onSuccess(data) {
+        persistence.clearPersisted();
         setNotification(true, {
           position: 'top-right',
           dismissible: true,
@@ -362,6 +413,7 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
 
   return (
     <FormProvider {...formContext}>
+      {/* persistence hook mounted */}
       <FormNotifications showNotification={showNotification} />
       <ApplicationAddDialog
         isOpen={showAddApplicationDialog}
@@ -391,7 +443,10 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
                 <Button
                   variant={ButtonVariant.Danger}
                   iconStart={<IconCross />}
-                  onClick={() => onFormClose(formValues.hankeTunnus)}
+                  onClick={() => {
+                    persistence.clearPersisted();
+                    onFormClose(formValues.hankeTunnus);
+                  }}
                 >
                   {t('hankeForm:cancelButton')}
                 </Button>

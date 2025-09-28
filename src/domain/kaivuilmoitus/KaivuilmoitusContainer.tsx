@@ -55,13 +55,22 @@ import ApplicationSendDialog from '../application/components/ApplicationSendDial
 import HaittojenHallinta from './HaittojenHallinta';
 import FormErrorsNotification from './components/FormErrorsNotification';
 import Button from '../../common/components/button/Button';
+import useFormLanguagePersistence from '../../common/hooks/useFormLanguagePersistence';
+// Removed geometry serialization imports because areas are no longer persisted temporarily.
 
 type Props = {
   hankeData: HankeData;
   application?: Application<KaivuilmoitusData>;
+  // When true, disables local session persistence of the form. Tests that
+  // render this container may pass this to avoid hydration side-effects.
+  disablePersistence?: boolean;
 };
 
-export default function KaivuilmoitusContainer({ hankeData, application }: Readonly<Props>) {
+export default function KaivuilmoitusContainer({
+  hankeData,
+  application,
+  disablePersistence,
+}: Readonly<Props>) {
   const { t } = useTranslation();
   const { setNotification } = useGlobalNotification();
   const navigateToApplicationView = useNavigateToApplicationView();
@@ -101,6 +110,24 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
     resolver: yupResolver(validationSchema),
     context: validationContext,
   });
+  const persistence = useFormLanguagePersistence(
+    `application-form-${application?.id || 'new'}-KAIVU`,
+    formContext,
+    {
+      enabled: !disablePersistence,
+      // Temporarily exclude areas & geometry from persistence to avoid regression issues.
+      // Reintroduce later with a safer, versioned serializer.
+      select(values) {
+        return {
+          applicationData: {
+            name: values.applicationData.name,
+            workDescription: values.applicationData.workDescription,
+          },
+        };
+      },
+      debounceMs: 250,
+    },
+  );
   const {
     getValues,
     setValue,
@@ -203,7 +230,12 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
     } else {
       applicationUpdateMutation.mutate(
         { id: formData.id, data: convertFormStateToKaivuilmoitusUpdateData(formData) },
-        { onSuccess: handleSuccess },
+        {
+          onSuccess(data) {
+            handleSuccess?.(data);
+            persistence.clearPersisted();
+          },
+        },
       );
     }
   }
@@ -215,6 +247,9 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
   function closeSendDialog(id?: number | null) {
     setShowSendDialog(false);
     navigateToApplicationView(id?.toString());
+    if (id) {
+      persistence.clearPersisted();
+    }
   }
 
   function saveAndQuit() {
@@ -231,7 +266,10 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
         closeButtonLabelText: t('common:components:notification:closeButtonLabelText'),
       });
     }
-    saveApplication(handleSuccess);
+    saveApplication(function (data) {
+      handleSuccess(data);
+      persistence.clearPersisted();
+    });
   }
 
   function closeAttachmentUploadErrorDialog() {

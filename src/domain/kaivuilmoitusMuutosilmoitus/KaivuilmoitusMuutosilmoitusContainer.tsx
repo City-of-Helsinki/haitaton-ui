@@ -55,6 +55,7 @@ import {
   downloadAttachment,
 } from '../application/muutosilmoitus/muutosilmoitusAttachmentsApi';
 import LoadingSpinner from '../../common/components/spinner/LoadingSpinner';
+import useFormLanguagePersistence from '../../common/hooks/useFormLanguagePersistence';
 
 type Props = {
   muutosilmoitus: Muutosilmoitus<KaivuilmoitusData>;
@@ -82,6 +83,24 @@ export default function KaivuilmoitusMuutosilmoitusContainer({
     resolver: yupResolver(validationSchema),
     context: { application: muutosilmoitus },
   });
+
+  // Persist only lightweight textual fields across language change; geometry/area data intentionally excluded
+  // (temporary regression mitigation – reintroduce with versioned schema when stable)
+  const persistence = useFormLanguagePersistence(
+    `muutosilmoitus-form-${muutosilmoitus.id || 'new'}-KAIVU`,
+    formContext,
+    {
+      select(values) {
+        return {
+          applicationData: {
+            name: values.applicationData.name,
+            workDescription: values.applicationData.workDescription,
+          },
+        };
+      },
+      debounceMs: 250,
+    },
+  );
 
   const {
     getValues,
@@ -214,7 +233,10 @@ export default function KaivuilmoitusMuutosilmoitusContainer({
     hakemusUpdateMutation.mutate(
       { id: formData.id, data: convertFormStateToKaivuilmoitusUpdateData(formData) },
       {
-        onSuccess: handleSuccess,
+        onSuccess() {
+          handleSuccess?.();
+          persistence.clearPersisted();
+        },
       },
     );
   }
@@ -255,6 +277,9 @@ export default function KaivuilmoitusMuutosilmoitusContainer({
   function closeSendDialog(id?: number | null) {
     setShowSendDialog(false);
     navigateToApplicationView(id?.toString());
+    if (id) {
+      persistence.clearPersisted();
+    }
   }
 
   function validateStepChange(changeStep: () => void, stepIndex: number) {

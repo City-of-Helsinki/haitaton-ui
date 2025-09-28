@@ -78,6 +78,14 @@ function HaitatonHeader() {
 
   async function setLanguage(lang: string) {
     const routeKey = getMatchingRouteKey(i18n, i18n.language as Language, location.pathname);
+    // Fire event so forms can persist state immediately before unmount
+    try {
+      window.dispatchEvent(
+        new CustomEvent('haitaton:languageChanging', { detail: { from: i18n.language, to: lang } }),
+      );
+    } catch {
+      // ignore
+    }
     await i18n.changeLanguage(lang);
     const path = getPathForLanguage(lang as Language, routeKey);
     navigate(path);
