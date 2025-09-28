@@ -56,21 +56,13 @@ import HaittojenHallinta from './HaittojenHallinta';
 import FormErrorsNotification from './components/FormErrorsNotification';
 import Button from '../../common/components/button/Button';
 import useFormLanguagePersistence from '../../common/hooks/useFormLanguagePersistence';
-// Removed geometry serialization imports because areas are no longer persisted temporarily.
 
 type Props = {
   hankeData: HankeData;
   application?: Application<KaivuilmoitusData>;
-  // When true, disables local session persistence of the form. Tests that
-  // render this container may pass this to avoid hydration side-effects.
-  disablePersistence?: boolean;
 };
 
-export default function KaivuilmoitusContainer({
-  hankeData,
-  application,
-  disablePersistence,
-}: Readonly<Props>) {
+export default function KaivuilmoitusContainer({ hankeData, application }: Readonly<Props>) {
   const { t } = useTranslation();
   const { setNotification } = useGlobalNotification();
   const navigateToApplicationView = useNavigateToApplicationView();
@@ -114,9 +106,6 @@ export default function KaivuilmoitusContainer({
     `application-form-${application?.id || 'new'}-KAIVU`,
     formContext,
     {
-      enabled: !disablePersistence,
-      // Temporarily exclude areas & geometry from persistence to avoid regression issues.
-      // Reintroduce later with a safer, versioned serializer.
       select(values) {
         return {
           applicationData: {

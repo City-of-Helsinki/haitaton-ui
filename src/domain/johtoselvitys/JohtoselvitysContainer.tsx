@@ -49,7 +49,6 @@ import useNavigateToApplicationView from '../application/hooks/useNavigateToAppl
 import ApplicationSendDialog from '../application/components/ApplicationSendDialog';
 import Button from '../../common/components/button/Button';
 import useFormLanguagePersistence from '../../common/hooks/useFormLanguagePersistence';
-// Removed geometry serialization imports because areas are no longer persisted temporarily.
 
 type Props = {
   hankeData?: HankeData;
@@ -71,7 +70,6 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
     alluStatus: null,
     applicationType: 'CABLE_REPORT',
     hankeTunnus: hanke ? hanke.hankeTunnus : null,
-    selfIntersectingPolygon: false,
     applicationData: {
       applicationType: 'CABLE_REPORT',
       name: '',
@@ -128,8 +126,6 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
     formState: { isDirty },
     reset,
   } = formContext;
-
-  // No geometry hydration needed for Johtoselvitys at this time (areas use ApplicationArea.geometry primitive structure already persisted via defaultValues)
 
   // Set up a callback to save application id to session storage
   // when the page is about to be unloaded if the application

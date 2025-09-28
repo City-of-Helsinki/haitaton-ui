@@ -1,0 +1,109 @@
+import React from 'react';
+import { render, waitFor, cleanup } from '../../../../testUtils/render';
+import userEvent from '@testing-library/user-event';
+import HankeForm from '../HankeForm';
+import { HankeDataFormState } from '../types';
+
+// Mock heavy sub components rendered inside steps to keep test light & fast.
+jest.mock('../HankeFormAlueet', () => () => <div data-testid="mock-alueet" />);
+jest.mock('../HankeFormPerustiedot', () => ({
+  __esModule: true,
+  default: function MockHankeFormPerustiedot() {
+    const { useFormContext } = jest.requireActual('react-hook-form');
+    const { register } = useFormContext();
+    return (
+      <div>
+        <input {...register('nimi')} data-testid="nimi" />
+        <textarea {...register('kuvaus')} data-testid="kuvaus" />
+      </div>
+    );
+  },
+}));
+jest.mock('../HankeFormYhteystiedot', () => () => <div data-testid="mock-yhteystiedot" />);
+jest.mock('../HankeFormHaittojenHallinta', () => () => <div data-testid="mock-haitat" />);
+jest.mock('../HankeFormLiitteet', () => () => <div data-testid="mock-liitteet" />);
+jest.mock('../HankeFormSummary', () => () => <div data-testid="mock-summary" />);
+jest.mock('../../../application/components/ApplicationAddDialog', () => () => null);
+
+// Simplify useApplicationsForHanke hook so form renders immediately
+jest.mock('../../../application/hooks/useApplications', () => ({
+  useApplicationsForHanke: () => ({ data: { applications: [] } }),
+}));
+
+// No-op for map draw provider heavy stuff
+jest.mock(
+  '../../../../common/components/map/modules/draw/DrawProvider',
+  () =>
+    ({ children }: { children: React.ReactNode }) => <>{children}</>,
+);
+
+// Provide deterministic translation (return key)
+jest.mock('react-i18next', () => ({
+  ...jest.requireActual('react-i18next'),
+  useTranslation: () => ({
+    t: (k: string) => k,
+    i18n: {
+      language: 'fi',
+      exists: () => true,
+    },
+  }),
+}));
+
+describe('HankeForm language persistence integration', () => {
+  const baseData: HankeDataFormState = {
+    hankeTunnus: 'HTEST123',
+    nimi: 'Alku nimi',
+    kuvaus: 'kuvaus',
+    tyomaaKatuosoite: '',
+    vaihe: null,
+    tyomaaTyyppi: [],
+    onYKTHanke: null,
+    alkuPvm: null,
+    loppuPvm: null,
+    omistajat: [],
+    rakennuttajat: [],
+    toteuttajat: [],
+    muut: [],
+    alueet: [],
+    tormaystarkasteluTulos: null,
+    status: 'DRAFT',
+  } as unknown as HankeDataFormState;
+
+  function mountOnce(overrides: Partial<HankeDataFormState> = {}) {
+    const formData = { ...baseData, ...overrides } as HankeDataFormState;
+    const onDirty = jest.fn();
+    const onClose = jest.fn();
+    return render(
+      <HankeForm formData={formData} onIsDirtyChange={onDirty} onFormClose={onClose}>
+        <div />
+      </HankeForm>,
+    );
+  }
+
+  beforeEach(() => {
+    sessionStorage.clear();
+    cleanup();
+  });
+
+  test('edits to nimi persist across simulated language change (unmount/remount)', async () => {
+    const { getByTestId, unmount } = mountOnce();
+    const user = userEvent.setup();
+    const nimiInput = getByTestId('nimi') as HTMLInputElement;
+    await user.clear(nimiInput);
+    await user.type(nimiInput, 'Muokattu nimi');
+
+    // Fire custom event that our persistence hook listens to for immediate snapshot
+    window.dispatchEvent(new CustomEvent('haitaton:languageChanging'));
+
+    // Storage key should now exist
+    await waitFor(() => expect(sessionStorage.getItem('hanke-form-HTEST123')).toBeTruthy());
+
+    // Simulate component unmount due to route/language change
+    unmount();
+
+    // Remount form (fresh instance) - should hydrate persisted nimi
+    const { getByTestId: getByTestId2 } = mountOnce({ nimi: 'Server nimi' });
+    const nimiAfter = getByTestId2('nimi') as HTMLInputElement;
+    await waitFor(() => expect(nimiAfter.value).toBe('Muokattu nimi'));
+  });
+});

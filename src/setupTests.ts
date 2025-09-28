@@ -12,6 +12,7 @@ import 'jest-canvas-mock';
 // emitted during module import (e.g., hds-react CSS injection via jsdom)
 const originalConsoleError = console.error;
 const originalConsoleWarn = console.warn;
+const originalConsoleDebug = console.debug;
 
 console.error = (...args: unknown[]) => {
   const msg = args[0]?.toString?.() ?? '';
@@ -19,7 +20,10 @@ console.error = (...args: unknown[]) => {
     msg.includes('Could not parse CSS stylesheet') ||
     msg.includes('Error: Could not parse CSS stylesheet') ||
     // Some libraries may emit noisy element warnings we don't care about in tests
-    msg.includes('Warning: React.createElement')
+    msg.includes('Warning: React.createElement') ||
+    // HDS / React 18 synthetic events: unknown pointer capture props on inputs
+    msg.includes('Unknown event handler property `onPointerEnterCapture`') ||
+    msg.includes('Unknown event handler property `onPointerLeaveCapture`')
   ) {
     return;
   }
@@ -35,6 +39,15 @@ console.warn = (...args: unknown[]) => {
     return;
   }
   originalConsoleWarn(...(args as Parameters<typeof originalConsoleWarn>));
+};
+
+// Suppress extremely noisy repeated validation debug output
+console.debug = (...args: unknown[]) => {
+  const msg = args[0]?.toString?.() ?? '';
+  if (msg.startsWith('mapValidationError')) {
+    return;
+  }
+  originalConsoleDebug(...(args as Parameters<typeof originalConsoleDebug>));
 };
 
 // Require heavy modules after console overrides so their import-time logs are filtered
@@ -62,6 +75,7 @@ beforeEach(() => server.resetHandlers());
 afterAll(() => {
   console.error = originalConsoleError;
   console.warn = originalConsoleWarn;
+  console.debug = originalConsoleDebug;
   server.close();
 });
 

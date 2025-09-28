@@ -902,4 +902,48 @@ describe('DrawInteraction', () => {
       );
     });
   });
+
+  it('does not mutate underlying coordinate array during draw change events (regression HAI-3310)', async () => {
+    // Arrange
+    const source = new VectorSource();
+    const actions = {
+      setSelectedDrawToolType: jest.fn(),
+      setSelectedFeature: jest.fn(),
+    };
+    // Force a selected draw tool so startDraw is invoked
+    const state = { selectedDrawtoolType: DRAWTOOLTYPE.POLYGON, selectedFeature: null };
+
+    const ui = (
+      <DrawContext.Provider
+        value={{ state, actions, source } as unknown as import('./types').DrawContextType}
+      >
+        <DrawInteraction />
+      </DrawContext.Provider>
+    );
+    rtlRender(ui);
+
+    await waitFor(() => expect(__getLastDrawInstance()).toBeDefined());
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const draw = __getLastDrawInstance() as any;
+
+    const ring = [
+      [0, 0], // start
+      [5, 0], // first user point
+      [5, 5], // second user point
+      [0, 0], // cursor closing link (auto)
+      [0, 0], // cursor position (auto)
+    ];
+    const originalLength = ring.length;
+    const mockGeometry = { getCoordinates: jest.fn(() => [ring]) };
+    const mockFeature = { on: jest.fn(), getGeometry: jest.fn(() => mockGeometry) };
+
+    draw.emit('drawstart', { feature: mockFeature });
+    const changeHandler = mockFeature.on.mock.calls[0][1];
+
+    // Act - trigger change (adds a point logically)
+    changeHandler({ target: mockFeature });
+
+    // Assert - ring length unchanged (no splice mutation)
+    expect(ring.length).toBe(originalLength);
+  });
 });

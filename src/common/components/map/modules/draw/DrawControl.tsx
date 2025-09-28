@@ -8,7 +8,6 @@ import ControlPanel from '../../controls/ControlPanel';
 import styles from '../../controls/Controls.module.scss';
 import { DRAWTOOLTYPE } from './types';
 import useDrawContext from './useDrawContext';
-import LoadingSpinner from '../../../spinner/LoadingSpinner';
 
 const getDrawIcon = (drawTool: DRAWTOOLTYPE) => {
   switch (drawTool) {
@@ -25,9 +24,7 @@ const getDrawIcon = (drawTool: DRAWTOOLTYPE) => {
   }
 };
 
-const DrawControls: React.FC<React.PropsWithChildren<{ disableDraw?: boolean }>> = ({
-  disableDraw,
-}) => {
+const DrawControls: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { t } = useTranslation();
   const { state, actions } = useDrawContext();
 
@@ -57,17 +54,8 @@ const DrawControls: React.FC<React.PropsWithChildren<{ disableDraw?: boolean }>>
             type="button"
             data-testid={`draw-control-${drawToolType}`}
             onClick={() => handleClickDrawTool(drawToolType)}
-            disabled={Boolean(disableDraw)}
           >
             {getDrawIcon(drawToolType)}
-            {disableDraw && (
-              <LoadingSpinner
-                small
-                className={styles.drawControl__spinner}
-                aria-hidden
-                data-testid={`draw-control-loading-spinner-${drawToolType}`}
-              />
-            )}
           </button>
         ))}
     </ControlPanel>

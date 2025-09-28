@@ -68,20 +68,4 @@
     padding-left: var(--spacing-xs);
     padding-bottom: var(--spacing-2-xs);
   }
-
-  &__spinner {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    margin-left: 6px;
-    width: 1rem; /* match small spinner size */
-    height: 1rem;
-    line-height: 1rem;
-    opacity: 0.95;
-
-    svg {
-      width: 1rem;
-      height: 1rem;
-    }
-  }
 }

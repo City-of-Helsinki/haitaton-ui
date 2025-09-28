@@ -36,7 +36,6 @@ import DrawProvider from '../../../common/components/map/modules/draw/DrawProvid
 import FormPagesErrorSummary from '../../forms/components/FormPagesErrorSummary';
 import FormFieldsErrorSummary from '../../forms/components/FormFieldsErrorSummary';
 import { useApplicationsForHanke } from '../../application/hooks/useApplications';
-// Geometry serialization/hydration intentionally disabled (temporary) – import removed
 import useFormLanguagePersistence from '../../../common/hooks/useFormLanguagePersistence';
 import Button from '../../../common/components/button/Button';
 
@@ -82,7 +81,6 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
     `hanke-form-${formData.hankeTunnus || 'new'}`,
     formContext,
     {
-      // Temporarily remove area (alueet) persistence to avoid regression issues with geometry & derived fields.
       select(values) {
         const {
           nimi,
@@ -125,9 +123,6 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
     trigger,
     watch,
   } = formContext;
-
-  // Geometry hydration removed because we no longer persist serialized geometries across language change.
-  // When reintroducing geometry persistence, restore a guarded hydration effect here.
 
   const formValues = getValues();
   const watchFormValues = watch();

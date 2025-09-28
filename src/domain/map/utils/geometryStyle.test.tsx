@@ -1,4 +1,12 @@
 import { styleFunction, STYLES } from './geometryStyle';
+import { FeatureLike } from 'ol/Feature';
+
+// Mock FeatureLike object for testing
+const createMockFeature = (properties: Record<string, unknown>): FeatureLike => {
+  return {
+    getProperties: () => properties,
+  } as unknown as FeatureLike;
+};
 
 describe('styleFunction', () => {
   it.each([
@@ -16,7 +24,7 @@ describe('styleFunction', () => {
   ])('when liikennehaittaindeksi is %s, style is %s', (liikennehaittaindeksi, expectedStyle) => {
     expect(
       styleFunction(
-        { getProperties: () => ({ liikennehaittaindeksi, statusKey: undefined }) },
+        createMockFeature({ liikennehaittaindeksi, statusKey: undefined }),
         undefined,
         false,
       ),
@@ -26,7 +34,7 @@ describe('styleFunction', () => {
   it('when statusKey is LAVENDER_BLUE, style is STYLES.LAVENDER_BLUE', () => {
     expect(
       styleFunction(
-        { getProperties: () => ({ liikennehaittaindeksi: undefined, statusKey: 'LAVENDER_BLUE' }) },
+        createMockFeature({ liikennehaittaindeksi: undefined, statusKey: 'LAVENDER_BLUE' }),
         undefined,
         false,
       ),
