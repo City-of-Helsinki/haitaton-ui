@@ -460,7 +460,7 @@ function KaivuilmoitusAreasInfo({
     ? changedAreas.filter((area) => !areasInclude(originalAreas, area))
     : [];
   const removedAreas = areasHaveChanged
-    ? originalAreas?.filter((area) => !areasInclude(changedAreas, area)) ?? []
+    ? (originalAreas?.filter((area) => !areasInclude(changedAreas, area)) ?? [])
     : [];
 
   return (
@@ -539,7 +539,7 @@ function KaivuilmoitusAreasNuisanceInfo({
     ? changedAreas.filter((area) => !areasInclude(originalAreas, area))
     : [];
   const removedAreas = areasHaveChanged
-    ? originalAreas?.filter((area) => !areasInclude(changedAreas, area)) ?? []
+    ? (originalAreas?.filter((area) => !areasInclude(changedAreas, area)) ?? [])
     : [];
 
   return (
@@ -716,18 +716,28 @@ function ApplicationView({
   const muutokset = taydennys?.muutokset ?? muutosilmoitus?.muutokset;
   const changedData = taydennys?.applicationData ?? muutosilmoitus?.applicationData;
 
-  const tyoalueet =
-    applicationType === 'CABLE_REPORT'
+  const tyoalueet = (() => {
+    if (!Array.isArray(areas)) return [] as ApplicationArea[];
+    return applicationType === 'CABLE_REPORT'
       ? (areas as ApplicationArea[])
-      : (areas as KaivuilmoitusAlue[]).flatMap((area) => area.tyoalueet);
+      : (areas as KaivuilmoitusAlue[]).flatMap((area) =>
+          Array.isArray(area?.tyoalueet) ? area.tyoalueet : [],
+        );
+  })();
   const kaivuilmoitusTaydennysAlueet =
     applicationType === 'EXCAVATION_NOTIFICATION'
       ? (changedData?.areas as KaivuilmoitusAlue[] | undefined)
       : null;
-  const taydennysTyoalueet =
-    applicationType === 'CABLE_REPORT'
-      ? (changedData?.areas as ApplicationArea[] | undefined)
-      : kaivuilmoitusTaydennysAlueet?.flatMap((area) => area.tyoalueet);
+  const taydennysTyoalueet = (() => {
+    if (applicationType === 'CABLE_REPORT') {
+      return Array.isArray(changedData?.areas) ? (changedData?.areas as ApplicationArea[]) : [];
+    }
+    return kaivuilmoitusTaydennysAlueet
+      ? kaivuilmoitusTaydennysAlueet.flatMap((area) =>
+          Array.isArray(area?.tyoalueet) ? area.tyoalueet : [],
+        )
+      : [];
+  })();
   const kaivuilmoitusAlueet =
     applicationType === 'EXCAVATION_NOTIFICATION' ? (areas as KaivuilmoitusAlue[]) : null;
   const hankealueet = hanke?.alueet;

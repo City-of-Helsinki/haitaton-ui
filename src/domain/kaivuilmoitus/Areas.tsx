@@ -111,13 +111,15 @@ export default function Areas({ hankeData, hankkeenHakemukset, originalHakemus }
   } = useFieldArrayWithStateUpdate<KaivuilmoitusFormValues, 'applicationData.areas'>({
     name: 'applicationData.areas',
   });
-  const wathcApplicationAreas = watch('applicationData.areas');
+  // Watch application areas; fall back to empty array defensively (tests may construct partial state)
+  const wathcApplicationAreas = watch('applicationData.areas') ?? [];
   const haittaIndexesMutation = useHaittaIndexes();
 
   const totalSurfaceArea = getTotalSurfaceArea(
-    wathcApplicationAreas
-      .flatMap((area) => area.tyoalueet)
-      .map((alue) => alue.openlayersFeature!.getGeometry()!),
+    (Array.isArray(wathcApplicationAreas) ? wathcApplicationAreas : [])
+      .flatMap((area) => (Array.isArray(area?.tyoalueet) ? area.tyoalueet : []))
+      .map((alue) => alue.openlayersFeature?.getGeometry())
+      .filter((g): g is Geometry => Boolean(g)),
   );
 
   const refreshHaittaIndexesChanged = useCallback(
@@ -324,7 +326,7 @@ export default function Areas({ hankeData, hankkeenHakemukset, originalHakemus }
 
   function handleChangeArea(feature: Feature<Geometry>) {
     const changedApplicationArea = wathcApplicationAreas.find((alue) => {
-      const changedTyoalue = alue.tyoalueet.find(
+      const changedTyoalue = (alue?.tyoalueet || []).find(
         (tyoalue) =>
           tyoalue.openlayersFeature?.get('relatedHankeAreaId') ===
           feature.get('relatedHankeAreaId'),
@@ -333,7 +335,7 @@ export default function Areas({ hankeData, hankkeenHakemukset, originalHakemus }
     });
 
     if (changedApplicationArea) {
-      const changedTyoalue = changedApplicationArea.tyoalueet.find((tyoalue) => {
+      const changedTyoalue = (changedApplicationArea.tyoalueet || []).find((tyoalue) => {
         return tyoalue.openlayersFeature?.get('areaName') === feature.get('areaName');
       });
       if (changedTyoalue) {
