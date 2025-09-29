@@ -7,18 +7,32 @@ import { Application, KaivuilmoitusData } from '../../application/types/applicat
 import { HankeData } from '../../types/hanke';
 
 // Mock heavy child components
-jest.mock('../../kaivuilmoitus/BasicInfo', () => () => (
-  <div>
-    <input data-testid="applicationData.name" defaultValue="Initial muutos" />
-  </div>
-));
-jest.mock('../../kaivuilmoitus/Areas', () => () => <div data-testid="mock-areas" />);
-jest.mock('../../kaivuilmoitus/HaittojenHallinta', () => () => <div data-testid="mock-haitat" />);
-jest.mock('../../kaivuilmoitus/Contacts', () => () => <div data-testid="mock-contacts" />);
-jest.mock('../../application/taydennysAndMuutosilmoitusCommon/components/Attachments', () => () => (
-  <div data-testid="mock-attachments" />
-));
-jest.mock('../ReviewAndSend', () => () => <div data-testid="mock-review" />);
+jest.mock('../../kaivuilmoitus/BasicInfo', () => {
+  const { useFormContext } = jest.requireActual('react-hook-form');
+  const ReactLocal = jest.requireActual('react');
+  return function MockBasicInfo() {
+    const { register } = useFormContext();
+    return ReactLocal.createElement(
+      'div',
+      null,
+      ReactLocal.createElement('input', {
+        'data-testid': 'applicationData.name',
+        ...register('applicationData.name'),
+      }),
+    );
+  };
+});
+jest.mock('../../kaivuilmoitus/Areas', () => ({ __esModule: true, default: () => null }));
+jest.mock('../../kaivuilmoitus/HaittojenHallinta', () => ({
+  __esModule: true,
+  default: () => null,
+}));
+jest.mock('../../kaivuilmoitus/Contacts', () => ({ __esModule: true, default: () => null }));
+jest.mock('../../application/taydennysAndMuutosilmoitusCommon/components/Attachments', () => ({
+  __esModule: true,
+  default: () => null,
+}));
+jest.mock('../ReviewAndSend', () => ({ __esModule: true, default: () => null }));
 jest.mock('../../application/components/ApplicationSendDialog', () => () => null);
 jest.mock('../../application/muutosilmoitus/components/MuutosilmoitusCancel', () => () => null);
 jest.mock('../../application/hooks/useAttachments', () => () => ({ data: [], isError: false }));

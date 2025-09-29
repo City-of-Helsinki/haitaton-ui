@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'; // top-level import okay outside mock factories
 import { render, waitFor, cleanup } from '../../../testUtils/render';
 import userEvent from '@testing-library/user-event';
 import KaivuilmoitusContainer from '../KaivuilmoitusContainer';
@@ -6,24 +6,36 @@ import { Application, KaivuilmoitusData } from '../../application/types/applicat
 import { HankeData } from '../../types/hanke';
 
 // Mock heavy child components to focus on persistence only
-jest.mock('../BasicInfo', () => () => (
-  <div>
-    <input data-testid="applicationData.name" defaultValue="Initial excavation" />
-    <textarea data-testid="applicationData.workDescription" defaultValue="Desc" />
-  </div>
-));
-jest.mock('../Contacts', () => () => <div data-testid="mock-contacts" />);
-jest.mock('../Areas', () => () => <div data-testid="mock-areas" />);
-jest.mock('../HaittojenHallinta', () => () => <div data-testid="mock-haitat" />);
-jest.mock('../Attachments', () => () => <div data-testid="mock-attachments" />);
-jest.mock('../ReviewAndSend', () => () => <div data-testid="mock-review" />);
-jest.mock(
-  '../../forms/components/FormActions',
-  () =>
-    ({ children }: { children: React.ReactNode }) => (
-      <div data-testid="mock-form-actions">{children}</div>
-    ),
-);
+// Mock BasicInfo but still integrate with react-hook-form so persistence hook sees updates
+jest.mock('../BasicInfo', () => {
+  const { useFormContext } = jest.requireActual('react-hook-form');
+  const ReactLocal = jest.requireActual('react');
+  return function MockBasicInfo() {
+    const { register } = useFormContext();
+    return ReactLocal.createElement(
+      'div',
+      null,
+      ReactLocal.createElement('input', {
+        'data-testid': 'applicationData.name',
+        ...register('applicationData.name'),
+      }),
+      ReactLocal.createElement('textarea', {
+        'data-testid': 'applicationData.workDescription',
+        ...register('applicationData.workDescription'),
+      }),
+    );
+  };
+});
+jest.mock('../Contacts', () => ({ __esModule: true, default: () => null }));
+jest.mock('../Areas', () => ({ __esModule: true, default: () => null }));
+jest.mock('../HaittojenHallinta', () => ({ __esModule: true, default: () => null }));
+jest.mock('../Attachments', () => ({ __esModule: true, default: () => null }));
+jest.mock('../ReviewAndSend', () => ({ __esModule: true, default: () => null }));
+// Minimal FormActions stub
+jest.mock('../../forms/components/FormActions', () => ({
+  __esModule: true,
+  default: () => null,
+}));
 jest.mock('../../application/components/ApplicationCancel', () => ({
   ApplicationCancel: () => null,
 }));

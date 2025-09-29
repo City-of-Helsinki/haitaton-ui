@@ -28,7 +28,7 @@ export default function useFormLanguagePersistence<T extends object>(
   } = {},
 ) {
   const { enabled = true, clearOnUnmount = false, select, debounceMs = 300 } = options;
-  const { watch, getValues, reset, formState } = form;
+  const { watch, getValues, formState } = form;
   const hydratedRef = useRef(false);
   const debounceRef = useRef<ReturnType<typeof debounce>>();
   const seenDuringSave = useRef<WeakSet<object> | null>(null);
@@ -72,44 +72,55 @@ export default function useFormLanguagePersistence<T extends object>(
     }
   }, [enabled, getValues, safeStringify, storageKey, select]);
 
-  // Hydrate once
+  // Hydrate once. Previous implementation skipped hydration entirely if formState.isDirty.
+  // However some containers (e.g. Kaivuilmoitus BasicInfo) mark unrelated fields dirty via
+  // programmatic setValue effects before this hook runs, blocking hydration. We now apply
+  // persisted values field-by-field for paths that are still pristine (not in dirtyFields),
+  // even if the overall form isDirty.
+  // helper utilities for selective hydration
+  type DirtyTree = Record<string, unknown> | true | undefined;
+  function pathIsDirty(dirty: DirtyTree, segments: string[]): boolean {
+    let node: DirtyTree = dirty;
+    for (const seg of segments) {
+      if (!node || node === true) return node === true;
+      node = (node as Record<string, unknown>)[seg] as DirtyTree;
+    }
+    return node === true;
+  }
+  function applyPersisted(
+    setValueFn: (path: string, value: unknown, opts?: { shouldDirty?: boolean }) => void,
+    dirty: DirtyTree,
+    prefix: string[],
+    value: unknown,
+  ) {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) {
+      if (!pathIsDirty(dirty, prefix)) {
+        setValueFn(prefix.join('.'), value, { shouldDirty: false });
+      }
+      return;
+    }
+    Object.entries(value as Record<string, unknown>).forEach(([k, v]) =>
+      applyPersisted(setValueFn, dirty, [...prefix, k], v),
+    );
+  }
+
   useEffect(() => {
     if (!enabled || hydratedRef.current) return;
     try {
       const raw = sessionStorage.getItem(storageKey);
       if (raw) {
         const persisted: unknown = JSON.parse(raw);
-        if (!formState.isDirty && typeof persisted === 'object' && persisted !== null) {
-          const current = getValues();
-          // Custom merge: for arrays of objects, keep original 'feature' references
-          const mergedObj: Record<string, unknown> = { ...(current as Record<string, unknown>) };
-          Object.entries(persisted as Record<string, unknown>).forEach(([key, val]) => {
-            const existing = mergedObj[key];
-            if (Array.isArray(val) && Array.isArray(existing)) {
-              mergedObj[key] = val.map((item, idx) => {
-                const currentItem = (existing as unknown[])[idx];
-                if (
-                  item &&
-                  typeof item === 'object' &&
-                  currentItem &&
-                  typeof currentItem === 'object'
-                ) {
-                  const currentWithFeature = currentItem as { feature?: unknown };
-                  return {
-                    ...(currentItem as object),
-                    ...(item as object),
-                    feature: currentWithFeature.feature,
-                  };
-                }
-                return item as unknown;
-              });
-            } else {
-              mergedObj[key] = val;
+        if (persisted && typeof persisted === 'object') {
+          const dirtyFields =
+            (formState as unknown as { dirtyFields?: DirtyTree }).dirtyFields || {};
+          const setValue = (
+            form as unknown as {
+              setValue: (path: string, value: unknown, opts?: { shouldDirty?: boolean }) => void;
             }
-          });
-          reset(mergedObj as T, {
-            keepDirty: false,
-          });
+          ).setValue;
+          Object.entries(persisted as Record<string, unknown>).forEach(([k, v]) =>
+            applyPersisted(setValue, dirtyFields, [k], v),
+          );
         }
       }
     } catch {
