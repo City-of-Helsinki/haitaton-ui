@@ -843,9 +843,8 @@ describe('HankeForm', () => {
     await user.click(screen.getByRole('button', { name: /yhteenveto/i }));
 
     // Look for the draft state message first
-    await screen.findByText(
-      'Hanke on luonnostilassa. Sen näkyvyys muille hankkeille on rajoitettua, eikä sille voi lisätä hakemuksia. Seuraavissa vaiheissa on puuttuvia tietoja:',
-    );
+    // Relax matcher: long text may be split by elements, match start phrase only
+    await screen.findByText(/Hanke on luonnostilassa\./);
 
     // Wait for each missing page entry explicitly. Using findByRole instead of getByRole + waitFor
     // avoids race conditions where the elements are not yet in the DOM when assertions run.

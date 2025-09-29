@@ -53,11 +53,14 @@ import useFormLanguagePersistence from '../../common/hooks/useFormLanguagePersis
 type Props = {
   hankeData?: HankeData;
   application?: Application<JohtoselvitysData>;
+  /** Optional initial step for tests */
+  initialStep?: number | undefined;
 };
 
 const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
   hankeData,
   application,
+  initialStep,
 }) => {
   let hanke = hankeData;
   const { t } = useTranslation();
@@ -129,6 +132,19 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
     formState: { isDirty },
     reset,
   } = formContext;
+
+  // Watch key fields so that this container re-renders when page validation fields change
+  // This ensures formSteps 'state' reflects current form validity (areas, dates, selfIntersectingPolygon)
+  // and prevents the stepper from remaining disabled after fields are filled in tests.
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const watched = formContext.watch([
+    'applicationData.startTime',
+    'applicationData.endTime',
+    'applicationData.areas',
+    'selfIntersectingPolygon',
+  ]);
+  // Create a stable primitive dependency for hook arrays
+  const watchedKey = JSON.stringify(watched);
 
   // Set up a callback to save application id to session storage
   // when the page is about to be unloaded if the application
@@ -374,7 +390,9 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
           : StepState.disabled,
       },
     ];
-  }, [t, getValues, pageFieldsToValidate, hanke, existingAttachments, attachmentsLoadError]);
+    // NOTE: intentionally include watched fields to re-evaluate step states when form values change.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [t, hanke, existingAttachments, attachmentsLoadError, watchedKey]);
 
   const hankeNameText = (
     <div style={{ visibility: hanke !== undefined ? 'visible' : 'hidden' }}>
@@ -406,6 +424,7 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
         heading={t('johtoselvitysForm:pageHeader')}
         subHeading={hankeNameText}
         formSteps={formSteps}
+        initialStep={initialStep}
         onStepChange={handleStepChange}
         onSubmit={handleSubmit(openSendDialog)}
         stepChangeValidator={validateStepChange}

@@ -62,6 +62,8 @@ interface Props {
   stepChangeValidator?: (changeStep: () => void, stepIndex: number) => void;
   formData?: unknown;
   validationContext?: AnyObject;
+  /** Optional initial step index (useful for tests) */
+  initialStep?: number;
 }
 
 /**
@@ -81,12 +83,16 @@ const MultipageForm: React.FC<Props> = ({
   topElement,
   formData,
   validationContext,
+  initialStep,
 }) => {
   const locale = useLocale();
 
   const stepReducer = createStepReducer(formSteps.length);
   const initialState = {
-    activeStepIndex: 0,
+    activeStepIndex:
+      typeof initialStep === 'number'
+        ? Math.max(0, Math.min(initialStep, formSteps.length - 1))
+        : 0,
     steps: formSteps,
   };
   const [state, dispatch] = useReducer(stepReducer, initialState);
