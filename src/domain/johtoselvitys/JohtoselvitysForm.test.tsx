@@ -40,9 +40,14 @@ jest.mock('../johtoselvitys/utils', () => {
   };
 });
 
-// Stub AreaSummary to avoid crashes when areas undefined or incomplete.
-// We keep minimal semantics: render heading and list count if provided.
-jest.mock('../application/summary/AreaSummary', () => ({
+// Stub AreaSummary: Provide lightweight stub to prevent crashes if implementation expects complex props.
+try {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  require('./components/AreaSummary');
+} catch {
+  // ignore if not found; stub will still be used
+}
+jest.mock('./components/AreaSummary', () => ({
   __esModule: true,
   default: (props: { areas?: Array<{ id: string }>; title?: string }) => (
     <div data-testid="stub-area-summary">
