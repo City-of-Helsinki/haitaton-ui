@@ -143,7 +143,9 @@ export function Geometries({ hankeData }: Readonly<Props>) {
 
   const startTime = watch('applicationData.startTime');
   const endTime = watch('applicationData.endTime');
+  const minStartDate = hankeData?.alkuPvm ? new Date(hankeData.alkuPvm) : undefined;
   const minEndDate = startTime ? new Date(startTime) : undefined;
+  const maxDate = hankeData?.loppuPvm ? new Date(hankeData.loppuPvm) : undefined;
 
   const workTimesSet = startTime && endTime;
 
@@ -211,6 +213,9 @@ export function Geometries({ hankeData }: Readonly<Props>) {
             label={t('hakemus:labels:startDate')}
             locale={locale}
             required
+            minDate={minStartDate}
+            maxDate={maxDate}
+            initialMonth={minStartDate}
             helperText={t('form:helperTexts:dateInForm')}
           />
           <DatePicker
@@ -219,6 +224,7 @@ export function Geometries({ hankeData }: Readonly<Props>) {
             locale={locale}
             required
             minDate={minEndDate}
+            maxDate={maxDate}
             initialMonth={minEndDate}
             helperText={t('form:helperTexts:dateInForm')}
           />

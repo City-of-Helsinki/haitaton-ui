@@ -65,6 +65,8 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
   const [attachmentUploadErrors, setAttachmentUploadErrors] = useState<JSX.Element[]>([]);
   const { data: signedInUser } = usePermissionsForHanke(hanke?.hankeTunnus);
 
+  const [validationContext] = useState({ hankeData: hanke });
+
   const initialValues: JohtoselvitysFormValues = {
     id: null,
     alluStatus: null,
@@ -97,6 +99,7 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
     shouldUnregister: false,
     defaultValues: merge(initialValues, convertApplicationDataToFormState(application)),
     resolver: yupResolver(validationSchema),
+    context: validationContext,
   });
 
   // Lightweight persisted shape handled purely by persistence select; no runtime type needed

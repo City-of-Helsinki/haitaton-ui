@@ -10,6 +10,57 @@ import { Taydennys, Taydennyspyynto } from '../application/taydennys/types';
 import { FORM_PAGES } from '../forms/types';
 import { Muutosilmoitus } from '../application/muutosilmoitus/types';
 
+/**
+ * Custom validator for johtoselvitys dates to ensure they are within hanke date boundaries
+ */
+function validateJohtoselvitysDate(type: 'start' | 'end') {
+  return function (this: yup.TestContext, value: Date | undefined) {
+    if (!value) {
+      return true;
+    }
+
+    const context = this.options.context;
+    if (!context) {
+      return true;
+    }
+
+    const { hankeData } = context as { hankeData?: { alkuPvm?: string; loppuPvm?: string } };
+    if (!hankeData) {
+      return true;
+    }
+
+    const date = new Date(value);
+    date.setHours(0, 0, 0, 0);
+
+    if (type === 'start' && hankeData.alkuPvm) {
+      const hankeStart = new Date(hankeData.alkuPvm);
+      hankeStart.setHours(0, 0, 0, 0);
+      if (date < hankeStart) {
+        return this.createError({
+          path: this.path,
+          message: 'Start date must be after hanke start date',
+        });
+      }
+    }
+
+    if (hankeData.loppuPvm) {
+      const hankeEnd = new Date(hankeData.loppuPvm);
+      hankeEnd.setHours(23, 59, 59, 999);
+      if (date > hankeEnd) {
+        return this.createError({
+          path: this.path,
+          message:
+            type === 'start'
+              ? 'Start date must be before hanke end date'
+              : 'End date must be before hanke end date',
+        });
+      }
+    }
+
+    return true;
+  };
+}
+
 const addressSchema = yup
   .object({
     streetAddress: yup.object({
@@ -46,7 +97,12 @@ export const johtoselvitysApplicationDataSchema = yup.object({
   customerWithContacts: customerWithContactsSchema,
   propertyDeveloperWithContacts: customerWithContactsSchema.nullable(),
   representativeWithContacts: customerWithContactsSchema.nullable(),
-  startTime: yup.date().nullable().required().meta({ pageName: FORM_PAGES.ALUEET }),
+  startTime: yup
+    .date()
+    .test('validJohtoselvitysStartDate', 'Invalid start date', validateJohtoselvitysDate('start'))
+    .nullable()
+    .required()
+    .meta({ pageName: FORM_PAGES.ALUEET }),
   endTime: yup
     .date()
     .when('startTime', (startTime: Date[], schema: yup.DateSchema) => {
@@ -56,6 +112,7 @@ export const johtoselvitysApplicationDataSchema = yup.object({
         return schema;
       }
     })
+    .test('validJohtoselvitysEndDate', 'Invalid end date', validateJohtoselvitysDate('end'))
     .nullable()
     .required()
     .meta({ pageName: FORM_PAGES.ALUEET }),
