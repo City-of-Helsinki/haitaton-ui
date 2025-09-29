@@ -17,10 +17,22 @@ jest.mock('../Areas', () => () => <div data-testid="mock-areas" />);
 jest.mock('../HaittojenHallinta', () => () => <div data-testid="mock-haitat" />);
 jest.mock('../Attachments', () => () => <div data-testid="mock-attachments" />);
 jest.mock('../ReviewAndSend', () => () => <div data-testid="mock-review" />);
-jest.mock('../../application/components/ApplicationCancel', () => () => null);
+jest.mock(
+  '../../forms/components/FormActions',
+  () =>
+    ({ children }: { children: React.ReactNode }) => (
+      <div data-testid="mock-form-actions">{children}</div>
+    ),
+);
+jest.mock('../../application/components/ApplicationCancel', () => ({
+  ApplicationCancel: () => null,
+}));
 jest.mock('../../application/components/ApplicationSendDialog', () => () => null);
 jest.mock('../../application/hooks/useAttachments', () => () => ({ data: [], isError: false }));
-jest.mock('../../common/components/globalNotification/GlobalNotificationContext', () => ({
+jest.mock('../../../common/components/globalNotification/GlobalNotificationContext', () => ({
+  GlobalNotificationProvider: ({ children }: { children: React.ReactNode }) => (
+    <div>{children}</div>
+  ),
   useGlobalNotification: () => ({ setNotification: jest.fn() }),
 }));
 jest.mock('../../hanke/hankeUsers/hooks/useUserRightsForHanke', () => ({
@@ -31,8 +43,18 @@ jest.mock('../../application/hooks/useApplications', () => ({
 }));
 jest.mock('react-i18next', () => ({
   ...jest.requireActual('react-i18next'),
-  useTranslation: () => ({ t: (k: string) => k }),
+  useTranslation: () => ({
+    t: (k: string) => k,
+    i18n: {
+      language: 'fi',
+      exists: () => true,
+      changeLanguage: jest.fn(),
+    },
+  }),
 }));
+jest.mock('../../application/hooks/useNavigateToApplicationView', () => {
+  return jest.fn(() => jest.fn());
+});
 
 describe('KaivuilmoitusContainer language persistence integration', () => {
   const hanke: HankeData = { hankeTunnus: 'HKAIVU1', nimi: 'Hanke Kaivu' } as HankeData;
