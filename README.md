@@ -32,6 +32,21 @@ with `scripts/update-runtime-env.ts`, which contains the actual used variables w
 App is not using create-react-app's default `process.env` way to refer of variables
 but `window._env_` object.
 
+### Testing conventions
+
+We follow these conventions for automated tests:
+
+- Unit and smaller component tests may live alongside the source (e.g. `Component.test.tsx`).
+- Feature / integration tests that exercise a domain container/form are placed directly in the
+  same domain folder as the component they target (e.g.
+  `src/domain/kaivuilmoitus/KaivuilmoitusContainer.persistence.test.tsx`).
+- We intentionally avoid scattering these higher‑level tests under nested `__tests__` directories
+  to keep related form/container code and its language‑persistence integration test in one place
+  (easier discoverability during maintenance).
+- When adding a new persistence or other container‑level integration test, co‑locate it with the
+  container file. Use a descriptive suffix, e.g.
+  `*.persistence.test.tsx` or `*.integration.test.tsx` for clarity.
+
 ### `yarn e2e`
 
 Runs Playwright tests with the default parameters.
