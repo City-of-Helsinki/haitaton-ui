@@ -626,6 +626,10 @@
       "titleText": "Cancel project?",
       "bodyText": "Are you sure you want to cancel the project? The project will be completely removed from the system."
     },
+    "validationError": {
+      "title": "The form contains errors",
+      "text": "Please check the information you entered and correct any errors."
+    },
     "labels": {
       "hankeTunnus": "Project identifier",
       "nimi": "Project name",
@@ -873,23 +877,17 @@
           {
             "heading": "Separating cycling traffic from other modes of transport",
             "tip": "Plan and implement the temporary cycling arrangements primarily in line with the original, permanent arrangements (e.g. one-way routes or passages or a two-way cycling lane). Aim to preserve a cycling traffic solution that is separate from pedestrian traffic if one is currently in use. When the volume of motor traffic exceeds 7,000 vehicles per day, cycling traffic should generally also be separated from motor traffic. On main cycling routes, the separation should also be considered with a lower volume of traffic. One-way cycling traffic arrangements can be proposed to be replaced with a mixed traffic solution next to the worksite, in which case a 30 km/h speed limit will be set for the street.",
-            "cardLinks": [
-              4
-            ]
+            "cardLinks": [4]
           },
           {
             "heading": "Junction arrangements",
             "tip": "Plan and implement the temporary junction arrangements of cycling traffic, especially in traffic light controlled junctions with regard to the functionality of different driving directions, but also in terms of left turns, visibility and lighting, in particular.",
-            "cardLinks": [
-              4
-            ]
+            "cardLinks": [4]
           },
           {
             "heading": "Detours",
             "tip": "Plan and implement clear, safely installed detour signage that separately addresses cycling. Determine cycling traffic’s impacts and the other necessary measures for the detour.",
-            "cardLinks": [
-              5
-            ]
+            "cardLinks": [5]
           },
           {
             "heading": "Accessibility",
@@ -902,17 +900,12 @@
           {
             "heading": "Advance communication and change notifications",
             "tip": "Communicate about major works and potential changes to cycling routes already during the planning stages and well in advance before implementing the new arrangements (public notices, local notices). Mark the detour in the surroundings prior to starting the work. Notify the different parties of potential changes in routes well in advance before implementing the new arrangements.",
-            "cardLinks": [
-              1
-            ]
+            "cardLinks": [1]
           },
           {
             "heading": "Protecting the cycling traffic from the worksite",
             "tip": "As your first measure, use railings and barriers to fence off the worksite in order to protect cycling traffic.",
-            "cardLinks": [
-              6,
-              7
-            ]
+            "cardLinks": [6, 7]
           },
           {
             "heading": "Maintenance",
@@ -921,9 +914,7 @@
           {
             "heading": "Surface quality of cycling routes",
             "tip": "Implement and maintain solid and clean cycling route surfaces (temporary cover) and sloped level changes.",
-            "cardLinks": [
-              2
-            ]
+            "cardLinks": [2]
           },
           {
             "heading": "Guidelines for cycling route arrangements during work at a site",
@@ -973,9 +964,7 @@
           {
             "heading": "Advance communication and change notifications",
             "tip": "Notify the different operators of any notable work and potential changes to motor traffic routes already during the planning stages and well in advance before their implementation (general bulletins, local bulletins). Notify the different parties of potential changes in routes well in advance before implementing the new arrangements.",
-            "cardLinks": [
-              1
-            ]
+            "cardLinks": [1]
           },
           {
             "heading": "Signage",
@@ -988,10 +977,7 @@
           {
             "heading": "Separating different modes of transport",
             "tip": "Do not guide pedestrians to a driving lane unless a safe, wide enough passage has been separated for them from the driving lane. Do not guide cycling traffic onto a driving lane with motor traffic except in well-founded situations (see the suggested measures for cycling traffic).",
-            "cardLinks": [
-              3,
-              4
-            ]
+            "cardLinks": [3, 4]
           },
           {
             "heading": "Driving lane surfaces and markings",
@@ -1016,23 +1002,17 @@
           {
             "heading": "Advance contacts and traffic arrangements to be agreed on in advance",
             "tip": "<p>Contact HSL (<mailto href=\"mailto:infra@hsl.fi\">infra@hsl.fi</mailto>) during the planning stages if your project is located on HSL’s bus route, and determine whether your project will have a detrimental effect on HSL’s bust transport, e.g. reduced lanes, delays, longer travel times, route changes, stop changes, etc. Plan potential detours for bus transport well in advance, along with their signage and the necessary public transport priorities. Make sure that the route is functional with both HSL and the urban traffic control centre of the Helsinki Metropolitan Area (<mailto href=\"mailto:liikenteenhallintakeskus@hel.fi\">liikenteenhallintakeskus@hel.fi</mailto>, tel. 09 310 37555) with regards to traffic light controls, including temporary lights. If necessary, agree on a test drive with HSL to ensure smooth traffic.</p><br><p>If the worksite is on the final stop of a bus route or if it prevents bus transport on the street in question, contact the other parties at least 2.5 months before starting the work. In cases on non-urgent worksites (not one caused by a broken pipe, for example), get in contact at least two weeks prior to starting the work. Further information in Finnish: <external href=\"https://www.hsl.fi/hsl/urakoitsijat\">Urakoitsija - ota joukkoliikenne huomioon työmaalla <span className=\"hds-icon icon hds-icon--link-external hds-icon--size-s vertical-align-medium-icon\" aria-hidden=\"true\"></span></external>.</p>",
-            "cardLinks": [
-              8
-            ]
+            "cardLinks": [8]
           },
           {
             "heading": "Bus and tram stop arrangements and access to stops",
             "tip": "Ensure accessibility to current stops or plan and implement the transfer of stops, signage to them and accessible pedestrian connections. Tram and bus stops cannot be moved or removed from use without an authorisation from HSL (<mailto href=\"mailto:infra@hsl.fi\">infra@hsl.fi</mailto>). Further information in Finnish: <external href=\"https://www.hsl.fi/hsl/urakoitsijat\">Urakoitsija - ota joukkoliikenne huomioon työmaalla <span className=\"hds-icon icon hds-icon--link-external hds-icon--size-s vertical-align-medium-icon\" aria-hidden=\"true\"></span></external>.",
-            "cardLinks": [
-              8
-            ]
+            "cardLinks": [8]
           },
           {
             "heading": "Advance communication and change notifications",
             "tip": "Communicate about major works and potential changes to bus transport routes to the various parties already during the planning stages and well in advance before implementing the new arrangements (public notices, local notices). Notify the different parties of potential changes in routes well in advance before implementing the new arrangements.",
-            "cardLinks": [
-              1
-            ]
+            "cardLinks": [1]
           },
           {
             "heading": "Signage",
@@ -1060,9 +1040,7 @@
           {
             "heading": "Advance contacts and traffic arrangements to be agreed on in advance",
             "tip": "<p>Assess in advance the timing of individual works related to the project and contact in advance both HSL (operations: <mailto href=\"mailto:infra@hsl.fi\">infra@hsl.fi</mailto>) and Metropolitan Area Transport Ltd. (tramline infrastructure and systems: <mailto href=\"mailto:urakoitsijaohjeistus@kaupunkiliikenne.fi\">urakoitsijaohjeistus@kaupunkiliikenne.fi</mailto>), so that the potentially needed exceptional arrangements can be coordinated with other exceptional routes. Plan the potential tram transport detours and public transport priorities and ensure the functionality of these routes together with HSL, the Metropolitan Area Transport Ltd. and with the urban traffic control centre of the Helsinki Metropolitan Area in terms of traffic lights (<mailto href=\"mailto:liikenteenhallintakeskus@hel.fi\">liikenteenhallintakeskus@hel.fi</mailto>, tel. 09 310 37555).</p><br><p>For diversions of tram transport, submit a notification to HSL 8 weeks prior to starting work lasting a maximum of three days, or 5 months prior to starting work lasting more than three days. For diversions of bus transport replacing tram routes, submit a notification to HSL 3 months prior to starting work lasting a maximum of three days, or 5 months prior to starting work lasting more than three days. Further information (in Finnish): <external href=\"https://www.hsl.fi/hsl/urakoitsijat\">Urakoitsija - ota joukkoliikenne huomioon työmaalla <span className=\"hds-icon icon hds-icon--link-external hds-icon--size-s vertical-align-medium-icon\" aria-hidden=\"true\"></span></external>and <external href=\"https://kaupunkiliikenne.fi/kaupunkiraidehankkeet-ja-kunnossapito/urakoitsijalle/tyot-raitiotieradan-laheisyydessa/\">Työt raitiotieradan läheisyydessä - Helsinki Metropolitan Area Transport Ltd <span className=\"hds-icon icon hds-icon--link-external hds-icon--size-s vertical-align-medium-icon\" aria-hidden=\"true\"></span></external></p>",
-            "cardLinks": [
-              8
-            ]
+            "cardLinks": [8]
           },
           {
             "heading": "Tramway structures and working near the track area",
@@ -1071,16 +1049,12 @@
           {
             "heading": "Bus and tram stop arrangements and access to stops",
             "tip": "Ensure accessibility to current stops or plan and implement the transfer of stops, signage to them and accessible pedestrian connections. Tram and bus stops cannot be moved or removed from use without an authorisation from HSL (<mailto href=\"mailto:infra@hsl.fi\">infra@hsl.fi</mailto>). Further information in Finnish: <external href=\"http://hsl.fi/hsl/urakoitsijat\">Urakoitsija - ota joukkoliikenne huomioon työmaalla <span className=\"hds-icon icon hds-icon--link-external hds-icon--size-s vertical-align-medium-icon\" aria-hidden=\"true\"></span></external>.",
-            "cardLinks": [
-              8
-            ]
+            "cardLinks": [8]
           },
           {
             "heading": "Advance communication and change notifications",
             "tip": "Communicate about major works and potential changes to tram transport routes to the various parties already during the planning stages and well in advance before implementing the new arrangements (public notices, local notices). Notify the different parties of potential changes in routes well in advance before implementing the new arrangements.",
-            "cardLinks": [
-              1
-            ]
+            "cardLinks": [1]
           },
           {
             "heading": "Traffic light control",
@@ -1095,16 +1069,12 @@
           {
             "heading": "Advance communication and change notifications",
             "tip": "Inform the operators and properties of any work causing noise, dust or vibration nuisance at least one week before starting the work, or immediately when the work timetable is known. If the work is highly disruptive, it should be announced at least 30 days before starting the work. Give the residents and different operators enough time to prepare for known disruptions and negotiate regarding these disruptions with the operators, especially near sensitive services.",
-            "cardLinks": [
-              1
-            ]
+            "cardLinks": [1]
           },
           {
             "heading": "Scheduling and methods of work",
             "tip": "Assess the scheduling and methods of work for opportunities to minimise emission nuisances to different operations.",
-            "cardLinks": [
-              10
-            ]
+            "cardLinks": [10]
           }
         ],
         "MELU": [
@@ -1119,9 +1089,7 @@
           {
             "heading": "Noise abatement solutions",
             "tip": "Implement solutions that abate the impacts of noise, such as portable noise barriers.",
-            "cardLinks": [
-              10
-            ]
+            "cardLinks": [10]
           }
         ],
         "POLY": [
@@ -1934,7 +1902,9 @@
     "drawPolygonButtonAria": "Draw a polygon on the map",
     "notifications": {
       "selfIntersectingLabel": "Invalid Geometry",
-      "selfIntersectingText": "The polygon cannot intersect with itself. Changes have been reverted."
+      "selfIntersectingText": "The polygon cannot intersect with itself. Changes have been reverted.",
+      "drawingOutsideHankeAreaLabel": "Drawing Prevented",
+      "drawingOutsideHankeAreaText": "Drawing outside the project area is not allowed."
     }
   },
   "staticPages": {
@@ -2004,7 +1974,7 @@
       },
       "asioinninToimintokokonaisuudet": {
         "heading": "Service functionalities",
-        "content": "<p>The front page of the Haitaton service consists of the following main sections and other sections depicting the system:</p> <br /> <ul> <li><strong>View projects</strong>: This section presents the project areas related to the projects in a map view. When selecting a project area on the map, the map’s side bar will show the basic information and nuisance index information of the project. The contents and purpose of nuisance indexes have been descripted under the section <a href=”./haittaindeksit”>Nuisance index calculation and nuisance management plan.</a></li> <li><strong>E-services for the public areas</strong>: This section you can have e-services in matters concerning the public areas. You can start by creating a new project. The project becomes public after filling in the mandatory fields of the project form, i.e. it will be shown to other system users. You can then start creating applications (excavation notification, cable report) under the project after this. As the project founder, you will be automatically given all the rights to edit the project. Read more about the project’s access rights in section <a href=”./yhteyshenkilot”>Adding and editing contact information and its access rights</a>.</li> <li><strong>E-services for the private areas</strong>: This section allows you to create an individual cable report application. In connection to this, Haitaton will establish an automatic project template, which only includes the name taken from the cable review as the project information. As the creator of this project template, you will automatically be granted all the rights to edit the project frame. Your cable reports are not shown to other users. However, you can turn this project template into a project by entering the mandatory project information, making the project visible to all the users. This will allow you to also later add other applications to the project in addition to the original cable report. No excavation notifications are made to the private areas.</li> <li><strong>Own projects</strong>: In this section, you can view the projects, applications and project templates (i.e. individual cable reports) where you are included as the original creator or as a contact person added later. With sufficient access rights, you can manage the access rights of other people included in the projects. Read more about the access rights in section <a href=”./yhteyshenkilot”>Adding and editing contact information and its access rights</a>. With sufficient access rights, you can also add new applications to the project through the project page and/or edit the applications created through the applications page. You can monitor the authority status of individual applications on these pages also with viewing rights.</li> <li><strong>Work instructions:</strong> This section will provide you with access to the City’s official work instructions and other important information. The section will also allow you to view the additional information cards supplementing the measurement suggestions of the nuisance management of the project and the application. The contents of these additional information cards are based on the Työmaaopas worksite guide publication of the City of Helsinki, which has since been removed from use. The contents have also been supplemented with the best practices collected through the Roadwork Site of the Year competition, and they have been edited into a format supporting the suggested measures of nuisance management in Haitaton.</li> </ul> <br /> <p>Other sections depicting the system: <strong>Instructions and support</strong>, <strong>About Haitaton</strong>, <strong>Accessibility statement</strong> and <strong>Privacy policies</strong>. These sections, along with the sections <strong>Projects on a map</strong> and <strong>Work instructions</strong> are also available to unregistered users of the Haitaton service.</p>"
+        "content": "<p>The front page of the Haitaton service consists of the following main sections and other sections depicting the system:</p> <br /> <ul> <li><strong>View projects</strong>: This section presents the project areas related to the projects in a map view. When selecting a project area on the map, the map’s side bar will show the basic information and nuisance index information of the project. The contents and purpose of nuisance indexes have been descripted under the section <a href=\"./haittaindeksit\">Nuisance index calculation and nuisance management plan.</a></li> <li><strong>Create new project</strong>: This section allows you to create a new project. The project becomes public after filling in the mandatory fields of the project form, i.e. it will be shown to other system users. You can also start creating applications (excavation notification, cable report) under the project after this. As the project founder, you will be automatically given all the rights to edit the project. Read more about the project’s access rights in section <a href=\"./yhteyshenkilot\">Adding and editing contact information and its access rights</a>.</li> <li><strong>Create a cable report application</strong>: This section allows you to create an individual cable report application. In connection to this, Haitaton will establish an automatic project template, which only includes the name taken from the cable review as the project information. As the creator of this project template, you will automatically be granted all the rights to edit the project frame. Your cable reports are not shown to other users. However, you can turn this project template into a project by entering the mandatory project information, making the project visible to all the users. This will allow you to also later add other applications to the project in addition to the original cable report.</li> <li><strong>Own projects</strong>: In this section, you can view the projects, applications and project templates (i.e. individual cable reports) where you are included as the original creator or as a contact person added later. With sufficient access rights, you can manage the access rights of other people included in the projects. Read more about the access rights in section <a href=\"./yhteyshenkilot\">Adding and editing contact information and its access rights</a>. With sufficient access rights, you can also add new applications to the project through the project page and/or edit the applications created through the applications page. You can monitor the authority status of individual applications on these pages also with viewing rights.</li> <li><strong>Work instructions:</strong> This section will provide you with access to the City’s official work instructions and other important information. The section will also allow you to view the additional information cards supplementing the measurement suggestions of the nuisance management of the project and the application. The contents of these additional information cards are based on the Työmaaopas worksite guide publication of the City of Helsinki, which has since been removed from use. The contents have also been supplemented with the best practices collected through the Roadwork Site of the Year competition, and they have been edited into a format supporting the suggested measures of nuisance management in Haitaton.</li> </ul> <br /> <p>Other sections depicting the system: <strong>Instructions and support</strong>, <strong>About Haitaton</strong>, <strong>Accessibility statement</strong> and <strong>Privacy policies</strong>. These sections, along with the sections <strong>Projects on a map</strong> and <strong>Work instructions</strong> are also available to unregistered users of the Haitaton service.</p>"
       },
       "asioinninKulku": {
         "heading": "Service process",
@@ -2012,7 +1982,7 @@
       },
       "hankkeenPerustaminen": {
         "heading": "Creating a project",
-        "content": "<p><strong>When you are using e-services for a public area</strong> create a new project in the Haitaton system as early on as possible during the project process to allow for proactive assessing of its detrimental effects and for compiling <a href=\"./haittaindeksit\">the nuisance management plan</a> and coordinating the different projects. This will also benefit your project. <a href=\"./hankkeenJaHakemuksenTilat\">Project status</a> is first saved as a draft and will not be shown publicly until you have filled in all the mandatory data in the project form. You can also proceed to creating applications (excavation notification, cable report) on a public project.</p><br /><p>Perspectives on <strong>Drawing the project areas</strong> and the maps have been reviewed in the chapter <a href=\"./karttatoiminnot\">Map actions and tools</a>. Fill in the requested nuisance assessments for each project area. After this, Haitaton will calculate the <a href=\"./haittaindeksit\">nuisance indexes</a> as the basis for each individual project area’s nuisance management plan.</p><br /><p><strong>Compile the predictive</strong> <a href=\"./haittaindeksit\">nuisance management plans</a> and implement them to the extent possible during the project stage in question (e.g., agreeing in advance on public transport arrangements).</p><br /><p><strong>When you are adding</strong> <a href=\"./yhteyshenkilot\">new people</a> to the project, Haitaton will send two <a href=\"./sahkopostiheratteet\">alerts</a> to the person’s email address, the first of which will guide the person to authenticate themselves so that they can later find the project under their ‘Own projects’ section. When a person has been authenticated, they can access the project they have been added to directly through the link in the second alert. This practice applies to all applications of the project. Contact persons and their personal information are managed project-specifically in Haitaton. This means that a separate authentication is required for each project.</p><br /><p><strong>The access rights of people added to the project are managed</strong> through the User Management section of the project page. If you are a project creator, you will automatically have all rights to it; if someone else has created the project, you will have the <a href=\"./kayttooikeustasot\">access rights</a> they have granted to you. If you have been granted editing rights, you can manage access rights of the same or lower level. Viewing rights do not allow managing access rights in the User management section. Editing access rights sends an alert to the person whose rights were changed.</p><br /><p><strong>When adding attachments</strong>, include a descriptive file name as adding a separate description is not possible. Attachments can be freely deleted from the project. Check the allowed attachments formats and file sizes on the forms’ Attachments page.</p>"
+        "content": "<p><strong>Create a new project</strong> in the Haitaton system as early on as possible during the project process to allow for proactive assessing of its detrimental effects and for compiling <a href=\"./haittaindeksit\">the nuisance management plan</a> and coordinating the different projects. This will also benefit your project. <a href=\"./hankkeenJaHakemuksenTilat\">Project status</a> is first saved as a draft and will not be shown publicly until you have filled in all the mandatory data in the project form. You can also proceed to creating applications (excavation notification, cable report) on a public project.</p><br /><p>Perspectives on <strong>Drawing the project areas</strong> and the maps have been reviewed in the chapter <a href=\"./karttatoiminnot\">Map actions and tools</a>. Fill in the requested nuisance assessments for each project area. After this, Haitaton will calculate the <a href=\"./haittaindeksit\">nuisance indexes</a> as the basis for each individual project area’s nuisance management plan.</p><br /><p><strong>Compile the predictive</strong> <a href=\"./haittaindeksit\">nuisance management plans</a> and implement them to the extent possible during the project stage in question (e.g., agreeing in advance on public transport arrangements).</p><br /><p><strong>When you are adding</strong> <a href=\"./yhteyshenkilot\">new people</a> to the project, Haitaton will send two <a href=\"./sahkopostiheratteet\">alerts</a> to the person’s email address, the first of which will guide the person to authenticate themselves so that they can later find the project under their ‘Own projects’ section. When a person has been authenticated, they can access the project they have been added to directly through the link in the second alert. This practice applies to all applications of the project. Contact persons and their personal information are managed project-specifically in Haitaton. This means that a separate authentication is required for each project.</p><br /><p><strong>The access rights of people added to the project are managed</strong> through the User Management section of the project page. If you are a project creator, you will automatically have all rights to it; if someone else has created the project, you will have the <a href=\"./kayttooikeustasot\">access rights</a> they have granted to you. If you have been granted editing rights, you can manage access rights of the same or lower level. Viewing rights do not allow managing access rights in the User management section. Editing access rights sends an alert to the person whose rights were changed.</p><br /><p><strong>When adding attachments</strong>, include a descriptive file name as adding a separate description is not possible. Attachments can be freely deleted from the project. Check the allowed attachments formats and file sizes on the forms’ Attachments page.</p>"
       },
       "hakemuksienTekeminen": {
         "heading": "Making and submitting applications",

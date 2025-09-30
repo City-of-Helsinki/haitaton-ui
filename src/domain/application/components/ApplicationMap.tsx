@@ -34,6 +34,8 @@ import { OverlayProps } from '../../../common/components/map/types';
 import AreaOverlay from '../../map/components/AreaOverlay/AreaOverlay';
 import FullScreenControl from '../../../common/components/map/controls/FullscreenControl';
 import useDrawContext from '../../../common/components/map/modules/draw/useDrawContext';
+import { DrawSegmentGuard } from '../../../common/components/map/modules/draw/types';
+import { useGlobalNotification } from '../../../common/components/globalNotification/GlobalNotificationContext';
 
 type Props = {
   drawSource: VectorSource;
@@ -45,6 +47,7 @@ type Props = {
   children?: React.ReactNode;
   restrictDrawingToHankeAreas?: boolean;
   workTimesSet?: boolean;
+  drawSegmentGuard?: DrawSegmentGuard;
 };
 
 export default function ApplicationMap({
@@ -57,8 +60,10 @@ export default function ApplicationMap({
   onChangeArea,
   onCopyArea,
   children,
+  drawSegmentGuard,
 }: Readonly<Props>) {
   const { t } = useTranslation();
+  const { setNotification } = useGlobalNotification();
   const forceUpdate = useForceUpdate();
   const [featuresLoaded, setFeaturesLoaded] = useState(false);
   const {
@@ -187,11 +192,21 @@ export default function ApplicationMap({
       ) {
         // If mofified feature is going over hanke feature, revert back to original geometry
         modifiedFeature.setGeometry(originalFeature.getGeometry());
+        setNotification(true, {
+          position: 'top-right',
+          dismissible: true,
+          autoClose: true,
+          autoCloseDuration: 5000,
+          label: t('map:notifications:drawingOutsideHankeAreaLabel'),
+          message: t('map:notifications:drawingOutsideHankeAreaText'),
+          type: 'error',
+          closeButtonLabelText: t('common:components:notification:closeButtonLabelText'),
+        });
       } else {
         setSelectedFeature(modifiedFeature);
       }
     },
-    [hankeLayerFilter, setSelectedFeature],
+    [hankeLayerFilter, setNotification, setSelectedFeature, t],
   );
 
   function handleCopyArea(feature: Feature<Geometry>) {
@@ -257,6 +272,7 @@ export default function ApplicationMap({
                 drawCondition={restrictDrawingToHankeAreas ? drawCondition : undefined}
                 drawFinishCondition={restrictDrawingToHankeAreas ? drawFinishCondition : undefined}
                 drawStyleFunction={restrictDrawingToHankeAreas ? drawStyleFunction : undefined}
+                drawSegmentGuard={drawSegmentGuard}
                 handleModifyEnd={restrictDrawingToHankeAreas ? handleModifyEnd : undefined}
               />
             )}

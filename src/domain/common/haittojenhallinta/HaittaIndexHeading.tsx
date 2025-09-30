@@ -1,4 +1,4 @@
-import { Box, HStack } from '@chakra-ui/layout';
+import { Box, HStack } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import HaittaIndex from '../haittaIndexes/HaittaIndex';
 import HaittaTooltipContent from '../haittaIndexes/HaittaTooltipContent';

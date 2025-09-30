@@ -634,6 +634,10 @@
       "titleText": "Peru hanke?",
       "bodyText": "Haluatko varmasti perua hankkeen? Hanke poistetaan kokonaan järjestelmästä."
     },
+    "validationError": {
+      "header": "Tietoja puuttuu",
+      "haittojenHallintaRequired": "Täydennä hankealueen haittojenhallintatoimet ja muut pakolliset tiedot, jotta voit tallentaa hankkeen."
+    },
     "labels": {
       "hankeTunnus": "Hankkeen tunnus",
       "nimi": "Hankkeen nimi",
@@ -1922,7 +1926,9 @@
     "drawPolygonButtonAria": "Piirrä monikulmio kartalle",
     "notifications": {
       "selfIntersectingLabel": "Virheellinen geometria",
-      "selfIntersectingText": "Monikulmio ei voi leikata itseään. Muutokset on peruutettu."
+      "selfIntersectingText": "Monikulmio ei voi leikata itseään. Muutokset on peruutettu.",
+      "drawingOutsideHankeAreaLabel": "Piirtäminen estetty",
+      "drawingOutsideHankeAreaText": "Piirtäminen hankkeen alueen ulkopuolelle ei ole sallittua."
     }
   },
   "staticPages": {
