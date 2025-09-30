@@ -1348,7 +1348,11 @@
       "reportOperationalConditionSuccessText": "Report of functional condition submitted for approval.",
       "reportWorkFinishedSuccessText": "Report of completion submitted for approval.",
       "reportCompletionDateErrorLabel": "Submission failed",
-      "reportCompletionDateErrorText": "<0>An error occurred during submission. Try again later or contact Haitaton technical supoprt at <1>haitatontuki@hel.fi</1>.</0>"
+      "reportCompletionDateErrorText": "<0>An error occurred during submission. Try again later or contact Haitaton technical supoprt at <1>haitatontuki@hel.fi</1>.</0>",
+      "dateBeforeProjectDateLabel": "Invalid date",
+      "dateBeforeProjectDateText": "The date cannot be before the start of the project {{date}}",
+      "dateFutureProjectDateLabel": "Invalid date",
+      "dateFutureProjectDateText": "The date cannot be after the end of the project {{date}}"
     },
     "sendDialog": {
       "title": "Submit application?",

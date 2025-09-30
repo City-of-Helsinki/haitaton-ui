@@ -1312,7 +1312,11 @@
       "reportOperationalConditionSuccessText": "Anmälan om funktionsdugligt skick har skickats iväg för godkännande.",
       "reportWorkFinishedSuccessText": "Anmälan om när arbetet är färdigt har skickats iväg för godkännande.",
       "reportCompletionDateErrorLabel": "Det gick inte att skicka anmälan.",
-      "reportCompletionDateErrorText": "<0>Ett fel uppstod när anmälan skulle skickas. Försök igen senare eller kontakta Haitatons tekniska stöd <1>haitatontuki@hel.fi</1>.</0>"
+      "reportCompletionDateErrorText": "<0>Ett fel uppstod när anmälan skulle skickas. Försök igen senare eller kontakta Haitatons tekniska stöd <1>haitatontuki@hel.fi</1>.</0>",
+      "dateBeforeProjectDateLabel": "Felaktigt datum",
+      "dateBeforeProjectDateText": "Datumet kan inte vara före projektets början {{date}}",
+      "dateFutureProjectDateLabel": "Felaktigt datum",
+      "dateFutureProjectDateText": "Datumet kan inte vara efter projektets slut {{date}}"
     },
     "sendDialog": {
       "title": "Vill du skicka in ansökan?",
