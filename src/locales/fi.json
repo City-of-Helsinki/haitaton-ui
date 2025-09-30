@@ -123,7 +123,10 @@
       "emailAlreadyUsedInUserManagement": "Valitsemasi sähköpostiosoite löytyy jo toiselta käyttäjältä.",
       "dateBeforeStart": "Päivämäärä ei voi olla ennen hakemuksen töiden alkamispäivää ({{startDate}})",
       "dateInFuture": "Päivämäärä ei voi olla tulevaisuudessa",
-      "dateConflictWithWorkAreas": "Tällä hankealueella on jo hakemusten kautta lisättyjä työalueita. Et voi lyhentää hankealueen ajankohtaa lyhyemmäksi kuin työalueiden ajankohdat."
+      "dateConflictWithWorkAreas": "Tällä hankealueella on jo hakemusten kautta lisättyjä työalueita. Et voi lyhentää hankealueen ajankohtaa lyhyemmäksi kuin työalueiden ajankohdat.",
+      "invalidDate": "Virheellinen päivämäärä.",
+      "dateBeforeProjectDate": "Päivämäärä ei voi olla ennen hankkeen alkamista.",
+      "dateFutureProjectDate": "Päivämäärä ei voi olla hankkeen loppumisen jälkeen."
     },
     "errors": {
       "areaRequired": "Vähintään yksi alue vaaditaan",
@@ -1325,7 +1328,11 @@
       "reportOperationalConditionSuccessText": "Ilmoitus toiminnallisesta kunnosta on lähetetty hyväksyttäväksi.",
       "reportWorkFinishedSuccessText": "Ilmoitus valmistumisesta on lähetetty hyväksyttäväksi.",
       "reportCompletionDateErrorLabel": "Ilmoituksen lähettäminen epäonnistui",
-      "reportCompletionDateErrorText": "<0>Lähettämisessä tapahtui virhe. Yritä myöhemmin uudelleen tai ota yhteyttä Haitattoman tekniseen tukeen sähköpostiosoitteessa <1>haitatontuki@hel.fi</1>.</0>"
+      "reportCompletionDateErrorText": "<0>Lähettämisessä tapahtui virhe. Yritä myöhemmin uudelleen tai ota yhteyttä Haitattoman tekniseen tukeen sähköpostiosoitteessa <1>haitatontuki@hel.fi</1>.</0>",
+      "dateBeforeProjectDateLabel": "Virheellinen päivämäärä",
+      "dateBeforeProjectDateText": "Päivämäärä ei voi olla ennen hankkeen alkamista {{date}}",
+      "dateFutureProjectDateLabel": "Virheellinen päivämäärä",
+      "dateFutureProjectDateText": "Päivämäärä ei voi olla hankkeen loppumisen jälkeen {{date}}"
     },
     "sendDialog": {
       "title": "Lähetä hakemus?",

@@ -6,6 +6,7 @@ import { TooltipProps } from '../../types/tooltip';
 import { getInputErrorText } from '../../utils/form';
 import styles from './DatePicker.module.scss';
 import { convertFinnishDate, formatToFinnishDate, toEndOfDayUTCISO } from '../../utils/date';
+import { useGlobalNotification } from "../globalNotification/GlobalNotificationContext";
 
 type PropTypes = {
   name: string;
@@ -20,6 +21,8 @@ type PropTypes = {
   initialMonth?: Date;
   helperText?: string;
   onValueChange?: (value: string) => void;
+  hankeStartDate?: Date;
+  hankeEndDate?: Date;
 };
 
 const DatePicker: React.FC<React.PropsWithChildren<PropTypes>> = ({
@@ -34,15 +37,30 @@ const DatePicker: React.FC<React.PropsWithChildren<PropTypes>> = ({
   helperText,
   locale,
   onValueChange,
+  hankeStartDate,
+  hankeEndDate
 }) => {
-  const { t } = useTranslation();
-  const { control } = useFormContext();
+  const { t } = useTranslation(['form', 'hakemus', 'common', 'validations']);
+  const { control, setError, clearErrors, trigger, setValue } = useFormContext();
+  const { setNotification } = useGlobalNotification();
 
   return (
     <>
       <Controller
         name={name}
         control={control}
+        rules={{
+          required: required ? t('form:errors:required') : false,
+          validate: (value) => {
+            const date = new Date(value);
+            if (isNaN(date.getTime())) return t('form:validations:invalidDate');
+            if (minDate && date < minDate) return t('form:errors:dateTooEarly');
+            if (maxDate && date > maxDate) return t('form:errors:dateTooLate');
+            if (hankeStartDate && date < hankeStartDate) return t('form:validations:dateBeforeProjectDate');
+            if (hankeEndDate && date > hankeEndDate) return t('form:validations:dateFutureProjectDate');
+            return true;
+          }
+        }}
         render={({ field: { onChange, onBlur, value, ref }, fieldState: { error } }) => (
           <div className={styles.datePicker}>
             <div className={styles.tooltip}>
@@ -68,10 +86,59 @@ const DatePicker: React.FC<React.PropsWithChildren<PropTypes>> = ({
                 helperText={helperText}
                 errorText={getInputErrorText(t, error)}
                 ref={ref}
-                onBlur={onBlur}
+                onBlur={(e) => {
+                  const rawValue = e.target.value;
+                  const [day, month, year] = rawValue.split('.');
+                  const parsedDate = new Date(`${year}-${month}-${day}`);
+                  if (isNaN(parsedDate.getTime())) {
+                    setError(name, { type: 'manual', message: 'invalidDate' });
+                    return;
+                  }
+                  if (hankeStartDate && parsedDate < hankeStartDate) {
+                    setError(name, {
+                      type: 'manual',
+                      message: t('dateBeforeProjectDate'),
+                    });
+                    setValue(name, '');
+                    setNotification(true, {
+                      position: 'top-right',
+                      dismissible: true,
+                      autoClose: true,
+                      autoCloseDuration: 5000,
+                      label: t('hakemus:notifications:dateBeforeProjectDateLabel'),
+                      message: t('hakemus:notifications:dateBeforeProjectDateText', { date: formatToFinnishDate(hankeStartDate)}),
+                      type: 'error',
+                      closeButtonLabelText: t('common:components:notification:closeButtonLabelText'),
+                    });
+                    return;
+                  }
+
+                  if (hankeEndDate && parsedDate > hankeEndDate) {
+                    setError(name, {
+                      type: 'manual',
+                      message: t('dateFutureProjectDate'),
+                    });
+                    setValue(name, '');
+                    setNotification(true, {
+                      position: 'top-right',
+                      dismissible: true,
+                      autoClose: true,
+                      autoCloseDuration: 5000,
+                      label: t('hakemus:notifications:dateFutureProjectDateLabel'),
+                      message: t('hakemus:notifications:dateFutureProjectDateText', { date: formatToFinnishDate(hankeEndDate)}),
+                      type: 'error',
+                      closeButtonLabelText: t('common:components:notification:closeButtonLabelText'),
+                    });
+                    return;
+                  }
+                  clearErrors(name);
+                  trigger(name);
+                  onBlur();
+                }}
                 onChange={(date) => {
                   const convertedDateString = convertFinnishDate(date);
                   onChange(toEndOfDayUTCISO(new Date(convertedDateString)));
+                  clearErrors(name);
                   if (onValueChange) {
                     onValueChange(date);
                   }
