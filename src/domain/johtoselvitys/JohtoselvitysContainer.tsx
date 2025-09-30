@@ -113,10 +113,99 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
     {
       // Temporarily exclude areas to avoid regression issues with geometry persistence.
       select(values) {
+        const ad = values.applicationData;
         return {
           applicationData: {
-            name: values.applicationData.name,
-            workDescription: values.applicationData.workDescription,
+            name: ad.name,
+            workDescription: ad.workDescription,
+            // Boolean / select fields
+            constructionWork: ad.constructionWork,
+            maintenanceWork: ad.maintenanceWork,
+            emergencyWork: ad.emergencyWork,
+            propertyConnectivity: ad.propertyConnectivity,
+            rockExcavation: ad.rockExcavation,
+            // Dates
+            startTime: ad.startTime,
+            endTime: ad.endTime,
+            // Minimal contact persistence for Yhteystiedot page
+            customerWithContacts: ad.customerWithContacts
+              ? {
+                  customer: {
+                    type: ad.customerWithContacts.customer.type,
+                    name: ad.customerWithContacts.customer.name,
+                    registryKey: ad.customerWithContacts.customer.registryKey,
+                    registryKeyHidden: ad.customerWithContacts.customer.registryKeyHidden,
+                    email: ad.customerWithContacts.customer.email,
+                    phone: ad.customerWithContacts.customer.phone,
+                  },
+                  contacts: ad.customerWithContacts.contacts.map((c) => ({
+                    firstName: c.firstName,
+                    lastName: c.lastName,
+                    email: c.email,
+                    phone: c.phone,
+                    orderer: c.orderer,
+                  })),
+                }
+              : ad.customerWithContacts,
+            contractorWithContacts: ad.contractorWithContacts
+              ? {
+                  customer: {
+                    type: ad.contractorWithContacts.customer.type,
+                    name: ad.contractorWithContacts.customer.name,
+                    registryKey: ad.contractorWithContacts.customer.registryKey,
+                    registryKeyHidden: ad.contractorWithContacts.customer.registryKeyHidden,
+                    email: ad.contractorWithContacts.customer.email,
+                    phone: ad.contractorWithContacts.customer.phone,
+                  },
+                  contacts: ad.contractorWithContacts.contacts.map((c) => ({
+                    firstName: c.firstName,
+                    lastName: c.lastName,
+                    email: c.email,
+                    phone: c.phone,
+                    orderer: c.orderer,
+                  })),
+                }
+              : ad.contractorWithContacts,
+            representativeWithContacts: ad.representativeWithContacts
+              ? {
+                  customer: {
+                    type: ad.representativeWithContacts.customer.type,
+                    name: ad.representativeWithContacts.customer.name,
+                    registryKey: ad.representativeWithContacts.customer.registryKey,
+                    registryKeyHidden: ad.representativeWithContacts.customer.registryKeyHidden,
+                    email: ad.representativeWithContacts.customer.email,
+                    phone: ad.representativeWithContacts.customer.phone,
+                  },
+                  contacts: ad.representativeWithContacts.contacts.map((c) => ({
+                    firstName: c.firstName,
+                    lastName: c.lastName,
+                    email: c.email,
+                    phone: c.phone,
+                    orderer: c.orderer,
+                  })),
+                }
+              : ad.representativeWithContacts,
+            propertyDeveloperWithContacts: ad.propertyDeveloperWithContacts
+              ? {
+                  customer: {
+                    type: ad.propertyDeveloperWithContacts.customer.type,
+                    name: ad.propertyDeveloperWithContacts.customer.name,
+                    registryKey: ad.propertyDeveloperWithContacts.customer.registryKey,
+                    registryKeyHidden: ad.propertyDeveloperWithContacts.customer.registryKeyHidden,
+                    email: ad.propertyDeveloperWithContacts.customer.email,
+                    phone: ad.propertyDeveloperWithContacts.customer.phone,
+                  },
+                  contacts: ad.propertyDeveloperWithContacts.contacts.map((c) => ({
+                    firstName: c.firstName,
+                    lastName: c.lastName,
+                    email: c.email,
+                    phone: c.phone,
+                    orderer: c.orderer,
+                  })),
+                }
+              : ad.propertyDeveloperWithContacts,
+            // Persist minimal postal address (street only used in basic info page editing during language switch)
+            postalAddress: ad.postalAddress ? { ...ad.postalAddress } : ad.postalAddress,
           },
         };
       },

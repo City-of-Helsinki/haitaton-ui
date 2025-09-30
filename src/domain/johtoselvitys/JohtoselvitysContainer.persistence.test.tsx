@@ -1,22 +1,24 @@
 import React from 'react';
-import { render, waitFor, cleanup } from '../../../testUtils/render';
+// Adjusted path after moving test up one directory from __tests__
+import { render, waitFor, cleanup } from '../../testUtils/render';
 import userEvent from '@testing-library/user-event';
-import JohtoselvitysContainer from '../JohtoselvitysContainer';
-import { Application, JohtoselvitysData } from '../../application/types/application';
-import { HankeData } from '../../types/hanke';
+// Adjusted relative imports after moving file out of __tests__
+import JohtoselvitysContainer from './JohtoselvitysContainer';
+import { Application, JohtoselvitysData } from '../application/types/application';
+import { HankeData } from '../types/hanke';
 
 // Light mocks for heavy/irrelevant child components
-jest.mock('../Geometries', () => ({
+jest.mock('./Geometries', () => ({
   Geometries: () => <div data-testid="mock-geometries" />,
 }));
-jest.mock('../Attachments', () => ({
+jest.mock('./Attachments', () => ({
   __esModule: true,
   default: () => <div data-testid="mock-attachments" />,
 }));
-jest.mock('../ReviewAndSend', () => ({
+jest.mock('./ReviewAndSend', () => ({
   ReviewAndSend: () => <div data-testid="mock-review" />,
 }));
-jest.mock('../BasicInfo', () => ({
+jest.mock('./BasicInfo', () => ({
   BasicInfo: ({
     applicationData,
   }: {
@@ -37,20 +39,20 @@ jest.mock('../BasicInfo', () => ({
     );
   },
 }));
-jest.mock('../../application/components/ApplicationContacts', () => () => (
+jest.mock('../application/components/ApplicationContacts', () => () => (
   <div data-testid="mock-contacts" />
 ));
-jest.mock('../../application/components/ApplicationCancel', () => ({
+jest.mock('../application/components/ApplicationCancel', () => ({
   ApplicationCancel: () => null,
 }));
-jest.mock('../../application/components/ApplicationSendDialog', () => () => null);
-jest.mock('../../application/hooks/useAttachments', () => () => ({ data: [], isError: false }));
-jest.mock('../../../common/components/globalNotification/GlobalNotificationContext', () => ({
+jest.mock('../application/components/ApplicationSendDialog', () => () => null);
+jest.mock('../application/hooks/useAttachments', () => () => ({ data: [], isError: false }));
+jest.mock('../../common/components/globalNotification/GlobalNotificationContext', () => ({
   __esModule: true,
   GlobalNotificationProvider: ({ children }: { children: React.ReactNode }) => <>{children}</>,
   useGlobalNotification: () => ({ isOpen: false, options: undefined, setNotification: jest.fn() }),
 }));
-jest.mock('../../hanke/hankeUsers/hooks/useUserRightsForHanke', () => ({
+jest.mock('../hanke/hankeUsers/hooks/useUserRightsForHanke', () => ({
   usePermissionsForHanke: () => ({ data: undefined }),
 }));
 jest.mock('react-i18next', () => ({

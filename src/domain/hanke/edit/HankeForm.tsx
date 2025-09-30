@@ -105,6 +105,18 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
           onYKTHanke,
           alkuPvm,
           loppuPvm,
+          // Persist minimal subset of each alue (omit geometry + heavy objects)
+          alueet: values.alueet?.map((a) => ({
+            id: a.id,
+            nimi: a.nimi,
+            haittaAlkuPvm: a.haittaAlkuPvm,
+            haittaLoppuPvm: a.haittaLoppuPvm,
+            kaistaHaitta: a.kaistaHaitta,
+            kaistaPituusHaitta: a.kaistaPituusHaitta,
+            meluHaitta: a.meluHaitta,
+            polyHaitta: a.polyHaitta,
+            tarinaHaitta: a.tarinaHaitta,
+          })),
           omistajat,
           rakennuttajat,
           toteuttajat,

@@ -1,12 +1,14 @@
 import React from 'react';
-import { render, waitFor, cleanup } from '../../../../testUtils/render';
+// Adjusted path after moving test up one directory from __tests__
+import { render, waitFor, cleanup } from '../../../testUtils/render';
 import userEvent from '@testing-library/user-event';
-import HankeForm from '../HankeForm';
-import { HankeDataFormState } from '../types';
+// Adjusted relative imports after moving file out of __tests__
+import HankeForm from './HankeForm';
+import { HankeDataFormState } from './types';
 
 // Mock heavy sub components rendered inside steps to keep test light & fast.
-jest.mock('../HankeFormAlueet', () => () => <div data-testid="mock-alueet" />);
-jest.mock('../HankeFormPerustiedot', () => ({
+jest.mock('./HankeFormAlueet', () => () => <div data-testid="mock-alueet" />);
+jest.mock('./HankeFormPerustiedot', () => ({
   __esModule: true,
   default: function MockHankeFormPerustiedot() {
     const { useFormContext } = jest.requireActual('react-hook-form');
@@ -19,20 +21,20 @@ jest.mock('../HankeFormPerustiedot', () => ({
     );
   },
 }));
-jest.mock('../HankeFormYhteystiedot', () => () => <div data-testid="mock-yhteystiedot" />);
-jest.mock('../HankeFormHaittojenHallinta', () => () => <div data-testid="mock-haitat" />);
-jest.mock('../HankeFormLiitteet', () => () => <div data-testid="mock-liitteet" />);
-jest.mock('../HankeFormSummary', () => () => <div data-testid="mock-summary" />);
-jest.mock('../../../application/components/ApplicationAddDialog', () => () => null);
+jest.mock('./HankeFormYhteystiedot', () => () => <div data-testid="mock-yhteystiedot" />);
+jest.mock('./HankeFormHaittojenHallinta', () => () => <div data-testid="mock-haitat" />);
+jest.mock('./HankeFormLiitteet', () => () => <div data-testid="mock-liitteet" />);
+jest.mock('./HankeFormSummary', () => () => <div data-testid="mock-summary" />);
+jest.mock('../../application/components/ApplicationAddDialog', () => () => null);
 
 // Simplify useApplicationsForHanke hook so form renders immediately
-jest.mock('../../../application/hooks/useApplications', () => ({
+jest.mock('../../application/hooks/useApplications', () => ({
   useApplicationsForHanke: () => ({ data: { applications: [] } }),
 }));
 
 // No-op for map draw provider heavy stuff
 jest.mock(
-  '../../../../common/components/map/modules/draw/DrawProvider',
+  '../../../common/components/map/modules/draw/DrawProvider',
   () =>
     ({ children }: { children: React.ReactNode }) => <>{children}</>,
 );

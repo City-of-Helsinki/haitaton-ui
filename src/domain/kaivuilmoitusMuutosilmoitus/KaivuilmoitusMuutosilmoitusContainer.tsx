@@ -91,10 +91,21 @@ export default function KaivuilmoitusMuutosilmoitusContainer({
     formContext,
     {
       select(values) {
+        const ad = values.applicationData;
         return {
           applicationData: {
-            name: values.applicationData.name,
-            workDescription: values.applicationData.workDescription,
+            name: ad.name,
+            workDescription: ad.workDescription,
+            constructionWork: ad.constructionWork,
+            maintenanceWork: ad.maintenanceWork,
+            emergencyWork: ad.emergencyWork,
+            rockExcavation: ad.rockExcavation,
+            cableReportDone: ad.cableReportDone,
+            requiredCompetence: ad.requiredCompetence,
+            cableReports: ad.cableReports,
+            placementContracts: ad.placementContracts,
+            startTime: ad.startTime,
+            endTime: ad.endTime,
           },
         };
       },

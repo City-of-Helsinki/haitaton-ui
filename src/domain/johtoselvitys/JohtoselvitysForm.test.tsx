@@ -58,6 +58,13 @@ jest.mock('./components/AreaSummary', () => ({
 }));
 
 afterEach(cleanup);
+beforeEach(() => {
+  try {
+    sessionStorage.clear();
+  } catch {
+    // ignore
+  }
+});
 
 interface DateOptions {
   start?: string;
@@ -1195,7 +1202,10 @@ describe('Show correct registry key label', () => {
       if (customerTypeSelect.getAttribute('aria-expanded') !== 'true') {
         fireEvent.click(customerTypeSelect);
       }
-      fireEvent.click(await screen.findByText('Yksityishenkilö'));
+      {
+        const opts = await screen.findAllByText('Yksityishenkilö');
+        fireEvent.click(opts[0]);
+      }
 
       // Soften strict count: at least one Y-tunnus label must appear; UI may render duplicates.
       const yLabels = await screen.findAllByText('Y-tunnus');
@@ -1222,7 +1232,10 @@ describe('Show correct registry key label', () => {
       if (customerTypeSelect.getAttribute('aria-expanded') !== 'true') {
         fireEvent.click(customerTypeSelect);
       }
-      fireEvent.click(await screen.findByText('Yritys'));
+      {
+        const opts = await screen.findAllByText('Yritys');
+        fireEvent.click(opts[0]);
+      }
 
       const yLabels = await screen.findAllByText('Y-tunnus');
       expect(yLabels.length).toBeGreaterThanOrEqual(1);
@@ -1248,7 +1261,10 @@ describe('Show correct registry key label', () => {
       if (customerTypeSelect.getAttribute('aria-expanded') !== 'true') {
         fireEvent.click(customerTypeSelect);
       }
-      fireEvent.click(await screen.findByText('Yhdistys'));
+      {
+        const opts = await screen.findAllByText('Yhdistys');
+        fireEvent.click(opts[0]);
+      }
 
       const yLabels = await screen.findAllByText('Y-tunnus');
       expect(yLabels.length).toBeGreaterThanOrEqual(1);
@@ -1274,7 +1290,10 @@ describe('Show correct registry key label', () => {
       if (customerTypeSelect.getAttribute('aria-expanded') !== 'true') {
         fireEvent.click(customerTypeSelect);
       }
-      fireEvent.click(await screen.findByText('Muu'));
+      {
+        const opts = await screen.findAllByText('Muu');
+        fireEvent.click(opts[0]);
+      }
 
       const yLabels = await screen.findAllByText('Y-tunnus');
       expect(yLabels.length).toBeGreaterThanOrEqual(1);
@@ -1301,7 +1320,10 @@ describe('Show correct registry key label', () => {
       if (customerTypeSelect.getAttribute('aria-expanded') !== 'true') {
         fireEvent.click(customerTypeSelect);
       }
-      fireEvent.click(await screen.findByText('Yritys'));
+      {
+        const opts = await screen.findAllByText('Yritys');
+        fireEvent.click(opts[0]);
+      }
 
       // Customer registry key should reference customerWithContacts not contractorWithContacts
       expect(
@@ -1327,7 +1349,10 @@ describe('Show correct registry key label', () => {
       if (customerTypeSelect.getAttribute('aria-expanded') !== 'true') {
         fireEvent.click(customerTypeSelect);
       }
-      fireEvent.click(await screen.findByText('Yhdistys'));
+      {
+        const opts = await screen.findAllByText('Yhdistys');
+        fireEvent.click(opts[0]);
+      }
 
       expect(
         await screen.findByTestId('applicationData.customerWithContacts.customer.registryKey'),
@@ -1352,7 +1377,10 @@ describe('Show correct registry key label', () => {
       if (customerTypeSelect.getAttribute('aria-expanded') !== 'true') {
         fireEvent.click(customerTypeSelect);
       }
-      fireEvent.click(await screen.findByText('Yksityishenkilö'));
+      {
+        const opts = await screen.findAllByText('Yksityishenkilö');
+        fireEvent.click(opts[0]);
+      }
 
       expect(
         await screen.findByTestId('applicationData.customerWithContacts.customer.registryKey'),
@@ -1377,7 +1405,10 @@ describe('Show correct registry key label', () => {
       if (customerTypeSelect.getAttribute('aria-expanded') !== 'true') {
         fireEvent.click(customerTypeSelect);
       }
-      fireEvent.click(await screen.findByText('Muu'));
+      {
+        const opts = await screen.findAllByText('Muu');
+        fireEvent.click(opts[0]);
+      }
 
       expect(
         await screen.findByTestId('applicationData.customerWithContacts.customer.registryKey'),
@@ -1441,7 +1472,10 @@ describe('Show correct registry key label', () => {
       if (contractorTypeSelect.getAttribute('aria-expanded') !== 'true') {
         fireEvent.click(contractorTypeSelect);
       }
-      fireEvent.click(await screen.findByText('Yritys'));
+      {
+        const opts = await screen.findAllByText('Yritys');
+        fireEvent.click(opts[0]);
+      }
 
       const yLabels = await screen.findAllByText('Y-tunnus');
       expect(yLabels.length).toBeGreaterThanOrEqual(1);
@@ -1471,7 +1505,10 @@ describe('Show correct registry key label', () => {
       if (contractorTypeSelect.getAttribute('aria-expanded') !== 'true') {
         fireEvent.click(contractorTypeSelect);
       }
-      fireEvent.click(await screen.findByText('Yhdistys'));
+      {
+        const opts = await screen.findAllByText('Yhdistys');
+        fireEvent.click(opts[0]);
+      }
 
       const yLabels = await screen.findAllByText('Y-tunnus');
       expect(yLabels.length).toBeGreaterThanOrEqual(1);
@@ -1593,7 +1630,10 @@ describe('Show correct registry key label', () => {
       if (contractorTypeSelect.getAttribute('aria-expanded') !== 'true') {
         fireEvent.click(contractorTypeSelect);
       }
-      fireEvent.click(await screen.findByText('Yksityishenkilö'));
+      {
+        const opts = await screen.findAllByText('Yksityishenkilö');
+        fireEvent.click(opts[0]);
+      }
 
       const field = await screen.findByTestId(
         'applicationData.contractorWithContacts.customer.registryKey',
@@ -1630,7 +1670,10 @@ describe('Show correct registry key label', () => {
       if (contractorTypeSelect.getAttribute('aria-expanded') !== 'true') {
         fireEvent.click(contractorTypeSelect);
       }
-      fireEvent.click(await screen.findByText('Muu'));
+      {
+        const opts = await screen.findAllByText('Muu');
+        fireEvent.click(opts[0]);
+      }
 
       const field = await screen.findByTestId(
         'applicationData.contractorWithContacts.customer.registryKey',

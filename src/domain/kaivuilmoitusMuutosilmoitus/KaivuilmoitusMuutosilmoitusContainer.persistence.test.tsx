@@ -1,13 +1,15 @@
 import React from 'react';
-import { render, waitFor, cleanup } from '../../../testUtils/render';
+// Adjusted path after moving test up one directory from __tests__
+import { render, waitFor, cleanup } from '../../testUtils/render';
 import userEvent from '@testing-library/user-event';
-import KaivuilmoitusMuutosilmoitusContainer from '../KaivuilmoitusMuutosilmoitusContainer';
-import { Muutosilmoitus } from '../../application/muutosilmoitus/types';
-import { Application, KaivuilmoitusData } from '../../application/types/application';
-import { HankeData } from '../../types/hanke';
+// Adjusted relative imports after moving file out of __tests__
+import KaivuilmoitusMuutosilmoitusContainer from './KaivuilmoitusMuutosilmoitusContainer';
+import { Muutosilmoitus } from '../application/muutosilmoitus/types';
+import { Application, KaivuilmoitusData } from '../application/types/application';
+import { HankeData } from '../types/hanke';
 
 // Mock heavy child components
-jest.mock('../../kaivuilmoitus/BasicInfo', () => {
+jest.mock('../kaivuilmoitus/BasicInfo', () => {
   const { useFormContext } = jest.requireActual('react-hook-form');
   const ReactLocal = jest.requireActual('react');
   return function MockBasicInfo() {
@@ -19,33 +21,38 @@ jest.mock('../../kaivuilmoitus/BasicInfo', () => {
         'data-testid': 'applicationData.name',
         ...register('applicationData.name'),
       }),
+      ReactLocal.createElement('input', {
+        type: 'checkbox',
+        'data-testid': 'applicationData.constructionWork',
+        ...register('applicationData.constructionWork'),
+      }),
     );
   };
 });
-jest.mock('../../kaivuilmoitus/Areas', () => ({ __esModule: true, default: () => null }));
-jest.mock('../../kaivuilmoitus/HaittojenHallinta', () => ({
+jest.mock('../kaivuilmoitus/Areas', () => ({ __esModule: true, default: () => null }));
+jest.mock('../kaivuilmoitus/HaittojenHallinta', () => ({
   __esModule: true,
   default: () => null,
 }));
-jest.mock('../../kaivuilmoitus/Contacts', () => ({ __esModule: true, default: () => null }));
-jest.mock('../../application/taydennysAndMuutosilmoitusCommon/components/Attachments', () => ({
+jest.mock('../kaivuilmoitus/Contacts', () => ({ __esModule: true, default: () => null }));
+jest.mock('../application/taydennysAndMuutosilmoitusCommon/components/Attachments', () => ({
   __esModule: true,
   default: () => null,
 }));
-jest.mock('../ReviewAndSend', () => ({ __esModule: true, default: () => null }));
-jest.mock('../../application/components/ApplicationSendDialog', () => () => null);
-jest.mock('../../application/muutosilmoitus/components/MuutosilmoitusCancel', () => () => null);
-jest.mock('../../application/hooks/useAttachments', () => () => ({ data: [], isError: false }));
-jest.mock('../../../common/components/globalNotification/GlobalNotificationContext', () => ({
+jest.mock('./ReviewAndSend', () => ({ __esModule: true, default: () => null }));
+jest.mock('../application/components/ApplicationSendDialog', () => () => null);
+jest.mock('../application/muutosilmoitus/components/MuutosilmoitusCancel', () => () => null);
+jest.mock('../application/hooks/useAttachments', () => () => ({ data: [], isError: false }));
+jest.mock('../../common/components/globalNotification/GlobalNotificationContext', () => ({
   GlobalNotificationProvider: ({ children }: { children: React.ReactNode }) => (
     <div>{children}</div>
   ),
   useGlobalNotification: () => ({ setNotification: jest.fn() }),
 }));
-jest.mock('../../hanke/hankeUsers/hooks/useUserRightsForHanke', () => ({
+jest.mock('../hanke/hankeUsers/hooks/useUserRightsForHanke', () => ({
   usePermissionsForHanke: () => ({ data: undefined }),
 }));
-jest.mock('../../application/hooks/useApplications', () => ({
+jest.mock('../application/hooks/useApplications', () => ({
   useApplicationsForHanke: () => ({ data: { applications: [] } }),
 }));
 jest.mock('react-i18next', () => ({
@@ -59,7 +66,7 @@ jest.mock('react-i18next', () => ({
     },
   }),
 }));
-jest.mock('../../application/hooks/useNavigateToApplicationView', () => {
+jest.mock('../application/hooks/useNavigateToApplicationView', () => {
   return jest.fn(() => jest.fn());
 });
 
@@ -133,5 +140,23 @@ describe('KaivuilmoitusMuutosilmoitusContainer language persistence integration'
     const { getByTestId: get2 } = mount();
     const nameAfter = get2('applicationData.name') as HTMLInputElement;
     expect(nameAfter.value).toBe('Edited Muutos');
+  });
+
+  test('persists boolean fields like constructionWork', async () => {
+    const { getByTestId, unmount } = mount();
+    const user = userEvent.setup();
+
+    // If constructionWork field not rendered in current mock, skip gracefully
+    const checkbox = getByTestId('applicationData.constructionWork');
+    await user.click(checkbox);
+
+    window.dispatchEvent(new CustomEvent('haitaton:languageChanging'));
+    await waitFor(() =>
+      expect(sessionStorage.getItem('muutosilmoitus-form-900-KAIVU')).toContain('true'),
+    );
+
+    unmount();
+    const { getByTestId: get2 } = mount();
+    expect((get2('applicationData.constructionWork') as HTMLInputElement).checked).toBe(true);
   });
 });
