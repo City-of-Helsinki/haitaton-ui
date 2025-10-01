@@ -156,7 +156,7 @@ export default function DrawInteraction({
                 autoCloseDuration: 5000,
                 label: t('map:notifications:drawingOutsideHankeAreaLabel'),
                 message: t('map:notifications:drawingOutsideHankeAreaText'),
-                type: 'error',
+                type: 'alert',
                 closeButtonLabelText: t('common:components:notification:closeButtonLabelText'),
               });
               return;
