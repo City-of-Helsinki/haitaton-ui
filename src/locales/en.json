@@ -1898,8 +1898,8 @@
     "drawPolygonButtonAria": "Draw a polygon on the map",
     "notifications": {
       "selfIntersectingLabel": "Invalid Geometry",
-      "selfIntersectingText": "The polygon cannot intersect with itself. Changes have been reverted.",
-      "drawingOutsideHankeAreaLabel": "Drawing Prevented",
+      "selfIntersectingText": "The polygon cannot intersect with itself. Changes have been cancelled.",
+      "drawingOutsideHankeAreaLabel": "Drawing Blocked",
       "drawingOutsideHankeAreaText": "Drawing outside the project area is not allowed."
     }
   },
