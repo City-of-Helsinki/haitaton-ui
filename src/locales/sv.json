@@ -1898,8 +1898,8 @@
     "drawPolygonButtonAria": "Rita en polygon på kartan",
     "notifications": {
       "selfIntersectingLabel": "Felaktig geometri",
-      "selfIntersectingText": "Monopolyt kan inte skära sig själv. Ändringarna har återkallats.",
-      "drawingOutsideHankeAreaLabel": "Ritning förhindrad",
+      "selfIntersectingText": "Polygonen kan inte skära sig själv. Ändringarna har dragits tillbaka.",
+      "drawingOutsideHankeAreaLabel": "Ritning blockerad",
       "drawingOutsideHankeAreaText": "Ritning utanför projektområdet är inte tillåten."
     }
   },
