@@ -14,10 +14,11 @@ npm test api.test.ts
 These tests cover:
 
 - SessionTerminationHandler component behavior
-- API interceptor error detection
+- API interceptor error detection using MSW
 - Logout handler setup and cleanup
-- Notification display
-- Error code detection (HAI0006, HAI4008)
+- Notification display and timing (4-second delay)
+- Error code detection (HAI0006, HAI4008) using Set-based lookup
+- Proper error handling in catch blocks
 
 ## Manual Testing Approaches
 
@@ -159,4 +160,8 @@ When testing, you should observe:
 - **Notification doesn't appear**: Check that SessionTerminationHandler is properly mounted within GlobalNotificationProvider
 - **Logout doesn't occur**: Verify that the OIDC client is available and logout handler is set
 - **Wrong language**: Check the i18n configuration and language setting
-- **Tests fail**: Ensure all mocks are properly set up and timing is handled correctly with fake timers
+- **Tests fail**:
+  - Ensure all mocks are properly set up and timing is handled correctly with fake timers
+  - Verify MSW server uses the global test-server setup (not a separate server instance)
+  - Check that error codes are being detected using the Set-based lookup
+  - Ensure catch blocks properly validate expected errors with assertions
