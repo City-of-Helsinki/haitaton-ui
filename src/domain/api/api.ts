@@ -17,7 +17,7 @@ export function setLogoutHandler(handler: (() => void) | null) {
 function handleSessionTermination() {
   if (logoutHandler) {
     logoutHandler();
-  } else if (typeof globalThis.window !== 'undefined') {
+  } else if (globalThis.window !== undefined) {
     // Fallback: redirect to log out path
     globalThis.window.location.href = '/logout';
   }
