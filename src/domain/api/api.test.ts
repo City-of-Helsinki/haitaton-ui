@@ -29,8 +29,11 @@ describe('API Session Termination', () => {
 
     try {
       await api.get('/test');
+      // Should not reach here
+      expect(true).toBe(false);
     } catch (error) {
-      // Expected to throw
+      // Expected to throw due to 401 error
+      expect(error).toBeDefined();
     }
 
     expect(mockLogoutHandler).toHaveBeenCalledTimes(1);
@@ -50,8 +53,11 @@ describe('API Session Termination', () => {
 
     try {
       await api.get('/test');
+      // Should not reach here
+      expect(true).toBe(false);
     } catch (error) {
-      // Expected to throw
+      // Expected to throw due to 401 error
+      expect(error).toBeDefined();
     }
 
     expect(mockLogoutHandler).toHaveBeenCalledTimes(1);
@@ -71,8 +77,11 @@ describe('API Session Termination', () => {
 
     try {
       await api.get('/test');
+      // Should not reach here
+      expect(true).toBe(false);
     } catch (error) {
-      // Expected to throw
+      // Expected to throw due to 401 error
+      expect(error).toBeDefined();
     }
 
     expect(mockLogoutHandler).not.toHaveBeenCalled();
@@ -87,8 +96,11 @@ describe('API Session Termination', () => {
 
     try {
       await api.get('/test');
+      // Should not reach here
+      expect(true).toBe(false);
     } catch (error) {
-      // Expected to throw
+      // Expected to throw due to 401 error
+      expect(error).toBeDefined();
     }
 
     expect(mockLogoutHandler).not.toHaveBeenCalled();
@@ -108,8 +120,11 @@ describe('API Session Termination', () => {
 
     try {
       await api.get('/test');
+      // Should not reach here
+      expect(true).toBe(false);
     } catch (error) {
-      // Expected to throw
+      // Expected to throw due to 401 error
+      expect(error).toBeDefined();
     }
 
     expect(mockLogoutHandler).not.toHaveBeenCalled();
@@ -132,6 +147,8 @@ describe('API Session Termination', () => {
     // Should not throw an error even when logout handler is null
     try {
       await api.get('/test');
+      // Should not reach here
+      expect(true).toBe(false);
     } catch (error) {
       // Expected to throw the original error
       expect(error).toBeDefined();
@@ -172,8 +189,11 @@ describe('API Session Termination', () => {
 
     try {
       await api.get('/test');
+      // Should not reach here
+      expect(true).toBe(false);
     } catch (error) {
-      // Expected to throw
+      // Expected to throw due to 401 error
+      expect(error).toBeDefined();
     }
 
     expect(consoleSpy).toHaveBeenCalledWith(

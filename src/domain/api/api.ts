@@ -3,7 +3,7 @@ import { getApiTokenFromStorage } from 'hds-react';
 import { publicEndpoints } from './publicEndpoints';
 
 // Session termination error codes that should trigger logout
-const SESSION_TERMINATION_ERROR_CODES = ['HAI0006', 'HAI4008'];
+const SESSION_TERMINATION_ERROR_CODES = new Set(['HAI0006', 'HAI4008']);
 
 // Global logout handler that can be set by the app
 let logoutHandler: (() => void) | null = null;
@@ -17,9 +17,9 @@ export function setLogoutHandler(handler: (() => void) | null) {
 function handleSessionTermination() {
   if (logoutHandler) {
     logoutHandler();
-  } else if (typeof window !== 'undefined') {
+  } else if (typeof globalThis.window !== 'undefined') {
     // Fallback: redirect to log out path
-    window.location.href = '/logout';
+    globalThis.window.location.href = '/logout';
   }
 }
 
@@ -68,7 +68,7 @@ api.interceptors.response.use(
       // Check for session termination error codes
       if (response.status === 401 && response.data?.errorCode) {
         const errorCode = response.data.errorCode;
-        if (SESSION_TERMINATION_ERROR_CODES.includes(errorCode)) {
+        if (SESSION_TERMINATION_ERROR_CODES.has(errorCode)) {
           // eslint-disable-next-line
           console.warn(`Session terminated with error code: ${errorCode}. Logging out...`);
           handleSessionTermination();
