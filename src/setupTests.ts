@@ -22,23 +22,29 @@ function suppressActWarning(): boolean {
 }
 
 console.error = (...args: unknown[]) => {
-  const msg = args[0]?.toString?.() ?? '';
+  // React dev warnings often use a printf-style first argument with %s placeholders; the actual
+  // dynamic pieces (like the prop name) are in subsequent args. Build a combined message so
+  // filtering can match either the formatted string or its pieces.
+  const toStr = (v: unknown) => (typeof v === 'string' ? v : (v?.toString?.() ?? ''));
+  const combined = args.map(toStr).join(' ');
+  const msg = combined;
   if (
     msg.includes('Could not parse CSS stylesheet') ||
     msg.includes('Error: Could not parse CSS stylesheet') ||
-    // Some libraries may emit noisy element warnings we don't care about in tests
     msg.includes('Warning: React.createElement') ||
-    // HDS / React 18 synthetic events: unknown pointer capture props on inputs
+    // HDS / React 18 synthetic events: unknown pointer capture props on inputs (either formatted or raw)
     msg.includes('Unknown event handler property `onPointerEnterCapture`') ||
     msg.includes('Unknown event handler property `onPointerLeaveCapture`') ||
+    // Placeholder format + arg style (older React dev output style):
+    (msg.includes('Unknown event handler property') &&
+      (msg.includes('onPointerEnterCapture') || msg.includes('onPointerLeaveCapture'))) ||
     // DOM nesting warnings from composed HDS components (low signal for tests)
     msg.includes('Warning: validateDOMNesting') ||
     // Axios expected 500 test case for /laheta failure test (avoid clutter)
     (msg.includes('Request failed with status code 500') &&
       msg.includes('/hakemukset/') &&
       msg.includes('/laheta')) ||
-    // Filter extremely noisy act() warnings AFTER we add auto-act patches below. We still
-    // want to see one representative instance for debugging, so allow only the first.
+    // Filter extremely noisy act() warnings AFTER we add auto-act patches below. Only keep first.
     (msg.includes('not wrapped in act') && suppressActWarning())
   ) {
     return;
