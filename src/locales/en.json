@@ -11,6 +11,7 @@
     "loggingOut": "Logging out...",
     "loggingInErrorLabel": "Error during log-in",
     "logoutError": "Error during log-out",
+    "sessionTerminated": "Your session has ended. You will be automatically logged out.",
     "noADPermissionHeading": "No access rights to Haitaton service",
     "noADPermissionText": "AD identification to Haitaton is only possible for the employees of Stara and the Urban Environment Division. <a>Log out</a> of Haitaton and attempt to login again via Suomi.fi authentication.",
     "noADUserNameHeading": "Login failed",

@@ -2,6 +2,27 @@ import axios, { AxiosInstance, AxiosResponse, AxiosError, InternalAxiosRequestCo
 import { getApiTokenFromStorage } from 'hds-react';
 import { publicEndpoints } from './publicEndpoints';
 
+// Session termination error codes that should trigger logout
+const SESSION_TERMINATION_ERROR_CODES = ['HAI0006', 'HAI4008'];
+
+// Global logout handler that can be set by the app
+let logoutHandler: (() => void) | null = null;
+
+// Function to set the logout handler
+export function setLogoutHandler(handler: (() => void) | null) {
+  logoutHandler = handler;
+}
+
+// Function to handle session termination
+function handleSessionTermination() {
+  if (logoutHandler) {
+    logoutHandler();
+  } else if (typeof window !== 'undefined') {
+    // Fallback: redirect to log out path
+    window.location.href = '/logout';
+  }
+}
+
 const api: AxiosInstance = axios.create({
   baseURL: '/api',
 });
@@ -44,6 +65,17 @@ api.interceptors.response.use(
       request?: XMLHttpRequest;
     } = error;
     if (response) {
+      // Check for session termination error codes
+      if (response.status === 401 && response.data?.errorCode) {
+        const errorCode = response.data.errorCode;
+        if (SESSION_TERMINATION_ERROR_CODES.includes(errorCode)) {
+          // eslint-disable-next-line
+          console.warn(`Session terminated with error code: ${errorCode}. Logging out...`);
+          handleSessionTermination();
+          return Promise.reject(error);
+        }
+      }
+
       if (response.status >= 400 && response.status < 500) {
         // eslint-disable-next-line
         console.error(response.data?.data?.message);

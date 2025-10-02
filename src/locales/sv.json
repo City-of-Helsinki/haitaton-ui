@@ -11,6 +11,7 @@
     "loggingOut": "Loggar ut...",
     "loggingInErrorLabel": "Ett fel uppstod vid inloggningen",
     "logoutError": "Ett fel uppstod vid utloggningen",
+    "sessionTerminated": "Din session har avslutats. Du kommer att loggas ut automatiskt.",
     "noADPermissionHeading": "Ingen användarrätt till Haitaton ärenden",
     "noADPermissionText": "AD-autentisering i Haitaton är möjlig endast för arbetstagare inom Stadsmiljön och Stara. <a>Logga ut</a> ur Haitaton och försök igen med Suomi.fi-identifieringen.",
     "noADUserNameHeading": "Inloggningen misslyckades",
