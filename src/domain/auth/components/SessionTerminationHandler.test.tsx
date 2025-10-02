@@ -8,7 +8,7 @@ jest.mock('hds-react', () => ({
 }));
 
 jest.mock('react-i18next', () => ({
-  useTranslation: jest.fn(),
+  useTranslation: () => ({ t: (key: string) => key }),
 }));
 
 jest.mock('../../../common/components/globalNotification/GlobalNotificationContext', () => ({
@@ -20,18 +20,15 @@ jest.mock('../../api/api', () => ({
 }));
 
 import { useOidcClient } from 'hds-react';
-import { useTranslation } from 'react-i18next';
 import { useGlobalNotification } from '../../../common/components/globalNotification/GlobalNotificationContext';
 
 const mockUseOidcClient = jest.mocked(useOidcClient);
-const mockUseTranslation = jest.mocked(useTranslation);
 const mockUseGlobalNotification = jest.mocked(useGlobalNotification);
 const mockSetLogoutHandler = jest.mocked(setLogoutHandler);
 
 describe('SessionTerminationHandler', () => {
   const mockLogout = jest.fn();
   const mockSetNotification = jest.fn();
-  const mockT = jest.fn((key: string) => key);
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -39,10 +36,6 @@ describe('SessionTerminationHandler', () => {
     mockUseOidcClient.mockReturnValue({
       logout: mockLogout,
     } as unknown as ReturnType<typeof useOidcClient>);
-
-    mockUseTranslation.mockReturnValue({
-      t: mockT,
-    } as unknown as ReturnType<typeof useTranslation>);
 
     mockUseGlobalNotification.mockReturnValue({
       setNotification: mockSetNotification,

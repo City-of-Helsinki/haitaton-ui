@@ -7,7 +7,7 @@ describe('API Session Termination', () => {
   const server = setupServer();
 
   beforeAll(() => {
-    server.listen();
+    server.listen({ onUnhandledRequest: 'bypass' });
   });
 
   beforeEach(() => {
