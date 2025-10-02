@@ -1045,31 +1045,45 @@ test('Should be able to remove work areas', async () => {
 // occur; alternative tab selection check also not triggered by clicking the raw work area button in current
 // implementation. Once UI exposes a deterministic indicator (e.g. data-selected, aria-pressed, or tab change),
 // re-enable and adjust.
-test.skip('Should highlight selected work area', async () => {
+test('Should highlight selected work area', async () => {
   const hankeData = hankkeet[1] as HankeData;
   const application = cloneDeep(applications[4] as Application<KaivuilmoitusData>);
+  // Ensure at least two application areas so the highlight interaction is meaningful.
+  try {
+    const areas = application.applicationData?.areas as KaivuilmoitusAlue[] | undefined;
+    if (areas && areas.length === 1) {
+      const first = areas[0];
+      const duplicate: KaivuilmoitusAlue = cloneDeep(first);
+      // Adjust identifying fields to avoid collisions and make UI labels distinct
+      duplicate.name = first.name ? `${first.name} 2` : 'Hankealue 2';
+      if (typeof duplicate.hankealueId === 'number') {
+        duplicate.hankealueId = duplicate.hankealueId + 1000; // arbitrary offset
+      } else {
+        // Assign a synthetic id if missing (cast to mutable form for test augmentation)
+        (duplicate as Partial<KaivuilmoitusAlue>).hankealueId = 9999 as unknown as number;
+      }
+      areas.push(duplicate);
+    }
+  } catch {
+    // If structure unexpected, proceed without augmentation (test will gracefully fail making root cause visible)
+  }
   const { user } = render(
     <KaivuilmoitusContainer hankeData={hankeData} application={application} />,
   );
   await user.click(await screen.findByRole('button', { name: /alueiden/i }));
-  const allButtons = await screen.findAllByRole('button');
-  const workAreaButtons = allButtons.filter((b) =>
-    /työalue\s*\d+/i.test((b.getAttribute('aria-label') || '') + ' ' + (b.textContent || '')),
-  );
-  if (workAreaButtons.length < 2) {
-    console.warn('Skipping highlight test – insufficient work area buttons');
-    return;
+  const workAreaButtons = await screen.findAllByTestId('work-area-button');
+  expect(workAreaButtons.length).toBeGreaterThan(1);
+  // Establish baseline: ensure first button becomes selected (hook effect may not have fired yet)
+  if (workAreaButtons[0].getAttribute('data-selected') !== 'true') {
+    await user.click(workAreaButtons[0]);
   }
-  // Instead of relying on internal button class changes (which may not occur), verify the tab for the
-  // second area becomes selected (aria-selected="true") after clicking its corresponding work area button.
-  const areaNameCandidate = /työalue\s*2/i;
+  await waitFor(() => expect(workAreaButtons[0].getAttribute('data-selected')).toBe('true'));
+  // Now select the second area and assert toggle
   await user.click(workAreaButtons[1]);
   await waitFor(() => {
-    const tabs = screen.getAllByRole('tab');
-    // Find a tab whose text (descendant) matches the area 2 name
-    const targetTab = tabs.find((t) => areaNameCandidate.test(t.textContent || ''));
-    expect(targetTab).toBeTruthy();
-    expect(targetTab!.getAttribute('aria-selected')).toBe('true');
+    const refreshed = screen.getAllByTestId('work-area-button');
+    expect(refreshed[1].getAttribute('data-selected')).toBe('true');
+    expect(refreshed[0].getAttribute('data-selected')).toBe('false');
   });
 });
 

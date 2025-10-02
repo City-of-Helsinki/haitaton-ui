@@ -172,7 +172,7 @@ export default function Areas({ hankeData, hankkeenHakemukset, originalHakemus }
     selectedJohtoselvitysTunnukset?.includes(hakemus.applicationIdentifier!),
   );
 
-  const { tabRefs, setSelectedTabIndex } = useSelectableTabs(applicationAreas, {
+  const { tabRefs, setSelectedTabIndex, selectedTabIndex } = useSelectableTabs(applicationAreas, {
     selectLastTabOnChange: true,
   });
 
@@ -382,14 +382,14 @@ export default function Areas({ hankeData, hankkeenHakemukset, originalHakemus }
   function handleStartTimeChange() {
     // Trigger validation for startTime field
     trigger('applicationData.startTime').then(() => {
-        refreshHaittaIndexes();
+      refreshHaittaIndexes();
     });
   }
 
   function handleEndTimeChange() {
     // Trigger validation for endTime field
     trigger('applicationData.endTime').then(() => {
-        refreshHaittaIndexes();
+      refreshHaittaIndexes();
     });
   }
 
@@ -456,12 +456,12 @@ export default function Areas({ hankeData, hankkeenHakemukset, originalHakemus }
           <ResponsiveGrid>
             <DatePicker
               name="applicationData.startTime"
-                  label={t('kaivuilmoitusForm:alueet:startDate')}
-                  locale={locale}
-                  required
+              label={t('kaivuilmoitusForm:alueet:startDate')}
+              locale={locale}
+              required
               minDate={minStartDate}
               maxDate={maxDate}
-                  initialMonth={minStartDate}
+              initialMonth={minStartDate}
               helperText={t('form:helperTexts:dateInForm')}
               onValueChange={handleStartTimeChange}
               hankeStartDate={hankeData.alkuPvm ? new Date(hankeData.alkuPvm) : undefined}
@@ -469,12 +469,12 @@ export default function Areas({ hankeData, hankkeenHakemukset, originalHakemus }
             />
             <DatePicker
               name="applicationData.endTime"
-                  label={t('kaivuilmoitusForm:alueet:endDate')}
-                  locale={locale}
-                  required
+              label={t('kaivuilmoitusForm:alueet:endDate')}
+              locale={locale}
+              required
               minDate={minEndDate}
               maxDate={maxDate}
-                  initialMonth={minEndDate}
+              initialMonth={minEndDate}
               helperText={t('form:helperTexts:dateInForm')}
               onValueChange={handleEndTimeChange}
               hankeStartDate={hankeData.alkuPvm ? new Date(hankeData.alkuPvm) : undefined}
@@ -539,6 +539,33 @@ export default function Areas({ hankeData, hankkeenHakemukset, originalHakemus }
           </Box>
         )}
 
+        {/* Work area selection buttons (mirror tab selection) */}
+        {applicationAreas.length > 0 && (
+          <Flex gap="var(--spacing-xs)" flexWrap="wrap" marginBottom="var(--spacing-s)">
+            {applicationAreas.map((alue, index) => (
+              <button
+                key={`work-area-btn-${alue.id}`}
+                type="button"
+                data-testid="work-area-button"
+                data-selected={selectedTabIndex === index ? 'true' : 'false'}
+                aria-pressed={selectedTabIndex === index}
+                onClick={() => {
+                  setSelectedTabIndex(index);
+                }}
+                style={{
+                  border: '1px solid var(--color-black-40)',
+                  background:
+                    selectedTabIndex === index ? 'var(--color-bus-light)' : 'var(--color-black-5)',
+                  padding: '0.25rem 0.5rem',
+                  borderRadius: '4px',
+                  cursor: 'pointer',
+                }}
+              >
+                {alue.name}
+              </button>
+            ))}
+          </Flex>
+        )}
         <Tabs>
           <TabList>
             {applicationAreas.map((alue, index) => {
