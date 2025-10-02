@@ -1,14 +1,9 @@
 import { http, HttpResponse } from 'msw';
-import { setupServer } from 'msw/node';
+import { server } from '../mocks/test-server';
 import api, { setLogoutHandler } from './api';
 
 describe('API Session Termination', () => {
   let mockLogoutHandler: jest.MockedFunction<() => void>;
-  const server = setupServer();
-
-  beforeAll(() => {
-    server.listen({ onUnhandledRequest: 'bypass' });
-  });
 
   beforeEach(() => {
     mockLogoutHandler = jest.fn();
@@ -16,13 +11,8 @@ describe('API Session Termination', () => {
   });
 
   afterEach(() => {
-    server.resetHandlers();
     setLogoutHandler(null);
     jest.clearAllMocks();
-  });
-
-  afterAll(() => {
-    server.close();
   });
 
   it('should call logout handler for HAI0006 error code', async () => {
