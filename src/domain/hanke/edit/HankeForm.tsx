@@ -78,6 +78,7 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
     shouldUnregister: false,
     defaultValues: formData,
     resolver: yupResolver(hankeSchema),
+    context: validationContext,
   });
 
   // Persist draft values so that switching language (which changes route & unmounts) does not lose unsaved edits
@@ -87,6 +88,7 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
     {
       select(values) {
         const {
+          hankeTunnus,
           nimi,
           kuvaus,
           tyomaaKatuosoite,
@@ -110,6 +112,7 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
           })),
         };
         return {
+          hankeTunnus, // Include hankeTunnus to ensure it's preserved
           nimi,
           kuvaus,
           tyomaaKatuosoite,

@@ -128,6 +128,19 @@ export default function useFormLanguagePersistence<T extends object>(
           Object.entries(persisted as Record<string, unknown>).forEach(([k, v]) => {
             // Skip internal/meta keys prefixed with __ (reserved for auxiliary persistence like geometry)
             if (k.startsWith('__')) return;
+
+            // For critical server-provided fields, only apply if the current form value is empty/undefined
+            // This prevents overwriting server data with stale persisted values
+            if (k === 'hankeTunnus') {
+              const currentValue = (
+                form as unknown as { getValues: (field: string) => unknown }
+              ).getValues('hankeTunnus');
+              if (currentValue && currentValue !== v) {
+                // Current form has a different hankeTunnus, don't overwrite with persisted value
+                return;
+              }
+            }
+
             applyPersisted(setValue, dirtyFields, [k], v);
           });
         }
