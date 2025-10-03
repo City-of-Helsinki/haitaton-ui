@@ -30,6 +30,7 @@ import { ModifyEvent } from 'ol/interaction/Modify';
 import { getWorkAreasInsideHankealueFeature } from '../../../hanke/edit/utils';
 import FullScreenControl from '../../../../common/components/map/controls/FullscreenControl';
 import useDrawContext from '../../../../common/components/map/modules/draw/useDrawContext';
+import { useFormContext } from 'react-hook-form';
 
 type Props = {
   features: Array<Feature | undefined> | undefined;
@@ -55,6 +56,13 @@ const HankeDrawer: React.FC<React.PropsWithChildren<Props>> = ({
   zoom = 9,
 }) => {
   const { mapTileLayers, toggleMapTileLayer, handleUpdateGeometryState } = useMapDataLayers();
+  // Attempt to access persistence injected on form context (if present)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const maybePersistence = (useFormContext() as any)?.persistence;
+  const handleGeometryFinalized = useCallback(() => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+    maybePersistence?.saveSnapshot?.();
+  }, [maybePersistence]);
   const ortoLayerOpacity = mapTileLayers.kantakartta.visible ? 0.5 : 1;
   const [drawSource] = useState<VectorSource>(existingDrawSource || new VectorSource());
 
@@ -171,6 +179,7 @@ const HankeDrawer: React.FC<React.PropsWithChildren<Props>> = ({
           <Controls>
             <DrawModule
               handleModifyEnd={restrictDrawingToHakemusAreas ? handleModifyEnd : undefined}
+              onGeometryFinalized={handleGeometryFinalized}
             />
             <LayerControl
               tileLayers={Object.values(mapTileLayers)}

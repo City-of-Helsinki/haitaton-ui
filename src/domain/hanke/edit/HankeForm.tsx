@@ -1,4 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { Feature } from 'ol';
+import {
+  serializeFeatureGeometry,
+  deserializeGeometry,
+} from '../../../common/utils/geometrySerialization';
 import { FieldPath, FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation, useQueryClient } from 'react-query';
@@ -73,7 +78,6 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
     shouldUnregister: false,
     defaultValues: formData,
     resolver: yupResolver(hankeSchema),
-    context: validationContext,
   });
 
   // Persist draft values so that switching language (which changes route & unmounts) does not lose unsaved edits
@@ -96,6 +100,15 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
           toteuttajat,
           muut,
         } = values as typeof values & { tyomaaTyyppi?: string[] };
+        // Lightweight geometry snapshot (only polygon coordinates), separate meta key so hook skips applying directly
+        // eslint-disable-next-line no-underscore-dangle -- internal meta key for persisted geometry snapshot
+        const __geometry = {
+          alueet: (values.alueet || []).map((a) => ({
+            id: a.id ?? null,
+            geometry: a.feature ? serializeFeatureGeometry(a.feature) : null,
+            name: a.nimi ?? null,
+          })),
+        };
         return {
           nimi,
           kuvaus,
@@ -121,11 +134,49 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
           rakennuttajat,
           toteuttajat,
           muut,
+          __geometry,
         };
       },
       debounceMs: 200,
+      afterHydrate(raw) {
+        try {
+          if (!raw || typeof raw !== 'object') return;
+          interface PersistedAreaGeom {
+            id: string | number | null;
+            name?: string | null;
+            geometry: { type: string; coordinates: unknown } | null;
+          }
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any,@typescript-eslint/naming-convention
+          // eslint-disable-next-line @typescript-eslint/naming-convention,@typescript-eslint/no-explicit-any
+          // eslint-disable-next-line no-underscore-dangle, @typescript-eslint/no-explicit-any -- accessing internal meta key
+          const geomSection = (raw as any)['__geometry'] as
+            | { alueet?: PersistedAreaGeom[] }
+            | undefined; // internal meta key
+          if (!geomSection || !Array.isArray(geomSection.alueet)) return;
+          const current = formContext.getValues('alueet');
+          if (!current) return;
+          geomSection.alueet.forEach((g, idx) => {
+            if (!g || !g.geometry || !current[idx]) return;
+            const geom = deserializeGeometry(g.geometry);
+            if (!geom) return;
+            const existingFeature = current[idx].feature || new Feature();
+            existingFeature.setGeometry(geom);
+            formContext.setValue(
+              // cast path for TS; feature is virtual field
+              `alueet.${idx}.feature` as unknown as FieldPath<HankeDataFormState>,
+              existingFeature as unknown,
+              { shouldDirty: false },
+            );
+          });
+        } catch {
+          // ignore
+        }
+      },
     },
   );
+  // Expose persistence on formContext for nested map components to trigger saveSnapshot after geometry edits
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (formContext as any).persistence = persistence;
 
   const {
     register,

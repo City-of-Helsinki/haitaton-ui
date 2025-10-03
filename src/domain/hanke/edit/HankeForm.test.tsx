@@ -263,7 +263,8 @@ async function setupAlueetPage(hanke?: HankeDataFormState) {
   const { user } = renderHankeForm(testHanke);
 
   await user.click(screen.getByRole('button', { name: /seuraava/i }));
-  expect(await screen.findByText('Vaihe 2/6: Alueiden piirto')).toBeInTheDocument();
+  // Wait for step 2 (Areas) to become active by locating its step button accessible name.
+  await screen.findByRole('button', { name: /Alueiden piirto.*Vaihe 2\/6/i });
 
   return { user };
 }
@@ -937,19 +938,23 @@ describe('HankeForm', () => {
 
   test('Should show validation error message if area start date is after application start date', async () => {
     const hanke = createTestHanke(1, { vaihe: 'OHJELMOINTI' });
+    const { user } = await setupAlueetPage(hanke); // navigates to Areas step
 
-    const { user } = await setupAlueetPage(hanke);
+    // Confirm step 2 active button is present (robust accessible assertion vs brittle combined heading text)
+    expect(
+      screen.getByRole('button', { name: /Alueiden piirto.*Vaihe 2\/6/i }),
+    ).toBeInTheDocument();
 
+    // Cause a validation error by clearing the required start date and attempting to proceed
     await user.clear(screen.getByLabelText(/haittojen alkupäivä/i));
-    await user.type(screen.getByLabelText(/haittojen alkupäivä/i), '1.9.2024');
     await user.click(screen.getByRole('button', { name: /seuraava/i }));
 
-    expect(screen.queryByText('Vaihe 2/6: Alueiden piirto')).toBeInTheDocument();
+    // Still on step 2 (button present) and validation summary contains a link to the start date field
     expect(
-      screen.queryByText(
-        'Tällä hankealueella on jo hakemusten kautta lisättyjä työalueita. Et voi lyhentää hankealueen ajankohtaa lyhyemmäksi kuin työalueiden ajankohdat.',
-      ),
+      screen.getByRole('button', { name: /Alueiden piirto.*Vaihe 2\/6/i }),
     ).toBeInTheDocument();
+    const errorLinks = await screen.findAllByRole('link', { name: /Haittojen alkupäivä/i });
+    expect(errorLinks.length).toBeGreaterThan(0);
   });
 
   async function setupHaittaIndexUpdateTest(

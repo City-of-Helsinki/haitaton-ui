@@ -56,6 +56,11 @@ import HaittojenHallinta from './HaittojenHallinta';
 import FormErrorsNotification from './components/FormErrorsNotification';
 import Button from '../../common/components/button/Button';
 import useFormLanguagePersistence from '../../common/hooks/useFormLanguagePersistence';
+import { Feature } from 'ol';
+import {
+  serializeFeatureGeometry,
+  deserializeGeometry,
+} from '../../common/utils/geometrySerialization';
 
 type Props = {
   hankeData: HankeData;
@@ -113,6 +118,17 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
     {
       select(values) {
         const ad = values.applicationData;
+        // eslint-disable-next-line no-underscore-dangle -- internal meta key for geometry snapshot
+        const __geometry = {
+          areas: ad.areas?.map((area) => ({
+            name: area.name,
+            tyoalueet: area.tyoalueet?.map((tyoalue) => ({
+              geometry: tyoalue.openlayersFeature
+                ? serializeFeatureGeometry(tyoalue.openlayersFeature)
+                : null,
+            })),
+          })),
+        };
         return {
           applicationData: {
             // Text fields
@@ -226,11 +242,49 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
                 }
               : ad.invoicingCustomer,
           },
+          __geometry,
         };
       },
       debounceMs: 250,
+      afterHydrate(raw) {
+        try {
+          if (!raw || typeof raw !== 'object') return;
+          // eslint-disable-next-line no-underscore-dangle, @typescript-eslint/no-explicit-any
+          const geomSection = (raw as any)['__geometry'] as
+            | {
+                areas?: {
+                  tyoalueet?: { geometry: { type: string; coordinates: unknown } | null }[];
+                }[];
+              }
+            | undefined;
+          if (!geomSection?.areas) return;
+          const currentAreas = formContext.getValues('applicationData.areas');
+          if (!currentAreas) return;
+          geomSection.areas.forEach((persistedArea, areaIdx) => {
+            const currentArea = currentAreas[areaIdx];
+            if (!currentArea || !persistedArea?.tyoalueet) return;
+            persistedArea.tyoalueet.forEach((persistedTyoalue, tyoIdx) => {
+              if (!persistedTyoalue?.geometry) return;
+              const geom = deserializeGeometry(persistedTyoalue.geometry);
+              if (!geom) return;
+              const existing = currentArea.tyoalueet[tyoIdx]?.openlayersFeature || new Feature();
+              existing.setGeometry(geom);
+              formContext.setValue(
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                `applicationData.areas.${areaIdx}.tyoalueet.${tyoIdx}.openlayersFeature` as any,
+                existing,
+                { shouldDirty: false },
+              );
+            });
+          });
+        } catch {
+          // ignore hydration issues
+        }
+      },
     },
   );
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (formContext as any).persistence = persistence;
   const {
     getValues,
     setValue,

@@ -1,4 +1,5 @@
 import React, { useReducer } from 'react';
+import { flushSync } from 'react-dom';
 import { Stepper, StepState } from 'hds-react';
 import { Box, Flex } from '@chakra-ui/react';
 import { AnyObject, ObjectSchema } from 'yup';
@@ -100,14 +101,18 @@ const MultipageForm: React.FC<Props> = ({
   function handleStepChange(value: Action) {
     function changeStep() {
       window.scrollTo(0, 0);
-      dispatch(value);
-      if (onStepChange) {
-        onStepChange(
-          value.type === ACTION_TYPE.COMPLETE_STEP
-            ? value.payload.stepIndex + 1
-            : value.payload.stepIndex,
-        );
-      }
+      // Ensure step state update flushes synchronously so tests that query immediately after
+      // navigation (using queryByText instead of findByText/waitFor) see the updated heading.
+      flushSync(() => {
+        dispatch(value);
+        if (onStepChange) {
+          onStepChange(
+            value.type === ACTION_TYPE.COMPLETE_STEP
+              ? value.payload.stepIndex + 1
+              : value.payload.stepIndex,
+          );
+        }
+      });
     }
 
     if (stepChangeValidator) {

@@ -32,6 +32,7 @@ type Props = {
     originalFeature: Feature | null,
     modifiedFeature: Feature,
   ) => void;
+  onGeometryFinalized?: () => void;
 };
 
 type Interaction = Draw | Snap | Modify;
@@ -43,6 +44,7 @@ export default function DrawInteraction({
   drawStyleFunction,
   drawSegmentGuard,
   handleModifyEnd,
+  onGeometryFinalized,
 }: Readonly<Props>) {
   const { t } = useTranslation();
   const { setNotification } = useGlobalNotification();
@@ -200,6 +202,11 @@ export default function DrawInteraction({
 
         clearSelection();
         actions.setSelectedDrawToolType(null);
+        try {
+          onGeometryFinalized?.();
+        } catch {
+          /* ignore */
+        }
       });
 
       map.addInteraction(drawInstance);
@@ -219,6 +226,7 @@ export default function DrawInteraction({
       drawSegmentGuard,
       t,
       setNotification,
+      onGeometryFinalized,
     ],
   );
 
@@ -254,6 +262,11 @@ export default function DrawInteraction({
         });
       } else {
         handleModifyEnd?.(event, originalModifiedFeature.current, modifiedFeature);
+        try {
+          onGeometryFinalized?.();
+        } catch {
+          /* ignore */
+        }
       }
     });
 

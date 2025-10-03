@@ -25,9 +25,16 @@ export default function useFormLanguagePersistence<T extends object>(
     clearOnUnmount?: boolean;
     select?: (values: T) => unknown; // pick lightweight subset to persist
     debounceMs?: number;
+    afterHydrate?: (rawPersisted: unknown) => void; // hook for extra side-effects (e.g. geometry rehydration)
   } = {},
 ) {
-  const { enabled = true, clearOnUnmount = false, select, debounceMs = 300 } = options;
+  const {
+    enabled = true,
+    clearOnUnmount = false,
+    select,
+    debounceMs = 300,
+    afterHydrate,
+  } = options;
   const { watch, getValues, formState } = form;
   const hydratedRef = useRef(false);
   const debounceRef = useRef<ReturnType<typeof debounce>>();
@@ -118,15 +125,26 @@ export default function useFormLanguagePersistence<T extends object>(
               setValue: (path: string, value: unknown, opts?: { shouldDirty?: boolean }) => void;
             }
           ).setValue;
-          Object.entries(persisted as Record<string, unknown>).forEach(([k, v]) =>
-            applyPersisted(setValue, dirtyFields, [k], v),
-          );
+          Object.entries(persisted as Record<string, unknown>).forEach(([k, v]) => {
+            // Skip internal/meta keys prefixed with __ (reserved for auxiliary persistence like geometry)
+            if (k.startsWith('__')) return;
+            applyPersisted(setValue, dirtyFields, [k], v);
+          });
         }
       }
     } catch {
       // ignore parse errors
     } finally {
       hydratedRef.current = true;
+      try {
+        if (afterHydrate) {
+          const raw = sessionStorage.getItem(storageKey);
+          // raw already parsed above but re-read to keep logic localized; performance impact negligible
+          if (raw) afterHydrate(JSON.parse(raw));
+        }
+      } catch {
+        // ignore
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [enabled, storageKey]);
@@ -183,5 +201,5 @@ export default function useFormLanguagePersistence<T extends object>(
     }
   }
 
-  return { clearPersisted, saveSnapshot };
+  return { clearPersisted, saveSnapshot, hydrated: hydratedRef.current };
 }
