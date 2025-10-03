@@ -123,7 +123,10 @@
       "emailAlreadyUsedInUserManagement": "Den e-postadress du valt finss redan hos en annan användare.",
       "dateBeforeStart": "Datumet kan inte vara tidigare än inledningsdatumet för arbetet i ansökan ({{startDate}})",
       "dateInFuture": "Datumet kan inte vara i framtiden",
-      "dateConflictWithWorkAreas": "Inom detta projektområde finns det redan arbetsområden som lagts till genom ansökningar. Du kan inte korta ner tidpunkterna för projektområdet så att de är kortare än tidpunkterna för arbetsområdena."
+      "dateConflictWithWorkAreas": "Inom detta projektområde finns det redan arbetsområden som lagts till genom ansökningar. Du kan inte korta ner tidpunkterna för projektområdet så att de är kortare än tidpunkterna för arbetsområdena.",
+      "invalidDate": "Felaktigt datum.",
+      "dateBeforeProjectDate": "Datumet kan inte vara före projektets början.",
+      "dateFutureProjectDate": "Datumet kan inte vara efter projektets slut."
     },
     "errors": {
       "areaRequired": "Det krävs minst ett område",
