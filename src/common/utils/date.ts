@@ -6,7 +6,7 @@ import { fi } from 'date-fns/locale';
 export const toEndOfDayUTCISO = (date: Date) => {
   try {
     return endOfDay(date).toISOString();
-  } catch (error) {
+  } catch {
     return '';
   }
 };
@@ -14,7 +14,7 @@ export const toEndOfDayUTCISO = (date: Date) => {
 export const toStartOfDayUTCISO = (date: Date) => {
   try {
     return startOfDay(date).toISOString();
-  } catch (error) {
+  } catch {
     return '';
   }
 };
@@ -26,7 +26,7 @@ export const formatToFinnishDate = (date: string | Date | null) => {
 
   try {
     return format(new Date(date), 'd.M.yyyy', { locale: fi });
-  } catch (error) {
+  } catch {
     return undefined;
   }
 };
@@ -38,7 +38,7 @@ export const formatToFinnishDateTime = (date: string | Date | null) => {
 
   try {
     return format(new Date(date), 'd.M.yyyy HH:mm', { locale: fi });
-  } catch (error) {
+  } catch {
     return undefined;
   }
 };

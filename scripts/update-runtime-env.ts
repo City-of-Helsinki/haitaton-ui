@@ -26,7 +26,7 @@ const start = async () => {
           return console.error(err);
         }
         return console.log('File created!');
-      }
+      },
     );
   } catch (err) {
     console.error(err.message); // eslint-disable-line

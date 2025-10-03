@@ -9,7 +9,7 @@ import { Application, ContactType, KaivuilmoitusData } from './types/application
 import { HIDDEN_FIELD_VALUE } from './constants';
 
 describe('getCurrentDecisions', () => {
-  test('returns all current decisions in correct order ', () => {
+  test('returns all current decisions in correct order', () => {
     const paatokset = hakemukset[9].paatokset;
 
     const currentDecisions = getCurrentDecisions(paatokset);

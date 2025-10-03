@@ -9,8 +9,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { I18nextProvider } from 'react-i18next';
 import { FeatureFlagsProvider } from '../featureFlags/FeatureFlagsContext';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const mockedUseUser = useUser as jest.Mock<any>;
+const mockedUseUser = useUser as jest.Mock;
 jest.mock('../../../domain/auth/useUser');
 
 type Language = 'Suomi' | 'English' | 'Svenska';

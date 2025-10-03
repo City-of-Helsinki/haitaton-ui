@@ -16,7 +16,9 @@ export default function useSendTaydennys(options?: Options) {
     {
       async onSuccess(data) {
         await queryClient.invalidateQueries(['application', data.id], { refetchInactive: true });
-        onSuccess && onSuccess(data);
+        if (onSuccess) {
+          onSuccess(data);
+        }
       },
     },
   );

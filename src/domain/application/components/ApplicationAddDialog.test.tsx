@@ -5,7 +5,7 @@ import { HankeData } from '../../types/hanke';
 
 test('Continue to application button should be disabled if application type is not selected', async () => {
   const hanke = hankkeetData[0] as HankeData;
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
+
   function handleClose() {}
   const { user } = render(<ApplicationAddDialog hanke={hanke} isOpen onClose={handleClose} />);
 
@@ -19,7 +19,7 @@ test('Continue to application button should be disabled if application type is n
 
 test('Navigates to cable application correctly', async () => {
   const hanke = hankkeetData[0] as HankeData;
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
+
   function handleClose() {}
   const { user } = render(<ApplicationAddDialog hanke={hanke} isOpen onClose={handleClose} />);
 
@@ -33,7 +33,7 @@ test('Navigates to cable application correctly', async () => {
 
 test('Application type labels are correct', async () => {
   const hanke = hankkeetData[0] as HankeData;
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
+
   function handleClose() {}
   const { user } = render(<ApplicationAddDialog hanke={hanke} isOpen onClose={handleClose} />);
 

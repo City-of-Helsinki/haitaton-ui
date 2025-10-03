@@ -3,7 +3,7 @@ import { getInputErrorText } from './form';
 import yup from './yup';
 
 describe('form:utils:getInputErrorText', () => {
-  test('it returns correct key ', () => {
+  test('it returns correct key', () => {
     const key = getInputErrorText(t, {
       message: { key: 'bar', values: {} },
       ref: { name: 'foo' },

@@ -297,7 +297,7 @@ async function setupYhteystiedotPage(jsx: JSX.Element) {
 }
 
 describe('HankeForm', () => {
-  test('Form should be populated correctly ', () => {
+  test('Form should be populated correctly', () => {
     render(
       <HankeForm
         formData={{
@@ -316,7 +316,14 @@ describe('HankeForm', () => {
     expect(screen.getByText('Ohjelmointi')).toBeInTheDocument();
   });
 
-  test('HankeFormContainer integration should work ', async () => {
+  test('HankeFormContainer integration should work', async () => {
+    // Mock successful API response for this test
+    server.use(
+      http.put('/api/hankkeet/:hankeTunnus', () => {
+        return HttpResponse.json(hankkeet[0]);
+      }),
+    );
+
     const { user } = render(<HankeFormContainer />);
     await user.clear(screen.getByTestId(FORMFIELD.NIMI));
     await user.type(screen.getByTestId(FORMFIELD.NIMI), nimi);
@@ -327,7 +334,7 @@ describe('HankeForm', () => {
 
     await user.click(screen.getByText('Tallenna ja keskeytä'));
 
-    await waitFor(() => expect(screen.queryByText('Luonnos tallennettu')));
+    await waitFor(() => expect(screen.getByTestId('formToastSuccess')).toBeInTheDocument());
 
     expect(screen.getByTestId(FORMFIELD.NIMI)).toHaveValue(nimi);
     expect(screen.getByTestId(FORMFIELD.KUVAUS)).toHaveValue(hankkeenKuvaus);
@@ -595,7 +602,9 @@ describe('HankeForm', () => {
     await user.click(screen.getByRole('button', { name: 'Tallenna ja keskeytä' }));
 
     expect(window.location.pathname).toBe('/fi/hankesalkku/HAI22-1');
-    expect(screen.getByText(`Hanke ${hankeName} (HAI22-1) tallennettu omiin hankkeisiin.`));
+    expect(
+      screen.getByText(`Hanke ${hankeName} (HAI22-1) tallennettu omiin hankkeisiin.`),
+    ).toBeInTheDocument();
   });
 
   test('Should be able to save hanke in the last page', async () => {
@@ -611,7 +620,7 @@ describe('HankeForm', () => {
       await screen.findByText(
         `Hanke ${hanke.nimi} (${hanke.hankeTunnus}) tallennettu omiin hankkeisiin.`,
       ),
-    );
+    ).toBeInTheDocument();
   });
 
   test('Should be able to upload attachments', async () => {
@@ -876,11 +885,15 @@ describe('HankeForm', () => {
 
     await user.click(screen.getByRole('button', { name: 'Poista alue' }));
 
-    const { getByRole, getByText } = within(screen.getByRole('dialog'));
-    expect(getByText('Aluetta ei voi poistaa')).toBeInTheDocument();
-    expect(getByRole('button', { name: 'Sulje' })).toBeInTheDocument();
+    const { getByText, getByTestId } = within(screen.getByRole('dialog'));
+    expect(
+      getByText(
+        'Hankealueen sisällä on hakemusten työalueita, joten aluetta ei voi poistaa. Tarkastele meneillään olevia hakemuksia hankesivun Hakemukset-välilehdellä.',
+      ),
+    ).toBeInTheDocument();
+    expect(getByTestId('dialog-button-test')).toBeInTheDocument();
 
-    await user.click(getByRole('button', { name: 'Sulje' }));
+    await user.click(getByTestId('dialog-button-test'));
 
     expect(screen.queryByText(/hankealue 1/i)).toBeInTheDocument();
   });

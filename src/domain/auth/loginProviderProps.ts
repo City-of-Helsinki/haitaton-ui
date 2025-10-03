@@ -5,19 +5,19 @@ const { origin } = window.location;
 
 export const loginProviderProps: LoginProviderProps = {
   userManagerSettings: {
-    authority: window._env_.REACT_APP_OIDC_AUTHORITY,
-    client_id: window._env_.REACT_APP_OIDC_CLIENT_ID,
-    scope: window._env_.REACT_APP_OIDC_SCOPE,
+    authority: String(window._env_.REACT_APP_OIDC_AUTHORITY || ''),
+    client_id: String(window._env_.REACT_APP_OIDC_CLIENT_ID || ''),
+    scope: String(window._env_.REACT_APP_OIDC_SCOPE || ''),
     redirect_uri: `${origin}${LOGIN_CALLBACK_PATH}`,
     post_logout_redirect_uri: `${origin}${LOGOUT_PATH}`,
   },
   apiTokensClientSettings: {
-    url: window._env_.REACT_APP_OIDC_API_TOKENS_URL,
+    url: String(window._env_.REACT_APP_OIDC_API_TOKENS_URL || ''),
     queryProps: {
       grantType: 'urn:ietf:params:oauth:grant-type:uma-ticket',
       permission: '#access',
     },
-    audiences: [window._env_.REACT_APP_OIDC_AUDIENCE_BACKEND],
+    audiences: [String(window._env_.REACT_APP_OIDC_AUDIENCE_BACKEND || '')],
   },
   sessionPollerSettings: { pollIntervalInMs: 60000 },
 };

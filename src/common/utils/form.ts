@@ -1,10 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { TFunction } from 'i18next';
 import { parse, isDate } from 'date-fns';
 
 export const parseDateString = (_: unknown, originalValue: string) =>
   isDate(originalValue) ? originalValue : parse(originalValue, 'yyyy-MM-dd', new Date());
 
-// eslint-disable-next-line
 const isI18nYupMessage = (error: any): boolean => {
   if (error && !!error.message?.key && !!error.message?.values) {
     return true;
@@ -12,7 +12,6 @@ const isI18nYupMessage = (error: any): boolean => {
 
   // Warn if YUP message is not correct
   if (process.env.NODE_ENV === 'development' && error && error.ref) {
-    // eslint-disable-next-line
     console.warn(
       `YUP translation key is not setup correctly. Fieldname: '${error.ref.name}'. Message: `,
       error,
@@ -23,7 +22,7 @@ const isI18nYupMessage = (error: any): boolean => {
 
 export const getInputErrorText = (
   t: TFunction<string>,
-  // eslint-disable-next-line
+
   error: any,
 ): string | undefined => {
   if (isI18nYupMessage(error)) {

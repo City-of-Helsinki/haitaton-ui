@@ -28,7 +28,7 @@ export function getSurfaceArea(geometry: Geometry) {
 /**
  * Calculate if two lines intersect and return true if they do
  */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+
 export function linesIntersect(
   line1start: [number, number],
   line1end: [number, number],
@@ -147,7 +147,7 @@ export function isPolygonSelfIntersectingByCoordinates(coordinates: Coordinate[]
     const turfPolygon = polygon(coordinates);
     const selfIntersectionPoints = kinks(turfPolygon);
     return selfIntersectionPoints.features.length > 0;
-  } catch (error) {
+  } catch {
     console.log('Polygon self-intersection check error');
     return false;
   }

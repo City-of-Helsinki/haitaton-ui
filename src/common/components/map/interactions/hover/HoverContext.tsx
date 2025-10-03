@@ -9,12 +9,12 @@ export type HankeAlueHoverData = {
   endDate?: Date | string | null;
 };
 
-type HoverContext = {
+type localHoverContext = {
   hoveredHankeAreaData: HankeAlueHoverData[];
   hoverPosition: number[];
 };
 
-const HoverContext = React.createContext<HoverContext>({
+const HoverContext = React.createContext<localHoverContext>({
   hoveredHankeAreaData: [],
   hoverPosition: [0, 0],
 });

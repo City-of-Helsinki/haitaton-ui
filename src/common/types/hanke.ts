@@ -10,7 +10,6 @@ export interface CRS {
   };
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type HankeGeoJSON = GeoJSON.FeatureCollection<any, HankeGeoJSONProperties> & {
+export type HankeGeoJSON = GeoJSON.FeatureCollection<GeoJSON.Geometry, HankeGeoJSONProperties> & {
   crs: CRS;
 };

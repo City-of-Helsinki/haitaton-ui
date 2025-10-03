@@ -223,7 +223,7 @@ function EditUserView({
         }
         handleSuccess(updatedUser);
         // eslint-disable-next-line no-empty
-      } catch (e) {}
+      } catch {}
     }
   }
 

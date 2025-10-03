@@ -101,8 +101,12 @@ export const getStyleByStatus = (status: LIIKENNEHAITTA_STATUS, highlight = fals
   });
 
 // Performance tips: https://github.com/openlayers/openlayers/issues/8392
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const styleFunction: any = (feature: FeatureLike, renderFeature: any, highlight = false) => {
+
+export const styleFunction = (
+  feature: FeatureLike,
+  renderFeature?: FeatureLike | number,
+  highlight = false,
+): Style => {
   const { statusKey, liikennehaittaindeksi } = feature.getProperties();
   const status = (statusKey as LIIKENNEHAITTA_STATUS) ?? getStatusByIndex(liikennehaittaindeksi);
 

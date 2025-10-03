@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-var-requires, no-underscore-dangle, @typescript-eslint/no-this-alias */
+/* eslint-disable @typescript-eslint/no-this-alias, @typescript-eslint/no-require-imports, @typescript-eslint/no-explicit-any */
 import React from 'react';
 import { render as rtlRender, waitFor } from '@testing-library/react';
 import MapContext from '../../MapContext';
@@ -660,7 +660,7 @@ describe('DrawInteraction startDraw events', () => {
 });
 // Create mock MapContext as a React context
 jest.mock('../../MapContext', () => {
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   const ReactLib = require('react');
   return {
     __esModule: true,

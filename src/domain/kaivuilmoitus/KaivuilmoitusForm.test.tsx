@@ -1192,36 +1192,24 @@ test('Should list existing attachments in the attachments page', async () => {
 
   const fileUploadList = await screen.findAllByTestId('file-upload-list');
   expect(fileUploadList.length).toBe(3);
+
+  // Define expected data for each file upload list
+  const expectedFileData = [
+    { fileName: fileNameA, dateText: 'Lisätty 1.12.2023', sizeText: '(117.7 MB)' },
+    { fileName: fileNameB, dateText: 'Lisätty tänään', sizeText: '(117.7 MB)' },
+    { fileName: fileNameC, dateText: 'Lisätty 7.10.2023', sizeText: '(121 KB)' },
+  ];
+
   fileUploadList.forEach((list, index) => {
     const { getAllByRole } = within(list);
     const fileListItems = getAllByRole('listitem');
     expect(fileListItems.length).toBe(1);
-    switch (index) {
-      case 0: {
-        // traffic arrangement plan attachments
-        const fileItemA = fileListItems.find((i) => i.innerHTML.includes(fileNameA));
-        const { getByText: getByTextInA } = within(fileItemA!);
-        expect(getByTextInA('Lisätty 1.12.2023')).toBeInTheDocument();
-        expect(getByTextInA('(117.7 MB)')).toBeInTheDocument();
-        break;
-      }
-      case 1: {
-        // mandate attachments
-        const fileItemB = fileListItems.find((i) => i.innerHTML.includes(fileNameB));
-        const { getByText: getByTextInB } = within(fileItemB!);
-        expect(getByTextInB('Lisätty tänään')).toBeInTheDocument();
-        expect(getByTextInB('(117.7 MB)')).toBeInTheDocument();
-        break;
-      }
-      case 2: {
-        // other attachments
-        const fileItemC = fileListItems.find((i) => i.innerHTML.includes(fileNameC));
-        const { getByText: getByTextInC } = within(fileItemC!);
-        expect(getByTextInC('Lisätty 7.10.2023')).toBeInTheDocument();
-        expect(getByTextInC('(121 KB)')).toBeInTheDocument();
-        break;
-      }
-    }
+
+    const expectedData = expectedFileData[index];
+    const fileItem = fileListItems.find((i) => i.innerHTML.includes(expectedData.fileName));
+    const { getByText } = within(fileItem!);
+    expect(getByText(expectedData.dateText)).toBeInTheDocument();
+    expect(getByText(expectedData.sizeText)).toBeInTheDocument();
   });
 });
 

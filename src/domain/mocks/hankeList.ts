@@ -45,7 +45,6 @@ const hankeList: HankeData[] = [
                 properties: { hankeTunnus: 'HAI22-2' },
                 geometry: {
                   type: 'Polygon',
-                  crs: { type: 'name', properties: { name: 'EPSG:3879' } },
                   coordinates: [
                     [
                       [2.549619729e7, 6673799.79],
@@ -112,7 +111,6 @@ const hankeList: HankeData[] = [
                 properties: { hankeTunnus: 'HAI22-2' },
                 geometry: {
                   type: 'Polygon',
-                  crs: { type: 'name', properties: { name: 'EPSG:3879' } },
                   coordinates: [
                     [
                       [2.549619722e7, 6673792.79],
@@ -179,7 +177,6 @@ const hankeList: HankeData[] = [
                 properties: { hankeTunnus: 'SMTGEN2_2' },
                 geometry: {
                   type: 'Polygon',
-                  crs: { type: 'name', properties: { name: 'EPSG:3879' } },
                   coordinates: [
                     [
                       [2.549619729e7, 6673799.79],

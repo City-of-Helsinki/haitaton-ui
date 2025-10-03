@@ -29,7 +29,6 @@ function VectorLayer({ source, className, zIndex = 0, style = STYLES.BLUE }: Rea
 
     layers[className] = vectorLayer;
 
-    // eslint-disable-next-line
     return () => {
       if (map) {
         map.removeLayer(vectorLayer);

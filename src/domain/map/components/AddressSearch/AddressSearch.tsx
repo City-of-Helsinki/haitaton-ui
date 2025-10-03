@@ -26,8 +26,18 @@ const AddressSearch: React.FC<React.PropsWithChildren<Props>> = ({ onAddressSele
 
       const { data } = await doAddressSearch(searchValue, controller);
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const suggestionItems: Address[] = data.features.map((feature: any) => {
+      interface AddressFeature {
+        properties: {
+          katunimi: string;
+          gatan: string;
+          osoitenumero_teksti?: string;
+        };
+        geometry: {
+          coordinates: [number, number];
+        };
+      }
+
+      const suggestionItems: Address[] = data.features.map((feature: AddressFeature) => {
         // Use Finnish street name as a label if it seems that user was searching for that,
         // otherwise use Swedish street name
         const searchedStreetName = getStreetName(searchValue).toLowerCase();
@@ -48,7 +58,7 @@ const AddressSearch: React.FC<React.PropsWithChildren<Props>> = ({ onAddressSele
       const uniqueItems = uniqBy(suggestionItems, 'label');
       suggestions.current = uniqueItems;
       return uniqueItems;
-    } catch (error) {
+    } catch {
       return [];
     }
   }

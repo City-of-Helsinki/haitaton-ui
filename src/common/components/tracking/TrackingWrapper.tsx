@@ -15,7 +15,7 @@ export function TrackingWrapper({
         // eslint-disable-next-line no-underscore-dangle
         const _paq = (window._paq = window._paq || []);
         _paq.push(['trackPageView']);
-      } catch (_) {
+      } catch {
         // ignore
       }
     }

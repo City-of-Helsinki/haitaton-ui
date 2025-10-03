@@ -59,8 +59,7 @@ export default function DrawInteraction({
   const clearSelection = useCallback(() => {
     if (selection.current) selection.current.getFeatures().clear();
     actions.setSelectedFeature(null);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [actions]);
 
   const removeDrawInteractions = useCallback(() => {
     instances.forEach((i: Interaction) => {
@@ -79,8 +78,7 @@ export default function DrawInteraction({
       }
 
       let geometryFunction;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      let geometryType: any = type;
+      let geometryType: 'Polygon' | 'Circle' = type as 'Polygon';
       if (type === DRAWTOOLTYPE.SQUARE) {
         geometryFunction = createBox();
         geometryType = 'Circle';
@@ -291,7 +289,6 @@ export default function DrawInteraction({
       }
     });
 
-    // eslint-disable-next-line consistent-return
     return function cleanUp() {
       if (modify.current) {
         map.removeInteraction(modify.current);
@@ -300,8 +297,17 @@ export default function DrawInteraction({
         map.removeInteraction(selection.current);
       }
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [map, source, t, setNotification]);
+  }, [
+    map,
+    source,
+    t,
+    setNotification,
+    clearSelection,
+    actions,
+    onSelfIntersectingPolygon,
+    handleModifyEnd,
+    state.selectedFeature,
+  ]);
 
   useEffect(() => {
     removeAllInteractions();
@@ -312,8 +318,7 @@ export default function DrawInteraction({
     } else {
       modify.current?.setActive(true);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.selectedDrawtoolType]);
+  }, [state.selectedDrawtoolType, removeAllInteractions, startDraw]);
 
   useEffect(() => {
     // When selected feature changes, clear selection and push new selected feature
@@ -328,10 +333,8 @@ export default function DrawInteraction({
   useEffect(() => {
     if (!map) return;
 
-    // eslint-disable-next-line
     return () => removeAllInteractions();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [removeAllInteractions, map]);
 
   return null;
 }

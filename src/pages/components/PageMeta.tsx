@@ -8,8 +8,7 @@ type Props = {
 
 const PageMeta: React.FC<React.PropsWithChildren<Props>> = ({ routeData }) => {
   return (
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    /* @ts-ignore */
+    // @ts-expect-error Helmet types are not properly configured
     <Helmet>
       <title>{routeData.meta.title}</title>
     </Helmet>

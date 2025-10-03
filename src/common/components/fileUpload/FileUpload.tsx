@@ -174,8 +174,9 @@ export default function FileUpload<T extends AttachmentMetadata>({
             file,
             abortSignal: abortController.current?.signal,
           });
-          // eslint-disable-next-line no-empty
-        } catch (error) {}
+        } catch (error) {
+          void error;
+        }
       }
     }
 
@@ -187,11 +188,11 @@ export default function FileUpload<T extends AttachmentMetadata>({
 
   function handleFilesChange(validFiles: File[]) {
     // Filter out attachments that have same names as those that have already been sent
-    // eslint-disable-next-line prefer-const
-    let [filesToUpload, duplicateFiles] = removeDuplicateAttachments(
+    const [initialFilesToUpload, duplicateFiles] = removeDuplicateAttachments(
       validFiles,
       existingAttachments,
     );
+    let filesToUpload = initialFilesToUpload;
 
     // Determine which files haven't passed HDS FileInput validation by comparing
     // files in input element or files dropped into drop zone to files received as

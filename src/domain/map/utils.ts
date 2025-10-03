@@ -130,7 +130,7 @@ export function getTotalSurfaceArea(geometries: Geometry[]): number {
     return geometries.reduce((totalArea, geom) => {
       return totalArea + Math.round(getSurfaceArea(geom));
     }, 0);
-  } catch (error) {
+  } catch {
     return 0;
   }
 }
@@ -141,7 +141,11 @@ export function getTotalSurfaceArea(geometries: Geometry[]): number {
  * @returns OpenLayers Feature
  */
 export function getFeatureFromHankeGeometry(geometry: HankeGeometria) {
-  return new Feature(new Polygon(geometry.featureCollection.features[0]?.geometry.coordinates));
+  const feature = geometry.featureCollection.features[0];
+  if (!feature || feature.geometry.type !== 'Polygon') {
+    throw new Error('Invalid geometry: expected Polygon');
+  }
+  return new Feature(new Polygon(feature.geometry.coordinates));
 }
 
 /**

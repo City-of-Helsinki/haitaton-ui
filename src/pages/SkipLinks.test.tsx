@@ -21,7 +21,7 @@ const skipLinkQuery = `#${SKIP_TO_ELEMENT_ID}`;
  */
 
 describe('There should be a skip link in the page', () => {
-  test('HomePage', async () => {
+  test('HomePage - initial render', async () => {
     const { container } = render(<HomePage />);
     await waitFor(() => expect(container.querySelector(skipLinkQuery)).toBeInTheDocument());
   });
@@ -30,7 +30,7 @@ describe('There should be a skip link in the page', () => {
     await waitForLoadingToFinish();
     await waitFor(() => expect(container.querySelector(skipLinkQuery)).toBeInTheDocument());
   });
-  test('HomePage', async () => {
+  test('HomePage - after navigation', async () => {
     const { container } = render(<HomePage />);
     await waitFor(() => expect(container.querySelector(skipLinkQuery)).toBeInTheDocument());
   });

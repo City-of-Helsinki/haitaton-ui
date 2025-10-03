@@ -49,7 +49,7 @@ function FileDownloadLink({
         setFileUrl(url);
         setLoading(false);
         setFileFetched(true);
-      } catch (error) {
+      } catch {
         setLoading(false);
         setErrorText(t('common:error'));
       }

@@ -21,9 +21,12 @@ type HankeAlueData = {
  * Request haittaindeksit for hanke area
  */
 async function calculateHaittaIndexes(data: HankeAlueData) {
-  const polygonToCheck = new Polygon(
-    data.geometriat.featureCollection.features[0].geometry.coordinates,
-  );
+  const feature = data.geometriat.featureCollection.features[0];
+  if (!feature || feature.geometry.type !== 'Polygon') {
+    throw new Error('Invalid geometry: expected Polygon');
+  }
+
+  const polygonToCheck = new Polygon(feature.geometry.coordinates);
   if (isPolygonSelfIntersecting(polygonToCheck)) {
     throw new Error('Self-intersecting polygon');
   }

@@ -66,7 +66,7 @@ export const handlers = [
       try {
         const hanke = await hankkeetDB.update(hankeTunnus as string, reqBody);
         return HttpResponse.json(hanke, { status: 200 });
-      } catch (error) {
+      } catch {
         return HttpResponse.json(
           {
             errorMessage: 'Hanke not found',

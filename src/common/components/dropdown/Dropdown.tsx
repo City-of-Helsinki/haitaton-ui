@@ -74,7 +74,9 @@ const Dropdown: React.FC<React.PropsWithChildren<PropTypes>> = ({
               onChange={(_, clickedOption: Option) => {
                 if (clickedOption) {
                   onChange(clickedOption.value);
-                  onValueChange && onValueChange(clickedOption.value);
+                  if (onValueChange) {
+                    onValueChange(clickedOption.value);
+                  }
                 }
                 onBlur();
               }}

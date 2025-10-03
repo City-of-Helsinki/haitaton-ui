@@ -16,6 +16,7 @@ import { Feature, Map as OlMap } from 'ol';
 import { Geometry, Polygon } from 'ol/geom';
 import VectorSource from 'ol/source/Vector';
 import { polygon } from '@turf/helpers';
+import { Feature as GeoJSONFeature, Polygon as GeoJSONPolygon } from 'geojson';
 import { $enum } from 'ts-enum-util';
 import Text from '../../common/components/text/Text';
 import ResponsiveGrid from '../../common/components/grid/ResponsiveGrid';
@@ -301,7 +302,11 @@ export default function Areas({ hankeData, hankkeenHakemukset, originalHakemus }
     // Check if the new tyoalue is contained in any of the existing hanke areas
     const hankeAlueetContainingNewArea = hankeData.alueet.filter((alue) => {
       const hankeAlueFeature = alue.geometriat?.featureCollection.features[0];
-      return hankeAlueFeature && featureContains(hankeAlueFeature, newAreaPolygon);
+      return (
+        hankeAlueFeature &&
+        hankeAlueFeature.geometry.type === 'Polygon' &&
+        featureContains(hankeAlueFeature as GeoJSONFeature<GeoJSONPolygon>, newAreaPolygon)
+      );
     });
     setHankeAreasContainingNewArea(hankeAlueetContainingNewArea);
 

@@ -46,8 +46,7 @@ export function changeFormStep<T extends FieldValues>(
 }
 
 export function isPageValid<T extends FieldValues, T2 = T>(
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  schema: ObjectSchema<any>,
+  schema: ObjectSchema<T>,
   pageFieldPaths: FieldPath<T>[],
   formValues: T2,
 ): boolean {
@@ -56,7 +55,7 @@ export function isPageValid<T extends FieldValues, T2 = T>(
     const path = pageFieldPaths[i];
     try {
       schema.validateSyncAt(path, formValues);
-    } catch (error) {
+    } catch {
       isValid = false;
       break;
     }

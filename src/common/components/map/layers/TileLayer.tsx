@@ -28,7 +28,6 @@ function TileLayer({ source, minZoom, maxZoom, zIndex = 0, opacity = 1 }: Props)
     map.addLayer(tileLayer);
     tileLayer.setZIndex(zIndex);
 
-    // eslint-disable-next-line
     return () => {
       if (map) {
         map.removeLayer(tileLayer);

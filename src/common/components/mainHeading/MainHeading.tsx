@@ -1,3 +1,4 @@
+import React from 'react';
 import { SKIP_TO_ELEMENT_ID } from '../../constants/constants';
 import Text, { Props as TextProps } from '../text/Text';
 
