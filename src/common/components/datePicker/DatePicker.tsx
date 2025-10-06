@@ -92,58 +92,72 @@ const DatePicker: React.FC<React.PropsWithChildren<PropTypes>> = ({
                   const rawValue = e.target.value;
                   const [day, month, year] = rawValue.split('.');
                   const parsedDate = new Date(`${year}-${month}-${day}`);
-                  if (isNaN(parsedDate.getTime())) {
-                    setError(name, { type: 'manual', message: 'invalidDate' });
-                    return;
-                  }
-                  if (hankeStartDate && parsedDate < hankeStartDate) {
-                    setError(name, {
-                      type: 'manual',
-                      message: t('dateBeforeProjectDate'),
-                    });
+                  const isSameDay = (a: Date, b: Date): boolean =>
+                    a.getFullYear() === b.getFullYear() &&
+                    a.getMonth() === b.getMonth() &&
+                    a.getDate() === b.getDate();
+                  const finalizeValid = () => {
+                    clearErrors(name);
+                    trigger(name);
+                    onBlur();
+                  };
+                  const notifyError = (
+                    messageKey: string,
+                    labelKey: string,
+                    textKey: string,
+                    date: Date
+                  ) => {
+                    setError(name, { type: 'manual', message: t(messageKey) });
                     setValue(name, '');
                     setNotification(true, {
                       position: 'top-right',
                       dismissible: true,
                       autoClose: true,
                       autoCloseDuration: 5000,
-                      label: t('hakemus:notifications:dateBeforeProjectDateLabel'),
-                      message: t('hakemus:notifications:dateBeforeProjectDateText', {
-                        date: formatToFinnishDate(hankeStartDate),
-                      }),
-                      type: 'error',
-                      closeButtonLabelText: t(
-                        'common:components:notification:closeButtonLabelText',
-                      ),
-                    });
-                    return;
-                  }
 
-                  if (hankeEndDate && parsedDate > hankeEndDate) {
-                    setError(name, {
-                      type: 'manual',
-                      message: t('dateFutureProjectDate'),
-                    });
-                    setValue(name, '');
-                    setNotification(true, {
-                      position: 'top-right',
-                      dismissible: true,
-                      autoClose: true,
-                      autoCloseDuration: 5000,
-                      label: t('hakemus:notifications:dateFutureProjectDateLabel'),
-                      message: t('hakemus:notifications:dateFutureProjectDateText', {
-                        date: formatToFinnishDate(hankeEndDate),
-                      }),
+                      label: t(labelKey),
+                      message: t(textKey, { date: formatToFinnishDate(date) }),
                       type: 'error',
                       closeButtonLabelText: t(
                         'common:components:notification:closeButtonLabelText',
                       ),
                     });
+                  };
+                  if (isNaN(parsedDate.getTime())) {
+                    setError(name, { type: 'manual', message: t('form:validations:invalidDate') });
                     return;
                   }
-                  clearErrors(name);
-                  trigger(name);
-                  onBlur();
+                  if (hankeStartDate) {
+                    if (isSameDay(parsedDate, hankeStartDate)) {
+                      finalizeValid();
+                      return;
+                    }
+                    if (parsedDate < hankeStartDate) {
+                      notifyError(
+                        'dateBeforeProjectDate',
+                        'hakemus:notifications:dateBeforeProjectDateLabel',
+                        'hakemus:notifications:dateBeforeProjectDateText',
+                        hankeStartDate
+                      );
+                      return;
+                    }
+                  }
+                  if (hankeEndDate) {
+                    if (isSameDay(parsedDate, hankeEndDate)) {
+                      finalizeValid();
+                      return;
+                    }
+                    if (parsedDate > hankeEndDate) {
+                      notifyError(
+                        'dateFutureProjectDate',
+                        'hakemus:notifications:dateFutureProjectDateLabel',
+                        'hakemus:notifications:dateFutureProjectDateText',
+                        hankeEndDate
+                      );
+                      return;
+                    }
+                  }
+                  finalizeValid();
                 }}
                 onChange={(date) => {
                   const convertedDateString = convertFinnishDate(date);
