@@ -1,0 +1,126 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Excavation notification application view Shows correct information in sidebar 1`] = `
+<div
+  class="sideBar"
+  data-testid="application-view-sidebar"
+>
+  <div
+    class="css-11yjvs7"
+  >
+    <div
+      data-testid="mock-own-hanke-map-header"
+    >
+      Alueiden sijainti (
+      HAI22-2
+      )
+    </div>
+    <div
+      data-testid="mock-own-hanke-map"
+    >
+      <p>
+        MockOwnHankeMap
+      </p>
+      <p>
+        hanke:
+        HAI22-2
+      </p>
+      <p>
+        tyoalueet:
+        2
+      </p>
+    </div>
+  </div>
+  <div
+    class="css-zkgtxt"
+  >
+    <div
+      aria-expanded="false"
+      class="css-1ka79lz"
+    >
+      <button
+        class="css-12ax0h3"
+        type="button"
+      >
+        <div
+          class="css-usczae"
+        >
+          <div>
+            <h2
+              class="heading-xs css-1eif5ff"
+            >
+              Hankealue 2
+            </h2>
+            <div
+              class="css-aslqeu"
+            >
+              <p>
+                15.5.2023
+                –
+                30.9.2023
+              </p>
+            </div>
+          </div>
+        </div>
+        <svg
+          aria-hidden="true"
+          aria-label="angle-down"
+          class="Icon-module_icon__1Jtzj icon_hds-icon__1YqNC Icon-module_small__gTGkU icon_hds-icon--size-s__2Lkik"
+          role="img"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            clip-rule="evenodd"
+            d="M12 13.5L17 8.5L18.5 10L12 16.5L5.5 10L7 8.5L12 13.5Z"
+            fill="currentColor"
+            fill-rule="evenodd"
+          />
+        </svg>
+      </button>
+    </div>
+    <div
+      style="display: none;"
+    >
+      <div
+        class="css-r09jf8"
+      >
+        <div
+          class="css-1evobf6"
+        >
+          <p
+            class="text--bold text--body-m text--spacing-bottom-2-xs"
+          >
+            Työalue 1
+             (
+            159 m²
+            )
+          </p>
+          <p>
+            12.1.2023
+            –
+            12.11.2024
+          </p>
+        </div>
+        <div
+          class="css-1evobf6"
+        >
+          <p
+            class="text--bold text--body-m text--spacing-bottom-2-xs"
+          >
+            Työalue 2
+             (
+            31 m²
+            )
+          </p>
+          <p>
+            12.1.2023
+            –
+            12.11.2024
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
