@@ -1,8 +1,8 @@
 import React from 'react';
-import { render, waitFor } from '../../../testUtils/render';
+import { render, waitFor } from '../../testUtils/render';
 import userEvent from '@testing-library/user-event';
 import { useForm, FormProvider } from 'react-hook-form';
-import useFormLanguagePersistence from '../useFormLanguagePersistence';
+import useFormLanguagePersistence from './useFormLanguagePersistence';
 
 interface AreaLike {
   id?: number;
