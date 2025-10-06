@@ -1,6 +1,6 @@
 import React from 'react'; // top-level import okay outside mock factories
 // Adjusted path after moving test up one directory from __tests__
-import { render, waitFor, cleanup } from '../../testUtils/render';
+import { render, waitFor, cleanup, fireEvent } from '../../testUtils/render';
 import userEvent from '@testing-library/user-event';
 // Adjusted relative imports after moving file out of __tests__
 import KaivuilmoitusContainer from './KaivuilmoitusContainer';
@@ -193,5 +193,101 @@ describe('KaivuilmoitusContainer language persistence integration', () => {
     expect((get2('applicationData.requiredCompetence') as HTMLInputElement).checked).toBe(true);
     expect((get2('applicationData.cableReports.0') as HTMLInputElement).value).toBe('CR-1');
     // Contact fields not on first step in this lightweight mock; validated in container-level test elsewhere
+  });
+
+  test('persists contact person fields across language change', async () => {
+    const { getByTestId, unmount } = mount(application);
+
+    // Navigate to Contacts step so contact inputs are rendered
+    const contactsStepButton = document.querySelectorAll('button')[3];
+    if (contactsStepButton)
+      contactsStepButton.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    await waitFor(() =>
+      expect(getByTestId('applicationData.customerWithContacts.customer.name')).toBeTruthy(),
+    );
+
+    // Fill customer and first contact fields synchronously to ensure react-hook-form sees updates
+    const custName = getByTestId(
+      'applicationData.customerWithContacts.customer.name',
+    ) as HTMLInputElement;
+    fireEvent.change(custName, { target: { value: 'Persisted Company' } });
+
+    const firstName = getByTestId(
+      'applicationData.customerWithContacts.contacts.0.firstName',
+    ) as HTMLInputElement;
+    fireEvent.change(firstName, { target: { value: 'Matti' } });
+
+    const lastName = getByTestId(
+      'applicationData.customerWithContacts.contacts.0.lastName',
+    ) as HTMLInputElement;
+    fireEvent.change(lastName, { target: { value: 'Meikäläinen' } });
+
+    // Ensure the DOM inputs reflect the full typed values before snapshotting
+    await waitFor(() =>
+      expect(
+        (getByTestId('applicationData.customerWithContacts.customer.name') as HTMLInputElement)
+          .value,
+      ).toBe('Persisted Company'),
+    );
+    await waitFor(() =>
+      expect(
+        (
+          getByTestId(
+            'applicationData.customerWithContacts.contacts.0.firstName',
+          ) as HTMLInputElement
+        ).value,
+      ).toBe('Matti'),
+    );
+    await waitFor(() =>
+      expect(
+        (
+          getByTestId(
+            'applicationData.customerWithContacts.contacts.0.lastName',
+          ) as HTMLInputElement
+        ).value,
+      ).toBe('Meikäläinen'),
+    );
+
+    // Trigger immediate snapshot before route/language change
+    window.dispatchEvent(new CustomEvent('haitaton:languageChanging'));
+    await waitFor(() => expect(sessionStorage.getItem('application-form-77-KAIVU')).toBeTruthy());
+
+    // Unmount and remount with different server-provided values to ensure persisted values take effect
+    unmount();
+    const remountApp = {
+      ...application,
+      applicationData: {
+        ...application.applicationData,
+        customerWithContacts: {
+          customer: {
+            name: 'Server Company',
+            registryKey: '0000000-0',
+            email: 'server@example.com',
+            phone: '999',
+          },
+          contacts: [{ firstName: 'Server', lastName: 'User', email: 's@t', phone: '' }],
+        },
+      },
+    } as unknown as Application<KaivuilmoitusData>;
+
+    const { getByTestId: get2 } = mount(remountApp);
+
+    // Navigate to Contacts step after remount to ensure inputs are rendered
+    const contactsStepButton2 = document.querySelectorAll('button')[3];
+    if (contactsStepButton2)
+      contactsStepButton2.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    await waitFor(() =>
+      expect(get2('applicationData.customerWithContacts.customer.name')).toBeTruthy(),
+    );
+
+    expect(
+      (get2('applicationData.customerWithContacts.customer.name') as HTMLInputElement).value,
+    ).toBe('Persisted Company');
+    expect(
+      (get2('applicationData.customerWithContacts.contacts.0.firstName') as HTMLInputElement).value,
+    ).toBe('Matti');
+    expect(
+      (get2('applicationData.customerWithContacts.contacts.0.lastName') as HTMLInputElement).value,
+    ).toBe('Meikäläinen');
   });
 });

@@ -86,10 +86,37 @@ export default function useFormLanguagePersistence<T extends object>(
   // even if the overall form isDirty.
   // helper utilities for selective hydration
   type DirtyTree = Record<string, unknown> | true | undefined;
+  /**
+   * Determine whether a specific form path (segments) is considered dirty.
+   *
+   * Semantics and rationale:
+   *  - Return true only when the exact path has been marked dirty (node === true).
+   *  - Do NOT treat an ancestor being marked `true` as making all descendants dirty.
+   *    Ancestor-true means "the ancestor value has been changed", but that should not
+   *    automatically prevent hydrating unrelated nested children which may still be
+   *    pristine and safe to restore from persisted snapshot.
+   *
+   * Example dirty trees and behavior:
+   *  - dirty = { a: true }
+   *      pathIsDirty(dirty, ['a'])      -> true
+   *      pathIsDirty(dirty, ['a','b'])  -> false  (allow hydrate a.b)
+   *  - dirty = { a: { b: true } }
+   *      pathIsDirty(dirty, ['a'])      -> false
+   *      pathIsDirty(dirty, ['a','b'])  -> true
+   *  - dirty = true
+   *      pathIsDirty(dirty, ['a'])      -> false  (we treat ancestor-true as non-blocking)
+   *
+   * Note: array indices should be represented as string segments (e.g. ['contacts','0','name']).
+   * This function focuses on conservative, predictable hydration: only exact-path dirty
+   * flags block hydration; everything else is eligible for re-application from storage.
+   */
   function pathIsDirty(dirty: DirtyTree, segments: string[]): boolean {
     let node: DirtyTree = dirty;
     for (const seg of segments) {
-      if (!node || node === true) return node === true;
+      // If the branch is missing or flagged as a generic `true` at an ancestor level,
+      // we DO NOT treat the deeper path as dirty. This intentionally allows applying
+      // persisted nested values when a parent container was marked dirty programmatically.
+      if (!node || node === true) return false;
       node = (node as Record<string, unknown>)[seg] as DirtyTree;
     }
     return node === true;
