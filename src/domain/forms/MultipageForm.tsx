@@ -65,6 +65,8 @@ interface Props {
   validationContext?: AnyObject;
   /** Optional initial step index (useful for tests) */
   initialStep?: number;
+  /** Optional persistence key to save/restore active step across language changes */
+  stepPersistKey?: string;
 }
 
 /**
@@ -85,17 +87,38 @@ const MultipageForm: React.FC<Props> = ({
   formData,
   validationContext,
   initialStep,
+  stepPersistKey,
 }) => {
   const locale = useLocale();
 
   const stepReducer = createStepReducer(formSteps.length);
+
+  // Determine initial active step: precedence
+  //  1. explicit initialStep prop
+  //  2. persisted step from sessionStorage keyed by stepPersistKey
+  //  3. default 0
+  let persistedStep: number | undefined;
+  try {
+    if (stepPersistKey && typeof window !== 'undefined') {
+      const raw = sessionStorage.getItem(`${stepPersistKey}-activeStep`);
+      if (raw !== null) {
+        const parsed = Number.parseInt(raw, 10);
+        if (!Number.isNaN(parsed))
+          persistedStep = Math.max(0, Math.min(parsed, formSteps.length - 1));
+      }
+    }
+  } catch {
+    // ignore sessionStorage errors
+  }
+
   const initialState = {
     activeStepIndex:
       typeof initialStep === 'number'
         ? Math.max(0, Math.min(initialStep, formSteps.length - 1))
-        : 0,
+        : (persistedStep ?? 0),
     steps: formSteps,
   };
+
   const [state, dispatch] = useReducer(stepReducer, initialState);
 
   function handleStepChange(value: Action) {
@@ -121,6 +144,24 @@ const MultipageForm: React.FC<Props> = ({
       changeStep();
     }
   }
+
+  // Persist active step index when language change is about to occur so it can be
+  // restored after navigation. This mirrors the form value persistence hook which
+  // listens for the same `haitaton:languageChanging` event.
+  React.useEffect(() => {
+    if (!stepPersistKey) return;
+    const handler = () => {
+      try {
+        sessionStorage.setItem(`${stepPersistKey}-activeStep`, String(state.activeStepIndex));
+      } catch {
+        // ignore
+      }
+    };
+    window.addEventListener('haitaton:languageChanging', handler);
+    return () => window.removeEventListener('haitaton:languageChanging', handler);
+    // Intentionally include state.activeStepIndex so the latest value is persisted
+    // when the event fires.
+  }, [stepPersistKey, state.activeStepIndex]);
 
   function handleStepClick(
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,

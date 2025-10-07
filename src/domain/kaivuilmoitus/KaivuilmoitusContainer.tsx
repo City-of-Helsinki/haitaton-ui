@@ -564,6 +564,7 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
         heading={t('kaivuilmoitusForm:pageHeader')}
         subHeading={`${hankeData.nimi} (${hankeData.hankeTunnus})`}
         formSteps={formSteps}
+        stepPersistKey={`application-form-${application?.id || 'new'}-KAIVU`}
         formData={watchFormValues}
         topElement={
           (lastStep || showErrorsPerStep[activeStepIndex]) && (

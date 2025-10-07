@@ -304,6 +304,7 @@ export default function JohtoselvitysTaydennysContainer({
         heading={t('hakemus:buttons:editApplication')}
         subHeading={`${hankeData.nimi} (${hankeData.hankeTunnus})`}
         formSteps={formSteps}
+        stepPersistKey={`application-form-${originalApplication?.id || 'new'}-JOHTO`}
         formData={watchFormValues}
         topElement={
           <>

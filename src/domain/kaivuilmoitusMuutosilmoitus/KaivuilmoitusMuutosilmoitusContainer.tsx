@@ -303,6 +303,7 @@ export default function KaivuilmoitusMuutosilmoitusContainer({
         heading={t('muutosilmoitus:heading')}
         subHeading={`${originalApplication.applicationData.name} (${originalApplication.applicationIdentifier})`}
         formSteps={formSteps}
+        stepPersistKey={`muutosilmoitus-form-${muutosilmoitus.id || 'new'}-KAIVU`}
         formData={watchFormValues}
         validationContext={{ application: watchFormValues }}
         onStepChange={handleStepChange}

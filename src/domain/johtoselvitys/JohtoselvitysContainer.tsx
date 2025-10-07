@@ -533,6 +533,7 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
         heading={t('johtoselvitysForm:pageHeader')}
         subHeading={hankeNameText}
         formSteps={formSteps}
+        stepPersistKey={`application-form-${application?.id || 'new'}-JOHTO`}
         initialStep={initialStep}
         onStepChange={handleStepChange}
         onSubmit={handleSubmit(openSendDialog)}

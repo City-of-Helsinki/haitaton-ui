@@ -454,6 +454,7 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
         <MultipageForm
           heading={formHeading}
           formSteps={formSteps}
+          stepPersistKey={`hanke-form-${formData.hankeTunnus || 'new'}`}
           onStepChange={handleStepChange}
           topElement={formErrorsNotification}
           formData={watchFormValues}
