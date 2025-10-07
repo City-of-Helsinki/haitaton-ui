@@ -231,6 +231,31 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
                   phone: ad.invoicingCustomer.phone,
                 }
               : ad.invoicingCustomer,
+            // Persist lightweight area metadata (exclude non-serializable OpenLayers features)
+            areas: ad.areas
+              ? ad.areas.map((area) => {
+                  const a = area as Record<string, unknown>;
+                  return {
+                    name: (a.name as string) ?? null,
+                    hankealueId: (a.hankealueId as unknown) ?? null,
+                    katuosoite: (a.katuosoite as string) ?? null,
+                    tyonTarkoitukset: (a.tyonTarkoitukset as unknown) ?? null,
+                    meluhaitta: (a.meluhaitta as unknown) ?? null,
+                    polyhaitta: (a.polyhaitta as unknown) ?? null,
+                    tarinahaitta: (a.tarinahaitta as unknown) ?? null,
+                    kaistahaitta: (a.kaistahaitta as unknown) ?? null,
+                    kaistahaittojenPituus: (a.kaistahaittojenPituus as unknown) ?? null,
+                    lisatiedot: (a.lisatiedot as string) ?? null,
+                    // Persist minimal tyoalue metadata (avoid feature)
+                    tyoalueet: Array.isArray(a.tyoalueet)
+                      ? (a.tyoalueet as Array<Record<string, unknown>>).map((ta) => ({
+                          area: (ta.area as unknown) ?? null,
+                          tormaystarkasteluTulos: (ta.tormaystarkasteluTulos as unknown) ?? null,
+                        }))
+                      : [],
+                  };
+                })
+              : undefined,
           },
           __geometry,
         };

@@ -32,6 +32,23 @@ export function buildKaivuAreasGeometrySnapshot<T = unknown>(areas?: T[]) {
   return {
     areas: areas?.map((a: unknown) => {
       const aa = a as Record<string, unknown>;
+      // Kaivuilmoitus stores geometries on nested tyoalueet[].openlayersFeature
+      if (Array.isArray(aa?.tyoalueet)) {
+        const tyoalueet = (aa.tyoalueet as Array<Record<string, unknown>>).map((ta) => {
+          const feature = (ta.openlayersFeature ?? ta.feature) as Feature | undefined | null;
+          return (
+            (serializeFeatureGeometry(feature as Feature) as SerializedGeometry | null) ?? null
+          );
+        });
+        return {
+          // include name for UI restore
+          name: aa?.name ?? null,
+          // include nested tyoalueet geometries
+          tyoalueet,
+        };
+      }
+
+      // Fallback: single-feature area shape (Johtoselvitys style)
       return {
         geometry: aa?.feature
           ? (serializeFeatureGeometry(aa.feature as Feature) as SerializedGeometry | null)
@@ -101,6 +118,34 @@ export function hydrateKaivuAreasGeometryAfterHydrate(
   const currentArr = current as Array<Record<string, unknown>>;
   persisted.forEach((entry: unknown, idx: number) => {
     const en = entry as Record<string, unknown>;
+    // If snapshot contains nested tyoalueet geometries (Kaivuilmoitus), hydrate them into
+    // applicationData.areas.{idx}.tyoalueet.{j}.openlayersFeature
+    if (Array.isArray(en?.tyoalueet)) {
+      const tyoalueSerials = en.tyoalueet as Array<SerializedGeometry | null>;
+      tyoalueSerials.forEach((ts, j) => {
+        if (!ts) return;
+        const geom = deserializeGeometry(ts as SerializedGeometry | null);
+        if (!geom) return;
+        // access nested tyoalueet permissively; form shapes are dynamic so use unknown casts
+        const currentItem = currentArr[idx] as unknown as Record<string, unknown> | undefined;
+        const tyoalueet = currentItem?.tyoalueet as unknown as
+          | Array<Record<string, unknown>>
+          | undefined;
+        const nestedTyoalue = tyoalueet
+          ? (tyoalueet[j] as Record<string, unknown> | undefined)
+          : undefined;
+        const existing: Feature<Geometry> =
+          (nestedTyoalue?.openlayersFeature as unknown as Feature<Geometry>) ??
+          new Feature<Geometry>();
+        existing.setGeometry(geom);
+        formContext.setValue(`${pathPrefix}.${idx}.tyoalueet.${j}.openlayersFeature`, existing, {
+          shouldDirty: false,
+        });
+      });
+      return;
+    }
+
+    // Fallback: single-area feature (Johtoselvitys style)
     if (!en?.geometry) return;
     const geom = deserializeGeometry(en.geometry as SerializedGeometry | null);
     if (!geom) return;

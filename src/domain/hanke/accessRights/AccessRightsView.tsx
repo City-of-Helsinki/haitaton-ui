@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState, useCallback } from 'react';
+import { unstable_batchedUpdates } from 'react-dom';
 import {
   SearchInput,
   Table,
@@ -231,8 +232,20 @@ function AccessRightsView({ hankeUsers, hankeTunnus, signedInUser, readonly }: R
   }
 
   function handleTableSort(order: 'asc' | 'desc', colKey: string, handleSort: () => void) {
-    toggleSortBy(colKey, order === 'desc');
-    handleSort();
+    // Batch react-table and HDS Table updates together to avoid nested
+    // synchronous updates while keeping the operations deterministic.
+    //
+    // Rationale: HDS Table exposes a UI handler (`handleSort`) for its
+    // internal representation while `react-table` exposes `toggleSortBy`
+    // to change the sorted data. Calling these separately (or in an
+    // inconsistent order) caused nested synchronous updates and a
+    // "Maximum update depth exceeded" failure in tests. Batching keeps
+    // both updates in the same render cycle so ordering is deterministic
+    // and tests (and the UI) remain stable.
+    unstable_batchedUpdates(() => {
+      toggleSortBy(colKey, order === 'desc');
+      handleSort();
+    });
   }
 
   function navigateToEditUserView(id: string) {
