@@ -17,6 +17,7 @@ import '../../../assets/styles/variables.css';
 import MaintenancePage from '../../../pages/staticPages/MaintenancePage';
 import AccessibleNavigationAnnouncer from '../NavigationAnnouncer';
 import { loginProviderProps } from '../../../domain/auth/loginProviderProps';
+import SessionTerminationHandler from '../../../domain/auth/components/SessionTerminationHandler';
 import siteSettings from './sitesettings.json';
 import { useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
@@ -86,6 +87,7 @@ function App({ matomoEnabled }: Readonly<{ matomoEnabled: boolean }>) {
                     <AccessibleNavigationAnnouncer />
                     <Layout>
                       <GlobalNotificationProvider>
+                        <SessionTerminationHandler />
                         <AppRoutes />
                         <GlobalNotification />
                         <CookieBanner />
