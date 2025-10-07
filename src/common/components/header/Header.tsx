@@ -78,6 +78,27 @@ function HaitatonHeader() {
 
   async function setLanguage(lang: string) {
     const routeKey = getMatchingRouteKey(i18n, i18n.language as Language, location.pathname);
+    // Determine any trailing subpath after the matched route base so we can preserve
+    // multipage/subpage state (e.g. /manual/:id or /workInstructions/card/123).
+    //
+    // Note: compute everything relative to the path *without* the locale prefix.
+    // The localized base path (translation) already contains the route segment
+    // (for example `/manual` vs `/manual-en`), so measuring the suffix on the
+    // path-without-locale avoids duplicating the base segment when we later
+    // append the suffix to the newly computed localized path.
+    const baseNoLocale = t(`routes:${routeKey}.path`);
+    const localePrefix = `/${i18n.language}`;
+    const pathNoLocale = location.pathname.startsWith(localePrefix)
+      ? location.pathname.substring(localePrefix.length)
+      : location.pathname;
+    let suffix = '';
+    if (pathNoLocale.startsWith(baseNoLocale)) {
+      suffix = pathNoLocale.substring(baseNoLocale.length);
+    } else {
+      const idx = pathNoLocale.indexOf(baseNoLocale);
+      if (idx >= 0) suffix = pathNoLocale.substring(idx + baseNoLocale.length);
+    }
+
     // Fire event so forms can persist state immediately before unmount
     try {
       window.dispatchEvent(
@@ -86,9 +107,11 @@ function HaitatonHeader() {
     } catch {
       // ignore
     }
+
     await i18n.changeLanguage(lang);
     const path = getPathForLanguage(lang as Language, routeKey);
-    navigate(path);
+    // Append suffix (may include leading '/') so the user remains on the same multipage subpage
+    navigate(`${path}${suffix}`);
   }
 
   function getUserMenuLabel() {
