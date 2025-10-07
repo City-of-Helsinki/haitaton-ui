@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Feature } from 'ol';
 import {
-  serializeFeatureGeometry,
-  deserializeGeometry,
-} from '../../../common/utils/geometrySerialization';
+  buildHankeAlueetGeometrySnapshot,
+  hydrateHankeAlueetGeometryAfterHydrate,
+} from '../../common/utils/persistenceGeometry';
 import { FieldPath, FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation, useQueryClient } from 'react-query';
@@ -104,13 +103,9 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
         } = values as typeof values & { tyomaaTyyppi?: string[] };
         // Lightweight geometry snapshot (only polygon coordinates), separate meta key so hook skips applying directly
         // eslint-disable-next-line no-underscore-dangle -- internal meta key for persisted geometry snapshot
-        const __geometry = {
-          alueet: (values.alueet || []).map((a) => ({
-            id: a.id ?? null,
-            geometry: a.feature ? serializeFeatureGeometry(a.feature) : null,
-            name: a.nimi ?? null,
-          })),
-        };
+        const __geometry = buildHankeAlueetGeometrySnapshot(
+          values.alueet as unknown as Array<Record<string, unknown>>,
+        );
         return {
           hankeTunnus, // Include hankeTunnus to ensure it's preserved
           nimi,
@@ -142,38 +137,12 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
       },
       debounceMs: 200,
       afterHydrate(raw) {
-        try {
-          if (!raw || typeof raw !== 'object') return;
-          interface PersistedAreaGeom {
-            id: string | number | null;
-            name?: string | null;
-            geometry: { type: string; coordinates: unknown } | null;
-          }
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any,@typescript-eslint/naming-convention
-          // eslint-disable-next-line @typescript-eslint/naming-convention,@typescript-eslint/no-explicit-any
-          // eslint-disable-next-line no-underscore-dangle, @typescript-eslint/no-explicit-any -- accessing internal meta key
-          const geomSection = (raw as any)['__geometry'] as
-            | { alueet?: PersistedAreaGeom[] }
-            | undefined; // internal meta key
-          if (!geomSection || !Array.isArray(geomSection.alueet)) return;
-          const current = formContext.getValues('alueet');
-          if (!current) return;
-          geomSection.alueet.forEach((g, idx) => {
-            if (!g || !g.geometry || !current[idx]) return;
-            const geom = deserializeGeometry(g.geometry);
-            if (!geom) return;
-            const existingFeature = current[idx].feature || new Feature();
-            existingFeature.setGeometry(geom);
-            formContext.setValue(
-              // cast path for TS; feature is virtual field
-              `alueet.${idx}.feature` as unknown as FieldPath<HankeDataFormState>,
-              existingFeature as unknown,
-              { shouldDirty: false },
-            );
-          });
-        } catch {
-          // ignore
-        }
+        // formContext uses react-hook-form generics; cast to any for compatibility
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        hydrateHankeAlueetGeometryAfterHydrate(raw, formContext as any, {
+          pathPrefix: 'alueet',
+          snapshotKey: 'alueet',
+        });
       },
     },
   );

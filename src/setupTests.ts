@@ -160,7 +160,7 @@ Promise.prototype.then = function patchedThen<TResult1 = unknown, TResult2 = nev
       : undefined;
   // @ts-expect-error generic forwarding
   return originalThen.call(this, wrap(onFulfilled), wrap(onRejected));
-};
+}; // NOSONAR
 
 // Provide a helper to await all pending promises within act for places where tests can call it
 // (opt-in): await flushAsync();

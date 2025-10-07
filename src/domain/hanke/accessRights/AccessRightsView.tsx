@@ -190,7 +190,17 @@ function AccessRightsView({ hankeUsers, hankeTunnus, signedInUser, readonly }: R
   );
 
   useEffect(() => {
-    setUsersData(hankeUsers.map(addWholeName));
+    // Only update state when the new mapped users differ from current state
+    const newUsers = hankeUsers.map(addWholeName);
+    setUsersData((prev) => {
+      if (
+        prev.length === newUsers.length &&
+        prev.every((u, i) => u.id === newUsers[i].id && u.nimi === newUsers[i].nimi)
+      ) {
+        return prev;
+      }
+      return newUsers;
+    });
   }, [hankeUsers]);
 
   useEffect(() => {

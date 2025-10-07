@@ -859,8 +859,12 @@ test('Should be able to upload attachments', async () => {
   // Instead of relying on UI re-render timing of react-query + FileList, assert the
   // upload API was called with the expected files. UI listing is covered in existing
   // separate tests ("Should list existing attachments in the attachments page").
-  const uploadedNames = uploadSpy.mock.calls.map((c) => c[0].file.name).sort();
-  expect(uploadedNames).toEqual(['liikennejärjestelyt.pdf', 'muu.png', 'valtakirja.pdf'].sort());
+  const uploadedNames = uploadSpy.mock.calls
+    .map((c) => c[0].file.name)
+    .sort((a, b) => a.localeCompare(b));
+  expect(uploadedNames).toEqual(
+    ['liikennejärjestelyt.pdf', 'muu.png', 'valtakirja.pdf'].sort((a, b) => a.localeCompare(b)),
+  );
   // Removed attachment step validation diagnostics
 });
 

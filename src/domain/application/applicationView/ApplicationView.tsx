@@ -59,6 +59,7 @@ import {
   isApplicationSent,
   isContactIn,
 } from '../utils';
+import { areasInclude } from '../../common/utils/persistenceGeometry';
 import ContactsSummary from '../components/summary/ContactsSummary';
 import JohtoselvitysDecisionLink from '../../johtoselvitys/components/DecisionLink';
 import KaivuilmoitusDecisionLink from '../../kaivuilmoitus/components/DecisionLink';
@@ -433,10 +434,6 @@ function KaivuilmoitusAreaInfo({
       </FormSummarySection>
     </Accordion>
   );
-}
-
-function areasInclude(areas: KaivuilmoitusAlue[] | null, area: KaivuilmoitusAlue) {
-  return areas?.some((a) => a.hankealueId === area.hankealueId);
 }
 
 function KaivuilmoitusAreasInfo({

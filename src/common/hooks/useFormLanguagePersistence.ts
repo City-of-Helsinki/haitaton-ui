@@ -72,7 +72,12 @@ export default function useFormLanguagePersistence<T extends object>(
       const persistable = (select ? select(allValues as T) : allValues) as unknown;
       const json = safeStringify(persistable);
       if (json) {
-        sessionStorage.setItem(storageKey, json);
+        try {
+          sessionStorage.setItem(storageKey, json);
+          // setItem succeeded
+        } catch (e) {
+          // ignore setItem failure in production
+        }
       }
     } catch {
       // ignore

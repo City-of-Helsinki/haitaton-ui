@@ -15,10 +15,9 @@ import { merge } from 'lodash';
 import { useBeforeUnload } from 'react-router-dom';
 import { JohtoselvitysFormValues } from './types';
 import {
-  serializeFeatureGeometry,
-  deserializeGeometry,
-} from '../../common/utils/geometrySerialization';
-import { Feature } from 'ol';
+  buildJohtoAreasGeometrySnapshot,
+  hydrateJohtoAreasGeometryAfterHydrate,
+} from '../common/utils/persistenceGeometry';
 import { BasicInfo } from './BasicInfo';
 import Contacts from '../application/components/ApplicationContacts';
 import { Geometries } from './Geometries';
@@ -120,12 +119,9 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
         const ad = values.applicationData;
         // eslint-disable-next-line @typescript-eslint/naming-convention
         // eslint-disable-next-line no-underscore-dangle -- internal meta snapshot key
-        const __geometry = {
-          areas: ad.areas?.map((area) => ({
-            geometry: area.feature ? serializeFeatureGeometry(area.feature) : null,
-            name: area.name ?? null,
-          })),
-        };
+        const __geometry = buildJohtoAreasGeometrySnapshot(
+          ad.areas as unknown as Array<Record<string, unknown>>,
+        );
         return {
           applicationData: {
             name: ad.name,
@@ -225,32 +221,12 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
       },
       debounceMs: 250,
       afterHydrate(raw) {
-        try {
-          if (!raw || typeof raw !== 'object') return;
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any,@typescript-eslint/naming-convention
-          // eslint-disable-next-line no-underscore-dangle, @typescript-eslint/no-explicit-any -- accessing internal meta key from persistence blob
-          const geomSection = (raw as any)['__geometry'] as
-            | { areas?: { geometry: { type: string; coordinates: unknown } | null }[] }
-            | undefined;
-          if (!geomSection?.areas) return;
-          const current = formContext.getValues('applicationData.areas');
-          if (!current) return;
-          geomSection.areas.forEach((g, idx) => {
-            if (!g?.geometry || !current[idx]) return;
-            const geom = deserializeGeometry(g.geometry);
-            if (!geom) return;
-            const existing = current[idx].feature || new Feature();
-            existing.setGeometry(geom);
-            formContext.setValue(
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              `applicationData.areas.${idx}.feature` as any,
-              existing,
-              { shouldDirty: false },
-            );
-          });
-        } catch {
-          // ignore
-        }
+        // formContext uses react-hook-form generics; cast to any for compatibility
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        hydrateJohtoAreasGeometryAfterHydrate(raw, formContext as any, {
+          pathPrefix: 'applicationData.areas',
+          snapshotKey: 'areas',
+        });
       },
     },
   );
