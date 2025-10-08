@@ -1234,14 +1234,15 @@ describe('Yhteystieto ytunnus validation', () => {
   });
 });
 test('Should not save if public hanke has missing haittojen hallinta fields', async () => {
-  const testHanke = createTestHanke(1, {
-    status: 'PUBLIC',
-  });
+  const testHanke = createTestHanke(2);
   const { user } = renderHankeForm(testHanke);
   await user.click(screen.getByRole('button', { name: /haittojen hallinta/i }));
-  const suunnitelmaInput = screen.getAllByLabelText(/toimet hankealueen haittojen hallintaan/i)[0];
+  const suunnitelmaInput = screen.getAllByLabelText(/toimet hankealueen haittojen hallintaan/i)[0] as HTMLInputElement;
   await user.clear(suunnitelmaInput);
   expect(suunnitelmaInput).toHaveValue('');
   await user.click(screen.getByRole('button', { name: /tallenna ja keskeytä/i }));
-  expect(await screen.findByText(/kenttä on pakollinen/i)).toBeInTheDocument();
+  const errorMessage = await screen.findByText(/kenttä on pakollinen/i);
+  expect(errorMessage).toBeInTheDocument();
+  await new Promise((resolve) => setTimeout(resolve, 150));
+  expect(document.activeElement).toBe(suunnitelmaInput);
 });
