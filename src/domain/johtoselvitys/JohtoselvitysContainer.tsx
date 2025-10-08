@@ -14,7 +14,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { merge } from 'lodash';
 import { useBeforeUnload } from 'react-router-dom';
 import { JohtoselvitysFormValues } from './types';
-import {} from '../common/utils/persistenceGeometry';
 import { BasicInfo } from './BasicInfo';
 import Contacts from '../application/components/ApplicationContacts';
 import { Geometries } from './Geometries';

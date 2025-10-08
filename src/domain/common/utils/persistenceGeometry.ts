@@ -27,6 +27,32 @@ export type FormContextLike = {
   setValue: (path: string, value: unknown, options?: { shouldDirty?: boolean }) => void;
 };
 
+// Helper: extract persisted array section (areas/alueet) from raw persisted payload.
+// exported for testing.
+export function extractPersistedArray(raw: unknown, snapshotKey: string) {
+  if (!raw || typeof raw !== 'object') return undefined;
+  const rawObj = raw as Record<string, unknown>;
+  const geomSectionRaw = rawObj[snapshotKey]
+    ? { [snapshotKey]: rawObj[snapshotKey] }
+    : (rawObj['__geometry'] as unknown | undefined);
+  let persisted: unknown = undefined;
+  if (geomSectionRaw && typeof geomSectionRaw === 'object') {
+    const gs = geomSectionRaw as Record<string, unknown>;
+    persisted = gs[snapshotKey] ?? geomSectionRaw;
+  } else {
+    persisted = geomSectionRaw;
+  }
+  return Array.isArray(persisted) ? (persisted as unknown[]) : undefined;
+}
+
+// Helper: read and validate current array from form context at pathPrefix
+// exported for testing.
+export function getCurrentArray(formContext: FormContextLike, pathPrefix: string) {
+  const current = formContext.getValues(pathPrefix) as unknown;
+  if (!Array.isArray(current)) return undefined;
+  return current as Array<Record<string, unknown>>;
+}
+
 export function buildJohtoAreasGeometrySnapshot<
   T extends Record<string, unknown> = Record<string, unknown>,
 >(areas?: T[]) {
@@ -80,23 +106,10 @@ export function hydrateJohtoAreasGeometryAfterHydrate(
   options: { pathPrefix?: string; snapshotKey?: string } = {},
 ) {
   const { pathPrefix = 'applicationData.areas', snapshotKey = 'areas' } = options;
-  if (!raw || typeof raw !== 'object') return;
-  const rawObj = raw as Record<string, unknown>;
-  const geomSectionRaw = rawObj[snapshotKey]
-    ? { areas: rawObj[snapshotKey] }
-    : (rawObj['__geometry'] as unknown | undefined);
-  let persisted: unknown = undefined;
-  if (geomSectionRaw && typeof geomSectionRaw === 'object') {
-    const gs = geomSectionRaw as Record<string, unknown>;
-    persisted = gs.areas ?? geomSectionRaw;
-  } else {
-    persisted = geomSectionRaw;
-  }
-  if (!Array.isArray(persisted)) return;
-  const current = formContext.getValues(pathPrefix) as unknown;
-  if (!Array.isArray(current)) return;
-  const currentArr = current as Array<Record<string, unknown>>;
-  if (!Array.isArray(persisted)) return;
+  const persisted = extractPersistedArray(raw, snapshotKey);
+  if (!persisted) return;
+  const currentArr = getCurrentArray(formContext, pathPrefix);
+  if (!currentArr) return;
   persisted.forEach((entry: unknown, idx: number) => {
     const en = entry as Record<string, unknown>;
     if (!en?.geometry) return;
@@ -115,22 +128,10 @@ export function hydrateKaivuAreasGeometryAfterHydrate(
   options: { pathPrefix?: string; snapshotKey?: string } = {},
 ) {
   const { pathPrefix = 'applicationData.areas', snapshotKey = 'areas' } = options;
-  if (!raw || typeof raw !== 'object') return;
-  const rawObj = raw as Record<string, unknown>;
-  const geomSectionRaw = rawObj[snapshotKey]
-    ? { areas: rawObj[snapshotKey] }
-    : (rawObj['__geometry'] as unknown | undefined);
-  let persisted: unknown = undefined;
-  if (geomSectionRaw && typeof geomSectionRaw === 'object') {
-    const gs = geomSectionRaw as Record<string, unknown>;
-    persisted = gs.areas ?? geomSectionRaw;
-  } else {
-    persisted = geomSectionRaw;
-  }
-  if (!Array.isArray(persisted)) return;
-  const current = formContext.getValues(pathPrefix) as unknown;
-  if (!Array.isArray(current)) return;
-  const currentArr = current as Array<Record<string, unknown>>;
+  const persisted = extractPersistedArray(raw, snapshotKey);
+  if (!persisted) return;
+  const currentArr = getCurrentArray(formContext, pathPrefix);
+  if (!currentArr) return;
   persisted.forEach((entry: unknown, idx: number) => {
     const en = entry as Record<string, unknown>;
     // If snapshot contains nested tyoalueet geometries (Kaivuilmoitus), hydrate them into
@@ -192,22 +193,10 @@ export function hydrateHankeAlueetGeometryAfterHydrate(
   options: { pathPrefix?: string; snapshotKey?: string } = {},
 ) {
   const { pathPrefix = 'alueet', snapshotKey = 'alueet' } = options;
-  if (!raw || typeof raw !== 'object') return;
-  const rawObj = raw as Record<string, unknown>;
-  const geomSectionRaw = rawObj[snapshotKey]
-    ? { alueet: rawObj[snapshotKey] }
-    : (rawObj['__geometry'] as unknown | undefined);
-  let persisted: unknown = undefined;
-  if (geomSectionRaw && typeof geomSectionRaw === 'object') {
-    const gs = geomSectionRaw as Record<string, unknown>;
-    persisted = gs.alueet ?? geomSectionRaw;
-  } else {
-    persisted = geomSectionRaw;
-  }
-  if (!Array.isArray(persisted)) return;
-  const current = formContext.getValues(pathPrefix) as unknown;
-  if (!Array.isArray(current)) return;
-  const currentArr = current as Array<Record<string, unknown>>;
+  const persisted = extractPersistedArray(raw, snapshotKey);
+  if (!persisted) return;
+  const currentArr = getCurrentArray(formContext, pathPrefix);
+  if (!currentArr) return;
   persisted.forEach((entry: unknown, idx: number) => {
     const en = entry as Record<string, unknown>;
     if (!en?.geometry || !currentArr[idx]) return;
