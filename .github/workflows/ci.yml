@@ -41,7 +41,7 @@ jobs:
         node-version: 20
         cache: 'yarn'
     - name: Check Yarn version and install dependencies
-      run: arn install --immutable --inline-builds
+      run: yarn install --immutable --inline-builds
     - name: Run tests
       run: yarn test:coverage
       env:
