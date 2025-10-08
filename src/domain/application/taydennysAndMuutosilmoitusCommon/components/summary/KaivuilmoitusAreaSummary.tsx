@@ -150,9 +150,10 @@ export default function KaivuilmoitusAreaSummary({
 }: Readonly<Props>) {
   const { t } = useTranslation();
   const { startTime, endTime, areas: taydennysAreas } = data;
+  const safeTaydennysAreas = Array.isArray(taydennysAreas) ? taydennysAreas : [];
   const startTimeChanged = muutokset.includes('startTime');
   const endTimeChanged = muutokset.includes('endTime');
-  const changedAreas: PartialExcept<KaivuilmoitusAlue, 'tyoalueet'>[] = taydennysAreas
+  const changedAreas: PartialExcept<KaivuilmoitusAlue, 'tyoalueet'>[] = safeTaydennysAreas
     .map((kaivuilmoitusAlue, index) => {
       if (isNewArea(index, muutokset)) {
         return kaivuilmoitusAlue;
@@ -163,7 +164,7 @@ export default function KaivuilmoitusAreaSummary({
     .filter((_, index) => {
       return muutokset.includes(`areas[${index}]`);
     });
-  const removedAreas = differenceBy(originalData.areas, taydennysAreas, 'hankealueId');
+  const removedAreas = differenceBy(originalData.areas || [], safeTaydennysAreas, 'hankealueId');
   if (
     changedAreas.length === 0 &&
     removedAreas.length === 0 &&
@@ -173,8 +174,8 @@ export default function KaivuilmoitusAreaSummary({
     return null;
   }
 
-  const geometries: Geometry[] = taydennysAreas
-    .flatMap((area) => area.tyoalueet)
+  const geometries: Geometry[] = safeTaydennysAreas
+    .flatMap((area) => (Array.isArray(area?.tyoalueet) ? area.tyoalueet : []))
     .map((alue) => getAreaGeometry(alue));
   const totalSurfaceArea = getTotalSurfaceArea(geometries);
 

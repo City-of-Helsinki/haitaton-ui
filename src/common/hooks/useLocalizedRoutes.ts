@@ -5,7 +5,8 @@ import { ROUTES, RouteMap } from '../types/route';
 import { Language } from '../types/language';
 
 export const APPLICATION_ID_REGEXP = /(?<=\/)(\d+)/;
-export const HANKETUNNUS_REGEXP = /HAI\d{2}-(\d+)/;
+// Match Hanke tunnus (case-insensitive) like HAI20-1234 - be permissive about casing
+export const HANKETUNNUS_REGEXP = /HAI\d{2}-\d+/i;
 export const USER_ID_REGEXP = /(?<=\/)(.{8}-.{4}-.{4}-.{4}-.{12})/;
 
 type GetLocalizationParams = {

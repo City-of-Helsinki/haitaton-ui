@@ -24,6 +24,7 @@ type Props = {
     originalFeature: Feature | null,
     modifiedFeature: Feature,
   ) => void;
+  onGeometryFinalized?: () => void;
 };
 
 const DrawModule: React.FC<React.PropsWithChildren<Props>> = ({
@@ -33,6 +34,7 @@ const DrawModule: React.FC<React.PropsWithChildren<Props>> = ({
   drawStyleFunction,
   drawSegmentGuard,
   handleModifyEnd,
+  onGeometryFinalized,
 }) => {
   return (
     <>
@@ -43,6 +45,7 @@ const DrawModule: React.FC<React.PropsWithChildren<Props>> = ({
         drawStyleFunction={drawStyleFunction}
         drawSegmentGuard={drawSegmentGuard}
         handleModifyEnd={handleModifyEnd}
+        onGeometryFinalized={onGeometryFinalized}
       />
       <DrawControl />
     </>

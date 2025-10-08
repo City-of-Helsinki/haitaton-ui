@@ -9,7 +9,6 @@ function isCustomerEmpty(customer?: Customer) {
   if (customer === undefined) {
     return true;
   }
-
   if (
     customer.name === '' &&
     !customer.registryKey &&
@@ -57,12 +56,16 @@ const ContactsSummary: React.FC<{
     return null;
   }
 
+  const contacts = Array.isArray(customerWithContacts.contacts)
+    ? customerWithContacts.contacts
+    : [];
+
   return (
     <>
       {title ? <SectionItemTitle>{title}</SectionItemTitle> : <div />}
       <ContentContainer>
         <CustomerSummary customer={customerWithContacts.customer} />
-        {customerWithContacts.contacts.length > 0 && (
+        {contacts.length > 0 && (
           <>
             <Text tag="h3" weight="bold" spacingBottom="xs">
               {t('form:yhteystiedot:titles:subContacts')}
@@ -73,7 +76,7 @@ const ContactsSummary: React.FC<{
               justifyContent="start"
               alignItems="start"
             >
-              {customerWithContacts.contacts.map((contact) => {
+              {contacts.map((contact) => {
                 return <ContactSummary key={contact.email} contact={contact} />;
               })}
             </Grid>

@@ -48,21 +48,27 @@ import useSaveApplication from '../application/hooks/useSaveApplication';
 import useNavigateToApplicationView from '../application/hooks/useNavigateToApplicationView';
 import ApplicationSendDialog from '../application/components/ApplicationSendDialog';
 import Button from '../../common/components/button/Button';
+import useAreasPersistence from '../../common/hooks/useAreasPersistence';
 
 type Props = {
   hankeData?: HankeData;
   application?: Application<JohtoselvitysData>;
+  /** Optional initial step for tests */
+  initialStep?: number | undefined;
 };
 
 const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
   hankeData,
   application,
+  initialStep,
 }) => {
   let hanke = hankeData;
   const { t } = useTranslation();
   const { setNotification } = useGlobalNotification();
   const [attachmentUploadErrors, setAttachmentUploadErrors] = useState<JSX.Element[]>([]);
   const { data: signedInUser } = usePermissionsForHanke(hanke?.hankeTunnus);
+
+  const [validationContext] = useState({ hankeData: hanke });
 
   const initialValues: JohtoselvitysFormValues = {
     id: null,
@@ -96,7 +102,18 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
     shouldUnregister: false,
     defaultValues: merge(initialValues, convertApplicationDataToFormState(application)),
     resolver: yupResolver(validationSchema),
+    context: validationContext,
   });
+
+  // Lightweight persisted shape handled purely by persistence select; no runtime type needed
+
+  const persistence = useAreasPersistence(
+    `application-form-${application?.id || 'new'}-JOHTO`,
+    formContext,
+    { type: 'JOHTO' },
+  );
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (formContext as any).persistence = persistence;
 
   const {
     getValues,
@@ -106,6 +123,19 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
     formState: { isDirty },
     reset,
   } = formContext;
+
+  // Watch key fields so that this container re-renders when page validation fields change
+  // This ensures formSteps 'state' reflects current form validity (areas, dates, selfIntersectingPolygon)
+  // and prevents the stepper from remaining disabled after fields are filled in tests.
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const watched = formContext.watch([
+    'applicationData.startTime',
+    'applicationData.endTime',
+    'applicationData.areas',
+    'selfIntersectingPolygon',
+  ]);
+  // Create a stable primitive dependency for hook arrays
+  const watchedKey = JSON.stringify(watched);
 
   // Set up a callback to save application id to session storage
   // when the page is about to be unloaded if the application
@@ -189,6 +219,9 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
   function closeSendDialog(id?: number | null) {
     setShowSendDialog(false);
     navigateToApplicationView(id?.toString());
+    if (id) {
+      persistence.clearPersisted();
+    }
   }
 
   function saveCableApplication(handleSuccess?: (data: Application<JohtoselvitysData>) => void) {
@@ -212,7 +245,13 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
     } else {
       applicationUpdateMutation.mutate(
         { id: formData.id, data: convertFormStateToJohtoselvitysUpdateData(formData) },
-        { onSuccess: handleSuccess },
+        {
+          onSuccess(data) {
+            handleSuccess?.(data);
+            // Clear after successful save
+            persistence.clearPersisted();
+          },
+        },
       );
     }
   }
@@ -239,7 +278,10 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
         closeButtonLabelText: t('common:components:notification:closeButtonLabelText'),
       });
     }
-    saveCableApplication(handleSuccess);
+    saveCableApplication(function (data) {
+      handleSuccess(data);
+      persistence.clearPersisted();
+    });
   }
 
   function closeAttachmentUploadErrorDialog() {
@@ -339,7 +381,9 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
           : StepState.disabled,
       },
     ];
-  }, [t, getValues, pageFieldsToValidate, hanke, existingAttachments, attachmentsLoadError]);
+    // NOTE: intentionally include watched fields to re-evaluate step states when form values change.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [t, hanke, existingAttachments, attachmentsLoadError, watchedKey]);
 
   const hankeNameText = (
     <div style={{ visibility: hanke !== undefined ? 'visible' : 'hidden' }}>
@@ -371,6 +415,8 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
         heading={t('johtoselvitysForm:pageHeader')}
         subHeading={hankeNameText}
         formSteps={formSteps}
+        stepPersistKey={`application-form-${application?.id || 'new'}-JOHTO`}
+        initialStep={initialStep}
         onStepChange={handleStepChange}
         onSubmit={handleSubmit(openSendDialog)}
         stepChangeValidator={validateStepChange}

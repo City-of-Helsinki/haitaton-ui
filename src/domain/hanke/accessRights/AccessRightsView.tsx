@@ -1,4 +1,5 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState, useCallback } from 'react';
+import { unstable_batchedUpdates } from 'react-dom';
 import {
   SearchInput,
   Table,
@@ -190,7 +191,17 @@ function AccessRightsView({ hankeUsers, hankeTunnus, signedInUser, readonly }: R
   );
 
   useEffect(() => {
-    setUsersData(hankeUsers.map(addWholeName));
+    // Only update state when the new mapped users differ from current state
+    const newUsers = hankeUsers.map(addWholeName);
+    setUsersData((prev) => {
+      if (
+        prev.length === newUsers.length &&
+        prev.every((u, i) => u.id === newUsers[i].id && u.nimi === newUsers[i].nimi)
+      ) {
+        return prev;
+      }
+      return newUsers;
+    });
   }, [hankeUsers]);
 
   useEffect(() => {
@@ -221,20 +232,32 @@ function AccessRightsView({ hankeUsers, hankeTunnus, signedInUser, readonly }: R
   }
 
   function handleTableSort(order: 'asc' | 'desc', colKey: string, handleSort: () => void) {
-    toggleSortBy(colKey, order === 'desc');
-    handleSort();
+    // Batch react-table and HDS Table updates together to avoid nested
+    // synchronous updates while keeping the operations deterministic.
+    //
+    // Rationale: HDS Table exposes a UI handler (`handleSort`) for its
+    // internal representation while `react-table` exposes `toggleSortBy`
+    // to change the sorted data. Calling these separately (or in an
+    // inconsistent order) caused nested synchronous updates and a
+    // "Maximum update depth exceeded" failure in tests. Batching keeps
+    // both updates in the same render cycle so ordering is deterministic
+    // and tests (and the UI) remain stable.
+    unstable_batchedUpdates(() => {
+      toggleSortBy(colKey, order === 'desc');
+      handleSort();
+    });
   }
 
   function navigateToEditUserView(id: string) {
     navigate(getEditUserPath({ hankeTunnus, id }));
   }
 
-  function canEditUser(user: HankeUser) {
-    return (
+  const canEditUser = useCallback(
+    (user: HankeUser) =>
       user.id === signedInUser?.hankeKayttajaId ||
-      signedInUser?.kayttooikeudet.includes('MODIFY_USER')
-    );
-  }
+      !!signedInUser?.kayttooikeudet.includes('MODIFY_USER'),
+    [signedInUser?.hankeKayttajaId, signedInUser?.kayttooikeudet],
+  );
 
   function handleUserDeleted(user: HankeUser) {
     queryClient.invalidateQueries(['hankeUsers', hankeTunnus]);
@@ -256,126 +279,157 @@ function AccessRightsView({ hankeUsers, hankeTunnus, signedInUser, readonly }: R
     }
   }
 
-  function getUserName(args: HankeUserWithWholeName) {
-    return (
+  const getUserName = useCallback(
+    (args: HankeUserWithWholeName) => (
       <Flex>
         <UserIcon user={args} signedInUser={signedInUser} />
         <p>{args.nimi}</p>
       </Flex>
-    );
-  }
+    ),
+    [signedInUser],
+  );
 
-  function getUserRolesLabel(args: HankeUser) {
-    return args.roolit
-      .sort(userRoleSorter)
-      .map((role) => t(`hankeUsers:roleLabels:${role}`))
-      .join(', ');
-  }
+  const getUserRolesLabel = useCallback(
+    (args: HankeUser) =>
+      args.roolit
+        .sort(userRoleSorter)
+        .map((role) => t(`hankeUsers:roleLabels:${role}`))
+        .join(', '),
+    [t],
+  );
 
-  function getUserRoles(args: HankeUser) {
-    return <p>{getUserRolesLabel(args)}</p>;
-  }
+  const getUserRoles = useCallback(
+    (args: HankeUser) => <p>{getUserRolesLabel(args)}</p>,
+    [getUserRolesLabel],
+  );
 
-  function getAccessRightLabel(args: HankeUser) {
-    return t(`hankeUsers:accessRightLevels:${args.kayttooikeustaso}`);
-  }
+  const getAccessRightLabel = useCallback(
+    (args: HankeUser) => t(`hankeUsers:accessRightLevels:${args.kayttooikeustaso}`),
+    [t],
+  );
 
-  function getActionButtons(args: HankeUser) {
-    const linkSent = linksSentTo.current.includes(args.id);
-    const isSending =
-      resendInvitationMutation.isLoading && resendInvitationMutation.variables === args.id;
-
-    return (
-      <Grid gridTemplateColumns="1fr 1fr 1fr" gap="var(--spacing-s)" justifyContent="flex-end">
-        {!readonly && canEditUser(args) ? (
-          <Link to={getEditUserPath({ hankeTunnus, id: args.id })}>
-            <IconPen
-              style={{ display: 'block' }}
-              color="var(--color-bus)"
-              aria-hidden={false}
-              aria-label={t('hankeUsers:buttons:edit')}
-            />
-          </Link>
-        ) : null}
-        {!readonly && showUserDeleteButton(args, hankeUsers, signedInUser) ? (
-          <button aria-label={t('hankeUsers:buttons:delete')} onClick={() => setDeletedUser(args)}>
-            {deleteInfoQueryResult.isLoading && args.id === userToDelete?.id ? (
-              <LoadingSpinner small />
-            ) : (
-              <IconTrash
+  const getActionButtons = useCallback(
+    (args: HankeUser) => {
+      const linkSent = linksSentTo.current.includes(args.id);
+      const isSending =
+        resendInvitationMutation.isLoading && resendInvitationMutation.variables === args.id;
+      return (
+        <Grid gridTemplateColumns="1fr 1fr 1fr" gap="var(--spacing-s)" justifyContent="flex-end">
+          {!readonly && canEditUser(args) ? (
+            <Link to={getEditUserPath({ hankeTunnus, id: args.id })}>
+              <IconPen
                 style={{ display: 'block' }}
-                color="var(--color-error)"
+                color="var(--color-bus)"
                 aria-hidden={false}
+                aria-label={t('hankeUsers:buttons:edit')}
               />
-            )}
-          </button>
-        ) : null}
-        {!args.tunnistautunut && signedInUser?.kayttooikeudet.includes('RESEND_INVITATION') ? (
-          <Menu>
-            <MenuButton as="button">
-              {isSending ? (
+            </Link>
+          ) : null}
+          {!readonly && showUserDeleteButton(args, hankeUsers, signedInUser) ? (
+            <button
+              aria-label={t('hankeUsers:buttons:delete')}
+              onClick={() => setDeletedUser(args)}
+            >
+              {deleteInfoQueryResult.isLoading && args.id === userToDelete?.id ? (
                 <LoadingSpinner small />
               ) : (
-                <IconMenuDots
+                <IconTrash
                   style={{ display: 'block' }}
-                  color="var(--color-bus)"
+                  color="var(--color-error)"
                   aria-hidden={false}
-                  aria-label={t('hankeUsers:labels:userMenu')}
                 />
               )}
-            </MenuButton>
-            <MenuList>
-              <MenuItem onClick={() => sendInvitation(args)} isDisabled={linkSent}>
-                <Flex alignItems="center" gap="var(--spacing-2-xs)" color="var(--color-bus)">
-                  <IconEnvelope size={IconSize.ExtraSmall} />
-                  {t('hankeUsers:buttons:resendInvitation')}
-                </Flex>
-              </MenuItem>
-            </MenuList>
-          </Menu>
-        ) : null}
-      </Grid>
-    );
-  }
+            </button>
+          ) : null}
+          {!args.tunnistautunut && signedInUser?.kayttooikeudet.includes('RESEND_INVITATION') ? (
+            <Menu>
+              <MenuButton as="button">
+                {isSending ? (
+                  <LoadingSpinner small />
+                ) : (
+                  <IconMenuDots
+                    style={{ display: 'block' }}
+                    color="var(--color-bus)"
+                    aria-hidden={false}
+                    aria-label={t('hankeUsers:labels:userMenu')}
+                  />
+                )}
+              </MenuButton>
+              <MenuList>
+                <MenuItem onClick={() => sendInvitation(args)} isDisabled={linkSent}>
+                  <Flex alignItems="center" gap="var(--spacing-2-xs)" color="var(--color-bus)">
+                    <IconEnvelope size={IconSize.ExtraSmall} />
+                    {t('hankeUsers:buttons:resendInvitation')}
+                  </Flex>
+                </MenuItem>
+              </MenuList>
+            </Menu>
+          ) : null}
+        </Grid>
+      );
+    },
+    [
+      readonly,
+      resendInvitationMutation.isLoading,
+      resendInvitationMutation.variables,
+      t,
+      hankeTunnus,
+      getEditUserPath,
+      hankeUsers,
+      signedInUser,
+      setDeletedUser,
+      deleteInfoQueryResult.isLoading,
+      userToDelete?.id,
+      sendInvitation,
+      linksSentTo,
+      canEditUser,
+    ],
+  );
 
-  const tableCols = [
-    {
-      headerName: t('form:yhteystiedot:labels:nimi'),
-      key: NAME_KEY,
-      isSortable: true,
-      customSortCompareFunction: sortCaseInsensitive,
-      transform: getUserName,
-    },
-    {
-      headerName: t('hankeUsers:role'),
-      key: ROLES_KEY,
-      isSortable: true,
-      transform: getUserRoles,
-    },
-    {
-      headerName: t('form:yhteystiedot:labels:email'),
-      key: EMAIL_KEY,
-      isSortable: true,
-      customSortCompareFunction: sortCaseInsensitive,
-    },
-    {
-      headerName: t('form:yhteystiedot:labels:puhelinnumero'),
-      key: PHONE_KEY,
-      isSortable: false,
-    },
-    {
-      headerName: t('hankeUsers:accessRights'),
-      key: ACCESS_RIGHT_LEVEL_KEY,
-      isSortable: true,
-      transform: getAccessRightLabel,
-    },
-    {
-      headerName: '',
-      key: 'actionButtons',
-      isSortable: false,
-      transform: getActionButtons,
-    },
-  ];
+  // Memoize table column configuration so that HDS Table / react-table integration
+  // does not receive a new 'cols' array identity on every render, which can
+  // cascade into re-sorts and state updates when combined with toggleSortBy.
+  const tableCols = useMemo(
+    () => [
+      {
+        headerName: t('form:yhteystiedot:labels:nimi'),
+        key: NAME_KEY,
+        isSortable: true,
+        customSortCompareFunction: sortCaseInsensitive,
+        transform: getUserName,
+      },
+      {
+        headerName: t('hankeUsers:role'),
+        key: ROLES_KEY,
+        isSortable: true,
+        transform: getUserRoles,
+      },
+      {
+        headerName: t('form:yhteystiedot:labels:email'),
+        key: EMAIL_KEY,
+        isSortable: true,
+        customSortCompareFunction: sortCaseInsensitive,
+      },
+      {
+        headerName: t('form:yhteystiedot:labels:puhelinnumero'),
+        key: PHONE_KEY,
+        isSortable: false,
+      },
+      {
+        headerName: t('hankeUsers:accessRights'),
+        key: ACCESS_RIGHT_LEVEL_KEY,
+        isSortable: true,
+        transform: getAccessRightLabel,
+      },
+      {
+        headerName: '',
+        key: 'actionButtons',
+        isSortable: false,
+        transform: getActionButtons,
+      },
+    ],
+    [t, getUserName, getUserRoles, getAccessRightLabel, getActionButtons],
+  );
 
   return (
     <article className={styles.container}>
@@ -405,7 +459,10 @@ function AccessRightsView({ hankeUsers, hankeTunnus, signedInUser, readonly }: R
         <div className={styles.table}>
           <Table
             cols={tableCols}
-            rows={page.map((row) => row.original)}
+            // Map rows only once per render cycle; memoize to avoid creating
+            // a new array reference that could contribute to unnecessary
+            // downstream recalculations.
+            rows={useMemo(() => page.map((row) => row.original), [page])}
             onSort={handleTableSort}
             indexKey="id"
             variant="light"

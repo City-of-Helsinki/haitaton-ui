@@ -113,11 +113,11 @@ exports[`Should show correct tips for AUTOLIIKENNE and haittaindex 3 1`] = `
               role="region"
               style="display: none;"
             >
-              <p
+              <div
                 class="css-11yjvs7"
               >
                 Selvitä ja toimeenpane liikkumisen ohjauksen keinoja autoliikenteen määrän vähentämiseksi hankkeen vaikutusalueella. Näitä voivat olla esimerkiksi ohjaaminen eri kulkumuotoihin tai liikkumisen ajoittamiseen ruuhka-ajan ulkopuolelle.
-              </p>
+              </div>
               <button
                 aria-label="Sulje Liikkumisen ohjaus"
                 class="Button-module_button__1msFE Button-module_supplementary__3YKiS Button-module_size-small__3lizH Accordion-module_closeButton__1Qt8U"
@@ -202,11 +202,11 @@ exports[`Should show correct tips for AUTOLIIKENNE and haittaindex 3 1`] = `
               role="region"
               style="display: none;"
             >
-              <p
+              <div
                 class="css-11yjvs7"
               >
                 Suunnittele ajoissa mahdolliset autoliikenteen kiertoreitit, niiden opastus sekä tarvittavat liikennevalojen muutokset. Suunnittele ajoissa toimivat järjestelyt ja/tai kiertoreitit myös raskaalle liikenteelle, huoltoliikenteelle ja jakeluliikenteelle.
-              </p>
+              </div>
               <button
                 aria-label="Sulje Kiertoreitit"
                 class="Button-module_button__1msFE Button-module_supplementary__3YKiS Button-module_size-small__3lizH Accordion-module_closeButton__1Qt8U"
@@ -291,7 +291,7 @@ exports[`Should show correct tips for AUTOLIIKENNE and haittaindex 3 1`] = `
               role="region"
               style="display: none;"
             >
-              <p
+              <div
                 class="css-11yjvs7"
               >
                 Tarkista, onko hankkeesi satamaliikenteen reitillä (
@@ -308,7 +308,7 @@ exports[`Should show correct tips for AUTOLIIKENNE and haittaindex 3 1`] = `
                   />
                 </a>
                 ) Jos on, suunnittele työt tehtäväksi autoliikenteen ruuhka-ajan ulkopuolella (arkisin klo 6-9 ja klo 15-18 sekä satamareiteillä päivittäin klo 10-10.30).
-              </p>
+              </div>
               <button
                 aria-label="Sulje Satamaliikenteen reitit"
                 class="Button-module_button__1msFE Button-module_supplementary__3YKiS Button-module_size-small__3lizH Accordion-module_closeButton__1Qt8U"
@@ -393,7 +393,7 @@ exports[`Should show correct tips for AUTOLIIKENNE and haittaindex 3 1`] = `
               role="region"
               style="display: none;"
             >
-              <p
+              <div
                 class="css-11yjvs7"
               >
                 Selvitä ajokaistojen lukumäärän säilyttämistarve ottamalla yhteyttä Kaupunkiympäristön toimialan liikennesuunnitteluun (
@@ -406,7 +406,7 @@ exports[`Should show correct tips for AUTOLIIKENNE and haittaindex 3 1`] = `
                   luvat@hel.fi
                 </a>
                 , asiakaspalvelu puh. 09 310 22111) suunnitteluvaiheessa
-              </p>
+              </div>
               <button
                 aria-label="Sulje Ajokaistojen lukumäärä"
                 class="Button-module_button__1msFE Button-module_supplementary__3YKiS Button-module_size-small__3lizH Accordion-module_closeButton__1Qt8U"
@@ -491,7 +491,7 @@ exports[`Should show correct tips for AUTOLIIKENNE and haittaindex 3 1`] = `
               role="region"
               style="display: none;"
             >
-              <p
+              <div
                 class="css-11yjvs7"
               >
                 Suunnittele ja varmista liikennevalojen toimivuus työn aluetta laajemmin (esim. liikennevaloliittymien tilapäiset kaistamuutokset työalueelle tultaessa, ilmaisimien sijainti ja toimivuus tilapäisissä järjestelyissä, kiertoreittien liikennevalot). Ole näiden osalta yhteydessä pääkaupunkiseudun liikenteenhallintakeskukseen (
@@ -504,7 +504,7 @@ exports[`Should show correct tips for AUTOLIIKENNE and haittaindex 3 1`] = `
                   liikenteenhallintakeskus@hel.fi
                 </a>
                 , p. 09 310 37555). Ole yhteydessä liikenteenhallintakeskukseen myös tilapäisten liikennevalojen tarpeesta.
-              </p>
+              </div>
               <button
                 aria-label="Sulje Liikennevalot"
                 class="Button-module_button__1msFE Button-module_supplementary__3YKiS Button-module_size-small__3lizH Accordion-module_closeButton__1Qt8U"
@@ -589,7 +589,7 @@ exports[`Should show correct tips for AUTOLIIKENNE and haittaindex 3 1`] = `
               role="region"
               style="display: none;"
             >
-              <p
+              <div
                 class="css-11yjvs7"
               >
                 Ota yhteyttä Linja-autoliittoon (
@@ -615,7 +615,7 @@ exports[`Should show correct tips for AUTOLIIKENNE and haittaindex 3 1`] = `
                   etunimi.sukunimi@linja-autoliitto.fi
                 </a>
                 ), mikäli hankkeesi sijoittuu merkittävälle kauko- tai turistiliikenteen reitille tai alueelle.
-              </p>
+              </div>
               <button
                 aria-label="Sulje Linja-autojen kauko- ja turistiliikenne"
                 class="Button-module_button__1msFE Button-module_supplementary__3YKiS Button-module_size-small__3lizH Accordion-module_closeButton__1Qt8U"
@@ -700,11 +700,11 @@ exports[`Should show correct tips for AUTOLIIKENNE and haittaindex 3 1`] = `
               role="region"
               style="display: none;"
             >
-              <p
+              <div
                 class="css-11yjvs7"
               >
                 Tiedota merkittävistä töistä ja mahdollisista autoliikenteen reittimuutoksista jo suunnitteluvaiheessa ja hyvissä ajoin ennen toteutusta eri osapuolille (yleiset tiedotteet, paikalliset tiedotteet). Tiedota eri osapuolille mahdollisista muutoksista reiteissä hyvissä ajoin ennen uusien järjestelyiden toteutusta.
-              </p>
+              </div>
               <p
                 class="css-11yjvs7"
               >
@@ -825,11 +825,11 @@ exports[`Should show correct tips for AUTOLIIKENNE and haittaindex 3 1`] = `
               role="region"
               style="display: none;"
             >
-              <p
+              <div
                 class="css-11yjvs7"
               >
                 Toteuta ja ylläpidä ennakko-opastus lähestymissuunnilta vaihtoehtoisille tai suunnitelluille ajoreiteille. Huomioi opasteita suunniteltaessa niiden sijaintipaikoissa nopeusrajoitus (opasteen tekstikoko).
-              </p>
+              </div>
               <button
                 aria-label="Sulje Opastus"
                 class="Button-module_button__1msFE Button-module_supplementary__3YKiS Button-module_size-small__3lizH Accordion-module_closeButton__1Qt8U"
@@ -914,11 +914,11 @@ exports[`Should show correct tips for AUTOLIIKENNE and haittaindex 3 1`] = `
               role="region"
               style="display: none;"
             >
-              <p
+              <div
                 class="css-11yjvs7"
               >
                 Rajoita ajonopeutta työalueen läheisyydessä erityisesti päiväkotien, koulujen, puistojen, vanhainkotien ja vammaispalveluiden lähellä. Käytä tarvittaessa autoilijoiden nopeusnäyttöjä hymiötoiminnolla. Sijainnit katselmoidaan työmaalla. Huomioi myös rajoituksen päättäminen työmaan jälkeen.
-              </p>
+              </div>
               <button
                 aria-label="Sulje Ajonopeuden rajoittaminen"
                 class="Button-module_button__1msFE Button-module_supplementary__3YKiS Button-module_size-small__3lizH Accordion-module_closeButton__1Qt8U"
@@ -1003,11 +1003,11 @@ exports[`Should show correct tips for AUTOLIIKENNE and haittaindex 3 1`] = `
               role="region"
               style="display: none;"
             >
-              <p
+              <div
                 class="css-11yjvs7"
               >
                 Älä ohjaa jalankulkijoita ajoradalle, ellei jalankulkijoille ole rajattu omaa turvallista ja riittävän leveää kulkuväylää ajoradalta. Älä ohjaa pyöräliikennettä ajoradalle autoliikenteen sekaan, paitsi perustelluissa tilanteissa (ks. pyöräliikenteen toimenpidevinkit).
-              </p>
+              </div>
               <p
                 class="css-11yjvs7"
               >
@@ -1157,11 +1157,11 @@ exports[`Should show correct tips for AUTOLIIKENNE and haittaindex 3 1`] = `
               role="region"
               style="display: none;"
             >
-              <p
+              <div
                 class="css-11yjvs7"
               >
                 Toteuta ja ylläpidä työn kohdalla tasalaatuinen ajoratapäällyste sekä ajantasaiset kaistanvaihtomerkinnät, muut ajoratamerkinnät ja liikenteenohjauslaitteet.
-              </p>
+              </div>
               <button
                 aria-label="Sulje Ajoratapäällysteet ja -merkinnät"
                 class="Button-module_button__1msFE Button-module_supplementary__3YKiS Button-module_size-small__3lizH Accordion-module_closeButton__1Qt8U"
@@ -1246,11 +1246,11 @@ exports[`Should show correct tips for AUTOLIIKENNE and haittaindex 3 1`] = `
               role="region"
               style="display: none;"
             >
-              <p
+              <div
                 class="css-11yjvs7"
               >
                 Jos työsi estää normaalin koneellisen kunnossapidon yleisillä alueilla, toteuta työn kohdalla laadukas kunnossapito (mm. puhtaus, lumien poisto, liukkaudentorjunta, ajotilan ja näkemien säilyttäminen).
-              </p>
+              </div>
               <button
                 aria-label="Sulje Kunnossapito"
                 class="Button-module_button__1msFE Button-module_supplementary__3YKiS Button-module_size-small__3lizH Accordion-module_closeButton__1Qt8U"
@@ -1433,11 +1433,11 @@ exports[`Should show correct tips for AUTOLIIKENNE and haittaindex 4 1`] = `
               role="region"
               style="display: none;"
             >
-              <p
+              <div
                 class="css-11yjvs7"
               >
                 Tutki ajokaistoihin vaikuttavien hankkeiden yhteisvaikutuksia ja ajoitusta hankkeen varhaisessa vaiheessa esimerkiksi liikenteen laaja-alaisen mallinnuksen avulla. Määrittele myös vaikutukset linja-autoliikenteeseen. Selvitä vaatimuksia hankkeelle sekä tutki tarvittaessa kiertoreittimahdollisuuksia.
-              </p>
+              </div>
               <button
                 aria-label="Sulje Autoliikenteen laaja-alainen vaikutusten arviointi"
                 class="Button-module_button__1msFE Button-module_supplementary__3YKiS Button-module_size-small__3lizH Accordion-module_closeButton__1Qt8U"
@@ -1522,11 +1522,11 @@ exports[`Should show correct tips for AUTOLIIKENNE and haittaindex 4 1`] = `
               role="region"
               style="display: none;"
             >
-              <p
+              <div
                 class="css-11yjvs7"
               >
                 Tutki ajokaistoihin vaikuttavan hankkeesi vaikutuksia, ajoitusta ja toimenpiteitä esimerkiksi paikallistenliikenteen toimivuustarkasteluiden avulla. Määrittele ja suunnittele toimenpiteet autoliikenteen haittojen minimoimiseksi ottaen huomioon myös muut alueella olevat hankkeet ja toiminnot.
-              </p>
+              </div>
               <button
                 aria-label="Sulje Autoliikenteen paikallisten vaikutusten arviointi"
                 class="Button-module_button__1msFE Button-module_supplementary__3YKiS Button-module_size-small__3lizH Accordion-module_closeButton__1Qt8U"
@@ -1611,11 +1611,11 @@ exports[`Should show correct tips for AUTOLIIKENNE and haittaindex 4 1`] = `
               role="region"
               style="display: none;"
             >
-              <p
+              <div
                 class="css-11yjvs7"
               >
                 Suunnittele pää- ja kokoojakatujen työt tehtäväksi ja toteuta ne lähtökohtaisesti ruuhka-ajan ulkopuolella (arkisin klo 6–9 ja klo 15-18 sekä satamareiteillä päivittäin klo 10-10.30).
-              </p>
+              </div>
               <button
                 aria-label="Sulje Työaikarajoitukset"
                 class="Button-module_button__1msFE Button-module_supplementary__3YKiS Button-module_size-small__3lizH Accordion-module_closeButton__1Qt8U"
@@ -1700,11 +1700,11 @@ exports[`Should show correct tips for AUTOLIIKENNE and haittaindex 4 1`] = `
               role="region"
               style="display: none;"
             >
-              <p
+              <div
                 class="css-11yjvs7"
               >
                 Selvitä ja toimeenpane liikkumisen ohjauksen keinoja autoliikenteen määrän vähentämiseksi hankkeen vaikutusalueella. Näitä voivat olla esimerkiksi ohjaaminen eri kulkumuotoihin tai liikkumisen ajoittamiseen ruuhka-ajan ulkopuolelle.
-              </p>
+              </div>
               <button
                 aria-label="Sulje Liikkumisen ohjaus"
                 class="Button-module_button__1msFE Button-module_supplementary__3YKiS Button-module_size-small__3lizH Accordion-module_closeButton__1Qt8U"
@@ -1789,11 +1789,11 @@ exports[`Should show correct tips for AUTOLIIKENNE and haittaindex 4 1`] = `
               role="region"
               style="display: none;"
             >
-              <p
+              <div
                 class="css-11yjvs7"
               >
                 Suunnittele ajoissa mahdolliset autoliikenteen kiertoreitit, niiden opastus sekä tarvittavat liikennevalojen muutokset. Suunnittele ajoissa toimivat järjestelyt ja/tai kiertoreitit myös raskaalle liikenteelle, huoltoliikenteelle ja jakeluliikenteelle.
-              </p>
+              </div>
               <button
                 aria-label="Sulje Kiertoreitit"
                 class="Button-module_button__1msFE Button-module_supplementary__3YKiS Button-module_size-small__3lizH Accordion-module_closeButton__1Qt8U"
@@ -1878,7 +1878,7 @@ exports[`Should show correct tips for AUTOLIIKENNE and haittaindex 4 1`] = `
               role="region"
               style="display: none;"
             >
-              <p
+              <div
                 class="css-11yjvs7"
               >
                 Tarkista, onko hankkeesi satamaliikenteen reitillä (
@@ -1895,7 +1895,7 @@ exports[`Should show correct tips for AUTOLIIKENNE and haittaindex 4 1`] = `
                   />
                 </a>
                 ) Jos on, suunnittele työt tehtäväksi autoliikenteen ruuhka-ajan ulkopuolella (arkisin klo 6-9 ja klo 15-18 sekä satamareiteillä päivittäin klo 10-10.30).
-              </p>
+              </div>
               <button
                 aria-label="Sulje Satamaliikenteen reitit"
                 class="Button-module_button__1msFE Button-module_supplementary__3YKiS Button-module_size-small__3lizH Accordion-module_closeButton__1Qt8U"
@@ -1980,7 +1980,7 @@ exports[`Should show correct tips for AUTOLIIKENNE and haittaindex 4 1`] = `
               role="region"
               style="display: none;"
             >
-              <p
+              <div
                 class="css-11yjvs7"
               >
                 Selvitä ajokaistojen lukumäärän säilyttämistarve ottamalla yhteyttä Kaupunkiympäristön toimialan liikennesuunnitteluun (
@@ -1993,7 +1993,7 @@ exports[`Should show correct tips for AUTOLIIKENNE and haittaindex 4 1`] = `
                   luvat@hel.fi
                 </a>
                 , asiakaspalvelu puh. 09 310 22111) suunnitteluvaiheessa
-              </p>
+              </div>
               <button
                 aria-label="Sulje Ajokaistojen lukumäärä"
                 class="Button-module_button__1msFE Button-module_supplementary__3YKiS Button-module_size-small__3lizH Accordion-module_closeButton__1Qt8U"
@@ -2078,7 +2078,7 @@ exports[`Should show correct tips for AUTOLIIKENNE and haittaindex 4 1`] = `
               role="region"
               style="display: none;"
             >
-              <p
+              <div
                 class="css-11yjvs7"
               >
                 Suunnittele ja varmista liikennevalojen toimivuus työn aluetta laajemmin (esim. liikennevaloliittymien tilapäiset kaistamuutokset työalueelle tultaessa, ilmaisimien sijainti ja toimivuus tilapäisissä järjestelyissä, kiertoreittien liikennevalot). Ole näiden osalta yhteydessä pääkaupunkiseudun liikenteenhallintakeskukseen (
@@ -2091,7 +2091,7 @@ exports[`Should show correct tips for AUTOLIIKENNE and haittaindex 4 1`] = `
                   liikenteenhallintakeskus@hel.fi
                 </a>
                 , p. 09 310 37555). Ole yhteydessä liikenteenhallintakeskukseen myös tilapäisten liikennevalojen tarpeesta.
-              </p>
+              </div>
               <button
                 aria-label="Sulje Liikennevalot"
                 class="Button-module_button__1msFE Button-module_supplementary__3YKiS Button-module_size-small__3lizH Accordion-module_closeButton__1Qt8U"
@@ -2176,7 +2176,7 @@ exports[`Should show correct tips for AUTOLIIKENNE and haittaindex 4 1`] = `
               role="region"
               style="display: none;"
             >
-              <p
+              <div
                 class="css-11yjvs7"
               >
                 Ota yhteyttä Linja-autoliittoon (
@@ -2202,7 +2202,7 @@ exports[`Should show correct tips for AUTOLIIKENNE and haittaindex 4 1`] = `
                   etunimi.sukunimi@linja-autoliitto.fi
                 </a>
                 ), mikäli hankkeesi sijoittuu merkittävälle kauko- tai turistiliikenteen reitille tai alueelle.
-              </p>
+              </div>
               <button
                 aria-label="Sulje Linja-autojen kauko- ja turistiliikenne"
                 class="Button-module_button__1msFE Button-module_supplementary__3YKiS Button-module_size-small__3lizH Accordion-module_closeButton__1Qt8U"
@@ -2287,11 +2287,11 @@ exports[`Should show correct tips for AUTOLIIKENNE and haittaindex 4 1`] = `
               role="region"
               style="display: none;"
             >
-              <p
+              <div
                 class="css-11yjvs7"
               >
                 Tiedota merkittävistä töistä ja mahdollisista autoliikenteen reittimuutoksista jo suunnitteluvaiheessa ja hyvissä ajoin ennen toteutusta eri osapuolille (yleiset tiedotteet, paikalliset tiedotteet). Tiedota eri osapuolille mahdollisista muutoksista reiteissä hyvissä ajoin ennen uusien järjestelyiden toteutusta.
-              </p>
+              </div>
               <p
                 class="css-11yjvs7"
               >
@@ -2412,11 +2412,11 @@ exports[`Should show correct tips for AUTOLIIKENNE and haittaindex 4 1`] = `
               role="region"
               style="display: none;"
             >
-              <p
+              <div
                 class="css-11yjvs7"
               >
                 Toteuta ja ylläpidä ennakko-opastus lähestymissuunnilta vaihtoehtoisille tai suunnitelluille ajoreiteille. Huomioi opasteita suunniteltaessa niiden sijaintipaikoissa nopeusrajoitus (opasteen tekstikoko).
-              </p>
+              </div>
               <button
                 aria-label="Sulje Opastus"
                 class="Button-module_button__1msFE Button-module_supplementary__3YKiS Button-module_size-small__3lizH Accordion-module_closeButton__1Qt8U"
@@ -2501,11 +2501,11 @@ exports[`Should show correct tips for AUTOLIIKENNE and haittaindex 4 1`] = `
               role="region"
               style="display: none;"
             >
-              <p
+              <div
                 class="css-11yjvs7"
               >
                 Rajoita ajonopeutta työalueen läheisyydessä erityisesti päiväkotien, koulujen, puistojen, vanhainkotien ja vammaispalveluiden lähellä. Käytä tarvittaessa autoilijoiden nopeusnäyttöjä hymiötoiminnolla. Sijainnit katselmoidaan työmaalla. Huomioi myös rajoituksen päättäminen työmaan jälkeen.
-              </p>
+              </div>
               <button
                 aria-label="Sulje Ajonopeuden rajoittaminen"
                 class="Button-module_button__1msFE Button-module_supplementary__3YKiS Button-module_size-small__3lizH Accordion-module_closeButton__1Qt8U"
@@ -2590,11 +2590,11 @@ exports[`Should show correct tips for AUTOLIIKENNE and haittaindex 4 1`] = `
               role="region"
               style="display: none;"
             >
-              <p
+              <div
                 class="css-11yjvs7"
               >
                 Älä ohjaa jalankulkijoita ajoradalle, ellei jalankulkijoille ole rajattu omaa turvallista ja riittävän leveää kulkuväylää ajoradalta. Älä ohjaa pyöräliikennettä ajoradalle autoliikenteen sekaan, paitsi perustelluissa tilanteissa (ks. pyöräliikenteen toimenpidevinkit).
-              </p>
+              </div>
               <p
                 class="css-11yjvs7"
               >
@@ -2744,11 +2744,11 @@ exports[`Should show correct tips for AUTOLIIKENNE and haittaindex 4 1`] = `
               role="region"
               style="display: none;"
             >
-              <p
+              <div
                 class="css-11yjvs7"
               >
                 Toteuta ja ylläpidä työn kohdalla tasalaatuinen ajoratapäällyste sekä ajantasaiset kaistanvaihtomerkinnät, muut ajoratamerkinnät ja liikenteenohjauslaitteet.
-              </p>
+              </div>
               <button
                 aria-label="Sulje Ajoratapäällysteet ja -merkinnät"
                 class="Button-module_button__1msFE Button-module_supplementary__3YKiS Button-module_size-small__3lizH Accordion-module_closeButton__1Qt8U"
@@ -2833,11 +2833,11 @@ exports[`Should show correct tips for AUTOLIIKENNE and haittaindex 4 1`] = `
               role="region"
               style="display: none;"
             >
-              <p
+              <div
                 class="css-11yjvs7"
               >
                 Jos työsi estää normaalin koneellisen kunnossapidon yleisillä alueilla, toteuta työn kohdalla laadukas kunnossapito (mm. puhtaus, lumien poisto, liukkaudentorjunta, ajotilan ja näkemien säilyttäminen).
-              </p>
+              </div>
               <button
                 aria-label="Sulje Kunnossapito"
                 class="Button-module_button__1msFE Button-module_supplementary__3YKiS Button-module_size-small__3lizH Accordion-module_closeButton__1Qt8U"
@@ -3020,7 +3020,7 @@ exports[`Should show correct tips for LINJAAUTOLIIKENNE and haittaindex 3 1`] = 
               role="region"
               style="display: none;"
             >
-              <p
+              <div
                 class="css-11yjvs7"
               >
                 <p>
@@ -3061,7 +3061,7 @@ exports[`Should show correct tips for LINJAAUTOLIIKENNE and haittaindex 3 1`] = 
                   </a>
                   .
                 </p>
-              </p>
+              </div>
               <p
                 class="css-11yjvs7"
               >
@@ -3182,7 +3182,7 @@ exports[`Should show correct tips for LINJAAUTOLIIKENNE and haittaindex 3 1`] = 
               role="region"
               style="display: none;"
             >
-              <p
+              <div
                 class="css-11yjvs7"
               >
                 Toteuta esteetön pääsy nykyisille pysäkeille tai suunnittele ja toteuta pysäkkien siirtäminen, opastus ja esteettömät jalankulkuyhteydet. Raitio- ja linja-autopysäkkejä ei saa siirtää tai poistaa käytöstä ilman HSL:n lupaa (
@@ -3208,7 +3208,7 @@ exports[`Should show correct tips for LINJAAUTOLIIKENNE and haittaindex 3 1`] = 
                   />
                 </a>
                 .
-              </p>
+              </div>
               <p
                 class="css-11yjvs7"
               >
@@ -3329,11 +3329,11 @@ exports[`Should show correct tips for LINJAAUTOLIIKENNE and haittaindex 3 1`] = 
               role="region"
               style="display: none;"
             >
-              <p
+              <div
                 class="css-11yjvs7"
               >
                 Tiedota merkittävistä töistä ja mahdollisista bussiliikenteen reittimuutoksista jo suunnitteluvaiheessa ja hyvissä ajoin ennen toteutusta eri osapuolille (yleiset tiedotteet, paikalliset tiedotteet). Tiedota eri osapuolille mahdollisista muutoksista reiteissä hyvissä ajoin ennen uusien järjestelyiden toteutusta.
-              </p>
+              </div>
               <p
                 class="css-11yjvs7"
               >
@@ -3454,11 +3454,11 @@ exports[`Should show correct tips for LINJAAUTOLIIKENNE and haittaindex 3 1`] = 
               role="region"
               style="display: none;"
             >
-              <p
+              <div
                 class="css-11yjvs7"
               >
                 Toteuta ja ylläpidä ennakko-opastus lähestymissuunnilta vaihtoehtoisille ajoreiteille.
-              </p>
+              </div>
               <button
                 aria-label="Sulje Opastus"
                 class="Button-module_button__1msFE Button-module_supplementary__3YKiS Button-module_size-small__3lizH Accordion-module_closeButton__1Qt8U"
@@ -3543,11 +3543,11 @@ exports[`Should show correct tips for LINJAAUTOLIIKENNE and haittaindex 3 1`] = 
               role="region"
               style="display: none;"
             >
-              <p
+              <div
                 class="css-11yjvs7"
               >
                 Toteuta ja ylläpidä työn kohdalla tasalaatuinen ajoratapäällyste sekä ajantasaiset kaistanvaihtomerkinnät, muut ajoratamerkinnät ja liikenteenohjauslaitteet.
-              </p>
+              </div>
               <button
                 aria-label="Sulje Ajoratapäällysteet ja -merkinnät"
                 class="Button-module_button__1msFE Button-module_supplementary__3YKiS Button-module_size-small__3lizH Accordion-module_closeButton__1Qt8U"
@@ -3632,11 +3632,11 @@ exports[`Should show correct tips for LINJAAUTOLIIKENNE and haittaindex 3 1`] = 
               role="region"
               style="display: none;"
             >
-              <p
+              <div
                 class="css-11yjvs7"
               >
                 Jos työsi estää normaalin koneellisen kunnossapidon yleisillä alueilla, toteuta työn kohdalla laadukas kunnossapito (mm. puhtaus, lumien poisto, liukkaudentorjunta, ajotilan ja näkemien säilyttäminen).
-              </p>
+              </div>
               <button
                 aria-label="Sulje Kunnossapito"
                 class="Button-module_button__1msFE Button-module_supplementary__3YKiS Button-module_size-small__3lizH Accordion-module_closeButton__1Qt8U"
@@ -3819,11 +3819,11 @@ exports[`Should show correct tips for MUUT and haittaindex 0 1`] = `
               role="region"
               style="display: none;"
             >
-              <p
+              <div
                 class="css-11yjvs7"
               >
                 Selvitä työsi melu-, pöly- tai tärinäpäästöjen vaikutusalue ja sillä olevat herkät toiminnot (asunnot, päiväkodit, koulut, tärkeät palvelut, kuten terveyspalvelut, liiketilat, ravintolaterassit, tutkimuslaitokset, luontokohteet, uskonnolliset laitokset ym.). Sovi tarvittavista toimenpiteistä tunnistettujen herkkien kohteiden kanssa.
-              </p>
+              </div>
               <button
                 aria-label="Sulje Päästöjen vaikutusalue ja herkät toiminnot"
                 class="Button-module_button__1msFE Button-module_supplementary__3YKiS Button-module_size-small__3lizH Accordion-module_closeButton__1Qt8U"
@@ -3908,11 +3908,11 @@ exports[`Should show correct tips for MUUT and haittaindex 0 1`] = `
               role="region"
               style="display: none;"
             >
-              <p
+              <div
                 class="css-11yjvs7"
               >
                 Tiedota toimijoille ja kiinteistöille vähintään viikkoa ennen tai välittömästi töiden ajankohdan ollessa tiedossa, kun tehdään melu-, pöly- tai tärinähaittaa aiheuttavia töitä. Erittäin häiritsevästä työstä tulee tehdä ilmoitus viimeistään 30 vuorokautta ennen töiden aloittamista. Anna asukkaille ja eri toimijoille aikaa varautua etukäteen tiedossa oleviin häriöihin ja neuvottele erityisesti herkkien toimintojen lähellä haitoista toimijoiden kanssa.
-              </p>
+              </div>
               <p
                 class="css-11yjvs7"
               >
@@ -4033,11 +4033,11 @@ exports[`Should show correct tips for MUUT and haittaindex 0 1`] = `
               role="region"
               style="display: none;"
             >
-              <p
+              <div
                 class="css-11yjvs7"
               >
                 Selvitä työsi aikatauluttamisen ja työmenetelmien mahdollisuudet päästöhaittojen minimoimiseksi toiminnoille.
-              </p>
+              </div>
               <p
                 class="css-11yjvs7"
               >
@@ -4256,7 +4256,7 @@ exports[`Should show correct tips for PYORALIIKENNE and haittaindex 4 1`] = `
               role="region"
               style="display: none;"
             >
-              <p
+              <div
                 class="css-11yjvs7"
               >
                 Pyöräliikenteeseen kohdistuvien toimenpiteiden priorisoitu järjestys on seuraavan listan mukainen. Pääreiteillä pitäydytään lähtökohtaisesti ensimmäisessä toimenpiteessä: 
@@ -4282,7 +4282,7 @@ exports[`Should show correct tips for PYORALIIKENNE and haittaindex 4 1`] = `
                     Pyöräliikenteen tilapäinen siirto eri reitille
                   </li>
                 </ol>
-              </p>
+              </div>
               <button
                 aria-label="Sulje Pyöräliikenteeseen kohdistuvien toimenpiteiden priorisoitu järjestys"
                 class="Button-module_button__1msFE Button-module_supplementary__3YKiS Button-module_size-small__3lizH Accordion-module_closeButton__1Qt8U"
@@ -4367,11 +4367,11 @@ exports[`Should show correct tips for PYORALIIKENNE and haittaindex 4 1`] = `
               role="region"
               style="display: none;"
             >
-              <p
+              <div
                 class="css-11yjvs7"
               >
                 Suunnittele ja toteuta pyöräliikenteen tilapäiset järjestelyt lähtökohtaisesti alkuperäisten pysyvien järjestelyiden (esim. yksisuuntaiset pyörätiet/-kaistat tai kaksisuuntainen pyörätie) mukaisesti. Pyri säilyttämään jalankulusta eroteltu pyöräliikenteen ratkaisu, jos sellainen on nykytilassa. Kun autoliikenteen määrä ylittää 7000 ajoneuvoa vuorokaudessa, tulee pyöräliikenne yleensä erotella myös autoliikenteestä. Pyöräliikenteen pääreiteillä erottelu on tarpeen harkita vähäisemmilläkin autoliikenteen liikennemäärillä. Vain 1-suuntaisia pyöräliikenteen järjestelyitä on mahdollista esittää korvattavaksi työmaan kohdalla sekaliikenneratkaisulla, jolloin kadulle osoitetaan 30 km/h nopeusrajoitus.
-              </p>
+              </div>
               <p
                 class="css-11yjvs7"
               >
@@ -4492,11 +4492,11 @@ exports[`Should show correct tips for PYORALIIKENNE and haittaindex 4 1`] = `
               role="region"
               style="display: none;"
             >
-              <p
+              <div
                 class="css-11yjvs7"
               >
                 Suunnittele ja toteuta pyöräliikenteen tilapäiset risteysjärjestelyt erityisesti liikennevalo-ohjatuissa liittymissä eri ajosuuntien toimivuuden, mutta erityisesti vasemmalle kääntymisen sekä näkemien ja valaistuksen osalta.
-              </p>
+              </div>
               <p
                 class="css-11yjvs7"
               >
@@ -4617,11 +4617,11 @@ exports[`Should show correct tips for PYORALIIKENNE and haittaindex 4 1`] = `
               role="region"
               style="display: none;"
             >
-              <p
+              <div
                 class="css-11yjvs7"
               >
                 Suunnittele ja toteuta selkeä pyöräliikenteen erikseen huomioon ottava ja turvallisesti asennettu opastus kiertoreitille. Määrittele pyöräliikenteen vaikutukset ja tarvittavat muut toimenpiteet kiertoreitille.
-              </p>
+              </div>
               <p
                 class="css-11yjvs7"
               >
@@ -4742,11 +4742,11 @@ exports[`Should show correct tips for PYORALIIKENNE and haittaindex 4 1`] = `
               role="region"
               style="display: none;"
             >
-              <p
+              <div
                 class="css-11yjvs7"
               >
                 Suunnittele ja toteuta pyöräliikenteen saavutettavuus eri osoitteisiin, palveluihin ym.
-              </p>
+              </div>
               <button
                 aria-label="Sulje Saavutettavuus"
                 class="Button-module_button__1msFE Button-module_supplementary__3YKiS Button-module_size-small__3lizH Accordion-module_closeButton__1Qt8U"
@@ -4831,7 +4831,7 @@ exports[`Should show correct tips for PYORALIIKENNE and haittaindex 4 1`] = `
               role="region"
               style="display: none;"
             >
-              <p
+              <div
                 class="css-11yjvs7"
               >
                 Selvitä mahdollisen kaupunkipyöräaseman tai muun merkittävän pyöräpysäköinnin siirtotarpeet. Sovi kaupunkipyöräasemien muutostarpeista Kaupunkiliikenne Oy:n (
@@ -4853,7 +4853,7 @@ exports[`Should show correct tips for PYORALIIKENNE and haittaindex 4 1`] = `
                   kaupunkiymparisto@hel.fi
                 </a>
                 , asiakaspalvelu puh. 09 310 22111) kanssa. Lähelle poistettua pyörätelinetta sijoittamaasi väliaikaiseen telineeseen tulee mahtua yhtä monta pyörää, kuin poistettuun telineeseen.
-              </p>
+              </div>
               <button
                 aria-label="Sulje Pyöräpysäköinti"
                 class="Button-module_button__1msFE Button-module_supplementary__3YKiS Button-module_size-small__3lizH Accordion-module_closeButton__1Qt8U"
@@ -4938,11 +4938,11 @@ exports[`Should show correct tips for PYORALIIKENNE and haittaindex 4 1`] = `
               role="region"
               style="display: none;"
             >
-              <p
+              <div
                 class="css-11yjvs7"
               >
                 Tiedota merkittävistä töistä ja mahdollisista pyöräliikenteen reittimuutoksista jo suunnitteluvaiheessa ja hyvissä ajoin ennen uusien järjestelyiden toteutusta (yleiset tiedotteet, paikalliset tiedotteet). Merkitse kiertoreitti maastoon ennen työn aloittamista. Tiedota eri osapuolille mahdollisista muutoksista reiteissä hyvissä ajoin ennen uusien järjestelyiden toteutusta.
-              </p>
+              </div>
               <p
                 class="css-11yjvs7"
               >
@@ -5063,11 +5063,11 @@ exports[`Should show correct tips for PYORALIIKENNE and haittaindex 4 1`] = `
               role="region"
               style="display: none;"
             >
-              <p
+              <div
                 class="css-11yjvs7"
               >
                 Toteuta heti ensimmäiseksi pyöräliikenteen suojaus työalueesta kaiteilla ja sulkulaitteilla.
-              </p>
+              </div>
               <p
                 class="css-11yjvs7"
               >
@@ -5217,11 +5217,11 @@ exports[`Should show correct tips for PYORALIIKENNE and haittaindex 4 1`] = `
               role="region"
               style="display: none;"
             >
-              <p
+              <div
                 class="css-11yjvs7"
               >
                 Jos työsi estää normaalin pyöräteiden koneellisen kunnossapidon yleisillä alueilla, toteuta työn kohdalla laadukas kunnossapito (mm. puhtaus, lumien poisto, liukkaudentorjunta, ajotilan ja näkemien säilyttäminen).
-              </p>
+              </div>
               <button
                 aria-label="Sulje Kunnossapito"
                 class="Button-module_button__1msFE Button-module_supplementary__3YKiS Button-module_size-small__3lizH Accordion-module_closeButton__1Qt8U"
@@ -5306,11 +5306,11 @@ exports[`Should show correct tips for PYORALIIKENNE and haittaindex 4 1`] = `
               role="region"
               style="display: none;"
             >
-              <p
+              <div
                 class="css-11yjvs7"
               >
                 Toteuta ja ylläpidä kovat ja puhtaat pyöräteiden pinnat (väliaikainen päällyste) sekä luiskatut tasovaihdot.
-              </p>
+              </div>
               <p
                 class="css-11yjvs7"
               >
@@ -5431,7 +5431,7 @@ exports[`Should show correct tips for PYORALIIKENNE and haittaindex 4 1`] = `
               role="region"
               style="display: none;"
             >
-              <p
+              <div
                 class="css-11yjvs7"
               >
                 Tarkista suunnittelemiesi ratkaisujen ohjeidenmukaisuus: 
@@ -5443,7 +5443,7 @@ exports[`Should show correct tips for PYORALIIKENNE and haittaindex 4 1`] = `
                 >
                   https://www.hel.fi/static/hkr/luvat/pyoraliikenteen_tyomaaohje.pdf
                 </a>
-              </p>
+              </div>
               <button
                 aria-label="Sulje Pyöräliikenteen reittien työnaikaisten järjestelyiden ohjeet"
                 class="Button-module_button__1msFE Button-module_supplementary__3YKiS Button-module_size-small__3lizH Accordion-module_closeButton__1Qt8U"
@@ -5626,11 +5626,11 @@ exports[`Should show correct tips for PYORALIIKENNE and haittaindex 5 1`] = `
               role="region"
               style="display: none;"
             >
-              <p
+              <div
                 class="css-11yjvs7"
               >
                 Tarkista vaikutukset pyöräliikenteen pääreitteihin ja priorisoituihin reitteihin ja varmista näiden toimivuus. Varmista, että laatutasotavoitteet toteutuvat tilapäisissä järjestelyissä.
-              </p>
+              </div>
               <button
                 aria-label="Sulje Pääreittien ja priorisoitujen reittien toimivuus"
                 class="Button-module_button__1msFE Button-module_supplementary__3YKiS Button-module_size-small__3lizH Accordion-module_closeButton__1Qt8U"
@@ -5715,11 +5715,11 @@ exports[`Should show correct tips for PYORALIIKENNE and haittaindex 5 1`] = `
               role="region"
               style="display: none;"
             >
-              <p
+              <div
                 class="css-11yjvs7"
               >
                 Valmistaudu töiden tekemiseen ruuhka-ajan ulkopuolella priorisoidulla pyöräverkolla sekä pyöräilyn pääreiteillä, mikäli tämä tulee ilmoituksen/hakemuksen päätöksessä määräykseksi. Rajoitus toteutetaan arkisin klo 6-9 ja 15-18.
-              </p>
+              </div>
               <button
                 aria-label="Sulje Pääverkolla olevien töiden ajoitus"
                 class="Button-module_button__1msFE Button-module_supplementary__3YKiS Button-module_size-small__3lizH Accordion-module_closeButton__1Qt8U"
@@ -5804,7 +5804,7 @@ exports[`Should show correct tips for PYORALIIKENNE and haittaindex 5 1`] = `
               role="region"
               style="display: none;"
             >
-              <p
+              <div
                 class="css-11yjvs7"
               >
                 Pyöräliikenteeseen kohdistuvien toimenpiteiden priorisoitu järjestys on seuraavan listan mukainen. Pääreiteillä pitäydytään lähtökohtaisesti ensimmäisessä toimenpiteessä: 
@@ -5830,7 +5830,7 @@ exports[`Should show correct tips for PYORALIIKENNE and haittaindex 5 1`] = `
                     Pyöräliikenteen tilapäinen siirto eri reitille
                   </li>
                 </ol>
-              </p>
+              </div>
               <button
                 aria-label="Sulje Pyöräliikenteeseen kohdistuvien toimenpiteiden priorisoitu järjestys"
                 class="Button-module_button__1msFE Button-module_supplementary__3YKiS Button-module_size-small__3lizH Accordion-module_closeButton__1Qt8U"
@@ -5915,11 +5915,11 @@ exports[`Should show correct tips for PYORALIIKENNE and haittaindex 5 1`] = `
               role="region"
               style="display: none;"
             >
-              <p
+              <div
                 class="css-11yjvs7"
               >
                 Suunnittele ja toteuta pyöräliikenteen tilapäiset järjestelyt lähtökohtaisesti alkuperäisten pysyvien järjestelyiden (esim. yksisuuntaiset pyörätiet/-kaistat tai kaksisuuntainen pyörätie) mukaisesti. Pyri säilyttämään jalankulusta eroteltu pyöräliikenteen ratkaisu, jos sellainen on nykytilassa. Kun autoliikenteen määrä ylittää 7000 ajoneuvoa vuorokaudessa, tulee pyöräliikenne yleensä erotella myös autoliikenteestä. Pyöräliikenteen pääreiteillä erottelu on tarpeen harkita vähäisemmilläkin autoliikenteen liikennemäärillä. Vain 1-suuntaisia pyöräliikenteen järjestelyitä on mahdollista esittää korvattavaksi työmaan kohdalla sekaliikenneratkaisulla, jolloin kadulle osoitetaan 30 km/h nopeusrajoitus.
-              </p>
+              </div>
               <p
                 class="css-11yjvs7"
               >
@@ -6040,11 +6040,11 @@ exports[`Should show correct tips for PYORALIIKENNE and haittaindex 5 1`] = `
               role="region"
               style="display: none;"
             >
-              <p
+              <div
                 class="css-11yjvs7"
               >
                 Suunnittele ja toteuta pyöräliikenteen tilapäiset risteysjärjestelyt erityisesti liikennevalo-ohjatuissa liittymissä eri ajosuuntien toimivuuden, mutta erityisesti vasemmalle kääntymisen sekä näkemien ja valaistuksen osalta.
-              </p>
+              </div>
               <p
                 class="css-11yjvs7"
               >
@@ -6165,11 +6165,11 @@ exports[`Should show correct tips for PYORALIIKENNE and haittaindex 5 1`] = `
               role="region"
               style="display: none;"
             >
-              <p
+              <div
                 class="css-11yjvs7"
               >
                 Suunnittele ja toteuta selkeä pyöräliikenteen erikseen huomioon ottava ja turvallisesti asennettu opastus kiertoreitille. Määrittele pyöräliikenteen vaikutukset ja tarvittavat muut toimenpiteet kiertoreitille.
-              </p>
+              </div>
               <p
                 class="css-11yjvs7"
               >
@@ -6290,11 +6290,11 @@ exports[`Should show correct tips for PYORALIIKENNE and haittaindex 5 1`] = `
               role="region"
               style="display: none;"
             >
-              <p
+              <div
                 class="css-11yjvs7"
               >
                 Suunnittele ja toteuta pyöräliikenteen saavutettavuus eri osoitteisiin, palveluihin ym.
-              </p>
+              </div>
               <button
                 aria-label="Sulje Saavutettavuus"
                 class="Button-module_button__1msFE Button-module_supplementary__3YKiS Button-module_size-small__3lizH Accordion-module_closeButton__1Qt8U"
@@ -6379,7 +6379,7 @@ exports[`Should show correct tips for PYORALIIKENNE and haittaindex 5 1`] = `
               role="region"
               style="display: none;"
             >
-              <p
+              <div
                 class="css-11yjvs7"
               >
                 Selvitä mahdollisen kaupunkipyöräaseman tai muun merkittävän pyöräpysäköinnin siirtotarpeet. Sovi kaupunkipyöräasemien muutostarpeista Kaupunkiliikenne Oy:n (
@@ -6401,7 +6401,7 @@ exports[`Should show correct tips for PYORALIIKENNE and haittaindex 5 1`] = `
                   kaupunkiymparisto@hel.fi
                 </a>
                 , asiakaspalvelu puh. 09 310 22111) kanssa. Lähelle poistettua pyörätelinetta sijoittamaasi väliaikaiseen telineeseen tulee mahtua yhtä monta pyörää, kuin poistettuun telineeseen.
-              </p>
+              </div>
               <button
                 aria-label="Sulje Pyöräpysäköinti"
                 class="Button-module_button__1msFE Button-module_supplementary__3YKiS Button-module_size-small__3lizH Accordion-module_closeButton__1Qt8U"
@@ -6486,11 +6486,11 @@ exports[`Should show correct tips for PYORALIIKENNE and haittaindex 5 1`] = `
               role="region"
               style="display: none;"
             >
-              <p
+              <div
                 class="css-11yjvs7"
               >
                 Tiedota merkittävistä töistä ja mahdollisista pyöräliikenteen reittimuutoksista jo suunnitteluvaiheessa ja hyvissä ajoin ennen uusien järjestelyiden toteutusta (yleiset tiedotteet, paikalliset tiedotteet). Merkitse kiertoreitti maastoon ennen työn aloittamista. Tiedota eri osapuolille mahdollisista muutoksista reiteissä hyvissä ajoin ennen uusien järjestelyiden toteutusta.
-              </p>
+              </div>
               <p
                 class="css-11yjvs7"
               >
@@ -6611,11 +6611,11 @@ exports[`Should show correct tips for PYORALIIKENNE and haittaindex 5 1`] = `
               role="region"
               style="display: none;"
             >
-              <p
+              <div
                 class="css-11yjvs7"
               >
                 Toteuta heti ensimmäiseksi pyöräliikenteen suojaus työalueesta kaiteilla ja sulkulaitteilla.
-              </p>
+              </div>
               <p
                 class="css-11yjvs7"
               >
@@ -6765,11 +6765,11 @@ exports[`Should show correct tips for PYORALIIKENNE and haittaindex 5 1`] = `
               role="region"
               style="display: none;"
             >
-              <p
+              <div
                 class="css-11yjvs7"
               >
                 Jos työsi estää normaalin pyöräteiden koneellisen kunnossapidon yleisillä alueilla, toteuta työn kohdalla laadukas kunnossapito (mm. puhtaus, lumien poisto, liukkaudentorjunta, ajotilan ja näkemien säilyttäminen).
-              </p>
+              </div>
               <button
                 aria-label="Sulje Kunnossapito"
                 class="Button-module_button__1msFE Button-module_supplementary__3YKiS Button-module_size-small__3lizH Accordion-module_closeButton__1Qt8U"
@@ -6854,11 +6854,11 @@ exports[`Should show correct tips for PYORALIIKENNE and haittaindex 5 1`] = `
               role="region"
               style="display: none;"
             >
-              <p
+              <div
                 class="css-11yjvs7"
               >
                 Toteuta ja ylläpidä kovat ja puhtaat pyöräteiden pinnat (väliaikainen päällyste) sekä luiskatut tasovaihdot.
-              </p>
+              </div>
               <p
                 class="css-11yjvs7"
               >
@@ -6979,7 +6979,7 @@ exports[`Should show correct tips for PYORALIIKENNE and haittaindex 5 1`] = `
               role="region"
               style="display: none;"
             >
-              <p
+              <div
                 class="css-11yjvs7"
               >
                 Tarkista suunnittelemiesi ratkaisujen ohjeidenmukaisuus: 
@@ -6991,7 +6991,7 @@ exports[`Should show correct tips for PYORALIIKENNE and haittaindex 5 1`] = `
                 >
                   https://www.hel.fi/static/hkr/luvat/pyoraliikenteen_tyomaaohje.pdf
                 </a>
-              </p>
+              </div>
               <button
                 aria-label="Sulje Pyöräliikenteen reittien työnaikaisten järjestelyiden ohjeet"
                 class="Button-module_button__1msFE Button-module_supplementary__3YKiS Button-module_size-small__3lizH Accordion-module_closeButton__1Qt8U"
@@ -7174,7 +7174,7 @@ exports[`Should show correct tips for RAITIOLIIKENNE and haittaindex 4 1`] = `
               role="region"
               style="display: none;"
             >
-              <p
+              <div
                 class="css-11yjvs7"
               >
                 Tarkista, miten hankkeesi vaikuttaa raitiotieverkkoon. Sovi aikaisessa vaiheessa hankkeen aiheuttamista raitiotieverkon toimenpidetarpeista HSL:n kanssa (liikennöinti: 
@@ -7196,7 +7196,7 @@ exports[`Should show correct tips for RAITIOLIIKENNE and haittaindex 4 1`] = `
                   urakoitsijaohjeistus@kaupunkiliikenne.fi
                 </a>
                 ) kanssa.
-              </p>
+              </div>
               <button
                 aria-label="Sulje Hankkeen vaikutus raitiotieliikenteeseen"
                 class="Button-module_button__1msFE Button-module_supplementary__3YKiS Button-module_size-small__3lizH Accordion-module_closeButton__1Qt8U"
@@ -7281,7 +7281,7 @@ exports[`Should show correct tips for RAITIOLIIKENNE and haittaindex 4 1`] = `
               role="region"
               style="display: none;"
             >
-              <p
+              <div
                 class="css-11yjvs7"
               >
                 <p>
@@ -7343,7 +7343,7 @@ exports[`Should show correct tips for RAITIOLIIKENNE and haittaindex 4 1`] = `
                     />
                   </a>
                 </p>
-              </p>
+              </div>
               <p
                 class="css-11yjvs7"
               >
@@ -7464,7 +7464,7 @@ exports[`Should show correct tips for RAITIOLIIKENNE and haittaindex 4 1`] = `
               role="region"
               style="display: none;"
             >
-              <p
+              <div
                 class="css-11yjvs7"
               >
                 Tarkista, joudutaanko raitiotien rakenteita (ml. rakennusten julkisivuissa olevat ajolankaripustukset) tai järjestelmiä tilapäisesti purkamaan tai siirtämään. Tarkista myös, joudutaanko työtä tekemään rata-alueen lähellä tai 2 m etäisyydellä ajojohtimista tai kannatinvaijereista (HUOM! Pikaraitiotiellä etäisyys 4 m). Jos joudutaan, sovi niistä HSL:n (liikennöinti: 
@@ -7512,7 +7512,7 @@ exports[`Should show correct tips for RAITIOLIIKENNE and haittaindex 4 1`] = `
                   />
                 </a>
                  (Työskentely kiskoalueella tai Työskentelu pikaratikka 15 -rata-alueella).
-              </p>
+              </div>
               <button
                 aria-label="Sulje Raitiotien rakenteet ja työskentely rata-alueen lähellä"
                 class="Button-module_button__1msFE Button-module_supplementary__3YKiS Button-module_size-small__3lizH Accordion-module_closeButton__1Qt8U"
@@ -7597,7 +7597,7 @@ exports[`Should show correct tips for RAITIOLIIKENNE and haittaindex 4 1`] = `
               role="region"
               style="display: none;"
             >
-              <p
+              <div
                 class="css-11yjvs7"
               >
                 Toteuta esteetön pääsy nykyisille pysäkeille tai suunnittele ja toteuta pysäkkien siirtäminen, opastus ja esteettömät jalankulkuyhteydet. Raitio- ja linja-autopysäkkejä ei saa siirtää tai poistaa käytöstä ilman HSL:n lupaa (
@@ -7623,7 +7623,7 @@ exports[`Should show correct tips for RAITIOLIIKENNE and haittaindex 4 1`] = `
                   />
                 </a>
                 .
-              </p>
+              </div>
               <p
                 class="css-11yjvs7"
               >
@@ -7744,11 +7744,11 @@ exports[`Should show correct tips for RAITIOLIIKENNE and haittaindex 4 1`] = `
               role="region"
               style="display: none;"
             >
-              <p
+              <div
                 class="css-11yjvs7"
               >
                 Tiedota merkittävistä töistä ja mahdollisista raitioliikenteen reittimuutoksista jo suunnitteluvaiheessa ja hyvissä ajoin ennen toteutusta eri osapuolille (yleiset tiedotteet, paikalliset tiedotteet). Tiedota eri osapuolille mahdollisista muutoksista reiteissä hyvissä ajoin ennen uusien järjestelyiden toteutusta.
-              </p>
+              </div>
               <p
                 class="css-11yjvs7"
               >
@@ -7869,7 +7869,7 @@ exports[`Should show correct tips for RAITIOLIIKENNE and haittaindex 4 1`] = `
               role="region"
               style="display: none;"
             >
-              <p
+              <div
                 class="css-11yjvs7"
               >
                 Varmista toteutuksessa, että raitioteiden liikennevalo-ohjaus toimii työnaikaisesti. Sovi valo-ohjauksen muutoksista pääkaupunkiseudun liikenteenhallintakeskuksen (
@@ -7882,7 +7882,7 @@ exports[`Should show correct tips for RAITIOLIIKENNE and haittaindex 4 1`] = `
                   liikenteenhallintakeskus@hel.fi
                 </a>
                 , p. 09 310 37555) kanssa.
-              </p>
+              </div>
               <button
                 aria-label="Sulje Liikennevalo-ohjaus"
                 class="Button-module_button__1msFE Button-module_supplementary__3YKiS Button-module_size-small__3lizH Accordion-module_closeButton__1Qt8U"
@@ -8065,7 +8065,7 @@ exports[`Should show correct tips for RAITIOLIIKENNE and haittaindex 5 1`] = `
               role="region"
               style="display: none;"
             >
-              <p
+              <div
                 class="css-11yjvs7"
               >
                 Tarkista, miten hankkeesi vaikuttaa raitiotieverkkoon. Sovi aikaisessa vaiheessa hankkeen aiheuttamista raitiotieverkon toimenpidetarpeista HSL:n kanssa (liikennöinti: 
@@ -8087,7 +8087,7 @@ exports[`Should show correct tips for RAITIOLIIKENNE and haittaindex 5 1`] = `
                   urakoitsijaohjeistus@kaupunkiliikenne.fi
                 </a>
                 ) kanssa.
-              </p>
+              </div>
               <button
                 aria-label="Sulje Hankkeen vaikutus raitiotieliikenteeseen"
                 class="Button-module_button__1msFE Button-module_supplementary__3YKiS Button-module_size-small__3lizH Accordion-module_closeButton__1Qt8U"
@@ -8172,11 +8172,11 @@ exports[`Should show correct tips for RAITIOLIIKENNE and haittaindex 5 1`] = `
               role="region"
               style="display: none;"
             >
-              <p
+              <div
                 class="css-11yjvs7"
               >
                 Suunnittele työt tehtäväksi ja toteuta ne pääsääntöisesti raitioliikenteen liikennöintiajan ulkopuolella mm. turvallisuussyistä. Raitiotien liikennöintihäiriöiden minimoimiseksi tee pakolliset työt ruuhka-ajan (klo 6-9, klo 15-18) ulkopuolella.
-              </p>
+              </div>
               <button
                 aria-label="Sulje Työaikarajoitukset"
                 class="Button-module_button__1msFE Button-module_supplementary__3YKiS Button-module_size-small__3lizH Accordion-module_closeButton__1Qt8U"
@@ -8261,7 +8261,7 @@ exports[`Should show correct tips for RAITIOLIIKENNE and haittaindex 5 1`] = `
               role="region"
               style="display: none;"
             >
-              <p
+              <div
                 class="css-11yjvs7"
               >
                 <p>
@@ -8323,7 +8323,7 @@ exports[`Should show correct tips for RAITIOLIIKENNE and haittaindex 5 1`] = `
                     />
                   </a>
                 </p>
-              </p>
+              </div>
               <p
                 class="css-11yjvs7"
               >
@@ -8444,7 +8444,7 @@ exports[`Should show correct tips for RAITIOLIIKENNE and haittaindex 5 1`] = `
               role="region"
               style="display: none;"
             >
-              <p
+              <div
                 class="css-11yjvs7"
               >
                 Tarkista, joudutaanko raitiotien rakenteita (ml. rakennusten julkisivuissa olevat ajolankaripustukset) tai järjestelmiä tilapäisesti purkamaan tai siirtämään. Tarkista myös, joudutaanko työtä tekemään rata-alueen lähellä tai 2 m etäisyydellä ajojohtimista tai kannatinvaijereista (HUOM! Pikaraitiotiellä etäisyys 4 m). Jos joudutaan, sovi niistä HSL:n (liikennöinti: 
@@ -8492,7 +8492,7 @@ exports[`Should show correct tips for RAITIOLIIKENNE and haittaindex 5 1`] = `
                   />
                 </a>
                  (Työskentely kiskoalueella tai Työskentelu pikaratikka 15 -rata-alueella).
-              </p>
+              </div>
               <button
                 aria-label="Sulje Raitiotien rakenteet ja työskentely rata-alueen lähellä"
                 class="Button-module_button__1msFE Button-module_supplementary__3YKiS Button-module_size-small__3lizH Accordion-module_closeButton__1Qt8U"
@@ -8577,7 +8577,7 @@ exports[`Should show correct tips for RAITIOLIIKENNE and haittaindex 5 1`] = `
               role="region"
               style="display: none;"
             >
-              <p
+              <div
                 class="css-11yjvs7"
               >
                 Toteuta esteetön pääsy nykyisille pysäkeille tai suunnittele ja toteuta pysäkkien siirtäminen, opastus ja esteettömät jalankulkuyhteydet. Raitio- ja linja-autopysäkkejä ei saa siirtää tai poistaa käytöstä ilman HSL:n lupaa (
@@ -8603,7 +8603,7 @@ exports[`Should show correct tips for RAITIOLIIKENNE and haittaindex 5 1`] = `
                   />
                 </a>
                 .
-              </p>
+              </div>
               <p
                 class="css-11yjvs7"
               >
@@ -8724,11 +8724,11 @@ exports[`Should show correct tips for RAITIOLIIKENNE and haittaindex 5 1`] = `
               role="region"
               style="display: none;"
             >
-              <p
+              <div
                 class="css-11yjvs7"
               >
                 Tiedota merkittävistä töistä ja mahdollisista raitioliikenteen reittimuutoksista jo suunnitteluvaiheessa ja hyvissä ajoin ennen toteutusta eri osapuolille (yleiset tiedotteet, paikalliset tiedotteet). Tiedota eri osapuolille mahdollisista muutoksista reiteissä hyvissä ajoin ennen uusien järjestelyiden toteutusta.
-              </p>
+              </div>
               <p
                 class="css-11yjvs7"
               >
@@ -8849,7 +8849,7 @@ exports[`Should show correct tips for RAITIOLIIKENNE and haittaindex 5 1`] = `
               role="region"
               style="display: none;"
             >
-              <p
+              <div
                 class="css-11yjvs7"
               >
                 Varmista toteutuksessa, että raitioteiden liikennevalo-ohjaus toimii työnaikaisesti. Sovi valo-ohjauksen muutoksista pääkaupunkiseudun liikenteenhallintakeskuksen (
@@ -8862,7 +8862,7 @@ exports[`Should show correct tips for RAITIOLIIKENNE and haittaindex 5 1`] = `
                   liikenteenhallintakeskus@hel.fi
                 </a>
                 , p. 09 310 37555) kanssa.
-              </p>
+              </div>
               <button
                 aria-label="Sulje Liikennevalo-ohjaus"
                 class="Button-module_button__1msFE Button-module_supplementary__3YKiS Button-module_size-small__3lizH Accordion-module_closeButton__1Qt8U"

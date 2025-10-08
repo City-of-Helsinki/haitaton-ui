@@ -1,4 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import {
+  buildHankeAlueetGeometrySnapshot,
+  hydrateHankeAlueetGeometryAfterHydrate,
+} from '../../common/utils/persistenceGeometry';
 import { FieldPath, FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation, useQueryClient } from 'react-query';
@@ -36,6 +40,7 @@ import DrawProvider from '../../../common/components/map/modules/draw/DrawProvid
 import FormPagesErrorSummary from '../../forms/components/FormPagesErrorSummary';
 import FormFieldsErrorSummary from '../../forms/components/FormFieldsErrorSummary';
 import { useApplicationsForHanke } from '../../application/hooks/useApplications';
+import useFormLanguagePersistence from '../../../common/hooks/useFormLanguagePersistence';
 import Button from '../../../common/components/button/Button';
 
 type Props = {
@@ -74,6 +79,76 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
     resolver: yupResolver(hankeSchema),
     context: validationContext,
   });
+
+  // Persist draft values so that switching language (which changes route & unmounts) does not lose unsaved edits
+  const persistence = useFormLanguagePersistence(
+    `hanke-form-${formData.hankeTunnus || 'new'}`,
+    formContext,
+    {
+      select(values) {
+        const {
+          hankeTunnus,
+          nimi,
+          kuvaus,
+          tyomaaKatuosoite,
+          vaihe,
+          tyomaaTyyppi,
+          onYKTHanke,
+          alkuPvm,
+          loppuPvm,
+          omistajat,
+          rakennuttajat,
+          toteuttajat,
+          muut,
+        } = values as typeof values & { tyomaaTyyppi?: string[] };
+        // Lightweight geometry snapshot (only polygon coordinates), separate meta key so hook skips applying directly
+        // eslint-disable-next-line no-underscore-dangle -- internal meta key for persisted geometry snapshot
+        const __geometry = buildHankeAlueetGeometrySnapshot(
+          values.alueet as unknown as Array<Record<string, unknown>>,
+        );
+        return {
+          hankeTunnus, // Include hankeTunnus to ensure it's preserved
+          nimi,
+          kuvaus,
+          tyomaaKatuosoite,
+          vaihe,
+          tyomaaTyyppi,
+          onYKTHanke,
+          alkuPvm,
+          loppuPvm,
+          // Persist minimal subset of each alue (omit geometry + heavy objects)
+          alueet: values.alueet?.map((a) => ({
+            id: a.id,
+            nimi: a.nimi,
+            haittaAlkuPvm: a.haittaAlkuPvm,
+            haittaLoppuPvm: a.haittaLoppuPvm,
+            kaistaHaitta: a.kaistaHaitta,
+            kaistaPituusHaitta: a.kaistaPituusHaitta,
+            meluHaitta: a.meluHaitta,
+            polyHaitta: a.polyHaitta,
+            tarinaHaitta: a.tarinaHaitta,
+          })),
+          omistajat,
+          rakennuttajat,
+          toteuttajat,
+          muut,
+          __geometry,
+        };
+      },
+      debounceMs: 200,
+      afterHydrate(raw) {
+        // formContext uses react-hook-form generics; cast to any for compatibility
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        hydrateHankeAlueetGeometryAfterHydrate(raw, formContext as any, {
+          pathPrefix: 'alueet',
+          snapshotKey: 'alueet',
+        });
+      },
+    },
+  );
+  // Expose persistence on formContext for nested map components to trigger saveSnapshot after geometry edits
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (formContext as any).persistence = persistence;
 
   const {
     register,
@@ -129,6 +204,8 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
       setValue('loppuPvm', data.loppuPvm);
       setValue('alueet', data.alueet?.map(convertHankeAlueToFormState));
       setShowNotification('success');
+      // Clear persisted draft after successful save
+      persistence.clearPersisted();
     },
   });
 
@@ -139,10 +216,13 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
   const [drawSource] = useState<VectorSource>(new VectorSource());
 
   function save() {
+    // Ensure snapshot prior to server mutation
+    persistence.saveSnapshot?.();
     hankeMutation.mutate(getValues());
   }
 
   function saveAndAddApplication() {
+    persistence.saveSnapshot?.();
     save();
     setShowAddApplicationDialog(true);
   }
@@ -271,6 +351,7 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
 
     hankeMutation.mutate(getValues(), {
       onSuccess(data) {
+        persistence.clearPersisted();
         setNotification(true, {
           position: 'top-right',
           dismissible: true,
@@ -374,6 +455,7 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
 
   return (
     <FormProvider {...formContext}>
+      {/* persistence hook mounted */}
       <FormNotifications showNotification={showNotification} />
       <ApplicationAddDialog
         isOpen={showAddApplicationDialog}
@@ -384,6 +466,7 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
         <MultipageForm
           heading={formHeading}
           formSteps={formSteps}
+          stepPersistKey={`hanke-form-${formData.hankeTunnus || 'new'}`}
           onStepChange={handleStepChange}
           topElement={formErrorsNotification}
           formData={watchFormValues}
@@ -403,7 +486,10 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
                 <Button
                   variant={ButtonVariant.Danger}
                   iconStart={<IconCross />}
-                  onClick={() => onFormClose(formValues.hankeTunnus)}
+                  onClick={() => {
+                    persistence.clearPersisted();
+                    onFormClose(formValues.hankeTunnus);
+                  }}
                 >
                   {t('hankeForm:cancelButton')}
                 </Button>

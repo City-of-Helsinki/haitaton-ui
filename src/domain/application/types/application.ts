@@ -294,7 +294,10 @@ export interface ApplicationDeletionResult {
 }
 
 export function isCustomerWithContacts(value: unknown): value is CustomerWithContacts {
-  return (value as CustomerWithContacts)?.contacts !== undefined;
+  return (
+    (value as CustomerWithContacts)?.contacts !== undefined &&
+    (value as CustomerWithContacts)?.customer !== undefined
+  );
 }
 
 export interface ApplicationUpdateContact {
@@ -309,9 +312,10 @@ export class ApplicationUpdateCustomerWithContacts {
   contacts: ApplicationUpdateContact[];
 
   static Create(customerWithContacts: CustomerWithContacts | null) {
-    if (customerWithContacts === null || customerWithContacts.customer.type === null) {
+    if (!customerWithContacts) {
       return null;
     }
+
     return new ApplicationUpdateCustomerWithContacts(customerWithContacts);
   }
 

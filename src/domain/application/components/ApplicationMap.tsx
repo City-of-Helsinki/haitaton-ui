@@ -78,6 +78,15 @@ export default function ApplicationMap({
     actions: { setSelectedFeature },
   } = useDrawContext();
 
+  // Access persistence instance if parent provided via form context (pattern: persistence attached to formContext).
+  // We attempt to find saveSnapshot on (formContext as any).persistence if it exists.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const maybePersistence = (useFormContext() as any)?.persistence;
+  const handleGeometryFinalized = useCallback(() => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+    maybePersistence?.saveSnapshot?.();
+  }, [maybePersistence]);
+
   useEffect(() => {
     function handleAddFeature(e: VectorSourceEvent<FeatureLike>) {
       if (e.feature && onAddArea) {
@@ -274,6 +283,7 @@ export default function ApplicationMap({
                 drawStyleFunction={restrictDrawingToHankeAreas ? drawStyleFunction : undefined}
                 drawSegmentGuard={drawSegmentGuard}
                 handleModifyEnd={restrictDrawingToHankeAreas ? handleModifyEnd : undefined}
+                onGeometryFinalized={handleGeometryFinalized}
               />
             )}
             <LayerControl

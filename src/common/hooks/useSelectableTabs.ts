@@ -42,5 +42,5 @@ export default function useSelectableTabs(
     }
   }, [numberOfTabs, setSelectedTabIndex, options.selectLastTabOnChange]);
 
-  return { tabRefs, setSelectedTabIndex };
+  return { tabRefs, setSelectedTabIndex, selectedTabIndex };
 }

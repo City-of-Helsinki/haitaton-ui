@@ -42,7 +42,8 @@ export function convertFormStateToJohtoselvitysUpdateData(
 
   const applicationData: JohtoselvitysUpdateData = cloneDeep(formState.applicationData);
 
-  applicationData.areas = formState.applicationData.areas.map(function mapToApplicationArea({
+  const sourceAreas = formState.applicationData.areas || [];
+  applicationData.areas = sourceAreas.map(function mapToApplicationArea({
     geometry,
     feature,
   }): ApplicationArea {

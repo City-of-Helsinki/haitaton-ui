@@ -439,6 +439,7 @@ const HankeView: React.FC<Props> = ({
                 validationContext={{ hanke: hankeData }}
                 notificationLabel={t('hankePortfolio:draftState:labels:insufficientPhases')}
                 testId="hankeDraftStateNotification"
+                immediate={true}
               />
             )}
             {isHankeCompleted && (

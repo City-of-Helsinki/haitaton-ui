@@ -1,4 +1,5 @@
 import React, { useReducer } from 'react';
+import { flushSync } from 'react-dom';
 import { Stepper, StepState } from 'hds-react';
 import { Box, Flex } from '@chakra-ui/react';
 import { AnyObject, ObjectSchema } from 'yup';
@@ -62,6 +63,10 @@ interface Props {
   stepChangeValidator?: (changeStep: () => void, stepIndex: number) => void;
   formData?: unknown;
   validationContext?: AnyObject;
+  /** Optional initial step index (useful for tests) */
+  initialStep?: number;
+  /** Optional persistence key to save/restore active step across language changes */
+  stepPersistKey?: string;
 }
 
 /**
@@ -81,27 +86,56 @@ const MultipageForm: React.FC<Props> = ({
   topElement,
   formData,
   validationContext,
+  initialStep,
+  stepPersistKey,
 }) => {
   const locale = useLocale();
 
   const stepReducer = createStepReducer(formSteps.length);
+
+  // Determine initial active step: precedence
+  //  1. explicit initialStep prop
+  //  2. persisted step from sessionStorage keyed by stepPersistKey
+  //  3. default 0
+  let persistedStep: number | undefined;
+  try {
+    if (stepPersistKey && typeof window !== 'undefined') {
+      const raw = sessionStorage.getItem(`${stepPersistKey}-activeStep`);
+      if (raw !== null) {
+        const parsed = Number.parseInt(raw, 10);
+        if (!Number.isNaN(parsed))
+          persistedStep = Math.max(0, Math.min(parsed, formSteps.length - 1));
+      }
+    }
+  } catch {
+    // ignore sessionStorage errors
+  }
+
   const initialState = {
-    activeStepIndex: 0,
+    activeStepIndex:
+      typeof initialStep === 'number'
+        ? Math.max(0, Math.min(initialStep, formSteps.length - 1))
+        : (persistedStep ?? 0),
     steps: formSteps,
   };
+
   const [state, dispatch] = useReducer(stepReducer, initialState);
 
   function handleStepChange(value: Action) {
     function changeStep() {
       window.scrollTo(0, 0);
-      dispatch(value);
-      if (onStepChange) {
-        onStepChange(
-          value.type === ACTION_TYPE.COMPLETE_STEP
-            ? value.payload.stepIndex + 1
-            : value.payload.stepIndex,
-        );
-      }
+      // Ensure step state update flushes synchronously so tests that query immediately after
+      // navigation (using queryByText instead of findByText/waitFor) see the updated heading.
+      flushSync(() => {
+        dispatch(value);
+        if (onStepChange) {
+          onStepChange(
+            value.type === ACTION_TYPE.COMPLETE_STEP
+              ? value.payload.stepIndex + 1
+              : value.payload.stepIndex,
+          );
+        }
+      });
     }
 
     if (stepChangeValidator) {
@@ -110,6 +144,24 @@ const MultipageForm: React.FC<Props> = ({
       changeStep();
     }
   }
+
+  // Persist active step index when language change is about to occur so it can be
+  // restored after navigation. This mirrors the form value persistence hook which
+  // listens for the same `haitaton:languageChanging` event.
+  React.useEffect(() => {
+    if (!stepPersistKey) return;
+    const handler = () => {
+      try {
+        sessionStorage.setItem(`${stepPersistKey}-activeStep`, String(state.activeStepIndex));
+      } catch {
+        // ignore
+      }
+    };
+    window.addEventListener('haitaton:languageChanging', handler);
+    return () => window.removeEventListener('haitaton:languageChanging', handler);
+    // Intentionally include state.activeStepIndex so the latest value is persisted
+    // when the event fires.
+  }, [stepPersistKey, state.activeStepIndex]);
 
   function handleStepClick(
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
