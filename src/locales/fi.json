@@ -11,6 +11,7 @@
     "loggingOut": "Kirjaudutaan ulos...",
     "loggingInErrorLabel": "Kirjautumisessa tapahtui virhe",
     "logoutError": "Uloskirjautumisessa tapahtui virhe",
+    "sessionTerminated": "Istunto on päättynyt. Sinut kirjataan automaattisesti ulos.",
     "noADPermissionHeading": "Ei käyttöoikeutta Haitaton-asiointiin",
     "noADPermissionText": "AD-tunnistautuminen Haitattomaan on mahdollista ainoastaan Kaupunkiympäristön ja Staran työntekijöille. <a>Kirjaudu ulos</a> Haitattomasta ja yritä uudelleen Suomi.fi-tunnistautumisen kautta.",
     "noADUserNameHeading": "Kirjautuminen epäonnistui",

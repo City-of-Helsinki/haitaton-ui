@@ -157,6 +157,7 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
     setValue,
     trigger,
     watch,
+    setFocus,
   } = formContext;
 
   const formValues = getValues();
@@ -334,6 +335,17 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
         closeButtonLabelText: t('common:components:notification:closeButtonLabelText'),
       });
       setActiveStepIndex(2);
+      return;
+    }
+// If hanke is public and there are missing fields dont save, focus on the first missing field
+    if (isHankePublic && haittojenHallintaErrors.length > 0) {
+      const firstErrorField = haittojenHallintaErrors[0]?.path;
+      setActiveStepIndex(3);
+      if (typeof firstErrorField === 'string') {
+        setTimeout(() => {
+          setFocus(firstErrorField as FieldPath<HankeDataFormState>);
+        }, 100);
+      }
       return;
     }
 

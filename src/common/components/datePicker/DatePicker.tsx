@@ -6,7 +6,7 @@ import { TooltipProps } from '../../types/tooltip';
 import { getInputErrorText } from '../../utils/form';
 import styles from './DatePicker.module.scss';
 import { convertFinnishDate, formatToFinnishDate, toEndOfDayUTCISO } from '../../utils/date';
-import { useGlobalNotification } from "../globalNotification/GlobalNotificationContext";
+import { useGlobalNotification } from '../globalNotification/GlobalNotificationContext';
 
 type PropTypes = {
   name: string;
@@ -38,7 +38,7 @@ const DatePicker: React.FC<React.PropsWithChildren<PropTypes>> = ({
   locale,
   onValueChange,
   hankeStartDate,
-  hankeEndDate
+  hankeEndDate,
 }) => {
   const { t } = useTranslation(['form', 'hakemus', 'common', 'validations']);
   const { control, setError, clearErrors, trigger, setValue } = useFormContext();
@@ -56,10 +56,12 @@ const DatePicker: React.FC<React.PropsWithChildren<PropTypes>> = ({
             if (isNaN(date.getTime())) return t('form:validations:invalidDate');
             if (minDate && date < minDate) return t('form:errors:dateTooEarly');
             if (maxDate && date > maxDate) return t('form:errors:dateTooLate');
-            if (hankeStartDate && date < hankeStartDate) return t('form:validations:dateBeforeProjectDate');
-            if (hankeEndDate && date > hankeEndDate) return t('form:validations:dateFutureProjectDate');
+            if (hankeStartDate && date < hankeStartDate)
+              return t('form:validations:dateBeforeProjectDate');
+            if (hankeEndDate && date > hankeEndDate)
+              return t('form:validations:dateFutureProjectDate');
             return true;
-          }
+          },
         }}
         render={({ field: { onChange, onBlur, value, ref }, fieldState: { error } }) => (
           <div className={styles.datePicker}>
@@ -112,10 +114,13 @@ const DatePicker: React.FC<React.PropsWithChildren<PropTypes>> = ({
                       dismissible: true,
                       autoClose: true,
                       autoCloseDuration: 5000,
+
                       label: t(labelKey),
                       message: t(textKey, { date: formatToFinnishDate(date) }),
                       type: 'error',
-                      closeButtonLabelText: t('common:components:notification:closeButtonLabelText'),
+                      closeButtonLabelText: t(
+                        'common:components:notification:closeButtonLabelText',
+                      ),
                     });
                   };
                   if (isNaN(parsedDate.getTime())) {

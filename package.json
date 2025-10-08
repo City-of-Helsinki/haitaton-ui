@@ -16,6 +16,7 @@
     "test": "TEST=true yarn run update-runtime-env && react-scripts test",
     "testCI": "TEST=true yarn run update-runtime-env && CI=true react-scripts test --watchAll=false --coverage --maxWorkers=2",
     "test:ci": "TEST=true yarn run update-runtime-env && CI=true react-scripts test --watchAll=false --coverage --maxWorkers=2",
+    "test:coverage": "TEST=true yarn run update-runtime-env && CI=true react-scripts test --watchAll=false --coverage --maxWorkers=2",
     "test:watch": "TEST=true yarn run update-runtime-env && react-scripts test --watch",
     "test:debug": "TEST=true yarn run update-runtime-env && react-scripts test --verbose --no-cache",
     "e2e": "playwright test --retries=1 --project=chromium --workers=3",
