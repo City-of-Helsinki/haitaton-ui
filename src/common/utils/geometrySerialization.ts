@@ -10,6 +10,18 @@ export interface SerializedGeometry {
   coordinates: unknown;
 }
 
+// Supported geometry shapes persisted by the app. These are GeoJSON geometry types and map
+// directly to OpenLayers geometry classes used by the application. We intentionally persist
+// only the geometry object ({ type, coordinates }) so that hydration can recreate a clean
+// Feature + Geometry pair without UI-specific metadata.
+//
+// - Point
+// - MultiPoint
+// - LineString
+// - MultiLineString
+// - Polygon
+// - MultiPolygon
+
 export interface SerializedFeatureGeometry {
   id: string | number | null;
   geometry: SerializedGeometry | null;

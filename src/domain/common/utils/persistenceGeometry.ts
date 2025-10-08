@@ -1,4 +1,19 @@
 // Clean single implementation for persistence geometry helpers
+//
+// Supported geometry shapes
+// - Point
+// - MultiPoint
+// - LineString
+// - MultiLineString
+// - Polygon
+// - MultiPolygon
+//
+// Notes:
+// - We persist only plain GeoJSON geometry objects in the form { type, coordinates }.
+// - Projection and coordinate order follow the map's current projection (the app uses
+//   the map coordinates directly; do not reproject during persistence).
+// - OpenLayers Feature instances (and any style/meta attached) are intentionally omitted
+//   from snapshots. Hydration recreates new Feature instances with geometry only.
 import { Feature } from 'ol';
 import Geometry from 'ol/geom/Geometry';
 import {

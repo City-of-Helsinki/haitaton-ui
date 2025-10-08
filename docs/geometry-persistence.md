@@ -43,6 +43,19 @@ Example (trimmed):
 
 Only raw GeoJSON geometry objects (no Feature wrappers, no projection transforms beyond what the map already uses).
 
+### Supported geometry shapes
+
+The persistence system stores plain GeoJSON geometry objects. The following GeoJSON geometry types are supported and will be serialized/deserialized by the helpers in `geometrySerialization.ts`:
+
+- Point
+- MultiPoint
+- LineString
+- MultiLineString
+- Polygon
+- MultiPolygon
+
+If you need to persist additional geometry types in future (for example `GeometryCollection`) add an explicit test and ensure `deserializeGeometry` correctly handles them.
+
 ### Key Components
 
 | Component / File                                                              | Responsibility                                                                                    |
