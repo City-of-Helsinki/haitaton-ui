@@ -157,3 +157,24 @@ To learn React, check out the [React documentation](https://reactjs.org/).
 ### Project Specific Architecture Docs
 
 - [Geometry & form session persistence](docs/geometry-persistence.md)
+
+## Running Jest with controlled logging
+
+Logging during Jest runs is now handled inside the test initialization code at `src/setupTests.ts`.
+
+- All console output from tests is appended immediately to a per-run timestamped log file in `/tmp`. The filename is of the form `/tmp/haitaton_<ISO-timestamp>_jest.log` and is created at test startup.
+- Additionally, if you set the `TEST_TEE_LOG` environment variable to a path (for example when you pipe output through `tee`), the test setup will append buffered per-spec output to that tee file as well so a single combined log file is available.
+- When `CI=true`, per-test buffered console output is suppressed on the terminal for passing tests; you will still see the normal Jest summary (PASS/FAIL). All console output is still persisted to the `/tmp` run log (and to `TEST_TEE_LOG` if provided).
+- When `CI` is not set or not `true`, per-test buffered console output is printed to the terminal as before.
+
+To run tests and collect a combined tee'd log manually, you can do this:
+
+```bash
+# Example: run a single test file and capture combined output with tee
+TEST_TEE_LOG=/tmp/test-run_combined.log CI=true yarn test src/domain/kaivuilmoitus/Areas.test.tsx --maxWorkers=70% --watchAll=false 2>&1 | tee /tmp/test-run_combined.log
+```
+
+Notes:
+
+- If you need to force per-test logs to be shown on the console even when `CI=true`, set `TEST_RUNNER_FORCE_SHOW=true` in the environment before running tests. This is intended for debugging.
+- The run log file path is written at test startup into the run log itself; if you need to locate the run log created by a test invocation, check `/tmp` for the most recent `haitaton_*_jest.log` file.
