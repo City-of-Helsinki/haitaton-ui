@@ -55,11 +55,7 @@ import ApplicationSendDialog from '../application/components/ApplicationSendDial
 import HaittojenHallinta from './HaittojenHallinta';
 import FormErrorsNotification from './components/FormErrorsNotification';
 import Button from '../../common/components/button/Button';
-import useFormLanguagePersistence from '../../common/hooks/useFormLanguagePersistence';
-import {
-  buildKaivuAreasGeometrySnapshot,
-  hydrateKaivuAreasGeometryAfterHydrate,
-} from '../common/utils/persistenceGeometry';
+import useAreasPersistence from '../../common/hooks/useAreasPersistence';
 
 type Props = {
   hankeData: HankeData;
@@ -111,129 +107,23 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
     resolver: yupResolver(validationSchema),
     context: validationContext,
   });
-  const persistence = useFormLanguagePersistence(
+  const persistence = useAreasPersistence(
     `application-form-${application?.id || 'new'}-KAIVU`,
     formContext,
     {
-      select(values) {
+      type: 'KAIVU',
+      extraSelect(values) {
         const ad = values.applicationData;
-        // eslint-disable-next-line no-underscore-dangle -- internal meta key for geometry snapshot
-        const __geometry = buildKaivuAreasGeometrySnapshot(ad.areas);
         return {
           applicationData: {
-            // Text fields
-            name: ad.name,
-            workDescription: ad.workDescription,
-            // Booleans / selects (checkbox / radio groups etc.)
-            constructionWork: ad.constructionWork,
-            maintenanceWork: ad.maintenanceWork,
-            emergencyWork: ad.emergencyWork,
-            rockExcavation: ad.rockExcavation,
-            cableReportDone: ad.cableReportDone,
-            requiredCompetence: ad.requiredCompetence,
-            // Multi-value tag inputs / selects
             cableReports: ad.cableReports,
             placementContracts: ad.placementContracts,
-            // Existing cable report single select (may be string or null depending on UI logic)
+            requiredCompetence: ad.requiredCompetence,
             existingCableReport: (ad as unknown as { existingCableReport?: string | null })
               .existingCableReport,
-            // Dates (primitives only, they will hydrate as strings -> server re-save not required until final submit)
-            startTime: ad.startTime,
-            endTime: ad.endTime,
-            // Minimal contact persistence: keep only identifiers & simple customer fields entered on the Yhteystiedot page.
-            customerWithContacts: ad.customerWithContacts
-              ? {
-                  customer: {
-                    type: ad.customerWithContacts.customer.type,
-                    name: ad.customerWithContacts.customer.name,
-                    registryKey: ad.customerWithContacts.customer.registryKey,
-                    registryKeyHidden: ad.customerWithContacts.customer.registryKeyHidden,
-                    email: ad.customerWithContacts.customer.email,
-                    phone: ad.customerWithContacts.customer.phone,
-                  },
-                  contacts: ad.customerWithContacts.contacts.map((c) => ({
-                    firstName: c.firstName,
-                    lastName: c.lastName,
-                    email: c.email,
-                    phone: c.phone,
-                    orderer: c.orderer,
-                  })),
-                }
-              : ad.customerWithContacts,
-            contractorWithContacts: ad.contractorWithContacts
-              ? {
-                  customer: {
-                    type: ad.contractorWithContacts.customer.type,
-                    name: ad.contractorWithContacts.customer.name,
-                    registryKey: ad.contractorWithContacts.customer.registryKey,
-                    registryKeyHidden: ad.contractorWithContacts.customer.registryKeyHidden,
-                    email: ad.contractorWithContacts.customer.email,
-                    phone: ad.contractorWithContacts.customer.phone,
-                  },
-                  contacts: ad.contractorWithContacts.contacts.map((c) => ({
-                    firstName: c.firstName,
-                    lastName: c.lastName,
-                    email: c.email,
-                    phone: c.phone,
-                    orderer: c.orderer,
-                  })),
-                }
-              : ad.contractorWithContacts,
-            representativeWithContacts: ad.representativeWithContacts
-              ? {
-                  customer: {
-                    type: ad.representativeWithContacts.customer.type,
-                    name: ad.representativeWithContacts.customer.name,
-                    registryKey: ad.representativeWithContacts.customer.registryKey,
-                    registryKeyHidden: ad.representativeWithContacts.customer.registryKeyHidden,
-                    email: ad.representativeWithContacts.customer.email,
-                    phone: ad.representativeWithContacts.customer.phone,
-                  },
-                  contacts: ad.representativeWithContacts.contacts.map((c) => ({
-                    firstName: c.firstName,
-                    lastName: c.lastName,
-                    email: c.email,
-                    phone: c.phone,
-                    orderer: c.orderer,
-                  })),
-                }
-              : ad.representativeWithContacts,
-            propertyDeveloperWithContacts: ad.propertyDeveloperWithContacts
-              ? {
-                  customer: {
-                    type: ad.propertyDeveloperWithContacts.customer.type,
-                    name: ad.propertyDeveloperWithContacts.customer.name,
-                    registryKey: ad.propertyDeveloperWithContacts.customer.registryKey,
-                    registryKeyHidden: ad.propertyDeveloperWithContacts.customer.registryKeyHidden,
-                    email: ad.propertyDeveloperWithContacts.customer.email,
-                    phone: ad.propertyDeveloperWithContacts.customer.phone,
-                  },
-                  contacts: ad.propertyDeveloperWithContacts.contacts.map((c) => ({
-                    firstName: c.firstName,
-                    lastName: c.lastName,
-                    email: c.email,
-                    phone: c.phone,
-                    orderer: c.orderer,
-                  })),
-                }
-              : ad.propertyDeveloperWithContacts,
-            invoicingCustomer: ad.invoicingCustomer
-              ? {
-                  type: ad.invoicingCustomer.type,
-                  name: ad.invoicingCustomer.name,
-                  registryKey: ad.invoicingCustomer.registryKey,
-                  registryKeyHidden: ad.invoicingCustomer.registryKeyHidden,
-                  ovt: ad.invoicingCustomer.ovt,
-                  invoicingOperator: ad.invoicingCustomer.invoicingOperator,
-                  customerReference: ad.invoicingCustomer.customerReference,
-                  postalAddress: ad.invoicingCustomer.postalAddress,
-                  email: ad.invoicingCustomer.email,
-                  phone: ad.invoicingCustomer.phone,
-                }
-              : ad.invoicingCustomer,
-            // Persist lightweight area metadata (exclude non-serializable OpenLayers features)
+            invoicingCustomer: ad.invoicingCustomer,
             areas: ad.areas
-              ? ad.areas.map((area) => {
+              ? ad.areas.map((area: unknown) => {
                   const a = area as Record<string, unknown>;
                   return {
                     name: (a.name as string) ?? null,
@@ -246,7 +136,6 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
                     kaistahaitta: (a.kaistahaitta as unknown) ?? null,
                     kaistahaittojenPituus: (a.kaistahaittojenPituus as unknown) ?? null,
                     lisatiedot: (a.lisatiedot as string) ?? null,
-                    // Persist minimal tyoalue metadata (avoid feature)
                     tyoalueet: Array.isArray(a.tyoalueet)
                       ? (a.tyoalueet as Array<Record<string, unknown>>).map((ta) => ({
                           area: (ta.area as unknown) ?? null,
@@ -257,17 +146,7 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
                 })
               : undefined,
           },
-          __geometry,
         };
-      },
-      debounceMs: 250,
-      afterHydrate(raw) {
-        // formContext uses react-hook-form generics; cast to any for compatibility
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        hydrateKaivuAreasGeometryAfterHydrate(raw, formContext as any, {
-          pathPrefix: 'applicationData.areas',
-          snapshotKey: 'areas',
-        });
       },
     },
   );

@@ -14,10 +14,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { merge } from 'lodash';
 import { useBeforeUnload } from 'react-router-dom';
 import { JohtoselvitysFormValues } from './types';
-import {
-  buildJohtoAreasGeometrySnapshot,
-  hydrateJohtoAreasGeometryAfterHydrate,
-} from '../common/utils/persistenceGeometry';
+import {} from '../common/utils/persistenceGeometry';
 import { BasicInfo } from './BasicInfo';
 import Contacts from '../application/components/ApplicationContacts';
 import { Geometries } from './Geometries';
@@ -52,7 +49,7 @@ import useSaveApplication from '../application/hooks/useSaveApplication';
 import useNavigateToApplicationView from '../application/hooks/useNavigateToApplicationView';
 import ApplicationSendDialog from '../application/components/ApplicationSendDialog';
 import Button from '../../common/components/button/Button';
-import useFormLanguagePersistence from '../../common/hooks/useFormLanguagePersistence';
+import useAreasPersistence from '../../common/hooks/useAreasPersistence';
 
 type Props = {
   hankeData?: HankeData;
@@ -111,124 +108,10 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
 
   // Lightweight persisted shape handled purely by persistence select; no runtime type needed
 
-  const persistence = useFormLanguagePersistence(
+  const persistence = useAreasPersistence(
     `application-form-${application?.id || 'new'}-JOHTO`,
     formContext,
-    {
-      select(values) {
-        const ad = values.applicationData;
-        // eslint-disable-next-line @typescript-eslint/naming-convention
-        // eslint-disable-next-line no-underscore-dangle -- internal meta snapshot key
-        const __geometry = buildJohtoAreasGeometrySnapshot(
-          ad.areas as unknown as Array<Record<string, unknown>>,
-        );
-        return {
-          applicationData: {
-            name: ad.name,
-            workDescription: ad.workDescription,
-            // Boolean / select fields
-            constructionWork: ad.constructionWork,
-            maintenanceWork: ad.maintenanceWork,
-            emergencyWork: ad.emergencyWork,
-            propertyConnectivity: ad.propertyConnectivity,
-            rockExcavation: ad.rockExcavation,
-            // Dates
-            startTime: ad.startTime,
-            endTime: ad.endTime,
-            // Minimal contact persistence for Yhteystiedot page
-            customerWithContacts: ad.customerWithContacts
-              ? {
-                  customer: {
-                    type: ad.customerWithContacts.customer.type,
-                    name: ad.customerWithContacts.customer.name,
-                    registryKey: ad.customerWithContacts.customer.registryKey,
-                    registryKeyHidden: ad.customerWithContacts.customer.registryKeyHidden,
-                    email: ad.customerWithContacts.customer.email,
-                    phone: ad.customerWithContacts.customer.phone,
-                  },
-                  contacts: ad.customerWithContacts.contacts.map((c) => ({
-                    firstName: c.firstName,
-                    lastName: c.lastName,
-                    email: c.email,
-                    phone: c.phone,
-                    orderer: c.orderer,
-                  })),
-                }
-              : ad.customerWithContacts,
-            contractorWithContacts: ad.contractorWithContacts
-              ? {
-                  customer: {
-                    type: ad.contractorWithContacts.customer.type,
-                    name: ad.contractorWithContacts.customer.name,
-                    registryKey: ad.contractorWithContacts.customer.registryKey,
-                    registryKeyHidden: ad.contractorWithContacts.customer.registryKeyHidden,
-                    email: ad.contractorWithContacts.customer.email,
-                    phone: ad.contractorWithContacts.customer.phone,
-                  },
-                  contacts: ad.contractorWithContacts.contacts.map((c) => ({
-                    firstName: c.firstName,
-                    lastName: c.lastName,
-                    email: c.email,
-                    phone: c.phone,
-                    orderer: c.orderer,
-                  })),
-                }
-              : ad.contractorWithContacts,
-            representativeWithContacts: ad.representativeWithContacts
-              ? {
-                  customer: {
-                    type: ad.representativeWithContacts.customer.type,
-                    name: ad.representativeWithContacts.customer.name,
-                    registryKey: ad.representativeWithContacts.customer.registryKey,
-                    registryKeyHidden: ad.representativeWithContacts.customer.registryKeyHidden,
-                    email: ad.representativeWithContacts.customer.email,
-                    phone: ad.representativeWithContacts.customer.phone,
-                  },
-                  contacts: ad.representativeWithContacts.contacts.map((c) => ({
-                    firstName: c.firstName,
-                    lastName: c.lastName,
-                    email: c.email,
-                    phone: c.phone,
-                    orderer: c.orderer,
-                  })),
-                }
-              : ad.representativeWithContacts,
-            propertyDeveloperWithContacts: ad.propertyDeveloperWithContacts
-              ? {
-                  customer: {
-                    type: ad.propertyDeveloperWithContacts.customer.type,
-                    name: ad.propertyDeveloperWithContacts.customer.name,
-                    registryKey: ad.propertyDeveloperWithContacts.customer.registryKey,
-                    registryKeyHidden: ad.propertyDeveloperWithContacts.customer.registryKeyHidden,
-                    email: ad.propertyDeveloperWithContacts.customer.email,
-                    phone: ad.propertyDeveloperWithContacts.customer.phone,
-                  },
-                  contacts: ad.propertyDeveloperWithContacts.contacts.map((c) => ({
-                    firstName: c.firstName,
-                    lastName: c.lastName,
-                    email: c.email,
-                    phone: c.phone,
-                    orderer: c.orderer,
-                  })),
-                }
-              : ad.propertyDeveloperWithContacts,
-            // Persist minimal postal address (street only used in basic info page editing during language switch)
-            postalAddress: ad.postalAddress ? { ...ad.postalAddress } : ad.postalAddress,
-          },
-          // eslint-disable-next-line @typescript-eslint/naming-convention
-          __geometry,
-        };
-      },
-      debounceMs: 250,
-      afterHydrate(raw) {
-        // formContext uses react-hook-form generics; cast to any for compatibility
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        hydrateJohtoAreasGeometryAfterHydrate(raw, formContext as any, {
-          pathPrefix: 'applicationData.areas',
-          snapshotKey: 'areas',
-        });
-      },
-    },
+    { type: 'JOHTO' },
   );
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (formContext as any).persistence = persistence;
