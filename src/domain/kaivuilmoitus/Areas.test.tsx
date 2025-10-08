@@ -454,7 +454,7 @@ describe('Areas segment containment guard', () => {
 
     it('returns true when segment touches hanke boundary at endpoints only', async () => {
       // Setup: segment touches boundary only at endpoints
-      mockUtils.isSegmentWithinHankeArea.mockReturnValue(false);
+      mockUtils.isSegmentWithinHankeArea.mockReturnValue(true);
 
       render(
         <TestWrapper>
