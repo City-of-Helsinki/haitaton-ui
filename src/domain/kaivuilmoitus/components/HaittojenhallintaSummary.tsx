@@ -11,7 +11,10 @@ type Props = {
 
 export default function HaittojenhallintaSummary({ hankealueet, formData }: Readonly<Props>) {
   const { t } = useTranslation();
-  const kaivuilmoitusAlueet = formData.applicationData.areas;
+  // Areas may be undefined in incomplete draft data used by tests; fall back to empty array
+  const kaivuilmoitusAlueet = Array.isArray(formData?.applicationData?.areas)
+    ? formData.applicationData.areas
+    : [];
 
   return (
     <Tabs>

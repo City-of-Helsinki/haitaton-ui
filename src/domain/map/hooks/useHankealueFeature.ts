@@ -13,19 +13,22 @@ export default function useHankealueFeature(source: Vector, hankealue: HankeAlue
   useEffect(() => {
     source.clear();
 
-    if (hankealue.geometriat) {
-      const feature = new GeoJSON().readFeatures(
+    if (hankealue.geometriat?.featureCollection) {
+      const features = new GeoJSON().readFeatures(
         hankealue.geometriat.featureCollection,
-      )[0] as Feature<Geometry>;
-      feature.setProperties(
-        {
-          liikennehaittaindeksi: indeksi,
-          areaName: hankealue.nimi,
-        },
-        true,
-      );
-      source.addFeature(feature);
-      source.dispatchEvent('featuresAdded');
+      ) as Feature<Geometry>[];
+      const feature = features[0];
+      if (feature) {
+        feature.setProperties(
+          {
+            liikennehaittaindeksi: indeksi,
+            areaName: hankealue.nimi,
+          },
+          true,
+        );
+        source.addFeature(feature);
+        source.dispatchEvent('featuresAdded');
+      }
     }
   }, [source, hankealue, indeksi]);
 }

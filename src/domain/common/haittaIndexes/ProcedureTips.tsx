@@ -95,7 +95,7 @@ const ProcedureTips: React.FC<Props> = memo(({ haittojenhallintaTyyppi, haittaIn
                 '--header-font-size': 'var(--fontsize-heading-xs)',
               }}
             >
-              <Box as="p" mb="var(--spacing-s)">
+              <Box as="div" mb="var(--spacing-s)">
                 <Trans i18nKey={item.tip} components={translationComponents} />
               </Box>
               {item.cardLinks && item.cardLinks.length > 0 && (

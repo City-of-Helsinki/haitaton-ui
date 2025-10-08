@@ -25,11 +25,14 @@ import React from 'react';
 
 function getTyoalueet(
   applicationType: ApplicationType,
-  areas: ApplicationArea[] | KaivuilmoitusAlue[],
+  areas: ApplicationArea[] | KaivuilmoitusAlue[] | undefined | null,
 ) {
+  if (!Array.isArray(areas)) return [];
   return applicationType === 'CABLE_REPORT'
     ? (areas as ApplicationArea[])
-    : (areas as KaivuilmoitusAlue[]).flatMap((area) => area.tyoalueet);
+    : (areas as KaivuilmoitusAlue[]).flatMap((area) =>
+        Array.isArray(area?.tyoalueet) ? area.tyoalueet : [],
+      );
 }
 
 type TyoalueetListProps = {

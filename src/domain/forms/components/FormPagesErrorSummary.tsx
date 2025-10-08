@@ -5,6 +5,7 @@ import { uniq } from 'lodash';
 import { $enum } from 'ts-enum-util';
 import { AnyObject, ObjectSchema, SchemaDescription, reach } from 'yup';
 import { useValidationErrors } from '../hooks/useValidationErrors';
+import { useImmediateValidationErrors } from '../hooks/useImmediateValidationErrors';
 import { FORM_PAGES } from '../types';
 
 const pageOrder = $enum(FORM_PAGES).getValues();
@@ -21,6 +22,8 @@ type Props<T> = {
   /** Additional class names to apply to the notification */
   className?: string;
   testId?: string;
+  /** If true, validation errors are shown immediately on mount instead of waiting for data changes */
+  immediate?: boolean;
 };
 
 /**
@@ -32,10 +35,13 @@ export default function FormPagesErrorSummary<T>({
   validationContext,
   notificationLabel,
   className,
+  immediate = false,
   testId,
 }: Readonly<Props<T>>) {
   const { t } = useTranslation();
-  const validationErrors = useValidationErrors(schema, data, validationContext);
+  const delayedValidationErrors = useValidationErrors(schema, data, validationContext);
+  const immediateValidationErrors = useImmediateValidationErrors(schema, data, validationContext);
+  const validationErrors = immediate ? immediateValidationErrors : delayedValidationErrors;
   const schemasWithErrors = validationErrors.map(
     (error) => reach(schema, error.path as string).describe() as SchemaDescription,
   );

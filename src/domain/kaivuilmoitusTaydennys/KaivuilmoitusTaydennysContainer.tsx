@@ -287,6 +287,7 @@ export default function KaivuilmoitusTaydennysContainer({
         heading={t('hakemus:buttons:editApplication')}
         subHeading={`${hankeData.nimi} (${hankeData.hankeTunnus})`}
         formSteps={formSteps}
+        stepPersistKey={`application-form-${originalApplication?.id || 'new'}-KAIVU`}
         formData={watchFormValues}
         validationContext={{ application: watchFormValues }}
         topElement={

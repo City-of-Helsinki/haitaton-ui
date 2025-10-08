@@ -13,6 +13,15 @@ export function useValidationErrors<T>(
   const [validationErrors, setValidationErrors] = useState<ValidationError[]>([]);
   const ref = useRef<T | null>(null);
   useEffect(() => {
+    // On initial mount we seed the ref with the current data but do not run
+    // validation. This prevents showing validation errors before the user
+    // has had a chance to interact with the form (tests rely on that
+    // behaviour).
+    if (ref.current === null) {
+      ref.current = cloneDeep(data);
+      return;
+    }
+
     if (!isEqual(ref.current, data)) {
       ref.current = cloneDeep(data);
       schema

@@ -25,10 +25,13 @@ export default function useHankeFeatures(
             return [];
           }
 
-          const feature = new GeoJSON().readFeatures(
+          const rawFeatures = new GeoJSON().readFeatures(
             alue.geometriat.featureCollection,
-          )[0] as Feature<Geometry>;
-
+          ) as Feature<Geometry>[];
+          const feature = rawFeatures[0];
+          if (!feature) {
+            return [];
+          }
           feature.setProperties(
             {
               liikennehaittaindeksi: alue.tormaystarkasteluTulos

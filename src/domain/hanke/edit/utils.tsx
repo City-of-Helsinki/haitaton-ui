@@ -249,7 +249,7 @@ export function getApplicationsInsideHankealue(
   const kaivuilmoitusApplicationInsideHankealue: HankkeenHakemus[] =
     kaivuilmoitusApplications.filter((hakemus) =>
       ((hakemus.applicationData.areas || []) as KaivuilmoitusAlue[])
-        .flatMap((area) => area.tyoalueet)
+        .flatMap((area) => (Array.isArray(area?.tyoalueet) ? area.tyoalueet : []))
         .some((area) => area.geometry && featureContains(hankeFeature, feature(area.geometry))),
     );
   return [...johtoselvitysApplicationInsideHankealue, ...kaivuilmoitusApplicationInsideHankealue];
@@ -276,7 +276,7 @@ export function getWorkAreasInsideHankealueFeature(
     .filter((area) => featureContains(hankeFeature, feature(area.geometry)));
   const kaivuilmoitusWorkAreasInsideHankealue: Tyoalue[] = kaivuilmoitusApplications
     .flatMap((hakemus) => (hakemus.applicationData.areas || []) as KaivuilmoitusAlue[])
-    .flatMap((area) => area.tyoalueet)
+    .flatMap((area) => (Array.isArray(area?.tyoalueet) ? area.tyoalueet : []))
     .filter((area) => area.geometry && featureContains(hankeFeature, feature(area.geometry)));
   return [...johtoselvitysWorkAreasInsideHankealue, ...kaivuilmoitusWorkAreasInsideHankealue];
 }

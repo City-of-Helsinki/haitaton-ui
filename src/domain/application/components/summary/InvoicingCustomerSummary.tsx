@@ -4,15 +4,18 @@ import { InvoicingCustomer } from '../../types/application';
 import React from 'react';
 
 function isInvoicingCustomerEmpty(invoicingCustomer: InvoicingCustomer) {
+  const streetName = invoicingCustomer.postalAddress?.streetAddress?.streetName;
+  const postalCode = invoicingCustomer.postalAddress?.postalCode;
+  const city = invoicingCustomer.postalAddress?.city;
   return (
     !invoicingCustomer.name &&
     !invoicingCustomer.registryKey &&
     !invoicingCustomer.ovt &&
     !invoicingCustomer.invoicingOperator &&
     !invoicingCustomer.customerReference &&
-    !invoicingCustomer.postalAddress.streetAddress.streetName &&
-    !invoicingCustomer.postalAddress.postalCode &&
-    !invoicingCustomer.postalAddress.city &&
+    !streetName &&
+    !postalCode &&
+    !city &&
     !invoicingCustomer.email &&
     !invoicingCustomer.phone
   );
@@ -49,9 +52,10 @@ export default function InvoicingCustomerSummary({
               <p>{invoicingCustomer.customerReference}</p>
             </Box>
             <Box marginBottom="var(--spacing-xs)">
-              <p>{invoicingCustomer.postalAddress.streetAddress.streetName}</p>
+              <p>{invoicingCustomer.postalAddress?.streetAddress?.streetName}</p>
               <p>
-                {invoicingCustomer.postalAddress.postalCode} {invoicingCustomer?.postalAddress.city}
+                {invoicingCustomer.postalAddress?.postalCode}{' '}
+                {invoicingCustomer.postalAddress?.city}
               </p>
             </Box>
             <div>

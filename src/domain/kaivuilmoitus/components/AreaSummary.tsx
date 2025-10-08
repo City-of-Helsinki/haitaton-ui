@@ -88,8 +88,9 @@ const AreaSummary: React.FC<Props> = ({ formData }) => {
 
   const { startTime, endTime, areas } = formData.applicationData;
 
-  const geometries: Geometry[] = areas
-    .flatMap((area) => area.tyoalueet)
+  const safeAreas = Array.isArray(areas) ? areas : [];
+  const geometries: Geometry[] = safeAreas
+    .flatMap((area) => (Array.isArray(area?.tyoalueet) ? area.tyoalueet : []))
     .map((alue) => getAreaGeometry(alue));
   const totalSurfaceArea = getTotalSurfaceArea(geometries);
 
@@ -108,7 +109,7 @@ const AreaSummary: React.FC<Props> = ({ formData }) => {
 
       <SectionItemTitle>{t('form:labels:areas')}</SectionItemTitle>
       <SectionItemContent>
-        {areas.map((area) => (
+        {safeAreas.map((area) => (
           <AreaDetail key={area.hankealueId} area={area} />
         ))}
       </SectionItemContent>
