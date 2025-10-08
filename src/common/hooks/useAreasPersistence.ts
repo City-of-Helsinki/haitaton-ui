@@ -35,7 +35,10 @@ export default function useAreasPersistence<T extends object = Record<string, un
           ? buildJohtoAreasGeometrySnapshot(areas as Array<Record<string, unknown>> | undefined)
           : buildKaivuAreasGeometrySnapshot(areas as unknown as Array<unknown> | undefined);
 
-      // Minimal persisted shape used by both containers
+      // Minimal persisted shape used by both containers. Use reserved __geometry key so
+      // the generic hydration logic in useFormLanguagePersistence skips applying raw
+      // geometry values into react-hook-form defaults and we can rehydrate them
+      // via afterHydrate.
       const base: Record<string, unknown> = {
         applicationData: {
           name: ad.name,
@@ -70,7 +73,8 @@ export default function useAreasPersistence<T extends object = Record<string, un
             };
           })(),
         },
-        geometrySnapshot,
+        // internal geometry snapshot reserved under __geometry per docs
+        __geometry: geometrySnapshot,
       };
 
       // Merge any caller-provided extra persisted data (Kaivu has many extra fields)
