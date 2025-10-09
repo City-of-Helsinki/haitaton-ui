@@ -122,6 +122,86 @@ Snapshots occur when:
 | Add automated hydration integration test | Guard against regressions                   | Could live as `*.persistence.test.tsx` per form |
 | Optional migration version field         | Forward compatibility for structure changes | E.g. `__meta: { v: 1 }`                         |
 
+### Step (Page) Persistence & Separation of Concerns
+
+The multi‑page forms (Hanke, Johtoselvitys, Kaivuilmoitus…) also persist the **active step index** so
+that a language change brings the user back to the same logical place. This is handled by
+`MultipageForm` and intentionally **uses a distinct key namespace** to avoid clobbering the draft
+JSON object that contains `__geometry`.
+
+Key pattern:
+
+```
+functional-<form>-form-step-<hankeTunnus|-new>-activeStep
+```
+
+Earlier regression: The step index used to be written under the same key as the form draft,
+overwriting the stored JSON object with a single number which destroyed the geometry snapshot.
+The fix introduced the explicit `-step-` segment to hard‑separate concerns.
+
+### Immediate Hydration While Remaining on the Areas Step
+
+Problem discovered after the key‑collision fix: When the user changed language **while already on**
+the Areas (geometry) step, polygons did hydrate into form state, but the UI (tabs + map drawer)
+did not show them until the user navigated away and back. Root cause: we previously derived
+`features` only from the static `useFieldArray` snapshot; setting `alueet[i].feature` mutates a
+nested property and does not change the array reference, so React had no reason to re‑render.
+
+Solution: In `HankeFormAlueet.tsx` we now derive `features` from a _watched_ array (`watch('alueet')`)
+falling back to the field array snapshot. This ensures that any mutation during hydration triggers
+a re‑render (react‑hook‑form updates the watched value proxy), making geometries instantly visible.
+
+### Test Coverage for Immediate Hydration
+
+Added test: `src/domain/hanke/edit/HankeFormAlueet.immediateHydration.test.tsx`.
+
+It verifies:
+
+1. User navigates to Areas step (persisting active step = 1).
+2. Language change event `haitaton:languageChanging` fires while on Areas step, persisting both
+   the draft (with `__geometry`) and the active step.
+3. Component remounts with server data that purposely omits `feature` objects (simulates a fresh
+   fetch lacking client‑only instances).
+4. Hydration reconstructs features and they are immediately visible (tab label "Area 1" present)
+   without any further step navigation.
+
+This guards specifically against regressions where geometry appears only after an unrelated state
+change (step switch) and will fail fast if the watch‑based derivation is removed.
+
+### Session Storage Keys & Cookie Banner Classification
+
+All keys introduced for draft + step persistence are strictly **functional / essential**: they only
+store the user's in‑progress form content and UI navigation context required to fulfill an explicit
+user action (editing a form during a language change). They contain no analytics identifiers, no
+cross‑session tracking data, and expire with the browser session.
+
+| Purpose                     | Key Pattern                      | Value Shape      | Essential Justification    |
+| --------------------------- | -------------------------------- | ---------------- | -------------------------- | --------------------------------------------------------- |
+| Form draft (incl. geometry) | `functional-hanke-form-<id       | new>`            | JSON object + `__geometry` | Prevents accidental data loss on language change mid‑edit |
+| Active step index           | `functional-hanke-form-step-<id  | new>-activeStep` | Integer (stringified)      | Returns user to same step; avoids confusion & rework      |
+| (Analogous for other forms) | `functional-<form>-form-<id      | new>`            | JSON object                | Same functional necessity                                 |
+| Step index (other forms)    | `functional-<form>-form-step-<id | new>-activeStep` | Integer                    | Same functional necessity                                 |
+
+Because these keys are sessionStorage (not persistent cookies) and purely operational, they should
+be allow‑listed as "essential" in the cookie consent configuration. If the consent tool surfaces a
+warning, confirm that the pattern `functional-*` is included in the essentials allowlist.
+
+Verification procedure after deploying a change:
+
+1. Open a form, edit a field, draw an area.
+2. Trigger a language change.
+3. After reload, check DevTools > Application > Session Storage for the two keys.
+4. Confirm consent banner does not flag them as non‑essential.
+5. Clear sessionStorage, repeat to ensure regeneration.
+
+### Rationale Summary
+
+Separating functional draft persistence (rich object) from step index (primitive) eliminates data
+type collisions and preserves geometry snapshots. The immediate hydration test ensures UX parity
+for the critical scenario of continuing to edit geometries across a language switch **without** an
+extra step toggle. The watch‑based feature derivation is minimal, localized, and does not alter
+public API surfaces.
+
 ### Usage Summary
 
 To add geometry persistence for a new form with map features:
@@ -139,4 +219,4 @@ To add geometry persistence for a new form with map features:
 
 ---
 
-_Last validated with full test run on 2025-10-03._
+_Last validated with full test run on 2025-10-09._
