@@ -61,13 +61,12 @@ export default function CustomAccordion({
         {...headingBoxProps}
         {...accordionButtonProps}
       >
-        <Grid
-          as="button"
-          type="button"
-          width="100%"
-          templateColumns="1fr 24px"
-          gap="var(--spacing-xs)"
-        >
+        {/* Grid previously rendered as a <button>, but the parent Box already receives
+            interactive/accordion buttonProps via useAccordion. Rendering a nested
+            <button> caused a validateDOMNesting warning when descendants also
+            included button-based components (e.g. Tooltip triggers). We switch to
+            a non-button element while retaining layout semantics. */}
+        <Grid as="div" width="100%" templateColumns="1fr 24px" gap="var(--spacing-xs)">
           <Flex
             justifyContent="space-between"
             alignItems="center"

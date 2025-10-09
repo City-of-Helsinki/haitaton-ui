@@ -87,7 +87,7 @@ export default function KaivuilmoitusMuutosilmoitusContainer({
   // Persist only lightweight textual fields across language change; geometry/area data intentionally excluded
   // (temporary regression mitigation – reintroduce with versioned schema when stable)
   const persistence = useFormLanguagePersistence(
-    `muutosilmoitus-form-${muutosilmoitus.id || 'new'}-KAIVU`,
+    `functional-muutosilmoitus-form-${muutosilmoitus.id || 'new'}-KAIVU`,
     formContext,
     {
       select(values) {
@@ -303,7 +303,8 @@ export default function KaivuilmoitusMuutosilmoitusContainer({
         heading={t('muutosilmoitus:heading')}
         subHeading={`${originalApplication.applicationData.name} (${originalApplication.applicationIdentifier})`}
         formSteps={formSteps}
-        stepPersistKey={`muutosilmoitus-form-${muutosilmoitus.id || 'new'}-KAIVU`}
+        // Separate namespace for step index so draft persistence key remains intact
+        stepPersistKey={`muutosilmoitus-form-step-${muutosilmoitus.id || 'new'}-KAIVU`}
         formData={watchFormValues}
         validationContext={{ application: watchFormValues }}
         onStepChange={handleStepChange}

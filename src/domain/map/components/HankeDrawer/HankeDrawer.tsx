@@ -31,6 +31,7 @@ import { getWorkAreasInsideHankealueFeature } from '../../../hanke/edit/utils';
 import FullScreenControl from '../../../../common/components/map/controls/FullscreenControl';
 import useDrawContext from '../../../../common/components/map/modules/draw/useDrawContext';
 import { useFormContext } from 'react-hook-form';
+import { Polygon } from 'ol/geom';
 
 type Props = {
   features: Array<Feature | undefined> | undefined;
@@ -75,6 +76,22 @@ const HankeDrawer: React.FC<React.PropsWithChildren<Props>> = ({
     if (features && features.length > 0) {
       drawSource.clear();
       features.forEach((feature) => {
+        const geometry = feature ? (feature.getGeometry() as Polygon) : null;
+        console.debug(
+          'Drawer mount feature:',
+          feature ? feature.getProperties() : null,
+          feature ? feature.getGeometry()?.getType() : null,
+          feature ? geometry?.getCoordinates() : null,
+          feature
+            ? JSON.stringify(
+                geometry
+                  ? (
+                      geometry.clone().transform('EPSG:3857', 'EPSG:4326') as Polygon
+                    ).getCoordinates()
+                  : '{}',
+              )
+            : null,
+        );
         if (feature) {
           drawSource.addFeature(feature);
         }
