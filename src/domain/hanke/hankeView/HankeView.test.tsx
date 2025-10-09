@@ -167,7 +167,12 @@ test('Correct information about hanke should be displayed', async () => {
     ),
   ).toBeInTheDocument();
   expect(screen.queryByText('Kaistahaittojen pituus: Alle 10 m')).toBeInTheDocument();
-  await user.click(screen.getAllByRole('button', { name: /haittaindeksi/i })[1]);
+  // Open autoliikenne nested accordion using its index test id
+  const autoliikenneIndex = screen.getByTestId('test-autoliikenneindeksi');
+  const autoliikenneToggle = autoliikenneIndex.closest('[aria-expanded]') as HTMLElement | null;
+  if (autoliikenneToggle && autoliikenneToggle.getAttribute('aria-expanded') === 'false') {
+    await user.click(autoliikenneToggle);
+  }
   expect(screen.getByText('Katuluokka')).toBeVisible();
   expect(screen.getByTestId('test-katuluokka')).toHaveTextContent('3');
   expect(screen.getByText('Autoliikenteen määrä')).toBeVisible();

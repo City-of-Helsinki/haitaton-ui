@@ -441,8 +441,11 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
       ];
 
   function validateStepChange(changeStep: () => void, stepIndex: number) {
-    // Ignore 'required' errors in 'Yhteystiedot' step if hanke is not public
-    const errorsToIgnore = stepIndex === 3 && !isHankePublic ? ['required'] : undefined;
+    // Relax navigation for draft hankkeet:
+    //  - Ignore 'required' errors in 'Yhteystiedot' step (index 3) when not public (existing behavior)
+    //  - NEW: Ignore 'required' errors in 'Haittojen hallinta' step (index 2) when not public so user can navigate away
+    const errorsToIgnore =
+      !isHankePublic && (stepIndex === 2 || stepIndex === 3) ? ['required'] : undefined;
 
     return changeFormStep(
       changeStep,

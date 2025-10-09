@@ -1183,10 +1183,14 @@ test('Should show changed traffic nuisance index summary when kaistahaitta chang
   await user.click(kaistahaittaSelection);
   await user.click(await screen.findByText('Ei vaikuta'));
 
-  const accordionHeader = await screen.findByRole('button', {
-    name: 'Työalueiden liikennehaittaindeksien yhteenveto (0-5)',
+  // Find the summary accordion by heading text (button role removed in CustomAccordion refactor)
+  const summaryHeading = await screen.findByRole('heading', {
+    name: /Työalueiden liikennehaittaindeksien yhteenveto/i,
   });
-  await user.click(accordionHeader);
+  const summaryToggle = summaryHeading.closest('[aria-expanded]') as HTMLElement | null;
+  if (summaryToggle && summaryToggle.getAttribute('aria-expanded') === 'false') {
+    await user.click(summaryToggle);
+  }
   expect(await screen.findByTestId('test-pyoraliikenneindeksi')).toHaveTextContent('3');
   expect(await screen.findByTestId('test-autoliikenneindeksi')).toHaveTextContent('3');
   expect(await screen.findByTestId('test-linjaautoliikenneindeksi')).toHaveTextContent('4');
