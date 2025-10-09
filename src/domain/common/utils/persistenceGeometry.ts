@@ -32,9 +32,13 @@ export type FormContextLike = {
 export function extractPersistedArray(raw: unknown, snapshotKey: string) {
   if (!raw || typeof raw !== 'object') return undefined;
   const rawObj = raw as Record<string, unknown>;
-  const geomSectionRaw = rawObj[snapshotKey]
-    ? { [snapshotKey]: rawObj[snapshotKey] }
-    : (rawObj['__geometry'] as unknown | undefined);
+  // Prefer the reserved '__geometry' snapshot when present. If not available,
+  // fall back to the top-level snapshotKey (legacy shape).
+  const geomSectionRaw = (rawObj['__geometry'] as unknown | undefined)
+    ? (rawObj['__geometry'] as unknown)
+    : rawObj[snapshotKey]
+      ? { [snapshotKey]: rawObj[snapshotKey] }
+      : undefined;
   let persisted: unknown = undefined;
   if (geomSectionRaw && typeof geomSectionRaw === 'object') {
     const gs = geomSectionRaw as Record<string, unknown>;
