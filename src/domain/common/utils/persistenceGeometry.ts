@@ -113,14 +113,22 @@ export function hydrateJohtoAreasGeometryAfterHydrate(
   const persisted = extractPersistedArray(raw, snapshotKey);
   if (!persisted) return;
   const currentArr = getCurrentArray(formContext, pathPrefix);
-  if (!currentArr) return;
+  if (!currentArr) {
+    // Create placeholder entries so we can hydrate geometries even when the form
+    // initially has no array at the target path (server may have returned undefined).
+    const placeholders = persisted.map(() => ({}));
+    formContext.setValue(pathPrefix, placeholders, { shouldDirty: false });
+  }
+  const currentArrAfter = getCurrentArray(formContext, pathPrefix);
+  if (!currentArrAfter) return;
   persisted.forEach((entry: unknown, idx: number) => {
     const en = entry as Record<string, unknown>;
     if (!en?.geometry) return;
     const geom = deserializeGeometry(en.geometry as SerializedGeometry | null);
     if (!geom) return;
+    if (!currentArrAfter[idx]) return;
     const existing: Feature<Geometry> =
-      (currentArr[idx]?.feature as Feature<Geometry>) ?? new Feature<Geometry>();
+      (currentArrAfter[idx].feature as Feature<Geometry>) ?? new Feature<Geometry>();
     existing.setGeometry(geom);
     formContext.setValue(`${pathPrefix}.${idx}.feature`, existing, { shouldDirty: false });
   });
@@ -135,7 +143,12 @@ export function hydrateKaivuAreasGeometryAfterHydrate(
   const persisted = extractPersistedArray(raw, snapshotKey);
   if (!persisted) return;
   const currentArr = getCurrentArray(formContext, pathPrefix);
-  if (!currentArr) return;
+  if (!currentArr) {
+    const placeholders = persisted.map(() => ({}));
+    formContext.setValue(pathPrefix, placeholders, { shouldDirty: false });
+  }
+  const currentArrAfter = getCurrentArray(formContext, pathPrefix);
+  if (!currentArrAfter) return;
   persisted.forEach((entry: unknown, idx: number) => {
     const en = entry as Record<string, unknown>;
     // If snapshot contains nested tyoalueet geometries (Kaivuilmoitus), hydrate them into
@@ -147,7 +160,7 @@ export function hydrateKaivuAreasGeometryAfterHydrate(
         const geom = deserializeGeometry(ts as SerializedGeometry | null);
         if (!geom) return;
         // access nested tyoalueet permissively; form shapes are dynamic so use unknown casts
-        const currentItem = currentArr[idx] as unknown as Record<string, unknown> | undefined;
+        const currentItem = currentArrAfter[idx] as unknown as Record<string, unknown> | undefined;
         const tyoalueet = currentItem?.tyoalueet as unknown as
           | Array<Record<string, unknown>>
           | undefined;
@@ -170,7 +183,7 @@ export function hydrateKaivuAreasGeometryAfterHydrate(
     const geom = deserializeGeometry(en.geometry as SerializedGeometry | null);
     if (!geom) return;
     const existing: Feature<Geometry> =
-      (currentArr[idx]?.feature as Feature<Geometry>) ?? new Feature<Geometry>();
+      (currentArrAfter[idx]?.feature as Feature<Geometry>) ?? new Feature<Geometry>();
     existing.setGeometry(geom);
     formContext.setValue(`${pathPrefix}.${idx}.feature`, existing, { shouldDirty: false });
   });
@@ -200,14 +213,20 @@ export function hydrateHankeAlueetGeometryAfterHydrate(
   const persisted = extractPersistedArray(raw, snapshotKey);
   if (!persisted) return;
   const currentArr = getCurrentArray(formContext, pathPrefix);
-  if (!currentArr) return;
+  if (!currentArr) {
+    const placeholders = persisted.map(() => ({}));
+    formContext.setValue(pathPrefix, placeholders, { shouldDirty: false });
+  }
+  const currentArrAfter = getCurrentArray(formContext, pathPrefix);
+  if (!currentArrAfter) return;
   persisted.forEach((entry: unknown, idx: number) => {
     const en = entry as Record<string, unknown>;
-    if (!en?.geometry || !currentArr[idx]) return;
+    if (!en?.geometry) return;
     const geom = deserializeGeometry(en.geometry as SerializedGeometry | null);
     if (!geom) return;
+    if (!currentArrAfter[idx]) return;
     const existing: Feature<Geometry> =
-      (currentArr[idx].feature as Feature<Geometry>) ?? new Feature<Geometry>();
+      (currentArrAfter[idx].feature as Feature<Geometry>) ?? new Feature<Geometry>();
     existing.setGeometry(geom);
     formContext.setValue(`${pathPrefix}.${idx}.feature`, existing, { shouldDirty: false });
   });
