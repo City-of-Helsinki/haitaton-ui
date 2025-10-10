@@ -54,7 +54,7 @@ type Props = {
   hankeData?: HankeData;
   application?: Application<JohtoselvitysData>;
   /** Optional initial step for tests */
-  initialStep?: number | undefined;
+  initialStep?: number;
 };
 
 const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
@@ -108,7 +108,7 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
   // Lightweight persisted shape handled purely by persistence select; no runtime type needed
 
   const persistence = useAreasPersistence(
-    `application-form-${application?.id || 'new'}-JOHTO`,
+    `functional-application-form-${application?.id || 'new'}-JOHTO`,
     formContext,
     { type: 'JOHTO' },
   );
@@ -415,7 +415,10 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
         heading={t('johtoselvitysForm:pageHeader')}
         subHeading={hankeNameText}
         formSteps={formSteps}
-        stepPersistKey={`application-form-${application?.id || 'new'}-JOHTO`}
+        // Use dedicated key namespace for step index so it never overwrites
+        // the form draft persistence payload used by useAreasPersistence
+        // (which stores JSON under `application-form-<id>-JOHTO`).
+        stepPersistKey={`functional-application-form-step-${application?.id || 'new'}-JOHTO`}
         initialStep={initialStep}
         onStepChange={handleStepChange}
         onSubmit={handleSubmit(openSendDialog)}

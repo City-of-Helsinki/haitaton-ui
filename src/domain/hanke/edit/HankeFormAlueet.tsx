@@ -173,16 +173,25 @@ const HankeFormAlueet: React.FC<FormProps & { drawSource: VectorSource }> = ({
 
   function removeArea(index: number) {
     remove(index);
-    const featureToRemove = hanke.alueet && hanke.alueet[index].feature;
+    const featureToRemove = hanke.alueet?.[index].feature;
     if (featureToRemove) {
       drawSource.removeFeature(featureToRemove);
     }
   }
 
+  // IMPORTANT:
+  // We intentionally derive features from the *watched* alueet array instead of the
+  // static fieldArray snapshot so that late hydration of geometry (language change
+  // persistence) which sets `alueet[i].feature` triggers an immediate re-render while
+  // the user remains on the "plotting areas" step. The previous implementation only
+  // depended on `hankeAlueet` (field array structure) which does not change when a
+  // nested property (feature) is set; thus features stayed undefined until some other
+  // state change (like switching steps) forced a re-render.
+  const effectiveAlueet = watchHankeAlueet || hankeAlueet;
   const features = useMemo(
     () =>
-      hankeAlueet.map((hankeAlue) => {
-        const { feature, tormaystarkasteluTulos, nimi } = hankeAlue;
+      (effectiveAlueet || []).map((hankeAlue) => {
+        const { feature, tormaystarkasteluTulos, nimi } = hankeAlue as HankeAlueFormState;
         feature?.setProperties(
           {
             liikennehaittaindeksi: tormaystarkasteluTulos
@@ -194,7 +203,7 @@ const HankeFormAlueet: React.FC<FormProps & { drawSource: VectorSource }> = ({
         );
         return feature;
       }),
-    [hankeAlueet],
+    [effectiveAlueet],
   );
 
   return (
@@ -267,9 +276,7 @@ const HankeFormAlueet: React.FC<FormProps & { drawSource: VectorSource }> = ({
               <Box mb="var(--spacing-m)">
                 <HaittaIndexes
                   heading={`${t('hanke:alue:liikennehaittaIndeksit')} (0-5)`}
-                  haittaIndexData={
-                    watchHankeAlueet && watchHankeAlueet[index].tormaystarkasteluTulos
-                  }
+                  haittaIndexData={watchHankeAlueet?.[index].tormaystarkasteluTulos}
                 />
               </Box>
             </TabPanel>

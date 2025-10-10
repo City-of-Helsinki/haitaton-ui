@@ -133,7 +133,7 @@ describe('KaivuilmoitusMuutosilmoitusContainer language persistence integration'
 
     window.dispatchEvent(new CustomEvent('haitaton:languageChanging'));
     await waitFor(() =>
-      expect(sessionStorage.getItem('muutosilmoitus-form-900-KAIVU')).toBeTruthy(),
+      expect(sessionStorage.getItem('functional-muutosilmoitus-form-900-KAIVU')).toBeTruthy(),
     );
 
     unmount();
@@ -152,7 +152,7 @@ describe('KaivuilmoitusMuutosilmoitusContainer language persistence integration'
 
     window.dispatchEvent(new CustomEvent('haitaton:languageChanging'));
     await waitFor(() =>
-      expect(sessionStorage.getItem('muutosilmoitus-form-900-KAIVU')).toContain('true'),
+      expect(sessionStorage.getItem('functional-muutosilmoitus-form-900-KAIVU')).toContain('true'),
     );
 
     unmount();

@@ -304,7 +304,8 @@ export default function JohtoselvitysTaydennysContainer({
         heading={t('hakemus:buttons:editApplication')}
         subHeading={`${hankeData.nimi} (${hankeData.hankeTunnus})`}
         formSteps={formSteps}
-        stepPersistKey={`application-form-${originalApplication?.id || 'new'}-JOHTO`}
+        // Distinct key for step index to prevent overwriting draft persistence key
+        stepPersistKey={`functional-application-form-step-${originalApplication?.id || 'new'}-JOHTO`}
         formData={watchFormValues}
         topElement={
           <>

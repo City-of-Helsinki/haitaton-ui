@@ -98,7 +98,9 @@ describe('HankeForm language persistence integration', () => {
     window.dispatchEvent(new CustomEvent('haitaton:languageChanging'));
 
     // Storage key should now exist
-    await waitFor(() => expect(sessionStorage.getItem('hanke-form-HTEST123')).toBeTruthy());
+    await waitFor(() =>
+      expect(sessionStorage.getItem('functional-hanke-form-HTEST123')).toBeTruthy(),
+    );
 
     // Simulate component unmount due to route/language change
     unmount();

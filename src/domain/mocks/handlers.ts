@@ -436,7 +436,7 @@ export const handlers = [
       const taydennys = await hakemuksetDB.createTaydennys(Number(id));
       return HttpResponse.json(taydennys, { status: 200 });
     } catch (error) {
-      return HttpResponse.json((<ApiError>error).message, { status: (<ApiError>error).status });
+      return HttpResponse.json((error as ApiError).message, { status: (error as ApiError).status });
     }
   }),
 
@@ -449,7 +449,9 @@ export const handlers = [
         const taydennys = await hakemuksetDB.updateTaydennys(id as string, updates);
         return HttpResponse.json(taydennys, { status: 200 });
       } catch (error) {
-        return HttpResponse.json((<ApiError>error).message, { status: (<ApiError>error).status });
+        return HttpResponse.json((error as ApiError).message, {
+          status: (error as ApiError).status,
+        });
       }
     },
   ),
@@ -481,7 +483,7 @@ export const handlers = [
       const muutosilmoitus = await hakemuksetDB.createMuutosilmoitus(Number(id));
       return HttpResponse.json(muutosilmoitus, { status: 200 });
     } catch (error) {
-      return HttpResponse.json((<ApiError>error).message, { status: (<ApiError>error).status });
+      return HttpResponse.json((error as ApiError).message, { status: (error as ApiError).status });
     }
   }),
 
@@ -494,7 +496,9 @@ export const handlers = [
         const muutosilmoitus = await hakemuksetDB.updateMuutosilmoitus(id as string, updates);
         return HttpResponse.json(muutosilmoitus, { status: 200 });
       } catch (error) {
-        return HttpResponse.json((<ApiError>error).message, { status: (<ApiError>error).status });
+        return HttpResponse.json((error as ApiError).message, {
+          status: (error as ApiError).status,
+        });
       }
     },
   ),

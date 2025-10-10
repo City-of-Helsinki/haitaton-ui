@@ -410,8 +410,23 @@ describe('HankeForm', () => {
   test('Car traffic nuisance categories are shown correctly on area page', async () => {
     const { user } = await setupAlueetPage();
 
-    await user.click(screen.getByRole('button', { name: /hankealueen liikennehaittaindeksit/i }));
-    await user.click(screen.getAllByRole('button', { name: /haittaindeksi/i })[1]);
+    // Try to open outer haitta indexes accordion if it exists on this page
+    const outerHeading = screen.queryByRole('heading', {
+      name: /hankealueen liikennehaittaindeksit/i,
+    });
+    if (outerHeading) {
+      const outerToggle = outerHeading.closest('[aria-expanded]') as HTMLElement | null;
+      if (outerToggle && outerToggle.getAttribute('aria-expanded') === 'false') {
+        await user.click(outerToggle);
+      }
+    }
+
+    // Open nested Autoliikenne accordion (translation may vary; use index test id to reach toggle)
+    const autoIndex = await screen.findByTestId('test-autoliikenneindeksi');
+    const autoAccordionToggle = autoIndex.closest('[aria-expanded]') as HTMLElement | null;
+    if (autoAccordionToggle && autoAccordionToggle.getAttribute('aria-expanded') === 'false') {
+      await user.click(autoAccordionToggle);
+    }
 
     expect(screen.getByText('Katuluokka')).toBeVisible();
     expect(screen.getByTestId('test-katuluokka')).toHaveTextContent('3');
@@ -468,7 +483,24 @@ describe('HankeForm', () => {
   test('Car traffic nuisance categories are shown correctly on nuisance control plan page', async () => {
     const { user } = await setupHaittojenHallintaPage();
 
-    await user.click(screen.getByRole('button', { name: /haittaindeksi/i }));
+    // Outer accordion might not exist on this page; if it does, open it.
+    const outerHeading = screen.queryByRole('heading', {
+      name: /hankealueen liikennehaittaindeksit/i,
+    });
+    if (outerHeading) {
+      const outerToggle = outerHeading.closest('[aria-expanded]') as HTMLElement | null;
+      if (outerToggle && outerToggle.getAttribute('aria-expanded') === 'false') {
+        await user.click(outerToggle);
+      }
+    }
+
+    // Open nested Autoliikenne accordion using the haitta index element inside the heading
+    const autoHeadingIndex = screen.getByTestId('test-AUTOLIIKENNE');
+    const autoAccordionToggle = autoHeadingIndex.closest('[aria-expanded]') as HTMLElement | null;
+    if (autoAccordionToggle && autoAccordionToggle.getAttribute('aria-expanded') === 'false') {
+      await user.click(autoAccordionToggle);
+    }
+    await screen.findByTestId('test-katuluokka');
 
     expect(screen.getByText('Katuluokka')).toBeVisible();
     expect(screen.getByTestId('test-katuluokka')).toHaveTextContent('3');
@@ -1000,9 +1032,13 @@ describe('HankeForm', () => {
       feature,
     }));
     const { user } = await setupAlueetPage(hanke);
-    await user.click(
-      screen.getByRole('button', { name: 'Hankealueen liikennehaittaindeksit (0-5)' }),
-    );
+    const haittaHeading2 = screen.getByRole('heading', {
+      name: /Hankealueen liikennehaittaindeksit \(0-5\)/i,
+    });
+    const toggleBtn2 = haittaHeading2.closest('[aria-expanded]') as HTMLElement | null;
+    if (toggleBtn2 && toggleBtn2.getAttribute('aria-expanded') === 'false') {
+      await user.click(toggleBtn2);
+    }
     return { user, feature };
   }
 
@@ -1292,7 +1328,9 @@ test('Should not save if public hanke has missing haittojen hallinta fields', as
   const testHanke = createTestHanke(2);
   const { user } = renderHankeForm(testHanke);
   await user.click(screen.getByRole('button', { name: /haittojen hallinta/i }));
-  const suunnitelmaInput = screen.getAllByLabelText(/toimet hankealueen haittojen hallintaan/i)[0] as HTMLInputElement;
+  const suunnitelmaInput = screen.getAllByLabelText(
+    /toimet hankealueen haittojen hallintaan/i,
+  )[0] as HTMLInputElement;
   await user.clear(suunnitelmaInput);
   expect(suunnitelmaInput).toHaveValue('');
   await user.click(screen.getByRole('button', { name: /tallenna ja keskeytä/i }));

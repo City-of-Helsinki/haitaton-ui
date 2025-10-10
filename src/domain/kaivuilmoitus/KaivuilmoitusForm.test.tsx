@@ -1183,10 +1183,14 @@ test('Should show changed traffic nuisance index summary when kaistahaitta chang
   await user.click(kaistahaittaSelection);
   await user.click(await screen.findByText('Ei vaikuta'));
 
-  const accordionHeader = await screen.findByRole('button', {
-    name: 'Työalueiden liikennehaittaindeksien yhteenveto (0-5)',
+  // Find the summary accordion by heading text (button role removed in CustomAccordion refactor)
+  const summaryHeading = await screen.findByRole('heading', {
+    name: /Työalueiden liikennehaittaindeksien yhteenveto/i,
   });
-  await user.click(accordionHeader);
+  const summaryToggle = summaryHeading.closest('[aria-expanded]') as HTMLElement | null;
+  if (summaryToggle && summaryToggle.getAttribute('aria-expanded') === 'false') {
+    await user.click(summaryToggle);
+  }
   expect(await screen.findByTestId('test-pyoraliikenneindeksi')).toHaveTextContent('3');
   expect(await screen.findByTestId('test-autoliikenneindeksi')).toHaveTextContent('3');
   expect(await screen.findByTestId('test-linjaautoliikenneindeksi')).toHaveTextContent('4');
@@ -1511,30 +1515,28 @@ describe('Registry key', () => {
               `Field expected disabled for '${s.optionText}' but was enabled – tolerated.`,
             );
           }
-        } else {
+        } else if (field.hasAttribute('disabled')) {
           // In some edge cases the field may still be disabled due to form state; log if so but don't fail.
-          if (field.hasAttribute('disabled')) {
+          // eslint-disable-next-line no-console
+          console.warn(`Registry key unexpectedly disabled for '${s.optionText}'`);
+        } else if (s.required) {
+          if (field.hasAttribute('required')) {
+            expect(field).toBeRequired();
+          } else {
             // eslint-disable-next-line no-console
-            console.warn(`Registry key unexpectedly disabled for '${s.optionText}'`);
-          } else if (s.required) {
-            if (field.hasAttribute('required')) {
-              expect(field).toBeRequired();
-            } else {
-              // eslint-disable-next-line no-console
-              console.warn(
-                `Registry key expected to be required for '${s.optionText}' but is not. (Tolerated)`,
-              );
-            }
-          } else if (!s.required) {
-            // If it shows up as required unexpectedly we still allow it; just log.
-            if (field.hasAttribute('required')) {
-              // eslint-disable-next-line no-console
-              console.warn(
-                `Registry key not expected to be required for '${s.optionText}' but is required. (Tolerated)`,
-              );
-            }
-            // Soft assertion: prefer NOT required, but don't fail if required.
+            console.warn(
+              `Registry key expected to be required for '${s.optionText}' but is not. (Tolerated)`,
+            );
           }
+        } else if (!s.required) {
+          // If it shows up as required unexpectedly we still allow it; just log.
+          if (field.hasAttribute('required')) {
+            // eslint-disable-next-line no-console
+            console.warn(
+              `Registry key not expected to be required for '${s.optionText}' but is required. (Tolerated)`,
+            );
+          }
+          // Soft assertion: prefer NOT required, but don't fail if required.
         }
       }
     });

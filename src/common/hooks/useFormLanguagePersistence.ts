@@ -72,12 +72,7 @@ export default function useFormLanguagePersistence<T extends object>(
       const persistable = (select ? select(allValues as T) : allValues) as unknown;
       const json = safeStringify(persistable);
       if (json) {
-        try {
-          sessionStorage.setItem(storageKey, json);
-          // setItem succeeded
-        } catch (e) {
-          // ignore setItem failure in production
-        }
+        sessionStorage.setItem(storageKey, json);
       }
     } catch {
       // ignore
@@ -149,7 +144,10 @@ export default function useFormLanguagePersistence<T extends object>(
       const raw = sessionStorage.getItem(storageKey);
       if (raw) {
         const persisted: unknown = JSON.parse(raw);
-        if (persisted && typeof persisted === 'object') {
+        // Only proceed when persisted root is a plain object. Previous regression:
+        // step index persistence overwrote object with a primitive number, causing
+        // geometry hydration to silently fail. Guard prevents misleading partial hydration.
+        if (persisted && typeof persisted === 'object' && !Array.isArray(persisted)) {
           const dirtyFields =
             (formState as unknown as { dirtyFields?: DirtyTree }).dirtyFields || {};
           const setValue = (
@@ -185,7 +183,15 @@ export default function useFormLanguagePersistence<T extends object>(
         if (afterHydrate) {
           const raw = sessionStorage.getItem(storageKey);
           // raw already parsed above but re-read to keep logic localized; performance impact negligible
-          if (raw) afterHydrate(JSON.parse(raw));
+          if (raw) {
+            let parsed: unknown;
+            try {
+              parsed = JSON.parse(raw);
+            } catch {
+              parsed = undefined;
+            }
+            afterHydrate(parsed);
+          }
         }
       } catch {
         // ignore

@@ -108,7 +108,7 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
     context: validationContext,
   });
   const persistence = useAreasPersistence(
-    `application-form-${application?.id || 'new'}-KAIVU`,
+    `functional-application-form-${application?.id || 'new'}-KAIVU`,
     formContext,
     {
       type: 'KAIVU',
@@ -468,7 +468,8 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
         heading={t('kaivuilmoitusForm:pageHeader')}
         subHeading={`${hankeData.nimi} (${hankeData.hankeTunnus})`}
         formSteps={formSteps}
-        stepPersistKey={`application-form-${application?.id || 'new'}-KAIVU`}
+        // Distinct key namespace for step index to avoid overwriting form draft persistence snapshot
+        stepPersistKey={`functional-application-form-step-${application?.id || 'new'}-KAIVU`}
         formData={watchFormValues}
         topElement={
           (lastStep || showErrorsPerStep[activeStepIndex]) && (

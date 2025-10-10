@@ -179,7 +179,9 @@ describe('KaivuilmoitusContainer language persistence integration', () => {
     await user.type(cable0, 'CR-1');
 
     window.dispatchEvent(new CustomEvent('haitaton:languageChanging'));
-    await waitFor(() => expect(sessionStorage.getItem('application-form-77-KAIVU')).toBeTruthy());
+    await waitFor(() =>
+      expect(sessionStorage.getItem('functional-application-form-77-KAIVU')).toBeTruthy(),
+    );
 
     unmount();
     const { getByTestId: get2 } = mount({
@@ -250,7 +252,9 @@ describe('KaivuilmoitusContainer language persistence integration', () => {
 
     // Trigger immediate snapshot before route/language change
     window.dispatchEvent(new CustomEvent('haitaton:languageChanging'));
-    await waitFor(() => expect(sessionStorage.getItem('application-form-77-KAIVU')).toBeTruthy());
+    await waitFor(() =>
+      expect(sessionStorage.getItem('functional-application-form-77-KAIVU')).toBeTruthy(),
+    );
 
     // Unmount and remount with different server-provided values to ensure persisted values take effect
     unmount();

@@ -82,7 +82,7 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
 
   // Persist draft values so that switching language (which changes route & unmounts) does not lose unsaved edits
   const persistence = useFormLanguagePersistence(
-    `hanke-form-${formData.hankeTunnus || 'new'}`,
+    `functional-hanke-form-${formData.hankeTunnus || 'new'}`,
     formContext,
     {
       select(values) {
@@ -337,7 +337,7 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
       setActiveStepIndex(2);
       return;
     }
-// If hanke is public and there are missing fields dont save, focus on the first missing field
+    // If hanke is public and there are missing fields dont save, focus on the first missing field
     if (isHankePublic && haittojenHallintaErrors.length > 0) {
       const firstErrorField = haittojenHallintaErrors[0]?.path;
       setActiveStepIndex(3);
@@ -441,8 +441,11 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
       ];
 
   function validateStepChange(changeStep: () => void, stepIndex: number) {
-    // Ignore 'required' errors in 'Yhteystiedot' step if hanke is not public
-    const errorsToIgnore = stepIndex === 3 && !isHankePublic ? ['required'] : undefined;
+    // Relax navigation for draft hankkeet:
+    //  - Ignore 'required' errors in 'Yhteystiedot' step (index 3) when not public (existing behavior)
+    //  - NEW: Ignore 'required' errors in 'Haittojen hallinta' step (index 2) when not public so user can navigate away
+    const errorsToIgnore =
+      !isHankePublic && (stepIndex === 2 || stepIndex === 3) ? ['required'] : undefined;
 
     return changeFormStep(
       changeStep,
@@ -466,7 +469,12 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
         <MultipageForm
           heading={formHeading}
           formSteps={formSteps}
-          stepPersistKey={`hanke-form-${formData.hankeTunnus || 'new'}`}
+          // IMPORTANT: use a distinct key for step index persistence to avoid
+          // clobbering the form draft persistence JSON (which uses
+          // `hanke-form-<id>`). A prior regression overwrote the draft object
+          // (with __geometry snapshot) with a bare number, losing area
+          // geometries on language change.
+          stepPersistKey={`functional-hanke-form-step-${formData.hankeTunnus || 'new'}`}
           onStepChange={handleStepChange}
           topElement={formErrorsNotification}
           formData={watchFormValues}
