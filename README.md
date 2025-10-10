@@ -159,6 +159,9 @@ To learn React, check out the [React documentation](https://reactjs.org/).
 - [Geometry & form session persistence](docs/geometry-persistence.md)
   - Includes rationale for separating draft vs step persistence keys (`functional-*` namespaces)
   - Documents immediate geometry hydration fix & test (`HankeFormAlueet.immediateHydration.test.tsx`)
+- [Geometry & intersection helpers](docs/geometry-intersection-helpers.md)
+  - Explains polygon intersection validation strategy (incremental vs closed)
+  - Provides extension pattern & testing guidelines for new geometry rules
 
 ## Running Jest with controlled logging
 
