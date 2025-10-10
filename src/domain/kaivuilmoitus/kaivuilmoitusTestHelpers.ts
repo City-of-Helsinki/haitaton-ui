@@ -7,6 +7,9 @@ import {
 } from '../application/types/application';
 import { HankeData } from '../types/hanke';
 import hankkeet from '../mocks/data/hankkeet-data';
+import { render } from '../../testUtils/render';
+import KaivuilmoitusContainer from './KaivuilmoitusContainer';
+import React from 'react';
 
 /**
  * Builds a pre-populated Kaivuilmoitus application suitable for jumping directly to the summary step.
@@ -38,7 +41,50 @@ export function getDefaultHanke(): HankeData {
 }
 
 /**
- * Navigate to a target step using stepper button text (e.g. Vaihe 6/6) if present.
- * Falls back to sequential 'Seuraava' clicks if direct step navigation is blocked.
+ * Render KaivuilmoitusContainer with optional overrides.
+ * Centralizes the default hankeData (index 1) and lets callers supply an application override.
+ * Returns the render result (including user) for further interactions.
  */
-// Re-export shared helper for backward compatibility with existing imports in domain tests.
+export function renderKaivuilmoitus({
+  hankeData,
+  application,
+}: {
+  hankeData?: HankeData;
+  application?: Application<KaivuilmoitusData>;
+} = {}) {
+  const resolvedHankeData = hankeData ?? (hankkeet[1] as HankeData);
+  return render(
+    React.createElement(KaivuilmoitusContainer, {
+      hankeData: resolvedHankeData,
+      application,
+    }),
+  );
+}
+
+/**
+ * Deep-clone a baseline kaivuilmoitus application and apply optional overrides.
+ * By default uses applications[4] which contains representative area data for most tests.
+ * Override mechanics:
+ *  - top-level fields of Application are shallow merged
+ *  - applicationData is merged field-by-field allowing partial customizations
+ */
+export function buildDefaultApplication({
+  baseIndex = 4,
+  overrides = {},
+  applicationData: appDataOverrides = {},
+}: {
+  baseIndex?: number;
+  overrides?: Partial<Application<KaivuilmoitusData>>;
+  applicationData?: Partial<KaivuilmoitusData>;
+} = {}): Application<KaivuilmoitusData> {
+  const base = cloneDeep(applications[baseIndex]) as Application<KaivuilmoitusData>;
+  const mergedAppData: KaivuilmoitusData = {
+    ...base.applicationData,
+    ...appDataOverrides,
+  } as KaivuilmoitusData;
+  return {
+    ...base,
+    ...overrides,
+    applicationData: mergedAppData,
+  } as Application<KaivuilmoitusData>;
+}

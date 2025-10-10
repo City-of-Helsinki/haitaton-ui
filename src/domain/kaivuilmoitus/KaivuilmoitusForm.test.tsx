@@ -1,18 +1,9 @@
-// Removed unused UserEvent import after wrapper cleanup.
 import { http, HttpResponse } from 'msw';
 import { cleanup, render, screen, waitFor, within } from '../../testUtils/render';
 import KaivuilmoitusContainer from './KaivuilmoitusContainer';
 import { HankeData } from '../types/hanke';
 import hankkeet from '../mocks/data/hankkeet-data';
 import { server } from '../mocks/test-server';
-// Removed global useAttachments mock. Individual tests will rely on API handler mocks
-// (initApplicationAttachmentGetResponse) to populate attachment lists, avoiding
-// stale deterministic data interfering with expectations.
-
-// Stub map/draw providers and heavy UI internals that cause passive async
-// updates and "not wrapped in act(...)" warnings in tests.
-// Note: do not mock DrawProvider here; DrawProvider and related context
-// must remain intact for components that rely on the draw context.
 import {
   Application,
   ApplicationAttachmentMetadata,
@@ -46,7 +37,10 @@ import * as applicationApi from '../application/utils';
 import { HAITTA_INDEX_TYPE, HaittaIndexData } from '../common/haittaIndexes/types';
 import { mockHaittaIndex } from '../../testUtils/helpers/haittaIndex';
 import { HIDDEN_FIELD_VALUE } from '../application/constants';
-// (removed unused hakemuksetDB import)
+import { renderKaivuilmoitus, buildDefaultApplication } from './kaivuilmoitusTestHelpers';
+
+// Note: do not mock DrawProvider here; DrawProvider and related context
+// must remain intact for components that rely on the draw context.
 
 afterEach(cleanup);
 // Ensure no persisted sessionStorage state bleeds between tests (language persistence snapshot)
@@ -70,52 +64,6 @@ server.use(
   }),
 );
 
-/**
- * Helper: Render KaivuilmoitusContainer with optional overrides.
- * Centralizes the default hankeData (index 1) and lets callers supply an application override.
- * Returns the render result (including user) for further interactions.
- */
-function renderKaivuilmoitus({
-  hankeData,
-  application,
-}: {
-  hankeData?: HankeData;
-  application?: Application<KaivuilmoitusData>;
-} = {}) {
-  const resolvedHankeData = hankeData ?? (hankkeet[1] as HankeData);
-  return render(<KaivuilmoitusContainer hankeData={resolvedHankeData} application={application} />);
-}
-/**
- * Helper: Deep-clone a baseline kaivuilmoitus application and apply optional overrides.
- * By default uses applications[4] which contains representative area data for most tests.
- * Override mechanics:
- *  - top-level fields of Application are shallow merged
- *  - applicationData is merged field-by-field allowing partial customizations
- */
-function buildDefaultApplication({
-  baseIndex = 4,
-  overrides = {},
-  applicationData: appDataOverrides = {},
-}: {
-  baseIndex?: number;
-  overrides?: Partial<Application<KaivuilmoitusData>>;
-  applicationData?: Partial<KaivuilmoitusData>;
-} = {}): Application<KaivuilmoitusData> {
-  const base = cloneDeep(applications[baseIndex]) as Application<KaivuilmoitusData>;
-  const mergedAppData: KaivuilmoitusData = {
-    ...base.applicationData,
-    ...appDataOverrides,
-  } as KaivuilmoitusData;
-  return {
-    ...base,
-    ...overrides,
-    applicationData: mergedAppData,
-  } as Application<KaivuilmoitusData>;
-}
-/**
- * Helper: select option from a combobox sequence by its field label (accessible name) and option text.
- * Works for HDS Combobox rendered as role 'combobox' elements.
- */
 test('Should fill kaivuilmoitus form and show summary', async () => {
   const application: Application<KaivuilmoitusData> = {
     id: 1,
