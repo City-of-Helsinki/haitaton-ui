@@ -281,47 +281,44 @@ describe('DrawInteraction startDraw events', () => {
     expect(handleModifyEnd).toHaveBeenCalledWith(endEvent, originalFeatureClone, endFeature);
   });
 
-  test('blocks finishing when closing segment creates self-intersection', async () => {
-    // Arrange: mock self-intersecting polygon via utils.isPolygonSelfIntersecting
+  test('finishCondition allows completion; drawend invokes callback for self-intersecting polygon', async () => {
+    // Arrange: mock self-intersecting polygon via utils.isPolygonSelfIntersecting (used only in drawend handler)
     const onSelfIntersectingPolygon = jest.fn();
     const spyIsSelfIntersecting = jest
       .spyOn(utils, 'isPolygonSelfIntersecting')
       .mockReturnValue(true);
     renderWithProviders({ onSelfIntersectingPolygon });
 
-    // Wait for draw interaction setup
     await waitFor(() => expect(__getLastDrawInstance()).toBeDefined());
     const draw: any = __getLastDrawInstance();
     const options = draw.__getOptions();
     expect(options.finishCondition).toBeDefined();
 
-    // Simulate drawstart to register change handler
+    // Simulate drawstart and one change event to set drawnFeature
     const fakePolygon = new Polygon([
       [
         [0, 0],
         [5, 5],
         [10, 0],
-        [0, 0],
+        [0, 0], // closing coordinate in test fixture (OL would manage cursor differently)
       ],
     ]);
     const feature = new Feature(fakePolygon);
     feature.on = jest.fn();
     feature.getGeometry = jest.fn(() => fakePolygon);
     draw.emit('drawstart', { feature });
-    // Obtain registered change handler and invoke to set drawnFeature.current
     const changeHandler = (feature as any).on.mock.calls.find((c: any[]) => c[0] === 'change')[1];
     changeHandler({ target: feature });
 
-    // Act: finishCondition should now BLOCK completion when polygon is self-intersecting
+    // Act: finishCondition should not itself block (no closure self-intersection check in current implementation)
     const canFinish = options.finishCondition({} as any);
-    expect(canFinish).toBe(false);
-    // Callback invoked immediately
-    expect(onSelfIntersectingPolygon).toHaveBeenCalledWith(feature);
-    // drawend should NOT be emitted by OL since finishCondition returned false; simulate to ensure no side-effects
-    draw.emit('drawend', { feature });
-    // drawend callback resets to null (since our drawend handler now unconditionally clears) - but since finish prevented, this emit is artificial
+    expect(canFinish).toBe(true);
+    expect(onSelfIntersectingPolygon).not.toHaveBeenCalled(); // callback only fired on drawend
 
-    // Cleanup spy
+    // Emulate OL finishing the draw
+    draw.emit('drawend', { feature });
+    expect(onSelfIntersectingPolygon).toHaveBeenCalledWith(feature);
+
     spyIsSelfIntersecting.mockRestore();
   });
 

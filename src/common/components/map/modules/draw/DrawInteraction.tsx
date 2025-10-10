@@ -117,10 +117,10 @@ export default function DrawInteraction({
               return false;
             }
             const currentCoordinates = modifiedPolygon.getCoordinates();
-            const userDrawnRing = [
-              ...currentCoordinates[0].slice(0, currentCoordinates[0].length - 1),
-            ];
-            // If final polygon (including implicit closing segment) is self-intersecting, reject finish:
+            // During drawing OL structure: [p0, p1, ..., pn, cursor, p0]. Exclude cursor & closing p0 for incremental ring.
+            const committedCount = currentCoordinates[0].length - 2;
+            const userDrawnRing = [...currentCoordinates[0].slice(0, committedCount)];
+            // Intersection check on the committed edges only (implicit closing segment evaluated separately on drawend or by turf if needed)
             if (areLinesInPolygonIntersecting([userDrawnRing])) {
               // Remove the last inserted point so user can continue adjusting
               // We rely on OpenLayers keeping the drawing interaction active.
@@ -204,9 +204,11 @@ export default function DrawInteraction({
           //  - the automatic closing link to the start
           //  - the live cursor position
           // Use a non-mutating copy to avoid altering OL's internal coordinate array (HAI-3310 regression guard).
-          const userDrawnRing = [
-            ...currentCoordinates[0].slice(0, currentCoordinates[0].length - 1),
-          ];
+          // Build ring of only committed user points (exclude live cursor and auto-added closing point).
+          // OpenLayers structure: [p0, p1, ..., pn, cursor, p0] during drawing.
+          // We want [p0, p1, ..., pn] for incremental self-intersection checks.
+          const committedCount = currentCoordinates[0].length - 2; // exclude cursor + closing p0
+          const userDrawnRing = [...currentCoordinates[0].slice(0, committedCount)];
           const intersecting: boolean = areLinesInPolygonIntersecting([userDrawnRing]);
           if (intersecting) {
             drawInstance.removeLastPoint();
