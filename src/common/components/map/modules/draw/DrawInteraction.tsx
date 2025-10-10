@@ -358,8 +358,10 @@ export default function DrawInteraction({
           event.feature.getGeometry() as Polygon,
         );
 
-        if (onSelfIntersectingPolygon && isSelfIntersecting) {
-          onSelfIntersectingPolygon(event.feature);
+        if (isSelfIntersecting) {
+          // Notify user even if self-intersecting polygon is finalized (legacy behavior kept)
+          showConstraintNotification('selfIntersecting');
+          onSelfIntersectingPolygon?.(event.feature);
         }
 
         clearSelection();
