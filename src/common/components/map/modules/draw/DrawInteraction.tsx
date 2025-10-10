@@ -105,6 +105,28 @@ export default function DrawInteraction({
         return;
       }
 
+      // Helper to show constraint notifications (self-intersection or outside area)
+      const showConstraintNotification = (kind: 'selfIntersecting' | 'outsideArea') => {
+        const labelKey =
+          kind === 'selfIntersecting'
+            ? 'map:notifications:selfIntersectingLabel'
+            : 'map:notifications:drawingOutsideHankeAreaLabel';
+        const messageKey =
+          kind === 'selfIntersecting'
+            ? 'map:notifications:selfIntersectingText'
+            : 'map:notifications:drawingOutsideHankeAreaText';
+        setNotification(true, {
+          position: 'top-right',
+          dismissible: true,
+          autoClose: true,
+          autoCloseDuration: 5000,
+          label: t(labelKey),
+          message: t(messageKey),
+          type: 'alert',
+          closeButtonLabelText: t('common:components:notification:closeButtonLabelText'),
+        });
+      };
+
       let geometryFunction;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       let geometryType: any = type;
@@ -125,7 +147,7 @@ export default function DrawInteraction({
         if (hasStartedRef.current || !getSubAreasAtCoordinate) return true;
         // If user already selected a sub area (from multi-area selection), allow start
         if (chosenSubAreaRef.current) return true;
-        const candidates = getSubAreasAtCoordinate(map!, evt.coordinate) || [];
+        const candidates = getSubAreasAtCoordinate(map, evt.coordinate) || [];
         if (candidates.length === 0) {
           // Block start silently
           return false;
@@ -212,16 +234,7 @@ export default function DrawInteraction({
               } catch {
                 /* ignore remove errors */
               }
-              setNotification(true, {
-                position: 'top-right',
-                dismissible: true,
-                autoClose: true,
-                autoCloseDuration: 5000,
-                label: t('map:notifications:selfIntersectingLabel'),
-                message: t('map:notifications:selfIntersectingText'),
-                type: 'alert',
-                closeButtonLabelText: t('common:components:notification:closeButtonLabelText'),
-              });
+              showConstraintNotification('selfIntersecting');
               return false; // Block finishing
             }
           }
@@ -279,16 +292,7 @@ export default function DrawInteraction({
             if (!ok) {
               drawInstance.removeLastPoint();
               lastCoordinateCount.current = actualPointCount - 1;
-              setNotification(true, {
-                position: 'top-right',
-                dismissible: true,
-                autoClose: true,
-                autoCloseDuration: 5000,
-                label: t('map:notifications:drawingOutsideHankeAreaLabel'),
-                message: t('map:notifications:drawingOutsideHankeAreaText'),
-                type: 'alert',
-                closeButtonLabelText: t('common:components:notification:closeButtonLabelText'),
-              });
+              showConstraintNotification('outsideArea');
               return;
             }
           }
@@ -302,16 +306,7 @@ export default function DrawInteraction({
             if (!poly.intersectsCoordinate(end)) {
               drawInstance.removeLastPoint();
               lastCoordinateCount.current = actualPointCount - 1;
-              setNotification(true, {
-                position: 'top-right',
-                dismissible: true,
-                autoClose: true,
-                autoCloseDuration: 5000,
-                label: t('map:notifications:drawingOutsideHankeAreaLabel'),
-                message: t('map:notifications:drawingOutsideHankeAreaText'),
-                type: 'alert',
-                closeButtonLabelText: t('common:components:notification:closeButtonLabelText'),
-              });
+              showConstraintNotification('outsideArea');
               return;
             }
             // Segment midpoints sampling to ensure it doesn't cross outside
@@ -322,16 +317,7 @@ export default function DrawInteraction({
               if (!poly.intersectsCoordinate(mid)) {
                 drawInstance.removeLastPoint();
                 lastCoordinateCount.current = actualPointCount - 1;
-                setNotification(true, {
-                  position: 'top-right',
-                  dismissible: true,
-                  autoClose: true,
-                  autoCloseDuration: 5000,
-                  label: t('map:notifications:drawingOutsideHankeAreaLabel'),
-                  message: t('map:notifications:drawingOutsideHankeAreaText'),
-                  type: 'alert',
-                  closeButtonLabelText: t('common:components:notification:closeButtonLabelText'),
-                });
+                showConstraintNotification('outsideArea');
                 return;
               }
             }
@@ -341,16 +327,7 @@ export default function DrawInteraction({
               if (!ok) {
                 drawInstance.removeLastPoint();
                 lastCoordinateCount.current = actualPointCount - 1;
-                setNotification(true, {
-                  position: 'top-right',
-                  dismissible: true,
-                  autoClose: true,
-                  autoCloseDuration: 5000,
-                  label: t('map:notifications:drawingOutsideHankeAreaLabel'),
-                  message: t('map:notifications:drawingOutsideHankeAreaText'),
-                  type: 'alert',
-                  closeButtonLabelText: t('common:components:notification:closeButtonLabelText'),
-                });
+                showConstraintNotification('outsideArea');
                 return;
               }
             }
@@ -370,16 +347,7 @@ export default function DrawInteraction({
           if (intersecting) {
             drawInstance.removeLastPoint();
             lastCoordinateCount.current = actualPointCount - 1; // Update count after removal
-            setNotification(true, {
-              position: 'top-right',
-              dismissible: true,
-              autoClose: true,
-              autoCloseDuration: 5000,
-              label: t('map:notifications:selfIntersectingLabel'),
-              message: t('map:notifications:selfIntersectingText'),
-              type: 'alert',
-              closeButtonLabelText: t('common:components:notification:closeButtonLabelText'),
-            });
+            showConstraintNotification('selfIntersecting');
             return;
           }
           drawnFeature.current = changeEvent.target;
@@ -463,13 +431,16 @@ export default function DrawInteraction({
       if (isPolygonSelfIntersecting(modifiedPolygon)) {
         modifiedPolygon.setCoordinates(originalGeometry.getCoordinates());
         // Show notification for self-intersecting polygon
+        // Reuse helper
+        const labelKey = 'map:notifications:selfIntersectingLabel';
+        const messageKey = 'map:notifications:selfIntersectingText';
         setNotification(true, {
           position: 'top-right',
           dismissible: true,
           autoClose: true,
           autoCloseDuration: 5000,
-          label: t('map:notifications:selfIntersectingLabel'),
-          message: t('map:notifications:selfIntersectingText'),
+          label: t(labelKey),
+          message: t(messageKey),
           type: 'alert',
           closeButtonLabelText: t('common:components:notification:closeButtonLabelText'),
         });
