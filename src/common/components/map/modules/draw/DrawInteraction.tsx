@@ -111,6 +111,25 @@ export default function DrawInteraction({
             if (surfaceArea < 1) {
               return false;
             }
+            // Final closing-segment self-intersection validation (enhanced UX):
+            // When attempting to finish, ensure polygon does not self-intersect.
+            if (geometry instanceof Polygon && isPolygonSelfIntersecting(geometry)) {
+              // Notify user & expose via callback while keeping drawing active
+              setNotification(true, {
+                position: 'top-right',
+                dismissible: true,
+                autoClose: true,
+                autoCloseDuration: 5000,
+                label: t('map:notifications:selfIntersectingLabel'),
+                message: t('map:notifications:selfIntersectingText'),
+                type: 'alert',
+                closeButtonLabelText: t('common:components:notification:closeButtonLabelText'),
+              });
+              if (onSelfIntersectingPolygon) {
+                onSelfIntersectingPolygon(drawnFeature.current as Feature<Geometry>);
+              }
+              return false; // Block finishing, keep interaction alive
+            }
           }
           return true;
         },
@@ -165,11 +184,15 @@ export default function DrawInteraction({
             }
           }
           // Check for self-intersection with the actual drawn points (excluding cursor position)
-          // OpenLayers creates minimum set of 3 coordinates when draw starts for polygon
-          // We are interested only with set of coordinates where there are only those
-          // that we have drawn. Discard the 2 coordinates the polygon inheritly gets.
-          currentCoordinates[0].splice(currentCoordinates[0].length - 2, 2);
-          const intersecting: boolean = areLinesInPolygonIntersecting(currentCoordinates);
+          // OpenLayers creates minimum set of 3 coordinates when draw starts for polygon.
+          // We need only the user drawn coordinates, excluding:
+          //  - the automatic closing link to the start
+          //  - the live cursor position
+          // Use a non-mutating copy to avoid altering OL's internal coordinate array (HAI-3310 regression guard).
+          const userDrawnRing = [
+            ...currentCoordinates[0].slice(0, currentCoordinates[0].length - 2),
+          ];
+          const intersecting: boolean = areLinesInPolygonIntersecting([userDrawnRing]);
           if (intersecting) {
             drawInstance.removeLastPoint();
             lastCoordinateCount.current = actualPointCount - 1; // Update count after removal
@@ -189,16 +212,10 @@ export default function DrawInteraction({
         });
       });
 
-      drawInstance.on('drawend', (event) => {
+      drawInstance.on('drawend', () => {
         selection.current?.setActive(true);
-
-        const isSelfIntersecting = isPolygonSelfIntersecting(
-          event.feature.getGeometry() as Polygon,
-        );
-
-        if (onSelfIntersectingPolygon && isSelfIntersecting) {
-          onSelfIntersectingPolygon(event.feature);
-        }
+        // At this point polygon already passed finishCondition (non-self-intersecting, valid area)
+        // So we do not need to re-check self-intersection.
 
         clearSelection();
         actions.setSelectedDrawToolType(null);

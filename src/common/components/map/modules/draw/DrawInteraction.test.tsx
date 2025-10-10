@@ -74,6 +74,7 @@ jest.mock('ol/interaction/Select', () => {
 jest.mock('ol/interaction', () => {
   let lastDrawInstance: unknown;
   let lastModifyInstance: unknown;
+  let lastDrawOptions: any;
   class Emitter {
     handlers: HandlerMap = {};
     on(event: string, handler: Handler) {
@@ -89,11 +90,14 @@ jest.mock('ol/interaction', () => {
 
   class Draw extends Emitter {
     removeLastPoint = jest.fn();
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    constructor(_opts?: unknown) {
+    constructor(opts?: unknown) {
       super();
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       lastDrawInstance = this;
+      lastDrawOptions = opts; // capture to allow direct finishCondition testing
+    }
+    // helper for tests
+    __getOptions() {
+      return lastDrawOptions;
     }
   }
   class Modify extends Emitter {
@@ -112,6 +116,7 @@ jest.mock('ol/interaction', () => {
     Modify,
     Snap,
     __getLastDrawInstance: () => lastDrawInstance,
+    __getLastDrawOptions: () => lastDrawOptions,
     __getLastModifyInstance: () => lastModifyInstance,
   };
 });
@@ -274,6 +279,90 @@ describe('DrawInteraction startDraw events', () => {
     // Assert
     expect(handleModifyEnd).toHaveBeenCalledTimes(1);
     expect(handleModifyEnd).toHaveBeenCalledWith(endEvent, originalFeatureClone, endFeature);
+  });
+
+  test('blocks finishing when closing segment creates self-intersection', async () => {
+    // Arrange: mock self-intersecting polygon via utils.isPolygonSelfIntersecting
+    const onSelfIntersectingPolygon = jest.fn();
+    const spyIsSelfIntersecting = jest
+      .spyOn(utils, 'isPolygonSelfIntersecting')
+      .mockReturnValue(true);
+    renderWithProviders({ onSelfIntersectingPolygon });
+
+    // Wait for draw interaction setup
+    await waitFor(() => expect(__getLastDrawInstance()).toBeDefined());
+    const draw: any = __getLastDrawInstance();
+    const options = draw.__getOptions();
+    expect(options.finishCondition).toBeDefined();
+
+    // Simulate drawstart to register change handler
+    const fakePolygon = new Polygon([
+      [
+        [0, 0],
+        [5, 5],
+        [10, 0],
+        [0, 0],
+      ],
+    ]);
+    const feature = new Feature(fakePolygon);
+    feature.on = jest.fn();
+    feature.getGeometry = jest.fn(() => fakePolygon);
+    draw.emit('drawstart', { feature });
+    // Obtain registered change handler and invoke to set drawnFeature.current
+    const changeHandler = (feature as any).on.mock.calls.find((c: any[]) => c[0] === 'change')[1];
+    changeHandler({ target: feature });
+
+    // Act: invoke finishCondition manually (OpenLayers calls this internally). Should return false.
+    const canFinish = options.finishCondition({} as any);
+
+    // Assert: finishing blocked, callback invoked
+    expect(canFinish).toBe(false);
+    expect(onSelfIntersectingPolygon).toHaveBeenCalledWith(feature);
+
+    // Cleanup spy
+    spyIsSelfIntersecting.mockRestore();
+  });
+
+  test('allows finishing when closing segment is valid (non-self-intersecting)', async () => {
+    const onSelfIntersectingPolygon = jest.fn();
+    const spyIsSelfIntersecting = jest
+      .spyOn(utils, 'isPolygonSelfIntersecting')
+      .mockReturnValue(false);
+    const { actions } = renderWithProviders({ onSelfIntersectingPolygon });
+
+    await waitFor(() => expect(__getLastDrawInstance()).toBeDefined());
+    const draw: any = __getLastDrawInstance();
+    const options = draw.__getOptions();
+    expect(options.finishCondition).toBeDefined();
+
+    // Simulate drawstart and change events to set drawnFeature
+    const fakePolygon = new Polygon([
+      [
+        [0, 0],
+        [10, 0],
+        [10, 10],
+        [0, 10],
+        [0, 0],
+      ],
+    ]);
+    const feature = new Feature(fakePolygon);
+    feature.on = jest.fn();
+    feature.getGeometry = jest.fn(() => fakePolygon);
+    draw.emit('drawstart', { feature });
+    const changeHandler = (feature as any).on.mock.calls.find((c: any[]) => c[0] === 'change')[1];
+    changeHandler({ target: feature });
+
+    // Act: finishCondition should allow completion
+    const canFinish = options.finishCondition({} as any);
+    expect(canFinish).toBe(true);
+    expect(onSelfIntersectingPolygon).not.toHaveBeenCalled();
+
+    // Simulate drawend emission
+    draw.emit('drawend', { feature });
+    expect(actions.setSelectedDrawToolType).toHaveBeenCalledWith(null);
+    expect(actions.setSelectedFeature).toHaveBeenCalledWith(null);
+
+    spyIsSelfIntersecting.mockRestore();
   });
 
   test('modifyend (self-intersecting) reverts coordinates to original', async () => {
