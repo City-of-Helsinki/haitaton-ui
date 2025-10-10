@@ -33,6 +33,15 @@ type Props = {
     modifiedFeature: Feature,
   ) => void;
   onGeometryFinalized?: () => void;
+  // New props for sub hanke area selection flow
+  getSubAreasAtCoordinate?: (map: Map, coord: number[]) => Feature<Polygon>[];
+  onRequestSubAreaSelection?: (
+    candidates: Feature<Polygon>[],
+    helpers: { confirm: (feature: Feature<Polygon>) => void; cancel: () => void },
+  ) => void;
+  onSubAreaSelected?: (feature: Feature<Polygon>) => void;
+  onSubAreaSelectionCanceled?: () => void;
+  allowLegacyDrawSegmentGuard?: boolean; // keep existing guard invocation after new area checks if desired
 };
 
 type Interaction = Draw | Snap | Modify;
@@ -45,6 +54,11 @@ export default function DrawInteraction({
   drawSegmentGuard,
   handleModifyEnd,
   onGeometryFinalized,
+  getSubAreasAtCoordinate,
+  onRequestSubAreaSelection,
+  onSubAreaSelected,
+  onSubAreaSelectionCanceled,
+  allowLegacyDrawSegmentGuard,
 }: Readonly<Props>) {
   const { t } = useTranslation();
   const { setNotification } = useGlobalNotification();
@@ -57,6 +71,17 @@ export default function DrawInteraction({
   const drawnFeature = useRef<null | Feature>(null);
   const originalModifiedFeature = useRef<null | Feature>(null);
   const lastCoordinateCount = useRef<number>(0);
+  // New state for chosen sub area
+  const [chosenSubArea, setChosenSubArea] = useState<Feature<Polygon> | null>(null);
+  const firstPointRef = useRef<number[] | null>(null);
+  // Mirror refs to avoid stale closure in OL change handlers
+  const chosenSubAreaRef = useRef<Feature<Polygon> | null>(null);
+  const pendingSubAreaSelectionRef = useRef<boolean>(false);
+  const hasStartedRef = useRef<boolean>(false);
+  // Pending selection handled via ref; expose setter for internal usage
+  const setPendingSubAreaSelection = (val: boolean) => {
+    pendingSubAreaSelectionRef.current = val;
+  };
 
   const clearSelection = useCallback(() => {
     if (selection.current) selection.current.getFeatures().clear();
@@ -93,11 +118,66 @@ export default function DrawInteraction({
         current: null as Draw | null,
       } as React.MutableRefObject<Draw | null>;
 
+      const composedCondition: Condition = (evt) => {
+        const baseOk = drawCondition ? drawCondition(evt) : true;
+        if (!baseOk) return false;
+        // If drawing already started or no sub area logic, allow
+        if (hasStartedRef.current || !getSubAreasAtCoordinate) return true;
+        // If user already selected a sub area (from multi-area selection), allow start
+        if (chosenSubAreaRef.current) return true;
+        const candidates = getSubAreasAtCoordinate(map!, evt.coordinate) || [];
+        if (candidates.length === 0) {
+          // Block start silently
+          return false;
+        }
+        if (candidates.length === 1) {
+          setChosenSubArea(candidates[0]);
+          chosenSubAreaRef.current = candidates[0];
+          onSubAreaSelected?.(candidates[0]);
+          return true;
+        }
+        // Multiple: request user selection, do not start yet
+        firstPointRef.current = evt.coordinate;
+        setPendingSubAreaSelection(true);
+        pendingSubAreaSelectionRef.current = true;
+        onRequestSubAreaSelection?.(candidates, {
+          confirm: (feature) => {
+            try {
+              const poly = feature.getGeometry() as Polygon;
+              if (!poly.intersectsCoordinate(firstPointRef.current!)) {
+                setPendingSubAreaSelection(false);
+                pendingSubAreaSelectionRef.current = false;
+                firstPointRef.current = null;
+                onSubAreaSelectionCanceled?.();
+                return;
+              }
+              setChosenSubArea(feature);
+              chosenSubAreaRef.current = feature;
+              setPendingSubAreaSelection(false);
+              pendingSubAreaSelectionRef.current = false;
+              onSubAreaSelected?.(feature);
+            } catch {
+              setPendingSubAreaSelection(false);
+              pendingSubAreaSelectionRef.current = false;
+              firstPointRef.current = null;
+              onSubAreaSelectionCanceled?.();
+            }
+          },
+          cancel: () => {
+            setPendingSubAreaSelection(false);
+            pendingSubAreaSelectionRef.current = false;
+            firstPointRef.current = null;
+            onSubAreaSelectionCanceled?.();
+          },
+        });
+        return false;
+      };
+
       const drawInstance = new Draw({
         source,
         type: geometryType,
         geometryFunction,
-        condition: drawCondition,
+        condition: composedCondition,
         style: drawStyleFunction ? (feature) => drawStyleFunction(map, feature) : undefined,
         finishCondition(event) {
           if (
@@ -152,6 +232,13 @@ export default function DrawInteraction({
       drawInstance.on('drawstart', (event) => {
         selection.current?.setActive(false);
         lastCoordinateCount.current = 0; // Reset coordinate count for new drawing
+        // Reset area selection state for a new drawing sequence
+        setChosenSubArea(null);
+        setPendingSubAreaSelection(false);
+        firstPointRef.current = null;
+        chosenSubAreaRef.current = null;
+        pendingSubAreaSelectionRef.current = false;
+        hasStartedRef.current = true;
         event.feature.on('change', (changeEvent) => {
           const currentFeature = event.feature;
           const modifiedPolygon: Polygon = currentFeature.getGeometry() as Polygon;
@@ -173,18 +260,25 @@ export default function DrawInteraction({
           }
           lastCoordinateCount.current = actualPointCount;
 
-          // NEW: Guard against leaving the hanke area while drawing
-          if (drawSegmentGuard && actualPointCount >= 2) {
-            const ring = currentCoordinates[0];
-            // Get the actual segment between the last two fixed points (ignoring cursor)
+          const ring = currentCoordinates[0];
+
+          // First point selection handled pre-start in composedCondition
+
+          // Block further points while selection pending
+          if (pendingSubAreaSelectionRef.current && actualPointCount > 1) {
+            drawInstance.removeLastPoint();
+            lastCoordinateCount.current = actualPointCount - 1;
+            return;
+          }
+
+          // Legacy segment guard fallback when no sub area selection logic is provided
+          if (!getSubAreasAtCoordinate && drawSegmentGuard && actualPointCount >= 2) {
             const start = ring[actualPointCount - 2];
             const end = ring[actualPointCount - 1];
             const ok = drawSegmentGuard(map, [start, end]);
             if (!ok) {
-              // Disallow this segment: revert last point
               drawInstance.removeLastPoint();
-              lastCoordinateCount.current = actualPointCount - 1; // Update count after removal
-              // Show notification for not allowed to draw outside hanke area
+              lastCoordinateCount.current = actualPointCount - 1;
               setNotification(true, {
                 position: 'top-right',
                 dismissible: true,
@@ -196,6 +290,69 @@ export default function DrawInteraction({
                 closeButtonLabelText: t('common:components:notification:closeButtonLabelText'),
               });
               return;
+            }
+          }
+
+          // AREA CONTAINMENT & SEGMENT GUARD (after area chosen)
+          if (chosenSubArea && actualPointCount >= 2) {
+            const start = ring[actualPointCount - 2];
+            const end = ring[actualPointCount - 1];
+            const poly = (chosenSubAreaRef.current ?? chosenSubArea)?.getGeometry() as Polygon;
+            // Check end point inside polygon
+            if (!poly.intersectsCoordinate(end)) {
+              drawInstance.removeLastPoint();
+              lastCoordinateCount.current = actualPointCount - 1;
+              setNotification(true, {
+                position: 'top-right',
+                dismissible: true,
+                autoClose: true,
+                autoCloseDuration: 5000,
+                label: t('map:notifications:drawingOutsideHankeAreaLabel'),
+                message: t('map:notifications:drawingOutsideHankeAreaText'),
+                type: 'alert',
+                closeButtonLabelText: t('common:components:notification:closeButtonLabelText'),
+              });
+              return;
+            }
+            // Segment midpoints sampling to ensure it doesn't cross outside
+            const steps = 5;
+            for (let i = 1; i < steps; i += 1) {
+              const f = i / steps;
+              const mid = [start[0] + (end[0] - start[0]) * f, start[1] + (end[1] - start[1]) * f];
+              if (!poly.intersectsCoordinate(mid)) {
+                drawInstance.removeLastPoint();
+                lastCoordinateCount.current = actualPointCount - 1;
+                setNotification(true, {
+                  position: 'top-right',
+                  dismissible: true,
+                  autoClose: true,
+                  autoCloseDuration: 5000,
+                  label: t('map:notifications:drawingOutsideHankeAreaLabel'),
+                  message: t('map:notifications:drawingOutsideHankeAreaText'),
+                  type: 'alert',
+                  closeButtonLabelText: t('common:components:notification:closeButtonLabelText'),
+                });
+                return;
+              }
+            }
+            // Optional legacy guard after our containment checks
+            if (allowLegacyDrawSegmentGuard && drawSegmentGuard) {
+              const ok = drawSegmentGuard(map, [start, end]);
+              if (!ok) {
+                drawInstance.removeLastPoint();
+                lastCoordinateCount.current = actualPointCount - 1;
+                setNotification(true, {
+                  position: 'top-right',
+                  dismissible: true,
+                  autoClose: true,
+                  autoCloseDuration: 5000,
+                  label: t('map:notifications:drawingOutsideHankeAreaLabel'),
+                  message: t('map:notifications:drawingOutsideHankeAreaText'),
+                  type: 'alert',
+                  closeButtonLabelText: t('common:components:notification:closeButtonLabelText'),
+                });
+                return;
+              }
             }
           }
           // Check for self-intersection with the actual drawn points (excluding cursor position)
@@ -232,6 +389,11 @@ export default function DrawInteraction({
       drawInstance.on('drawend', (event) => {
         selection.current?.setActive(true);
 
+        // Reset pending selection flags after end
+        setPendingSubAreaSelection(false);
+        firstPointRef.current = null;
+        pendingSubAreaSelectionRef.current = false;
+
         const isSelfIntersecting = isPolygonSelfIntersecting(
           event.feature.getGeometry() as Polygon,
         );
@@ -247,6 +409,10 @@ export default function DrawInteraction({
         } catch {
           /* ignore */
         }
+        // Keep chosenSubArea for potential modify operations or clear? Clearing to force re-selection on next draw.
+        setChosenSubArea(null);
+        chosenSubAreaRef.current = null;
+        hasStartedRef.current = false;
       });
 
       map.addInteraction(drawInstance);
@@ -267,6 +433,13 @@ export default function DrawInteraction({
       t,
       setNotification,
       onGeometryFinalized,
+      getSubAreasAtCoordinate,
+      onRequestSubAreaSelection,
+      onSubAreaSelected,
+      onSubAreaSelectionCanceled,
+      allowLegacyDrawSegmentGuard,
+      chosenSubArea,
+      hasStartedRef,
     ],
   );
 

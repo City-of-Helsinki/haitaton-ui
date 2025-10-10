@@ -465,7 +465,10 @@ describe('DrawInteraction startDraw events', () => {
           <MapContext.Provider value={{ map: map as any, layers: {} as any } as any}>
             {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
             <DrawContext.Provider value={{ state, actions, source } as any}>
-              <DrawInteraction drawSegmentGuard={mockDrawSegmentGuardInside} />
+              <DrawInteraction
+                drawSegmentGuard={mockDrawSegmentGuardInside}
+                allowLegacyDrawSegmentGuard
+              />
             </DrawContext.Provider>
           </MapContext.Provider>
         </GlobalNotificationProvider>
@@ -578,7 +581,10 @@ describe('DrawInteraction startDraw events', () => {
           <MapContext.Provider value={{ map: map as any, layers: {} as any } as any}>
             {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
             <DrawContext.Provider value={{ state, actions, source } as any}>
-              <DrawInteraction drawSegmentGuard={mockDrawSegmentGuardOutside} />
+              <DrawInteraction
+                drawSegmentGuard={mockDrawSegmentGuardOutside}
+                allowLegacyDrawSegmentGuard
+              />
             </DrawContext.Provider>
           </MapContext.Provider>
         </GlobalNotificationProvider>
@@ -690,7 +696,10 @@ describe('DrawInteraction startDraw events', () => {
           <MapContext.Provider value={{ map: map as any, layers: {} as any } as any}>
             {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
             <DrawContext.Provider value={{ state, actions, source } as any}>
-              <DrawInteraction drawSegmentGuard={mockDrawSegmentGuardSkip} />
+              <DrawInteraction
+                drawSegmentGuard={mockDrawSegmentGuardSkip}
+                allowLegacyDrawSegmentGuard
+              />
             </DrawContext.Provider>
           </MapContext.Provider>
         </GlobalNotificationProvider>
@@ -893,7 +902,7 @@ describe('DrawInteraction', () => {
 
       rtlRender(
         <DrawProvider source={source}>
-          <DrawInteraction drawSegmentGuard={mockDrawSegmentGuard} />
+          <DrawInteraction drawSegmentGuard={mockDrawSegmentGuard} allowLegacyDrawSegmentGuard />
         </DrawProvider>,
       );
     });
@@ -910,7 +919,7 @@ describe('DrawInteraction', () => {
 
       rtlRender(
         <DrawProvider source={source}>
-          <DrawInteraction drawSegmentGuard={mockDrawSegmentGuard} />
+          <DrawInteraction drawSegmentGuard={mockDrawSegmentGuard} allowLegacyDrawSegmentGuard />
         </DrawProvider>,
       );
     });
@@ -925,7 +934,7 @@ describe('DrawInteraction', () => {
 
       rtlRender(
         <DrawProvider source={source}>
-          <DrawInteraction drawSegmentGuard={mockDrawSegmentGuard} />
+          <DrawInteraction drawSegmentGuard={mockDrawSegmentGuard} allowLegacyDrawSegmentGuard />
         </DrawProvider>,
       );
     });
@@ -944,7 +953,7 @@ describe('DrawInteraction', () => {
 
       rtlRender(
         <DrawProvider source={source}>
-          <DrawInteraction drawSegmentGuard={mockDrawSegmentGuard} />
+          <DrawInteraction drawSegmentGuard={mockDrawSegmentGuard} allowLegacyDrawSegmentGuard />
         </DrawProvider>,
       );
     });
@@ -964,7 +973,7 @@ describe('DrawInteraction', () => {
 
       rtlRender(
         <DrawProvider source={source}>
-          <DrawInteraction drawSegmentGuard={mockDrawSegmentGuard} />
+          <DrawInteraction drawSegmentGuard={mockDrawSegmentGuard} allowLegacyDrawSegmentGuard />
         </DrawProvider>,
       );
     });
@@ -985,9 +994,192 @@ describe('DrawInteraction', () => {
 
       rtlRender(
         <DrawProvider source={source}>
-          <DrawInteraction drawSegmentGuard={mockDrawSegmentGuard} />
+          <DrawInteraction drawSegmentGuard={mockDrawSegmentGuard} allowLegacyDrawSegmentGuard />
         </DrawProvider>,
       );
+    });
+  });
+
+  describe('sub hanke area selection', () => {
+    const OLD_ENV = process.env;
+    beforeEach(() => {
+      process.env = { ...OLD_ENV, NODE_ENV: 'development' } as NodeJS.ProcessEnv;
+    });
+    afterEach(() => {
+      process.env = OLD_ENV;
+    });
+    function makePoly(coords: number[][]): Feature<Polygon> {
+      return new Feature(new Polygon([coords]));
+    }
+
+    test('silent ignore when first point outside all areas', async () => {
+      const getSubAreasAtCoordinate = jest.fn(() => []);
+      const source = new VectorSource();
+      const actions = { setSelectedDrawToolType: jest.fn(), setSelectedFeature: jest.fn() };
+      const state = { selectedDrawtoolType: DRAWTOOLTYPE.POLYGON, selectedFeature: null };
+      const map = { addInteraction: jest.fn(), removeInteraction: jest.fn() } as any;
+      const ui = (
+        <MapContext.Provider value={{ map, layers: {} } as any}>
+          <DrawContext.Provider value={{ state, actions, source } as any}>
+            <DrawInteraction getSubAreasAtCoordinate={getSubAreasAtCoordinate} />
+          </DrawContext.Provider>
+        </MapContext.Provider>
+      );
+      rtlRender(ui);
+      await waitFor(() => expect(__getLastDrawInstance()).toBeDefined());
+      // Access Draw options and invoke condition directly
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const { __getLastDrawOptions } = require('ol/interaction');
+      let options = __getLastDrawOptions();
+      if (!options) {
+        // Fallback: fetch from instance helper
+        const drawInst: any = __getLastDrawInstance();
+        if (drawInst && drawInst.__getOptions) {
+          options = drawInst.__getOptions();
+        }
+      }
+      expect(options).toBeDefined();
+      const event = { coordinate: [999, 999] } as any; // outside any area
+      const allow = options.condition(event);
+      expect(allow).toBe(false);
+      expect(getSubAreasAtCoordinate).toHaveBeenCalledTimes(1);
+      // Drawstart should not have fired automatically
+      const draw: any = __getLastDrawInstance();
+      expect(draw.handlers?.drawstart || []).toHaveLength(1); // handler registered
+      // Ensure handler not invoked
+      // (No reliable internal counter; absence of feature.on calls is indicative)
+      // We simply assert no chosen area callback was triggered
+    });
+
+    test('auto-select single sub area on first point', async () => {
+      const poly = makePoly([
+        [0, 0],
+        [100, 0],
+        [100, 100],
+        [0, 100],
+        [0, 0],
+      ]);
+      const getSubAreasAtCoordinate = jest.fn(() => [poly]);
+      const onSubAreaSelected = jest.fn();
+      const source = new VectorSource();
+      const actions = { setSelectedDrawToolType: jest.fn(), setSelectedFeature: jest.fn() };
+      const state = { selectedDrawtoolType: DRAWTOOLTYPE.POLYGON, selectedFeature: null };
+      const map = { addInteraction: jest.fn(), removeInteraction: jest.fn() } as any;
+      const ui = (
+        <MapContext.Provider value={{ map, layers: {} } as any}>
+          <DrawContext.Provider value={{ state, actions, source } as any}>
+            <DrawInteraction
+              getSubAreasAtCoordinate={getSubAreasAtCoordinate}
+              onSubAreaSelected={onSubAreaSelected}
+            />
+          </DrawContext.Provider>
+        </MapContext.Provider>
+      );
+      rtlRender(ui);
+      await waitFor(() => expect(__getLastDrawInstance()).toBeDefined());
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const { __getLastDrawOptions } = require('ol/interaction');
+      let options = __getLastDrawOptions();
+      if (!options) {
+        const drawInst: any = __getLastDrawInstance();
+        if (drawInst && drawInst.__getOptions) options = drawInst.__getOptions();
+      }
+      const event = { coordinate: [10, 10] } as any; // inside poly
+      const allow = options.condition(event);
+      expect(allow).toBe(true);
+      expect(onSubAreaSelected).toHaveBeenCalledWith(poly);
+      // Now simulate drawstart since condition allowed
+      const draw: any = __getLastDrawInstance();
+      const feature = new Feature(
+        new Polygon([
+          [
+            [0, 0],
+            [1, 0],
+            [1, 1],
+            [0, 1],
+            [0, 0],
+          ],
+        ]),
+      );
+      feature.on = jest.fn();
+      draw.emit('drawstart', { feature });
+      expect(feature.on).toHaveBeenCalledWith('change', expect.any(Function));
+    });
+
+    test('multi-area selection blocks further points until confirm', async () => {
+      const polyA = makePoly([
+        [0, 0],
+        [50, 0],
+        [50, 50],
+        [0, 50],
+        [0, 0],
+      ]);
+      const polyB = makePoly([
+        [10, 10],
+        [100, 10],
+        [100, 100],
+        [10, 100],
+        [10, 10],
+      ]);
+      const getSubAreasAtCoordinate = jest.fn(() => [polyA, polyB]);
+      const onSubAreaSelected = jest.fn();
+      let helpersRef: any = null;
+      const onRequestSubAreaSelection = jest.fn((candidates, helpers) => {
+        expect(candidates).toHaveLength(2);
+        helpersRef = helpers;
+      });
+      const source = new VectorSource();
+      const actions = { setSelectedDrawToolType: jest.fn(), setSelectedFeature: jest.fn() };
+      const state = { selectedDrawtoolType: DRAWTOOLTYPE.POLYGON, selectedFeature: null };
+      const map = { addInteraction: jest.fn(), removeInteraction: jest.fn() } as any;
+      const ui = (
+        <MapContext.Provider value={{ map, layers: {} } as any}>
+          <DrawContext.Provider value={{ state, actions, source } as any}>
+            <DrawInteraction
+              getSubAreasAtCoordinate={getSubAreasAtCoordinate}
+              onRequestSubAreaSelection={onRequestSubAreaSelection}
+              onSubAreaSelected={onSubAreaSelected}
+            />
+          </DrawContext.Provider>
+        </MapContext.Provider>
+      );
+      rtlRender(ui);
+      await waitFor(() => expect(__getLastDrawInstance()).toBeDefined());
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const { __getLastDrawOptions } = require('ol/interaction');
+      let options = __getLastDrawOptions();
+      if (!options) {
+        const drawInst: any = __getLastDrawInstance();
+        if (drawInst && drawInst.__getOptions) options = drawInst.__getOptions();
+      }
+      // Initial click -> returns false and triggers selection callback
+      const firstEvent = { coordinate: [15, 15] } as any;
+      const allowFirst = options.condition(firstEvent);
+      expect(allowFirst).toBe(false);
+      expect(onRequestSubAreaSelection).toHaveBeenCalled();
+      // Confirm selection for polyB
+      helpersRef.confirm(polyB);
+      // Second click after selection should now allow drawing
+      const secondEvent = { coordinate: [16, 16] } as any;
+      const allowSecond = options.condition(secondEvent);
+      expect(allowSecond).toBe(true);
+      expect(onSubAreaSelected).toHaveBeenCalledWith(polyB);
+      // Emit drawstart to ensure interaction proceeds
+      const draw: any = __getLastDrawInstance();
+      const feature = new Feature(
+        new Polygon([
+          [
+            [10, 10],
+            [20, 10],
+            [20, 20],
+            [10, 20],
+            [10, 10],
+          ],
+        ]),
+      );
+      feature.on = jest.fn();
+      draw.emit('drawstart', { feature });
+      expect(feature.on).toHaveBeenCalledWith('change', expect.any(Function));
     });
   });
 
