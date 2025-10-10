@@ -152,6 +152,88 @@ function mockHaittaIndex({
     raitioliikenneindeksi,
   });
 }
+/**
+ * Helper: Navigate to a target step number (1-6) using direct stepper button if available,
+ * otherwise fall back to sequential 'Seuraava' clicks. Returns when target step button is present.
+ */
+async function navigateToStep(user: UserEvent, stepNumber: number) {
+  const direct = screen.queryByRole('button', { name: new RegExp(`vaihe ${stepNumber}/6`, 'i') });
+  if (direct) {
+    await user.click(direct);
+    return;
+  }
+  for (let i = 0; i < 10; i++) {
+    // safety cap
+    const targetVisible = screen.queryByRole('button', {
+      name: new RegExp(`vaihe ${stepNumber}/6`, 'i'),
+    });
+    if (targetVisible) break;
+    const nextBtn = screen.queryByRole('button', { name: /seuraava/i });
+    if (!nextBtn) break;
+    await user.click(nextBtn);
+  }
+}
+/**
+ * Helper: Fill invoicing customer section fields. Accepts partial overrides; when a value is undefined it is skipped.
+ * This keeps tests focused on validation logic instead of repetitive low-level field operations.
+ */
+async function fillInvoicingCustomer(
+  user: UserEvent,
+  data: {
+    name?: string;
+    ovt?: string;
+    invoicingOperator?: string; // previously called 'invoicingOperator' in tests
+    registryKey?: string; // not needed for OVT logic but supported for completeness
+    streetAddress?: string;
+    postalCode?: string;
+    city?: string;
+  },
+) {
+  if (data.name !== undefined) {
+    const el = screen.getByTestId('applicationData.invoicingCustomer.name');
+    await user.clear(el);
+    await user.type(el, data.name);
+    (el as HTMLInputElement).blur();
+  }
+  if (data.ovt !== undefined) {
+    const el = screen.getByTestId('applicationData.invoicingCustomer.ovt');
+    await user.clear(el);
+    await user.type(el, data.ovt);
+    (el as HTMLInputElement).blur();
+  }
+  if (data.invoicingOperator !== undefined) {
+    const el = screen.getByTestId('applicationData.invoicingCustomer.invoicingOperator');
+    await user.clear(el);
+    await user.type(el, data.invoicingOperator);
+    (el as HTMLInputElement).blur();
+  }
+  if (data.registryKey !== undefined) {
+    const el = screen.getByTestId('applicationData.invoicingCustomer.registryKey');
+    await user.clear(el);
+    await user.type(el, data.registryKey);
+    (el as HTMLInputElement).blur();
+  }
+  if (data.streetAddress !== undefined) {
+    const el = screen.getByTestId(
+      'applicationData.invoicingCustomer.postalAddress.streetAddress.streetName',
+    );
+    await user.clear(el);
+    await user.type(el, data.streetAddress);
+    (el as HTMLInputElement).blur();
+  }
+  if (data.postalCode !== undefined) {
+    const el = screen.getByTestId('applicationData.invoicingCustomer.postalAddress.postalCode');
+    await user.clear(el);
+    await user.type(el, data.postalCode);
+    (el as HTMLInputElement).blur();
+  }
+  if (data.city !== undefined) {
+    const el = screen.getByTestId('applicationData.invoicingCustomer.postalAddress.city');
+    await user.clear(el);
+    await user.type(el, data.city);
+    (el as HTMLInputElement).blur();
+  }
+}
 test('Should fill kaivuilmoitus form and show summary', async () => {
   const application: Application<KaivuilmoitusData> = {
     id: 1,
@@ -693,6 +775,7 @@ test('Postal address fields should be required if OVT fields are empty', async (
   await fillBasicInformation(user);
   await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
 
+  // Initially (no OVT info) postal address is required
   expect(
     screen.getByTestId('applicationData.invoicingCustomer.postalAddress.streetAddress.streetName'),
   ).toBeRequired();
@@ -701,17 +784,8 @@ test('Postal address fields should be required if OVT fields are empty', async (
   ).toBeRequired();
   expect(screen.getByTestId('applicationData.invoicingCustomer.postalAddress.city')).toBeRequired();
 
-  await user.clear(screen.getByTestId('applicationData.invoicingCustomer.ovt'));
-  await user.type(screen.getByTestId('applicationData.invoicingCustomer.ovt'), '123456789012');
-  (screen.getByTestId('applicationData.invoicingCustomer.ovt') as HTMLInputElement).blur();
-  await user.clear(screen.getByTestId('applicationData.invoicingCustomer.invoicingOperator'));
-  await user.type(
-    screen.getByTestId('applicationData.invoicingCustomer.invoicingOperator'),
-    '12345',
-  );
-  (
-    screen.getByTestId('applicationData.invoicingCustomer.invoicingOperator') as HTMLInputElement
-  ).blur();
+  // Provide OVT details (ovt number + operator) -> postal address fields become optional
+  await fillInvoicingCustomer(user, { ovt: '123456789012', invoicingOperator: '12345' });
 
   expect(
     screen.getByTestId('applicationData.invoicingCustomer.postalAddress.streetAddress.streetName'),
@@ -730,41 +804,16 @@ test('OVT fields should be required if postal address fields are empty', async (
   await fillBasicInformation(user);
   await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
 
+  // Initially (no postal address) OVT fields are required
   expect(screen.getByTestId('applicationData.invoicingCustomer.ovt')).toBeRequired();
   expect(screen.getByTestId('applicationData.invoicingCustomer.invoicingOperator')).toBeRequired();
 
-  await user.clear(
-    screen.getByTestId('applicationData.invoicingCustomer.postalAddress.streetAddress.streetName'),
-  );
-  await user.type(
-    screen.getByTestId('applicationData.invoicingCustomer.postalAddress.streetAddress.streetName'),
-    'Katu 1',
-  );
-  (
-    screen.getByTestId(
-      'applicationData.invoicingCustomer.postalAddress.streetAddress.streetName',
-    ) as HTMLInputElement
-  ).blur();
-  await user.clear(
-    screen.getByTestId('applicationData.invoicingCustomer.postalAddress.postalCode'),
-  );
-  await user.type(
-    screen.getByTestId('applicationData.invoicingCustomer.postalAddress.postalCode'),
-    '00100',
-  );
-  (
-    screen.getByTestId(
-      'applicationData.invoicingCustomer.postalAddress.postalCode',
-    ) as HTMLInputElement
-  ).blur();
-  await user.clear(screen.getByTestId('applicationData.invoicingCustomer.postalAddress.city'));
-  await user.type(
-    screen.getByTestId('applicationData.invoicingCustomer.postalAddress.city'),
-    'Helsinki',
-  );
-  (
-    screen.getByTestId('applicationData.invoicingCustomer.postalAddress.city') as HTMLInputElement
-  ).blur();
+  // Provide postal address details -> OVT fields become optional
+  await fillInvoicingCustomer(user, {
+    streetAddress: 'Katu 1',
+    postalCode: '00100',
+    city: 'Helsinki',
+  });
 
   expect(screen.getByTestId('applicationData.invoicingCustomer.ovt')).not.toBeRequired();
   expect(
@@ -1300,12 +1349,9 @@ test('Should show changed traffic nuisance index summary when kaistahaitta chang
 });
 
 test('Should be able to send application', async () => {
-  const hankeData = hankkeet[1] as HankeData;
-  const application = cloneDeep(applications[6] as Application<KaivuilmoitusData>);
-  const { user } = render(
-    <KaivuilmoitusContainer hankeData={hankeData} application={application} />,
-  );
-  await user.click(await screen.findByRole('button', { name: /yhteenveto/i }));
+  const application = buildDefaultApplication({ baseIndex: 6 });
+  const { user } = renderKaivuilmoitus({ application });
+  await navigateToStep(user, 6);
   await user.click(screen.getByRole('button', { name: /lähetä hakemus/i }));
 
   expect(await screen.findByText(/lähetä hakemus\?/i)).toBeInTheDocument();
@@ -1321,12 +1367,9 @@ test('Should show error message when sending fails', async () => {
     }),
   );
 
-  const hankeData = hankkeet[1] as HankeData;
-  const application = cloneDeep(applications[6] as Application<KaivuilmoitusData>);
-  const { user } = render(
-    <KaivuilmoitusContainer hankeData={hankeData} application={application} />,
-  );
-  await user.click(await screen.findByRole('button', { name: /yhteenveto/i }));
+  const application = buildDefaultApplication({ baseIndex: 6 });
+  const { user } = renderKaivuilmoitus({ application });
+  await navigateToStep(user, 6);
   await user.click(screen.getByRole('button', { name: /lähetä hakemus/i }));
 
   expect(await screen.findByText(/lähetä hakemus\?/i)).toBeInTheDocument();
