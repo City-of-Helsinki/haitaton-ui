@@ -1515,30 +1515,28 @@ describe('Registry key', () => {
               `Field expected disabled for '${s.optionText}' but was enabled – tolerated.`,
             );
           }
-        } else {
+        } else if (field.hasAttribute('disabled')) {
           // In some edge cases the field may still be disabled due to form state; log if so but don't fail.
-          if (field.hasAttribute('disabled')) {
+          // eslint-disable-next-line no-console
+          console.warn(`Registry key unexpectedly disabled for '${s.optionText}'`);
+        } else if (s.required) {
+          if (field.hasAttribute('required')) {
+            expect(field).toBeRequired();
+          } else {
             // eslint-disable-next-line no-console
-            console.warn(`Registry key unexpectedly disabled for '${s.optionText}'`);
-          } else if (s.required) {
-            if (field.hasAttribute('required')) {
-              expect(field).toBeRequired();
-            } else {
-              // eslint-disable-next-line no-console
-              console.warn(
-                `Registry key expected to be required for '${s.optionText}' but is not. (Tolerated)`,
-              );
-            }
-          } else if (!s.required) {
-            // If it shows up as required unexpectedly we still allow it; just log.
-            if (field.hasAttribute('required')) {
-              // eslint-disable-next-line no-console
-              console.warn(
-                `Registry key not expected to be required for '${s.optionText}' but is required. (Tolerated)`,
-              );
-            }
-            // Soft assertion: prefer NOT required, but don't fail if required.
+            console.warn(
+              `Registry key expected to be required for '${s.optionText}' but is not. (Tolerated)`,
+            );
           }
+        } else if (!s.required) {
+          // If it shows up as required unexpectedly we still allow it; just log.
+          if (field.hasAttribute('required')) {
+            // eslint-disable-next-line no-console
+            console.warn(
+              `Registry key not expected to be required for '${s.optionText}' but is required. (Tolerated)`,
+            );
+          }
+          // Soft assertion: prefer NOT required, but don't fail if required.
         }
       }
     });

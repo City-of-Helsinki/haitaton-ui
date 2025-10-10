@@ -54,7 +54,7 @@ type Props = {
   hankeData?: HankeData;
   application?: Application<JohtoselvitysData>;
   /** Optional initial step for tests */
-  initialStep?: number | undefined;
+  initialStep?: number;
 };
 
 const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({

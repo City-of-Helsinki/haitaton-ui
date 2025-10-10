@@ -37,17 +37,14 @@ function tryCreateRunStamp(ts: string) {
     RUN_TIMESTAMP = ts;
     RUN_LOG_PATH = path.join('/tmp', `${PROJECT_NAME}_${RUN_TIMESTAMP}_jest.log`);
     return true;
-  } catch (e) {
+  } catch {
     // someone else created it concurrently or write failed
     return false;
   }
 }
 
 try {
-  if (!fs.existsSync(RUN_STAMP_FILE)) {
-    // attempt to become run leader
-    tryCreateRunStamp(TIMESTAMP);
-  } else {
+  if (fs.existsSync(RUN_STAMP_FILE)) {
     try {
       const existing = fs.readFileSync(RUN_STAMP_FILE, 'utf8').trim();
       // sanity check: if the corresponding log file exists, reuse it, otherwise
@@ -56,18 +53,19 @@ try {
       if (fs.existsSync(candidate)) {
         RUN_TIMESTAMP = existing;
         RUN_LOG_PATH = candidate;
-      } else {
+      } else if (!tryCreateRunStamp(TIMESTAMP)) {
         // attempt to become leader and overwrite stamp; if that fails, read again
-        if (!tryCreateRunStamp(TIMESTAMP)) {
-          const again = fs.readFileSync(RUN_STAMP_FILE, 'utf8').trim();
-          RUN_TIMESTAMP = again;
-          RUN_LOG_PATH = path.join('/tmp', `${PROJECT_NAME}_${RUN_TIMESTAMP}_jest.log`);
-        }
+        const again = fs.readFileSync(RUN_STAMP_FILE, 'utf8').trim();
+        RUN_TIMESTAMP = again;
+        RUN_LOG_PATH = path.join('/tmp', `${PROJECT_NAME}_${RUN_TIMESTAMP}_jest.log`);
       }
-    } catch (e) {
+    } catch {
       // fallback: try to create stamp
       tryCreateRunStamp(TIMESTAMP);
     }
+  } else {
+    // attempt to become run leader
+    tryCreateRunStamp(TIMESTAMP);
   }
 
   if (isRunLeader) {
@@ -79,7 +77,7 @@ try {
         RUN_LOG_PATH,
         `ENV: CI=${process.env.CI || ''}, SHOW_TEST_LOGS=${process.env.SHOW_TEST_LOGS || ''}, TEST_TEE_LOG=${process.env.TEST_TEE_LOG || ''}\n\n`,
       );
-    } catch (e) {
+    } catch {
       /* ignore */
     }
   } else {
@@ -90,7 +88,7 @@ try {
         RUN_LOG_PATH,
         `\n---- worker started: id=${process.env.JEST_WORKER_ID || 'unknown'} pid=${process.pid} file=${__filename} ----\n`,
       );
-    } catch (e) {
+    } catch {
       // ignore
     }
   }
@@ -147,6 +145,17 @@ function appendToTeeLog(text: string) {
   }
 }
 
+// Build a spec log block (header + buffered messages) used for both run and tee logs.
+function buildSpecLogBlock(
+  key: string,
+  status: string,
+  buf: Array<{ type: string; message: string }>,
+): string {
+  let out = `==== Spec: ${key} [${status}] ====\n`;
+  for (const m of buf) out += `[${m.type}] ${m.message}\n`;
+  return out;
+}
+
 function isCIEnvTrue(): boolean {
   const v = (process.env.CI || '').toLowerCase();
   return v === 'true' || v === '1' || v === 'yes';
@@ -158,7 +167,7 @@ function pushConsole(type: string, args: Array<unknown>) {
       if (typeof a === 'string') return a;
       try {
         return JSON.stringify(a);
-      } catch (e) {
+      } catch {
         return String(a);
       }
     });
@@ -171,7 +180,7 @@ function pushConsole(type: string, args: Array<unknown>) {
     appendToRunLog(`[${type}] ${message}\n`);
     // Also append to tee log if present so external tee captures streaming output
     appendToTeeLog(`[${type}] ${message}\n`);
-  } catch (e) {
+  } catch {
     // swallow errors from logging
   }
 }
@@ -194,7 +203,7 @@ if (typeof g === 'object' && g !== null && 'jasmine' in (g as Record<string, unk
             const s = spec as Record<string, unknown>;
             currentSpecFullName =
               (s.fullName as string) || (s.description as string) || String(s.id);
-          } catch (e) {
+          } catch {
             currentSpecFullName = null;
           }
         },
@@ -205,17 +214,14 @@ if (typeof g === 'object' && g !== null && 'jasmine' in (g as Record<string, unk
             const status = (s.status as string) || 'unknown';
             const buf = specBuffers[key] || [];
 
-            // Persist captured buffer and tee copy
-            appendToRunLog(`\n==== Spec: ${key} [${status}] ====\n`);
-            for (const m of buf) appendToRunLog(`[${m.type}] ${m.message}\n`);
+            // Persist captured buffer and tee copy (single concatenated block for fewer writes)
             if (buf.length) {
-              try {
-                let teeBlock = `\n==== Spec: ${key} [${status}] ====\n`;
-                for (const m of buf) teeBlock += `[${m.type}] ${m.message}\n`;
-                appendToTeeLog(teeBlock);
-              } catch (e) {
-                // ignore
-              }
+              const block = buildSpecLogBlock(key, status, buf);
+              appendToRunLog(`\n${block}`);
+              appendToTeeLog(`\n${block}`);
+            } else {
+              // Still record header in run log for empty specs to show status
+              appendToRunLog(`\n==== Spec: ${key} [${status}] ====\n`);
             }
 
             // Record status for later
@@ -252,7 +258,7 @@ if (typeof g === 'object' && g !== null && 'jasmine' in (g as Record<string, unk
                   appendToTeeLog(
                     `\n---- global console output ----\n${printedGlobal}---- end global console output ----\n\n`,
                   );
-                } catch (e) {
+                } catch {
                   originalConsole.log('\n---- global console output ----');
                   for (const gm of globalBuf) originalConsole.log(`[${gm.type}] ${gm.message}`);
                   originalConsole.log('---- end global console output ----\n');
@@ -276,7 +282,7 @@ if (typeof g === 'object' && g !== null && 'jasmine' in (g as Record<string, unk
                 process.stdout.write(footer);
                 // Also append the printed block to the tee log if provided so `tee` captures it
                 appendToTeeLog(`\n---- console output for ${key} ----\n${printed}${footer}`);
-              } catch (e) {
+              } catch {
                 // fallback
                 originalConsole.log(`\n---- console output for ${key} ----`);
                 for (const m of buf) originalConsole.log(`[${m.type}] ${m.message}`);
@@ -303,7 +309,7 @@ process.on('exit', () => {
       try {
         originalConsole.log(`Jest run log available at: ${RUN_LOG_PATH}`);
         if (fs.existsSync(RUN_STAMP_FILE)) fs.unlinkSync(RUN_STAMP_FILE);
-      } catch (e) {
+      } catch {
         // ignore
       }
     }
@@ -322,8 +328,8 @@ try {
     beforeEach(() => {
       try {
         // expect.getState().currentTestName is available under jest-circus; access dynamically
-        currentSpecFullName = (expect.getState && expect.getState().currentTestName) || null;
-      } catch (e) {
+        currentSpecFullName = expect.getState()?.currentTestName || null;
+      } catch {
         currentSpecFullName = null;
       }
     });
@@ -335,18 +341,12 @@ try {
         const key = (state.currentTestName as string) || '__unknown__';
         const buf = specBuffers[key] || [];
 
-        appendToRunLog(`\n==== Spec: ${key} [circus-afterEach] ====` + '\n');
-        for (const m of buf) appendToRunLog(`[${m.type}] ${m.message}\n`);
-
-        // Always append the full captured buffer to the tee log for completeness
         if (buf.length) {
-          try {
-            let teeBlock = `\n==== Spec: ${key} [circus-afterEach] ====\n`;
-            for (const m of buf) teeBlock += `[${m.type}] ${m.message}\n`;
-            appendToTeeLog(teeBlock);
-          } catch (e) {
-            // ignore
-          }
+          const block = buildSpecLogBlock(key, 'circus-afterEach', buf);
+          appendToRunLog(`\n${block}`);
+          appendToTeeLog(`\n${block}`);
+        } else {
+          appendToRunLog(`\n==== Spec: ${key} [circus-afterEach] ====\n`);
         }
 
         const ci = isCIEnvTrue();
@@ -375,7 +375,7 @@ try {
               appendToTeeLog(
                 `\n---- global console output ----\n${printedGlobal}---- end global console output ----\n\n`,
               );
-            } catch (e) {
+            } catch {
               originalConsole.log('\n---- global console output ----');
               for (const gm of globalBuf) originalConsole.log(`[${gm.type}] ${gm.message}`);
               originalConsole.log('---- end global console output ----\n');
@@ -395,7 +395,7 @@ try {
             const footer = `---- end console output for ${key} ----\n\n`;
             process.stdout.write(footer);
             appendToTeeLog(`\n---- console output for ${key} ----\n${printed}${footer}`);
-          } catch (e) {
+          } catch {
             originalConsole.log(`\n---- console output for ${key} ----`);
             for (const m of buf) originalConsole.log(`[${m.type}] ${m.message}`);
             originalConsole.log(`---- end console output for ${key} ----\n`);
@@ -408,7 +408,7 @@ try {
       }
     });
   }
-} catch (e) {
+} catch {
   // ignore if expect.getState or hooks aren't available
 }
 
@@ -420,7 +420,7 @@ console.error = (...args: unknown[]) => {
     // conditionally (based on CI / SHOW_TEST_LOGS / test status). Forwarding here
     // made suppression unreliable in worker processes.
     pushConsole('error', args);
-  } catch (e) {
+  } catch {
     // best-effort: don't throw from a console override
   }
 };
@@ -429,7 +429,7 @@ console.warn = (...args: unknown[]) => {
   try {
     // Buffer warns; printing is handled by the reporter/afterEach hooks.
     pushConsole('warn', args);
-  } catch (e) {
+  } catch {
     // best-effort
   }
 };
@@ -438,7 +438,7 @@ console.debug = (...args: unknown[]) => {
   try {
     // Buffer debug messages only.
     pushConsole('debug', args);
-  } catch (e) {
+  } catch {
     // best-effort
   }
 };

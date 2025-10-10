@@ -110,7 +110,7 @@ describe('HankeForm draft navigation from Haittojen hallinta with missing nuisan
     );
 
     // Navigate: Perustiedot -> Alueet -> Haittojen hallinta
-    await await findByText('hankeForm:perustiedotForm:header'); // initial step visible implicitly
+    await findByText('hankeForm:perustiedotForm:header'); // initial step visible implicitly
     const areasButton = await findByText('hankeForm:hankkeenAlueForm:header');
     await user.click(areasButton);
     const haitatButton = await findByText('hankeForm:haittojenHallintaForm:header');

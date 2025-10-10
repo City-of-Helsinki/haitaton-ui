@@ -173,7 +173,7 @@ const HankeFormAlueet: React.FC<FormProps & { drawSource: VectorSource }> = ({
 
   function removeArea(index: number) {
     remove(index);
-    const featureToRemove = hanke.alueet && hanke.alueet[index].feature;
+    const featureToRemove = hanke.alueet?.[index].feature;
     if (featureToRemove) {
       drawSource.removeFeature(featureToRemove);
     }
@@ -276,9 +276,7 @@ const HankeFormAlueet: React.FC<FormProps & { drawSource: VectorSource }> = ({
               <Box mb="var(--spacing-m)">
                 <HaittaIndexes
                   heading={`${t('hanke:alue:liikennehaittaIndeksit')} (0-5)`}
-                  haittaIndexData={
-                    watchHankeAlueet && watchHankeAlueet[index].tormaystarkasteluTulos
-                  }
+                  haittaIndexData={watchHankeAlueet?.[index].tormaystarkasteluTulos}
                 />
               </Box>
             </TabPanel>

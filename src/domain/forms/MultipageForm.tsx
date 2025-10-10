@@ -215,7 +215,7 @@ const MultipageForm: React.FC<Props> = ({
 
       {formSteps[state.activeStepIndex].element}
 
-      {children && children(state.activeStepIndex, handlePrevious, handleNext)}
+      {children?.(state.activeStepIndex, handlePrevious, handleNext)}
     </form>
   );
 };
