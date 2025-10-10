@@ -1,3 +1,35 @@
+/**
+ * DrawInteraction component
+ * ---------------------------------------------
+ * Responsibilities:
+ *  - Orchestrates OpenLayers drawing & modifying interactions (polygon / square) for map features
+ *  - Provides incremental constraint validation during drawing:
+ *      * Prevents self-intersecting geometry while user adds points (rejects latest point)
+ *      * Prevents drawing segments outside selected hanke sub-area
+ *      * Optionally applies legacy segment guard logic (drawSegmentGuard) after area containment
+ *      * Blocks finishing if polygon surface area < 1 (silent; no notification per legacy behavior)
+ *  - Handles multi-sub-area selection before drawing starts:
+ *      * If multiple candidate sub-areas under first click, invokes onRequestSubAreaSelection with
+ *        confirm/cancel helpers; drawing only begins after confirmation
+ *  - Emits notifications for constraint violations using unified helper `notifyConstraint`:
+ *      * 'outsideArea' when segment / point would be outside allowed area or selection pending
+ *      * 'selfIntersecting' when a self-intersection is detected incrementally or finalized
+ *    These replace previous duplicated inline notification constructions.
+ *  - Reverts modifications that would result in self-intersecting polygon while maintaining legacy
+ *    user feedback via notification.
+ *  - Keeps internal refs (chosenSubAreaRef, pendingSubAreaSelectionRef, hasStartedRef) to avoid stale
+ *    closures inside OL event handlers.
+ *
+ * Notification Strategy:
+ *  - Centralized via `notifyConstraint(setNotification, t, kind)` to ensure consistent keys, timing,
+ *    and visual style. Extensible through optional overrides should future kinds be added.
+ *  - Surface-too-small condition deliberately remains silent to preserve existing UX.
+ *
+ * Testing Notes:
+ *  - Pure helper tests reside next to module (`notifyConstraint.test.ts`). Interaction-specific behavior
+ *    (e.g., rejecting points) relies on OpenLayers events and is better suited for integration tests.
+ */
+
 import { useEffect, useContext, useRef, useState, useCallback } from 'react';
 import Feature, { FeatureLike } from 'ol/Feature';
 import Select from 'ol/interaction/Select';
@@ -29,6 +61,7 @@ import {
 import { styleFunction } from '../../../../../domain/map/utils/geometryStyle';
 import { Map, MapBrowserEvent } from 'ol';
 import { useGlobalNotification } from '../../../globalNotification/GlobalNotificationContext';
+import { notifyConstraint } from './notifyConstraint';
 
 type Props = {
   onSelfIntersectingPolygon?: (feature: Feature<Geometry> | null) => void;
@@ -115,26 +148,9 @@ export default function DrawInteraction({
       }
 
       // Helper to show constraint notifications (self-intersection or outside area)
-      const showConstraintNotification = (kind: 'selfIntersecting' | 'outsideArea') => {
-        const labelKey =
-          kind === 'selfIntersecting'
-            ? 'map:notifications:selfIntersectingLabel'
-            : 'map:notifications:drawingOutsideHankeAreaLabel';
-        const messageKey =
-          kind === 'selfIntersecting'
-            ? 'map:notifications:selfIntersectingText'
-            : 'map:notifications:drawingOutsideHankeAreaText';
-        setNotification(true, {
-          position: 'top-right',
-          dismissible: true,
-          autoClose: true,
-          autoCloseDuration: 5000,
-          label: t(labelKey),
-          message: t(messageKey),
-          type: 'alert',
-          closeButtonLabelText: t('common:components:notification:closeButtonLabelText'),
-        });
-      };
+      // Unified constraint notifier used across draw lifecycle
+      const showConstraintNotification = (kind: 'selfIntersecting' | 'outsideArea') =>
+        notifyConstraint(setNotification, t, kind);
 
       let geometryFunction;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -424,20 +440,7 @@ export default function DrawInteraction({
 
       if (isPolygonSelfIntersecting(modifiedPolygon)) {
         modifiedPolygon.setCoordinates(originalGeometry.getCoordinates());
-        // Show notification for self-intersecting polygon
-        // Reuse helper
-        const labelKey = 'map:notifications:selfIntersectingLabel';
-        const messageKey = 'map:notifications:selfIntersectingText';
-        setNotification(true, {
-          position: 'top-right',
-          dismissible: true,
-          autoClose: true,
-          autoCloseDuration: 5000,
-          label: t(labelKey),
-          message: t(messageKey),
-          type: 'alert',
-          closeButtonLabelText: t('common:components:notification:closeButtonLabelText'),
-        });
+        notifyConstraint(setNotification, t, 'selfIntersecting');
       } else {
         handleModifyEnd?.(event, originalModifiedFeature.current, modifiedFeature);
         try {
