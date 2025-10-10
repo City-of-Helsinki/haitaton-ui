@@ -77,6 +77,81 @@ async function fillAttachments(user: UserEvent, options: Record<string, unknown>
 async function fillContactsInformation(user: UserEvent, options: Record<string, unknown> = {}) {
   return fillContactsInformationHelper(user, options);
 }
+/**
+ * Helper: Render KaivuilmoitusContainer with optional overrides.
+ * Centralizes the default hankeData (index 1) and lets callers supply an application override.
+ * Returns the render result (including user) for further interactions.
+ */
+function renderKaivuilmoitus({
+  hankeData,
+  application,
+}: {
+  hankeData?: HankeData;
+  application?: Application<KaivuilmoitusData>;
+} = {}) {
+  const resolvedHankeData = hankeData ?? (hankkeet[1] as HankeData);
+  return render(<KaivuilmoitusContainer hankeData={resolvedHankeData} application={application} />);
+}
+/**
+ * Helper: Deep-clone a baseline kaivuilmoitus application and apply optional overrides.
+ * By default uses applications[4] which contains representative area data for most tests.
+ * Override mechanics:
+ *  - top-level fields of Application are shallow merged
+ *  - applicationData is merged field-by-field allowing partial customizations
+ */
+function buildDefaultApplication({
+  baseIndex = 4,
+  overrides = {},
+  applicationData: appDataOverrides = {},
+}: {
+  baseIndex?: number;
+  overrides?: Partial<Application<KaivuilmoitusData>>;
+  applicationData?: Partial<KaivuilmoitusData>;
+} = {}): Application<KaivuilmoitusData> {
+  const base = cloneDeep(applications[baseIndex]) as Application<KaivuilmoitusData>;
+  const mergedAppData: KaivuilmoitusData = {
+    ...base.applicationData,
+    ...appDataOverrides,
+  } as KaivuilmoitusData;
+  return {
+    ...base,
+    ...overrides,
+    applicationData: mergedAppData,
+  } as Application<KaivuilmoitusData>;
+}
+/**
+ * Helper: Mock haitta indices POST response with deterministic values.
+ * Wraps initHaittaindeksitPostResponse for concise test usage.
+ * Accepts a partial HaittaIndexData; unspecified numeric indices default to 0.
+ */
+function mockHaittaIndex({
+  liikennehaittaindeksi,
+  pyoraliikenneindeksi = 0,
+  autoliikenne,
+  linjaautoliikenneindeksi = 0,
+  raitioliikenneindeksi = 0,
+}: Partial<HaittaIndexData> = {}) {
+  // Provide required objects with minimal defaults if omitted to satisfy type expectations
+  const resolvedLiikennehaitta = liikennehaittaindeksi ?? {
+    indeksi: 0,
+    tyyppi: HAITTA_INDEX_TYPE.AUTOLIIKENNEINDEKSI,
+  };
+  const resolvedAutoliikenne = autoliikenne ?? {
+    indeksi: 0,
+    haitanKesto: 0,
+    katuluokka: 0,
+    liikennemaara: 0,
+    kaistahaitta: 0,
+    kaistapituushaitta: 0,
+  };
+  initHaittaindeksitPostResponse({
+    liikennehaittaindeksi: resolvedLiikennehaitta,
+    pyoraliikenneindeksi,
+    autoliikenne: resolvedAutoliikenne,
+    linjaautoliikenneindeksi,
+    raitioliikenneindeksi,
+  });
+}
 test('Should fill kaivuilmoitus form and show summary', async () => {
   const application: Application<KaivuilmoitusData> = {
     id: 1,
@@ -600,8 +675,7 @@ test('Should show validation error if the new user has an existing email address
 });
 
 test('Should disable OVT fields if invoicing customer type is not COMPANY or ASSOCIATION', async () => {
-  const hankeData = hankkeet[1] as HankeData;
-  const { user } = render(<KaivuilmoitusContainer hankeData={hankeData} />);
+  const { user } = renderKaivuilmoitus();
   await fillBasicInformation(user);
   await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
 
@@ -700,12 +774,9 @@ test('OVT fields should be required if postal address fields are empty', async (
 
 test('OVT and registryKey fields should be send as null if they are left empty', async () => {
   const applicationUpdateSpy = jest.spyOn(applicationApi, 'updateApplication');
-  const hankeData = hankkeet[1] as HankeData;
-  const application = cloneDeep(applications[5] as Application<KaivuilmoitusData>);
-  const testApplication: Application<KaivuilmoitusData> = {
-    ...application,
+  const testApplication = buildDefaultApplication({
+    baseIndex: 5,
     applicationData: {
-      ...application.applicationData,
       customerWithContacts: null,
       contractorWithContacts: null,
       invoicingCustomer: {
@@ -721,10 +792,8 @@ test('OVT and registryKey fields should be send as null if they are left empty',
         },
       },
     },
-  };
-  const { user } = render(
-    <KaivuilmoitusContainer hankeData={hankeData} application={testApplication} />,
-  );
+  });
+  const { user } = renderKaivuilmoitus({ application: testApplication });
   await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
   // Clear ovt, invoicingOperator and registryKey fields of invoicingCustomer, which should set them to null
   await user.clear(screen.getByTestId('applicationData.invoicingCustomer.ovt'));
@@ -1149,7 +1218,7 @@ test('Should show initial traffic nuisance index summary', async () => {
 });
 
 test('Should show changed traffic nuisance index summary when kaistahaitta changes', async () => {
-  initHaittaindeksitPostResponse({
+  mockHaittaIndex({
     autoliikenne: {
       indeksi: 3.0,
       haitanKesto: 3,
