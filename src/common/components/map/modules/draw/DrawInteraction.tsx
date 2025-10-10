@@ -88,6 +88,11 @@ export default function DrawInteraction({
         geometryType = 'Circle';
       }
 
+      // Ref to allow finishCondition to access interaction instance (assigned post-construction)
+      const currentDrawRef = {
+        current: null as Draw | null,
+      } as React.MutableRefObject<Draw | null>;
+
       const drawInstance = new Draw({
         source,
         type: geometryType,
@@ -103,18 +108,47 @@ export default function DrawInteraction({
             return false;
           }
 
-          const geometry = drawnFeature.current?.getGeometry();
-          if (geometry) {
-            const surfaceArea = getSurfaceArea(geometry);
+          const modifiedPolygon: Polygon = drawnFeature.current?.getGeometry() as Polygon;
+          if (modifiedPolygon) {
+            const surfaceArea = getSurfaceArea(modifiedPolygon);
             // Don't allow drawing to be finished if its
             // surface area is below 1
             if (surfaceArea < 1) {
               return false;
             }
+            const currentCoordinates = modifiedPolygon.getCoordinates();
+            // During drawing OL structure: [p0, p1, ..., pn, cursor, p0]. Exclude cursor & closing p0 for incremental ring.
+            const committedCount = currentCoordinates[0].length - 2;
+            const userDrawnRing = [...currentCoordinates[0].slice(0, committedCount)];
+            // Intersection check on the committed edges only (implicit closing segment evaluated separately on drawend or by turf if needed)
+            if (areLinesInPolygonIntersecting([userDrawnRing])) {
+              // Remove the last inserted point so user can continue adjusting
+              // We rely on OpenLayers keeping the drawing interaction active.
+              try {
+                // drawInstance is not yet assigned at creation time; we set a ref below and use it here.
+                currentDrawRef.current?.removeLastPoint();
+                // Adjust internal count so next added point is validated correctly
+                lastCoordinateCount.current = Math.max(0, lastCoordinateCount.current - 1);
+              } catch {
+                /* ignore remove errors */
+              }
+              setNotification(true, {
+                position: 'top-right',
+                dismissible: true,
+                autoClose: true,
+                autoCloseDuration: 5000,
+                label: t('map:notifications:selfIntersectingLabel'),
+                message: t('map:notifications:selfIntersectingText'),
+                type: 'alert',
+                closeButtonLabelText: t('common:components:notification:closeButtonLabelText'),
+              });
+              return false; // Block finishing
+            }
           }
           return true;
         },
       });
+      currentDrawRef.current = drawInstance;
       drawInstance.on('drawstart', (event) => {
         selection.current?.setActive(false);
         lastCoordinateCount.current = 0; // Reset coordinate count for new drawing
@@ -165,11 +199,17 @@ export default function DrawInteraction({
             }
           }
           // Check for self-intersection with the actual drawn points (excluding cursor position)
-          // OpenLayers creates minimum set of 3 coordinates when draw starts for polygon
-          // We are interested only with set of coordinates where there are only those
-          // that we have drawn. Discard the 2 coordinates the polygon inheritly gets.
-          currentCoordinates[0].splice(currentCoordinates[0].length - 2, 2);
-          const intersecting: boolean = areLinesInPolygonIntersecting(currentCoordinates);
+          // OpenLayers creates minimum set of 3 coordinates when draw starts for polygon.
+          // We need only the user drawn coordinates, excluding:
+          //  - the automatic closing link to the start
+          //  - the live cursor position
+          // Use a non-mutating copy to avoid altering OL's internal coordinate array (HAI-3310 regression guard).
+          // Build ring of only committed user points (exclude live cursor and auto-added closing point).
+          // OpenLayers structure: [p0, p1, ..., pn, cursor, p0] during drawing.
+          // We want [p0, p1, ..., pn] for incremental self-intersection checks.
+          const committedCount = currentCoordinates[0].length - 2; // exclude cursor + closing p0
+          const userDrawnRing = [...currentCoordinates[0].slice(0, committedCount)];
+          const intersecting: boolean = areLinesInPolygonIntersecting([userDrawnRing]);
           if (intersecting) {
             drawInstance.removeLastPoint();
             lastCoordinateCount.current = actualPointCount - 1; // Update count after removal
