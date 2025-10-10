@@ -187,7 +187,9 @@ describe('JohtoselvitysContainer language persistence integration', () => {
       ).toBe('Johto Company'),
     );
     window.dispatchEvent(new CustomEvent('haitaton:languageChanging'));
-    await waitFor(() => expect(sessionStorage.getItem('application-form-99-JOHTO')).toBeTruthy());
+    await waitFor(() =>
+      expect(sessionStorage.getItem('functional-application-form-99-JOHTO')).toBeTruthy(),
+    );
 
     unmount();
 
@@ -229,7 +231,9 @@ describe('JohtoselvitysContainer language persistence integration', () => {
     }
 
     window.dispatchEvent(new CustomEvent('haitaton:languageChanging'));
-    await waitFor(() => expect(sessionStorage.getItem('application-form-55-JOHTO')).toBeTruthy());
+    await waitFor(() =>
+      expect(sessionStorage.getItem('functional-application-form-55-JOHTO')).toBeTruthy(),
+    );
 
     unmount();
     const { getByTestId: getByTestId2 } = mount({

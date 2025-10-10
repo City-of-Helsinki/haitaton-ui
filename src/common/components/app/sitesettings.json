@@ -167,6 +167,36 @@
           "storageType": 2
         },
         {
+          "name": "functional-hanke-form-*",
+          "host": "haitaton.hel.fi",
+          "description": {
+            "fi": "Lomakkeen keskeneräisten hanketietojen väliaikainen tallennus (istuntokohtainen, poistetaan uloskirjautuessa / välilehden sulkeutuessa).",
+            "sv": "Tillfällig lagring av ofullständiga projektuppgifter i formuläret (sessionsbaserad, raderas vid utloggning / när fliken stängs).",
+            "en": "Temporary storage of unsaved project form draft data (session scoped, cleared on logout / tab close)."
+          },
+          "expiration": {
+            "fi": "Istunto",
+            "sv": "Session",
+            "en": "Session"
+          },
+          "storageType": 3
+        },
+        {
+          "name": "functional-hanke-form-step-*",
+          "host": "haitaton.hel.fi",
+          "description": {
+            "fi": "Monivaiheisen hankelomakkeen sivuindeksin muistaminen (istuntokohtainen).",
+            "sv": "Kom ihåg sidindex i flerstegs projektformulär (sessionsbaserad).",
+            "en": "Remember active step index of multi-step project form (session scoped)."
+          },
+          "expiration": {
+            "fi": "Istunto",
+            "sv": "Session",
+            "en": "Session"
+          },
+          "storageType": 3
+        },
+        {
           "name": "oidc.*",
           "host": "haitaton.hel.fi",
           "description": {

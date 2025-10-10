@@ -149,47 +149,45 @@ const HankeDrawer: React.FC<React.PropsWithChildren<Props>> = ({
   );
 
   return (
-    <>
-      <div
-        className={`${styles.mapContainer} ${styles.borders}`}
-        style={{ width: '100%', height: 500 }}
+    <div
+      className={`${styles.mapContainer} ${styles.borders}`}
+      style={{ width: '100%', height: 500 }}
+    >
+      <Map
+        zoom={zoom}
+        center={center}
+        mapClassName={styles.mapContainer__inner}
+        showAttribution={false}
       >
-        <Map
-          zoom={zoom}
-          center={center}
-          mapClassName={styles.mapContainer__inner}
-          showAttribution={false}
-        >
-          <AddressSearchContainer position={{ top: '1rem', left: '1rem' }} zIndex={100} />
+        <AddressSearchContainer position={{ top: '1rem', left: '1rem' }} zIndex={100} />
 
-          <FullScreenControl />
+        <FullScreenControl />
 
-          <OverviewMapControl />
+        <OverviewMapControl />
 
-          {mapTileLayers.kantakartta.visible && <Kantakartta />}
-          {mapTileLayers.ortokartta.visible && <Ortokartta opacity={ortoLayerOpacity} />}
-          <VectorLayer source={drawSource} zIndex={1} className="drawLayer" style={styleFunction} />
+        {mapTileLayers.kantakartta.visible && <Kantakartta />}
+        {mapTileLayers.ortokartta.visible && <Ortokartta opacity={ortoLayerOpacity} />}
+        <VectorLayer source={drawSource} zIndex={1} className="drawLayer" style={styleFunction} />
 
-          {hankkeenHakemukset?.map((hakemus) => (
-            <HakemusLayer key={hakemus.id} hakemusId={hakemus.id!} layerStyle={styleFunction} />
-          ))}
+        {hankkeenHakemukset?.map((hakemus) => (
+          <HakemusLayer key={hakemus.id} hakemusId={hakemus.id!} layerStyle={styleFunction} />
+        ))}
 
-          <FitSource source={drawSource} />
+        <FitSource source={drawSource} />
 
-          <Controls>
-            <DrawModule
-              handleModifyEnd={restrictDrawingToHakemusAreas ? handleModifyEnd : undefined}
-              onGeometryFinalized={handleGeometryFinalized}
-            />
-            <LayerControl
-              tileLayers={Object.values(mapTileLayers)}
-              onClickTileLayer={(id: MapTileLayerId) => toggleMapTileLayer(id)}
-              className={hankeDrawerStyles.layerControl}
-            />
-          </Controls>
-        </Map>
-      </div>
-    </>
+        <Controls>
+          <DrawModule
+            handleModifyEnd={restrictDrawingToHakemusAreas ? handleModifyEnd : undefined}
+            onGeometryFinalized={handleGeometryFinalized}
+          />
+          <LayerControl
+            tileLayers={Object.values(mapTileLayers)}
+            onClickTileLayer={(id: MapTileLayerId) => toggleMapTileLayer(id)}
+            className={hankeDrawerStyles.layerControl}
+          />
+        </Controls>
+      </Map>
+    </div>
   );
 };
 

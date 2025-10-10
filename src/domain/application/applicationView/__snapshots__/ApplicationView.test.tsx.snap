@@ -38,9 +38,8 @@ exports[`Excavation notification application view Shows correct information in s
       aria-expanded="false"
       class="css-1ka79lz"
     >
-      <button
+      <div
         class="css-12ax0h3"
-        type="button"
       >
         <div
           class="css-usczae"
@@ -77,7 +76,7 @@ exports[`Excavation notification application view Shows correct information in s
             fill-rule="evenodd"
           />
         </svg>
-      </button>
+      </div>
     </div>
     <div
       style="display: none;"

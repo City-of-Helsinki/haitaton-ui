@@ -157,6 +157,8 @@ To learn React, check out the [React documentation](https://reactjs.org/).
 ### Project Specific Architecture Docs
 
 - [Geometry & form session persistence](docs/geometry-persistence.md)
+  - Includes rationale for separating draft vs step persistence keys (`functional-*` namespaces)
+  - Documents immediate geometry hydration fix & test (`HankeFormAlueet.immediateHydration.test.tsx`)
 
 ## Running Jest with controlled logging
 
