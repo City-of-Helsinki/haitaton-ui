@@ -67,10 +67,7 @@ export function getCoordinateNumbersFromCoordinate(coordinate: Coordinate): [num
   return [coordinate[0], coordinate[1]];
 }
 
-/**
- * Calculate if two lines intersect and get intersection point if they do
- * @param coordinates
- */
+// Provide line intersection earlier so helpers can reference it
 export function getLineIntersection(
   line1start: [number, number],
   line1end: [number, number],
@@ -81,62 +78,121 @@ export function getLineIntersection(
   const s1_y = line1end[1] - line1start[1];
   const s2_x = line2end[0] - line2start[0];
   const s2_y = line2end[1] - line2start[1];
-
   const denom = -s2_x * s1_y + s1_x * s2_y;
-  if (denom === 0) {
-    // Lines are parallel or coincident
-    return null;
-  }
-
+  if (denom === 0) return null;
   const s =
     (-s1_y * (line1start[0] - line2start[0]) + s1_x * (line1start[1] - line2start[1])) / denom;
   const t =
     (s2_x * (line1start[1] - line2start[1]) - s2_y * (line1start[0] - line2start[0])) / denom;
-
   if (s >= 0 && s <= 1 && t >= 0 && t <= 1) {
-    // Intersection detected within the segments
     return [line1start[0] + t * s1_x, line1start[1] + t * s1_y];
   }
-
-  // No intersection within the segments
   return null;
 }
+
+// Helper: convert an edge (two coordinates) into numeric endpoints
+export function numericEdge(edge: [Coordinate, Coordinate]): [[number, number], [number, number]] {
+  return [getCoordinateNumbersFromCoordinate(edge[0]), getCoordinateNumbersFromCoordinate(edge[1])];
+}
+
+// Helper: check if intersection point matches any endpoint in list exactly
+export function isIntersectionAtAnyEndpoint(
+  intersection: [number, number],
+  endpoints: Array<[number, number]>,
+): boolean {
+  return endpoints.some(([x, y]) => intersection[0] === x && intersection[1] === y);
+}
+
+// Helper: compute line intersection and classify if it's an invalid interior crossing
+// allowSharedEndpoints=true will treat endpoint-only intersections as acceptable
+export function hasInvalidInteriorIntersection(
+  aStart: [number, number],
+  aEnd: [number, number],
+  bStart: [number, number],
+  bEnd: [number, number],
+  allowSharedEndpoints: boolean,
+): boolean {
+  const intersection = getLineIntersection(aStart, aEnd, bStart, bEnd);
+  if (!intersection) return false;
+  if (allowSharedEndpoints) {
+    if (isIntersectionAtAnyEndpoint(intersection, [aStart, aEnd, bStart, bEnd])) {
+      return false; // shared endpoint only
+    }
+  }
+  return true; // interior crossing
+}
+
+// Helper: derive candidate validation segment (latest or closing)
+export function getCandidateSegmentForValidation(
+  coordinates: Coordinate[][],
+  lines: Array<[Coordinate, Coordinate]>,
+): { segment: [[number, number], [number, number]]; isClosed: boolean; latestIndex: number } {
+  const first = getCoordinateNumbersFromCoordinate(coordinates[0][0]);
+  const last = getCoordinateNumbersFromCoordinate(coordinates[0][coordinates[0].length - 1]);
+  const isClosed = first[0] === last[0] && first[1] === last[1];
+  const latestIndex = lines.length - 1;
+  if (isClosed) {
+    const penultimate = getCoordinateNumbersFromCoordinate(
+      coordinates[0][coordinates[0].length - 2],
+    );
+    return { segment: [penultimate, first], isClosed, latestIndex };
+  }
+  const latest = lines[latestIndex];
+  return {
+    segment: [
+      getCoordinateNumbersFromCoordinate(latest[0]),
+      getCoordinateNumbersFromCoordinate(latest[1]),
+    ],
+    isClosed,
+    latestIndex,
+  };
+}
+
+/**
+ * Calculate if two lines intersect and get intersection point if they do
+ * @param coordinates
+ */
 
 /**
  * Check if the latest line is intersecting with previous lines in polygon
  * @param coordinates
  */
-export function areLinesInPolygonIntersecting(coordinates: Coordinate[][]): boolean {
-  const lines: Array<Array<Coordinate>> = getLinesFromCoordinates(coordinates);
-  let result: boolean = false;
-  const number_of_lines_in_polygon = lines.length;
-  // To check if lines in a polygon are intersecting we need to check from the 3rd line on
-  if (number_of_lines_in_polygon > 2) {
-    const latest_line: Array<Coordinate> = lines[number_of_lines_in_polygon - 1];
-    const latest_line_start: [number, number] = getCoordinateNumbersFromCoordinate(latest_line[0]);
-    const latest_line_end: [number, number] = getCoordinateNumbersFromCoordinate(latest_line[1]);
-    // if the first coordinate and last coordinate is the same we are ending the polygon
-    // thus not intersecting
-    if (coordinates[0][0] !== latest_line[1]) {
-      // Check that the latest inserted line does not intersect with other lines
-      // The previous line before the latest cannot intersect with it, so do not check that
-      // break on first intersection
-      for (let i = 0; i < number_of_lines_in_polygon - 2 && !result; i++) {
-        const current_line_start: [number, number] = getCoordinateNumbersFromCoordinate(
-          lines[i][0],
-        );
-        const current_line_end: [number, number] = getCoordinateNumbersFromCoordinate(lines[i][1]);
-        result =
-          getLineIntersection(
-            current_line_start,
-            current_line_end,
-            latest_line_start,
-            latest_line_end,
-          ) != null;
-      }
+function validateClosedPolygon(lines: Array<[Coordinate, Coordinate]>): boolean {
+  const lastIndex = lines.length - 1;
+  for (let i = 0; i < lines.length; i++) {
+    const [aStart, aEnd] = numericEdge(lines[i]);
+    for (let j = i + 1; j < lines.length; j++) {
+      const isAdjacent = j === i + 1 || (i === 0 && j === lastIndex);
+      if (isAdjacent) continue;
+      const [bStart, bEnd] = numericEdge(lines[j]);
+      if (hasInvalidInteriorIntersection(aStart, aEnd, bStart, bEnd, true)) return true;
     }
   }
-  return result;
+  return false;
+}
+
+function validateIncrementalSegment(
+  lines: Array<[Coordinate, Coordinate]>,
+  segStart: [number, number],
+  segEnd: [number, number],
+): boolean {
+  const lastIndex = lines.length - 1;
+  for (let i = 0; i < lastIndex; i++) {
+    if (i === lastIndex - 1) continue; // skip adjacent previous edge
+    const [currStart, currEnd] = numericEdge(lines[i]);
+    if (hasInvalidInteriorIntersection(currStart, currEnd, segStart, segEnd, true)) return true;
+  }
+  return false;
+}
+
+export function areLinesInPolygonIntersecting(coordinates: Coordinate[][]): boolean {
+  const lines = getLinesFromCoordinates(coordinates) as Array<[Coordinate, Coordinate]>;
+  if (lines.length <= 2) return false;
+  const { segment, isClosed } = getCandidateSegmentForValidation(coordinates, lines);
+  const [segStart, segEnd] = segment;
+  return isClosed
+    ? validateClosedPolygon(lines)
+    : validateIncrementalSegment(lines, segStart, segEnd);
 }
 
 /**
@@ -148,7 +204,9 @@ export function isPolygonSelfIntersectingByCoordinates(coordinates: Coordinate[]
     const selfIntersectionPoints = kinks(turfPolygon);
     return selfIntersectionPoints.features.length > 0;
   } catch (error) {
-    console.log('Polygon self-intersection check error');
+    // Log and treat invalid geometry as non self-intersecting to keep draw flow resilient
+    // eslint-disable-next-line no-console
+    console.warn('turf kinks error (treated as non-intersecting):', error);
     return false;
   }
 }
@@ -190,18 +248,18 @@ export function isSegmentWithinHankeArea(
   const almost = (a: number, b: number) => Math.abs(a - b) < eps;
 
   for (const edge of edges) {
-    const [ax, ay] = getCoordinateNumbersFromCoordinate(edge[0]);
-    const [bx, by] = getCoordinateNumbersFromCoordinate(edge[1]);
-    const cross = getLineIntersection([sx, sy], [ex, ey], [ax, ay], [bx, by]);
-    if (
-      cross &&
-      !(
+    const [aStart, aEnd] = numericEdge(edge as [Coordinate, Coordinate]);
+    const cross = getLineIntersection([sx, sy], [ex, ey], aStart, aEnd);
+    if (cross) {
+      // treat almost-equal endpoints as shared endpoints
+      const endpointMatches =
         (almost(cross[0], sx) && almost(cross[1], sy)) ||
-        (almost(cross[0], ex) && almost(cross[1], ey))
-      )
-    ) {
-      // Segment crosses the boundary -> disallow this point
-      return false;
+        (almost(cross[0], ex) && almost(cross[1], ey)) ||
+        (almost(cross[0], aStart[0]) && almost(cross[1], aStart[1])) ||
+        (almost(cross[0], aEnd[0]) && almost(cross[1], aEnd[1]));
+      if (!endpointMatches) {
+        return false;
+      }
     }
   }
   return true;

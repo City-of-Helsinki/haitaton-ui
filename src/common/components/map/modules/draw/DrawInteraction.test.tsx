@@ -312,12 +312,14 @@ describe('DrawInteraction startDraw events', () => {
     const changeHandler = (feature as any).on.mock.calls.find((c: any[]) => c[0] === 'change')[1];
     changeHandler({ target: feature });
 
-    // Act: invoke finishCondition manually (OpenLayers calls this internally). Should return false.
+    // Act: finishCondition should now BLOCK completion when polygon is self-intersecting
     const canFinish = options.finishCondition({} as any);
-
-    // Assert: finishing blocked, callback invoked
     expect(canFinish).toBe(false);
+    // Callback invoked immediately
     expect(onSelfIntersectingPolygon).toHaveBeenCalledWith(feature);
+    // drawend should NOT be emitted by OL since finishCondition returned false; simulate to ensure no side-effects
+    draw.emit('drawend', { feature });
+    // drawend callback resets to null (since our drawend handler now unconditionally clears) - but since finish prevented, this emit is artificial
 
     // Cleanup spy
     spyIsSelfIntersecting.mockRestore();

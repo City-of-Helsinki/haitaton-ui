@@ -9,6 +9,10 @@ import {
   areLinesInPolygonIntersecting,
   linesIntersect,
   isSegmentWithinHankeArea,
+  numericEdge,
+  isIntersectionAtAnyEndpoint,
+  hasInvalidInteriorIntersection,
+  getCandidateSegmentForValidation,
 } from './utils';
 
 describe('surface area', () => {
@@ -190,6 +194,19 @@ describe('areLinesInPolygonIntersecting', () => {
     ];
     expect(areLinesInPolygonIntersecting(coordinates)).toBe(false);
   });
+  test('returns true for bow-tie when closing segment intersects (closing end equals first vertex)', () => {
+    // Bow-tie shape: last segment from [3,3] to [0,0] crosses interior
+    const coordinates = [
+      [
+        [0, 0], // start
+        [3, 3],
+        [0, 3],
+        [3, 0],
+        [0, 0], // implicit closing (OL would add this as final link)
+      ],
+    ];
+    expect(areLinesInPolygonIntersecting(coordinates)).toBe(true);
+  });
 });
 
 describe('linesIntersect', () => {
@@ -299,5 +316,84 @@ describe('isSegmentWithinHankeArea', () => {
     ];
 
     expect(isSegmentWithinHankeArea(map, latestLine, () => true)).toBe(true);
+  });
+});
+
+describe('intersection helpers', () => {
+  test('numericEdge returns numeric endpoints', () => {
+    const edge: [number[], number[]] = [
+      [1, 2],
+      [3, 4],
+    ];
+    const [a, b] = numericEdge(edge as [number[], number[]]);
+    expect(a).toEqual([1, 2]);
+    expect(b).toEqual([3, 4]);
+  });
+  test('isIntersectionAtAnyEndpoint detects when an intersection matches an endpoint', () => {
+    expect(
+      isIntersectionAtAnyEndpoint(
+        [1, 2],
+        [
+          [0, 0],
+          [1, 2],
+        ],
+      ),
+    ).toBe(true);
+    expect(
+      isIntersectionAtAnyEndpoint(
+        [1, 2],
+        [
+          [0, 0],
+          [2, 2],
+        ],
+      ),
+    ).toBe(false);
+  });
+  test('hasInvalidInteriorIntersection returns true for interior crossing', () => {
+    const aStart: [number, number] = [0, 0];
+    const aEnd: [number, number] = [2, 2];
+    const bStart: [number, number] = [0, 2];
+    const bEnd: [number, number] = [2, 0];
+    expect(hasInvalidInteriorIntersection(aStart, aEnd, bStart, bEnd, true)).toBe(true);
+  });
+  test('hasInvalidInteriorIntersection returns false for shared endpoint only', () => {
+    const aStart: [number, number] = [0, 0];
+    const aEnd: [number, number] = [2, 0];
+    const bStart: [number, number] = [0, 0];
+    const bEnd: [number, number] = [0, 2];
+    expect(hasInvalidInteriorIntersection(aStart, aEnd, bStart, bEnd, true)).toBe(false);
+  });
+  test('getCandidateSegmentForValidation distinguishes closed vs incremental polygon', () => {
+    const incremental = [
+      [
+        [0, 0],
+        [5, 0],
+        [5, 5],
+      ],
+    ];
+    const incLines = getLinesFromCoordinates(
+      incremental as unknown as import('ol/coordinate').Coordinate[][],
+    );
+    const incCandidate = getCandidateSegmentForValidation(
+      incremental as unknown as import('ol/coordinate').Coordinate[][],
+      incLines as [import('ol/coordinate').Coordinate, import('ol/coordinate').Coordinate][],
+    );
+    expect(incCandidate.isClosed).toBe(false);
+    const closed = [
+      [
+        [0, 0],
+        [5, 0],
+        [5, 5],
+        [0, 0],
+      ],
+    ];
+    const closedLines = getLinesFromCoordinates(
+      closed as unknown as import('ol/coordinate').Coordinate[][],
+    );
+    const closedCandidate = getCandidateSegmentForValidation(
+      closed as unknown as import('ol/coordinate').Coordinate[][],
+      closedLines as [import('ol/coordinate').Coordinate, import('ol/coordinate').Coordinate][],
+    );
+    expect(closedCandidate.isClosed).toBe(true);
   });
 });

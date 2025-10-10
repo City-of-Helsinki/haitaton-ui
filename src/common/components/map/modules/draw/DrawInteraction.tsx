@@ -88,6 +88,11 @@ export default function DrawInteraction({
         geometryType = 'Circle';
       }
 
+      // Ref to allow finishCondition to access interaction instance (assigned post-construction)
+      const currentDrawRef = {
+        current: null as Draw | null,
+      } as React.MutableRefObject<Draw | null>;
+
       const drawInstance = new Draw({
         source,
         type: geometryType,
@@ -103,18 +108,30 @@ export default function DrawInteraction({
             return false;
           }
 
-          const geometry = drawnFeature.current?.getGeometry();
-          if (geometry) {
-            const surfaceArea = getSurfaceArea(geometry);
+          const modifiedPolygon: Polygon = drawnFeature.current?.getGeometry() as Polygon;
+          if (modifiedPolygon) {
+            const surfaceArea = getSurfaceArea(modifiedPolygon);
             // Don't allow drawing to be finished if its
             // surface area is below 1
             if (surfaceArea < 1) {
               return false;
             }
-            // Final closing-segment self-intersection validation (enhanced UX):
-            // When attempting to finish, ensure polygon does not self-intersect.
-            if (geometry instanceof Polygon && isPolygonSelfIntersecting(geometry)) {
-              // Notify user & expose via callback while keeping drawing active
+            const currentCoordinates = modifiedPolygon.getCoordinates();
+            const userDrawnRing = [
+              ...currentCoordinates[0].slice(0, currentCoordinates[0].length - 1),
+            ];
+            // If final polygon (including implicit closing segment) is self-intersecting, reject finish:
+            if (areLinesInPolygonIntersecting([userDrawnRing])) {
+              // Remove the last inserted point so user can continue adjusting
+              // We rely on OpenLayers keeping the drawing interaction active.
+              try {
+                // drawInstance is not yet assigned at creation time; we set a ref below and use it here.
+                currentDrawRef.current?.removeLastPoint();
+                // Adjust internal count so next added point is validated correctly
+                lastCoordinateCount.current = Math.max(0, lastCoordinateCount.current - 1);
+              } catch {
+                /* ignore remove errors */
+              }
               setNotification(true, {
                 position: 'top-right',
                 dismissible: true,
@@ -125,15 +142,13 @@ export default function DrawInteraction({
                 type: 'alert',
                 closeButtonLabelText: t('common:components:notification:closeButtonLabelText'),
               });
-              if (onSelfIntersectingPolygon) {
-                onSelfIntersectingPolygon(drawnFeature.current as Feature<Geometry>);
-              }
-              return false; // Block finishing, keep interaction alive
+              return false; // Block finishing
             }
           }
           return true;
         },
       });
+      currentDrawRef.current = drawInstance;
       drawInstance.on('drawstart', (event) => {
         selection.current?.setActive(false);
         lastCoordinateCount.current = 0; // Reset coordinate count for new drawing
@@ -190,7 +205,7 @@ export default function DrawInteraction({
           //  - the live cursor position
           // Use a non-mutating copy to avoid altering OL's internal coordinate array (HAI-3310 regression guard).
           const userDrawnRing = [
-            ...currentCoordinates[0].slice(0, currentCoordinates[0].length - 2),
+            ...currentCoordinates[0].slice(0, currentCoordinates[0].length - 1),
           ];
           const intersecting: boolean = areLinesInPolygonIntersecting([userDrawnRing]);
           if (intersecting) {
@@ -212,10 +227,16 @@ export default function DrawInteraction({
         });
       });
 
-      drawInstance.on('drawend', () => {
+      drawInstance.on('drawend', (event) => {
         selection.current?.setActive(true);
-        // At this point polygon already passed finishCondition (non-self-intersecting, valid area)
-        // So we do not need to re-check self-intersection.
+
+        const isSelfIntersecting = isPolygonSelfIntersecting(
+          event.feature.getGeometry() as Polygon,
+        );
+
+        if (onSelfIntersectingPolygon && isSelfIntersecting) {
+          onSelfIntersectingPolygon(event.feature);
+        }
 
         clearSelection();
         actions.setSelectedDrawToolType(null);
