@@ -13,10 +13,19 @@ import { DRAWTOOLTYPE, DrawSegmentGuard } from './types';
 import MapContext from '../../MapContext';
 import useDrawContext from './useDrawContext';
 import {
-  areLinesInPolygonIntersecting,
   getSurfaceArea,
   isPolygonSelfIntersecting,
+  areLinesInPolygonIntersecting,
 } from '../../utils';
+import {
+  getActualPointCount,
+  isCursorMovement,
+  getSegmentPoints,
+  legacyGuardViolated,
+  polygonContainsSegment,
+  selfIntersectionDetected,
+  rejectLastPoint,
+} from './drawConstraints';
 import { styleFunction } from '../../../../../domain/map/utils/geometryStyle';
 import { Map, MapBrowserEvent } from 'ol';
 import { useGlobalNotification } from '../../../globalNotification/GlobalNotificationContext';
@@ -253,103 +262,86 @@ export default function DrawInteraction({
         pendingSubAreaSelectionRef.current = false;
         hasStartedRef.current = true;
         event.feature.on('change', (changeEvent) => {
-          const currentFeature = event.feature;
-          const modifiedPolygon: Polygon = currentFeature.getGeometry() as Polygon;
-          const currentCoordinates = modifiedPolygon.getCoordinates();
+          const polygon = event.feature.getGeometry() as Polygon;
+          const coords = polygon.getCoordinates();
+          const pointCount = getActualPointCount(coords);
 
-          // current coordinates contain always 3 points.
-          // When starting drawing polygon, OL adds 2 coordinates to form a polygon
-          //    1. point is start point for the polygon
-          //    a minimum of 3 coordinates are needed to form a polygon
-          // Number of actual drawn points is array length - 2 because
-          //    2. last point is the cursor position (that is in this context same as last drawn point)
-          //    last point is to link the starting point to get full polygon
+          // Skip if just cursor movement
+          if (isCursorMovement(pointCount, lastCoordinateCount.current)) return;
+          lastCoordinateCount.current = pointCount;
 
-          // Only validate when a new point is actually added (not just cursor movement)
-          const actualPointCount = currentCoordinates[0].length - 2; // Exclude cursor position and starting point link
-          // Only process change events that are triggered by user interaction (mouse clicks i.e. new point is added)
-          if (actualPointCount <= lastCoordinateCount.current) {
-            return; // No new point added, just cursor movement
-          }
-          lastCoordinateCount.current = actualPointCount;
+          const ring = coords[0];
 
-          const ring = currentCoordinates[0];
-
-          // First point selection handled pre-start in composedCondition
-
-          // Block further points while selection pending
-          if (pendingSubAreaSelectionRef.current && actualPointCount > 1) {
-            drawInstance.removeLastPoint();
-            lastCoordinateCount.current = actualPointCount - 1;
+          // Pending multi-area selection blocks further committed points
+          if (pendingSubAreaSelectionRef.current && pointCount > 1) {
+            lastCoordinateCount.current = rejectLastPoint(
+              drawInstance,
+              'outsideArea',
+              showConstraintNotification,
+              pointCount,
+            );
             return;
           }
 
-          // Legacy segment guard fallback when no sub area selection logic is provided
-          if (!getSubAreasAtCoordinate && drawSegmentGuard && actualPointCount >= 2) {
-            const start = ring[actualPointCount - 2];
-            const end = ring[actualPointCount - 1];
-            const ok = drawSegmentGuard(map, [start, end]);
-            if (!ok) {
-              drawInstance.removeLastPoint();
-              lastCoordinateCount.current = actualPointCount - 1;
-              showConstraintNotification('outsideArea');
+          const hasSegment = pointCount >= 2;
+          const { start, end } = hasSegment ? getSegmentPoints(ring, pointCount) : {};
+
+          // Legacy guard when no sub area selection logic is present
+          if (
+            hasSegment &&
+            !getSubAreasAtCoordinate &&
+            drawSegmentGuard &&
+            start &&
+            end &&
+            legacyGuardViolated(map, drawSegmentGuard, start, end)
+          ) {
+            lastCoordinateCount.current = rejectLastPoint(
+              drawInstance,
+              'outsideArea',
+              showConstraintNotification,
+              pointCount,
+            );
+            return;
+          }
+
+          // Area containment & optional legacy guard after containment
+          if (hasSegment && chosenSubArea && start && end) {
+            const poly = (chosenSubAreaRef.current ?? chosenSubArea).getGeometry() as Polygon;
+            if (!polygonContainsSegment(poly, start, end)) {
+              lastCoordinateCount.current = rejectLastPoint(
+                drawInstance,
+                'outsideArea',
+                showConstraintNotification,
+                pointCount,
+              );
+              return;
+            }
+            if (
+              allowLegacyDrawSegmentGuard &&
+              drawSegmentGuard &&
+              legacyGuardViolated(map, drawSegmentGuard, start, end)
+            ) {
+              lastCoordinateCount.current = rejectLastPoint(
+                drawInstance,
+                'outsideArea',
+                showConstraintNotification,
+                pointCount,
+              );
               return;
             }
           }
 
-          // AREA CONTAINMENT & SEGMENT GUARD (after area chosen)
-          if (chosenSubArea && actualPointCount >= 2) {
-            const start = ring[actualPointCount - 2];
-            const end = ring[actualPointCount - 1];
-            const poly = (chosenSubAreaRef.current ?? chosenSubArea)?.getGeometry() as Polygon;
-            // Check end point inside polygon
-            if (!poly.intersectsCoordinate(end)) {
-              drawInstance.removeLastPoint();
-              lastCoordinateCount.current = actualPointCount - 1;
-              showConstraintNotification('outsideArea');
-              return;
-            }
-            // Segment midpoints sampling to ensure it doesn't cross outside
-            const steps = 5;
-            for (let i = 1; i < steps; i += 1) {
-              const f = i / steps;
-              const mid = [start[0] + (end[0] - start[0]) * f, start[1] + (end[1] - start[1]) * f];
-              if (!poly.intersectsCoordinate(mid)) {
-                drawInstance.removeLastPoint();
-                lastCoordinateCount.current = actualPointCount - 1;
-                showConstraintNotification('outsideArea');
-                return;
-              }
-            }
-            // Optional legacy guard after our containment checks
-            if (allowLegacyDrawSegmentGuard && drawSegmentGuard) {
-              const ok = drawSegmentGuard(map, [start, end]);
-              if (!ok) {
-                drawInstance.removeLastPoint();
-                lastCoordinateCount.current = actualPointCount - 1;
-                showConstraintNotification('outsideArea');
-                return;
-              }
-            }
-          }
-          // Check for self-intersection with the actual drawn points (excluding cursor position)
-          // OpenLayers creates minimum set of 3 coordinates when draw starts for polygon.
-          // We need only the user drawn coordinates, excluding:
-          //  - the automatic closing link to the start
-          //  - the live cursor position
-          // Use a non-mutating copy to avoid altering OL's internal coordinate array (HAI-3310 regression guard).
-          // Build ring of only committed user points (exclude live cursor and auto-added closing point).
-          // OpenLayers structure: [p0, p1, ..., pn, cursor, p0] during drawing.
-          // We want [p0, p1, ..., pn] for incremental self-intersection checks.
-          const committedCount = currentCoordinates[0].length - 2; // exclude cursor + closing p0
-          const userDrawnRing = [...currentCoordinates[0].slice(0, committedCount)];
-          const intersecting: boolean = areLinesInPolygonIntersecting([userDrawnRing]);
-          if (intersecting) {
-            drawInstance.removeLastPoint();
-            lastCoordinateCount.current = actualPointCount - 1; // Update count after removal
-            showConstraintNotification('selfIntersecting');
+          // Self-intersection incremental check
+          if (selfIntersectionDetected(ring)) {
+            lastCoordinateCount.current = rejectLastPoint(
+              drawInstance,
+              'selfIntersecting',
+              showConstraintNotification,
+              pointCount,
+            );
             return;
           }
+
           drawnFeature.current = changeEvent.target;
         });
       });
