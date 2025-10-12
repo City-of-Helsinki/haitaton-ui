@@ -4,8 +4,11 @@ import {
   initApplicationAttachmentGetResponse,
   initHaittaindeksitPostResponse,
 } from '../../testUtils/helperFunctions';
-import { buildApplicationForSummary, getDefaultHanke } from './kaivuilmoitusTestHelpers';
-import { navigateToStep } from '../../testUtils/helpers/navigation';
+import {
+  buildApplicationForSummary,
+  getDefaultHanke,
+  navigateToStep,
+} from './kaivuilmoitusTestHelpers';
 import { HAITTA_INDEX_TYPE } from '../common/haittaIndexes/types';
 
 test('Summary displays key kaivuilmoitus information quickly', async () => {

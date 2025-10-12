@@ -1,3 +1,20 @@
+/**
+ * Kaivuilmoitus domain test helpers
+ * ---------------------------------
+ * This module centralizes commonly used helper functions for Kaivuilmoitus tests to reduce
+ * repetitive multi-path imports and make refactors easier.
+ *
+ * Exposed categories:
+ *  - Rendering & application builders (renderKaivuilmoitus, buildDefaultApplication, buildApplicationForSummary)
+ *  - Primitive UI interaction helpers (navigateToStep, selectComboboxOption, expandAccordionByText)
+ *  - Data/setup helpers (mockHaittaIndex, uploadTestAttachments, fillInvoicingCustomer)
+ *
+ * Usage pattern:
+ *  import { renderKaivuilmoitus, navigateToStep, mockHaittaIndex } from './kaivuilmoitusTestHelpers';
+ *
+ * Keep this file focused on Kaivuilmoitus domain needs. Cross-domain generic helpers should
+ * remain in testUtils/helpers to avoid tight coupling.
+ */
 import { cloneDeep } from 'lodash';
 import applications from '../mocks/data/hakemukset-data';
 import {
@@ -10,6 +27,22 @@ import hankkeet from '../mocks/data/hankkeet-data';
 import { render } from '../../testUtils/render';
 import KaivuilmoitusContainer from './KaivuilmoitusContainer';
 import React from 'react';
+// Common test helpers used across Kaivuilmoitus domain tests. Re-export them here for convenience.
+import { navigateToStep } from '../../testUtils/helpers/navigation';
+import { uploadTestAttachments } from '../../testUtils/helpers/uploadTestAttachments';
+import { expandAccordionByText } from '../../testUtils/helpers/accordion';
+import { mockHaittaIndex } from '../../testUtils/helpers/haittaIndex';
+import { selectComboboxOption } from '../../testUtils/helpers/combobox';
+import { fillInvoicingCustomer } from '../../testUtils/formHelpers/invoicingCustomer';
+
+export {
+  navigateToStep,
+  uploadTestAttachments,
+  expandAccordionByText,
+  mockHaittaIndex,
+  selectComboboxOption,
+  fillInvoicingCustomer,
+};
 
 /**
  * Builds a pre-populated Kaivuilmoitus application suitable for jumping directly to the summary step.

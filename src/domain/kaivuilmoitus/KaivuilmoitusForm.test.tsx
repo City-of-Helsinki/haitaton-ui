@@ -13,10 +13,17 @@ import {
   KaivuilmoitusData,
 } from '../application/types/application';
 import * as applicationAttachmentsApi from '../application/attachments';
-import { uploadTestAttachments } from '../../testUtils/helpers/uploadTestAttachments';
-import { navigateToStep } from '../../testUtils/helpers/navigation';
-import { expandAccordionByText } from '../../testUtils/helpers/accordion';
-import { selectComboboxOption } from '../../testUtils/helpers/combobox';
+// Consolidated kaivuilmoitus domain test helpers
+import {
+  uploadTestAttachments,
+  navigateToStep,
+  expandAccordionByText,
+  selectComboboxOption,
+  fillInvoicingCustomer,
+  mockHaittaIndex,
+  renderKaivuilmoitus,
+  buildDefaultApplication,
+} from './kaivuilmoitusTestHelpers';
 import applications from '../mocks/data/hakemukset-data';
 import {
   initApplicationAttachmentGetResponse,
@@ -31,13 +38,10 @@ import {
   fillAttachments,
   fillContactsInformation,
 } from '../../testUtils/formHelpers/kaivuilmoitus';
-import { fillInvoicingCustomer } from '../../testUtils/formHelpers/invoicingCustomer';
 import { SignedInUser } from '../hanke/hankeUsers/hankeUser';
 import * as applicationApi from '../application/utils';
 import { HAITTA_INDEX_TYPE, HaittaIndexData } from '../common/haittaIndexes/types';
-import { mockHaittaIndex } from '../../testUtils/helpers/haittaIndex';
 import { HIDDEN_FIELD_VALUE } from '../application/constants';
-import { renderKaivuilmoitus, buildDefaultApplication } from './kaivuilmoitusTestHelpers';
 
 // Note: do not mock DrawProvider here; DrawProvider and related context
 // must remain intact for components that rely on the draw context.
