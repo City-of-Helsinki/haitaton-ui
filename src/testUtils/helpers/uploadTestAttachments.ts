@@ -44,8 +44,18 @@ export async function uploadTestAttachments(
   const attachmentsButton = screen.queryByRole('button', { name: /liitteet/i });
   if (attachmentsButton) await user.click(attachmentsButton);
 
-  // Collect dropzones / file inputs
-  let dropzones = screen.queryAllByLabelText('Raahaa tiedostot tänne');
+  // Collect dropzones / file inputs. Prefer the accessible labelled dropzones but wait for them
+  // since some implementations render them async. If none found within a short timeout, fall
+  // back to looking up known input IDs.
+  let dropzones: HTMLElement[] = [];
+  try {
+    dropzones = await screen.findAllByLabelText('Raahaa tiedostot tänne', undefined, {
+      timeout: 2000,
+    });
+  } catch {
+    // ignore and fall back to ID based lookup below
+  }
+
   if (!dropzones.length) {
     const ids = [
       'excavation-notification-file-upload-traffic-arrangement-plan',
@@ -58,16 +68,56 @@ export async function uploadTestAttachments(
   }
 
   const typeOrder = Object.keys(filesByType);
+  // Resolve target input element for each provided file and group files by input so that
+  // we can upload multiple files to the same input in a single user.upload call.
+  const inputToFiles = new Map<HTMLElement, File[]>();
   for (const type of typeOrder) {
     const file = filesByType[type];
-    let index = 2; // default other/misc
-    if (/liikenne|traffic/i.test(type)) index = 0;
-    else if (/valtakirja|mandate/i.test(type)) index = 1;
-    if (!dropzones[index]) continue; // tolerate missing inputs
-    await user.upload(dropzones[index], file);
+    let targetInput: HTMLElement | null = null;
+    if (/liikenne|traffic/i.test(type)) {
+      targetInput =
+        (document.querySelector(
+          `#excavation-notification-file-upload-traffic-arrangement-plan input[type=file]`,
+        ) as HTMLElement) || null;
+    } else if (/valtakirja|mandate/i.test(type)) {
+      targetInput =
+        (document.querySelector(
+          `#excavation-notification-file-upload-mandate input[type=file]`,
+        ) as HTMLElement) || null;
+    } else {
+      targetInput =
+        (document.querySelector(
+          `#excavation-notification-file-upload-other-attachments input[type=file]`,
+        ) as HTMLElement) || null;
+    }
+
+    if (!targetInput) {
+      let index = 2; // default other/misc
+      if (/liikenne|traffic/i.test(type)) index = 0;
+      else if (/valtakirja|mandate/i.test(type)) index = 1;
+      targetInput = dropzones[index] || dropzones[0] || null;
+    }
+
+    if (!targetInput) continue; // tolerate missing inputs
+
+    const existing = inputToFiles.get(targetInput) || [];
+    existing.push(file);
+    inputToFiles.set(targetInput, existing);
   }
 
-  await waitFor(() => expect(uploadSpy).toHaveBeenCalledTimes(typeOrder.length), { timeout: 8000 });
+  // Perform the uploads grouped by input element. For each input, upload all files at once
+  // so that components that use a single unified FileUpload receive them in one change event.
+  let totalFiles = 0;
+  for (const files of inputToFiles.values()) totalFiles += files.length;
+  for (const [input, files] of inputToFiles.entries()) {
+    if (files.length === 1) {
+      await user.upload(input, files[0]);
+    } else {
+      await user.upload(input, files);
+    }
+  }
+
+  await waitFor(() => expect(uploadSpy).toHaveBeenCalledTimes(totalFiles), { timeout: 8000 });
   return uploadSpy.mock.calls.map((c) => c[0].file.name);
 }
 

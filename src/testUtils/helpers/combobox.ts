@@ -1,4 +1,4 @@
-import { screen } from '../../testUtils/render';
+import { screen, within } from '../../testUtils/render';
 import { UserEvent } from '@testing-library/user-event/dist/types/setup/setup';
 
 /**
@@ -18,6 +18,12 @@ export async function selectComboboxOption(
   const boxes = screen.getAllByRole('combobox', { name: labelRegex });
   const target = index !== undefined ? boxes[index] : boxes[0];
   await user.click(target);
-  const option = await screen.findByText(optionRegex);
+  // When the combobox is opened, options are rendered inside a listbox.
+  // Find the most recently opened listbox and scope the option search within it to avoid
+  // matching unrelated nodes (there can be multiple instances of the same option text
+  // elsewhere in the document, e.g. placeholders or other select lists).
+  const listboxes = await screen.findAllByRole('listbox');
+  const listbox = listboxes[listboxes.length - 1];
+  const option = await within(listbox).findByText(optionRegex);
   await user.click(option);
 }
