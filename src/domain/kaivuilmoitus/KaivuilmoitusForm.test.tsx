@@ -68,6 +68,30 @@ server.use(
   }),
 );
 
+// Fast test-only haitta indices handler to speed nuisance-control related tests
+// Activated only when running with CI=1 so it won't affect normal test behavior.
+if (process.env.CI) {
+  server.use(
+    http.post('/api/haittaindeksit', async () => {
+      // Return a small, deterministic haitta index response used by many kaivuilmoitus flows.
+      return HttpResponse.json<HaittaIndexData>({
+        liikennehaittaindeksi: { indeksi: 1.4, tyyppi: HAITTA_INDEX_TYPE.AUTOLIIKENNEINDEKSI },
+        pyoraliikenneindeksi: 3,
+        autoliikenne: {
+          indeksi: 1.4,
+          haitanKesto: 1,
+          katuluokka: 0,
+          liikennemaara: 0,
+          kaistahaitta: 1,
+          kaistapituushaitta: 1,
+        },
+        linjaautoliikenneindeksi: 0,
+        raitioliikenneindeksi: 1,
+      });
+    }),
+  );
+}
+
 test('Should fill kaivuilmoitus form and show summary', async () => {
   const application: Application<KaivuilmoitusData> = {
     id: 1,

@@ -119,6 +119,7 @@ afterEach(() => {
   if (global.gc) {
     global.gc();
   }
+  // no-op: timing instrumentation removed
 });
 
 // Factory functions for creating isolated test data

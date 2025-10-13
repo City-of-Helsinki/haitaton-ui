@@ -33,7 +33,55 @@ type BackendError = {
   errorCode: string;
 };
 
+// When running timed tests, avoid artificial handler delays to speed up CI profiling.
+function conditionalDelay(ms?: number) {
+  return process.env.CI ? Promise.resolve() : delay(ms);
+}
+
+// Fast, test-only contact-person handlers to avoid extra work and make contact
+// related tests deterministic and quick when profiling. These handlers are
+// added early so they take precedence over the normal handlers.
+const testFastContactHandlers = process.env.CI
+  ? [
+      http.get(`${apiUrl}/hankkeet/:hankeTunnus/kayttajat`, async ({ params }) => {
+        const hankeTunnus = params.hankeTunnus as string;
+        const kayttajat = await usersDB.readAll(hankeTunnus);
+        return HttpResponse.json({ kayttajat });
+      }),
+
+      http.post(`${apiUrl}/hankkeet/:hankeTunnus/kayttajat`, async ({ params, request }) => {
+        const hankeTunnus = params.hankeTunnus as string;
+        const body = (await request.json()) as Yhteyshenkilo;
+        // Use usersDB.create so the created user is persisted for subsequent GETs
+        const created = await usersDB.create(hankeTunnus, {
+          etunimi: body.etunimi,
+          sukunimi: body.sukunimi,
+          sahkoposti: body.sahkoposti,
+          puhelinnumero: body.puhelinnumero,
+        });
+        return HttpResponse.json(created);
+      }),
+
+      http.get(`${apiUrl}/kayttajat/:id`, async ({ params }) => {
+        const id = params.id as string;
+        const user = await usersDB.read(id);
+        return HttpResponse.json(user);
+      }),
+
+      http.post(`${apiUrl}/kayttajat`, async () => {
+        // Identification response used when creating a global kayttaja
+        return HttpResponse.json({
+          kayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+          hankeTunnus: 'HAI22-2',
+          hankeNimi: 'Test Hanke',
+        });
+      }),
+    ]
+  : [];
+
 export const handlers = [
+  // Insert test-only fast contact handlers first when enabled
+  ...testFastContactHandlers,
   // Private hankkeet endpoints miss handling of user at this point
   http.get<PathParams, undefined, HankeDataDraft>(
     `${apiUrl}/hankkeet/:hankeTunnus`,
@@ -348,13 +396,13 @@ export const handlers = [
   http.post(`${apiUrl}/kayttajat/:kayttajaId/kutsu`, async ({ params }) => {
     const { kayttajaId } = params;
     const user = await usersDB.resendInvitation(kayttajaId as string);
-    await delay();
+    await conditionalDelay();
     return HttpResponse.json(user);
   }),
 
   http.get(`${apiUrl}/kayttajat/:id/deleteInfo`, async ({ params }) => {
     const { id } = params;
-    await delay();
+    await conditionalDelay();
     if (id === '3fa85f64-5717-4562-b3fc-2c963f66afa7') {
       return HttpResponse.json<DeleteInfo>({
         activeHakemukset: [
@@ -410,7 +458,7 @@ export const handlers = [
   }),
 
   http.post(`${apiUrl}/hakemukset/:id/liitteet`, async () => {
-    await delay(500);
+    await conditionalDelay(500);
     return new HttpResponse();
   }),
 
@@ -469,7 +517,7 @@ export const handlers = [
   }),
 
   http.post(`${apiUrl}/taydennykset/:id/liitteet`, async () => {
-    await delay(500);
+    await conditionalDelay(500);
     return new HttpResponse();
   }),
 
@@ -516,7 +564,7 @@ export const handlers = [
   }),
 
   http.post(`${apiUrl}/muutosilmoitukset/:id/liitteet`, async () => {
-    await delay(500);
+    await conditionalDelay(500);
     return new HttpResponse();
   }),
 

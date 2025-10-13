@@ -361,19 +361,55 @@ test('Should show server error message if deleting file fails with server error'
 
 test('Should be able to cancel upload requests', async () => {
   const abortSpy = jest.spyOn(AbortController.prototype, 'abort');
+
+  // Provide a test-local upload function that respects the abortSignal and
+  // delays a short while so the cancel button can trigger an abort deterministically.
+  const delayedUpload = jest.fn(
+    ({ file, abortSignal }: { file: File; abortSignal?: AbortSignal }) =>
+      new Promise<AttachmentMetadata>((resolve, reject) => {
+        const meta: AttachmentMetadata = {
+          id: `meta-${file.name}`,
+          fileName: file.name,
+          contentType: file.type,
+          size: file.size,
+          createdByUserId: 'test-user',
+          createdAt: new Date().toISOString(),
+        };
+        const timer = setTimeout(() => resolve(meta), 300);
+        if (abortSignal) {
+          interface CancellableError extends Error {
+            code?: string;
+          }
+          const onAbort = () => {
+            clearTimeout(timer);
+            const e = new Error('aborted') as CancellableError;
+            e.code = 'ERR_CANCELED';
+            reject(e);
+          };
+          if (abortSignal.aborted) return onAbort();
+          abortSignal.addEventListener('abort', onAbort, { once: true });
+        }
+      }),
+  );
+
   const {
     renderResult: { user },
     fileUploadElement,
-  } = getFileUpload({ accept: '.pdf' });
+  } = getFileUpload({ accept: '.pdf', upload: delayedUpload });
+
   await user.upload(fileUploadElement, [
     new File(['test-a'], 'test-file-a.pdf', { type: 'application/pdf' }),
     new File(['test-b'], 'test-file-b.pdf', { type: 'application/pdf' }),
   ]);
+
+  // Ensure uploading modal is visible
   await screen.findByText('Tallennetaan tiedostoja');
   await user.click(screen.getByRole('button', { name: 'Peruuta' }));
+
   await waitFor(() => {
     expect(abortSpy).toHaveBeenCalledTimes(1);
   });
+
   abortSpy.mockRestore();
 });
 

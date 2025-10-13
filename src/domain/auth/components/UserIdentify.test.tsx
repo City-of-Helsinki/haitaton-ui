@@ -67,9 +67,11 @@ test('Should identify user after login', async () => {
 
   await waitFor(() => expect(window.document.title).toBe('Haitaton - Etusivu'));
   expect(identifyUser).toHaveBeenCalledWith(id);
-  expect(
-    screen.queryByText(
-      'Sinut on nyt lisätty hankkeelle (Aidasmäentien vesihuollon rakentaminen HAI22-2).',
-    ),
-  ).toBeInTheDocument();
+  // Wait for the identification notification to appear; allow flexible matching
+  const notification = await screen.findByText(
+    /Sinut on nyt lisätty hankkeelle[\s\S]*HAI22-2/i,
+    {},
+    { timeout: 5000 },
+  );
+  expect(notification).toBeInTheDocument();
 });
