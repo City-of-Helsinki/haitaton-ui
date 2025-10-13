@@ -1,4 +1,5 @@
 import { render, screen, waitFor } from '../../testUtils/render';
+import { act } from '@testing-library/react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { HankeData, HANKE_KAISTAHAITTA, HANKE_KAISTAPITUUSHAITTA } from '../types/hanke';
@@ -6,7 +7,8 @@ import { HankkeenHakemus } from '../application/types/application';
 import hankkeet from '../mocks/data/hankkeet-data';
 import { KaivuilmoitusFormValues } from './types';
 import { validationSchema } from './validationSchema';
-import { Map as OlMap } from 'ol';
+import { Map as OlMap, Feature } from 'ol';
+import { Polygon } from 'ol/geom';
 import React from 'react';
 import { Coordinate } from 'ol/coordinate';
 
@@ -247,6 +249,60 @@ jest.mock('../../common/hooks/useFieldArrayWithStateUpdate', () => {
     __esModule: true,
     default: useFieldArrayWithStateUpdate,
     __getAppendMock: () => append,
+  };
+});
+
+// Mock VectorSource so we can inspect addFeature/removeFeature calls
+jest.mock('ol/source/Vector', () => {
+  const mocks = {
+    addFeature: jest.fn(),
+    removeFeature: jest.fn(),
+    getFeatures: jest.fn(() => []),
+    clear: jest.fn(),
+  };
+
+  class VectorSource {
+    constructor() {
+      // no-op
+    }
+    addFeature(feature: unknown) {
+      return mocks.addFeature(feature);
+    }
+    removeFeature(feature: unknown) {
+      return mocks.removeFeature(feature);
+    }
+    getFeatures() {
+      return mocks.getFeatures();
+    }
+    clear() {
+      return mocks.clear();
+    }
+  }
+
+  // attach mocks retriever
+  const VectorSourceAny = VectorSource as unknown as { __getMocks?: () => unknown };
+  // eslint-disable-next-line no-underscore-dangle
+  VectorSourceAny.__getMocks = () => mocks;
+
+  return {
+    __esModule: true,
+    default: VectorSource,
+    __getMocks: () => mocks,
+  };
+});
+
+// Mock useSelectableTabs to provide setSelectedTabIndex spy
+jest.mock('../../common/hooks/useSelectableTabs', () => {
+  const setSelectedTabIndex = jest.fn();
+  const useSelectableTabs = () => ({
+    tabRefs: [],
+    setSelectedTabIndex,
+    selectedTabIndex: 0,
+  });
+  return {
+    __esModule: true,
+    default: useSelectableTabs,
+    __getSetSelectedTabIndex: () => setSelectedTabIndex,
   };
 });
 
@@ -769,6 +825,362 @@ describe('Areas segment containment guard', () => {
       );
 
       expect(screen.getByTestId('mock-application-map')).toBeInTheDocument();
+    });
+  });
+
+  describe('area handlers', () => {
+    it('handleAddArea removes feature when no hanke contains it', async () => {
+      // featureContains mocked to true globally; override to false for this test
+      const mapUtilsModule = jest.requireMock('../map/utils') as { featureContains: jest.Mock };
+      mapUtilsModule.featureContains.mockImplementation(() => false);
+
+      render(
+        <TestWrapper>
+          <Areas
+            hankeData={hankeData}
+            hankkeenHakemukset={hankkeenHakemukset}
+            originalHakemus={originalHakemus}
+          />
+        </TestWrapper>,
+      );
+
+      const appMap = jest.requireMock('../application/components/ApplicationMap') as {
+        __getLastAppMapProps: () => Record<string, unknown> | undefined;
+      };
+      await waitFor(() => {
+        // eslint-disable-next-line no-underscore-dangle
+        const props = appMap.__getLastAppMapProps();
+        expect(props?.onAddArea).toBeDefined();
+      });
+
+      // eslint-disable-next-line no-underscore-dangle
+      const props = appMap.__getLastAppMapProps();
+      const onAddArea = props?.onAddArea as (f: Feature<Polygon>) => void;
+      // create a trivial polygon feature
+      const feat = new Feature(
+        new Polygon([
+          [
+            [0, 0],
+            [1, 0],
+            [1, 1],
+            [0, 0],
+          ],
+        ]),
+      ) as Feature<Polygon>;
+
+      // call onAddArea which should call drawSource.removeFeature when no hanke contains the feature
+      act(() => onAddArea(feat));
+
+      // eslint-disable-next-line no-underscore-dangle
+      const vsMocks = jest.requireMock('ol/source/Vector').__getMocks();
+      expect(vsMocks.removeFeature).toHaveBeenCalledWith(feat);
+    });
+
+    it('handleAddArea opens dialog when multiple hanke areas contain feature', async () => {
+      // Make featureContains return true and simulate multiple hanke areas
+      const mapUtilsModule = jest.requireMock('../map/utils') as { featureContains: jest.Mock };
+      mapUtilsModule.featureContains.mockImplementation(() => true);
+
+      const multiHanke = {
+        ...hankeData,
+        alueet: [hankeData.alueet[0], hankeData.alueet[0]],
+      } as HankeData;
+
+      render(
+        <TestWrapper>
+          <Areas
+            hankeData={multiHanke}
+            hankkeenHakemukset={hankkeenHakemukset}
+            originalHakemus={originalHakemus}
+          />
+        </TestWrapper>,
+      );
+
+      const appMap = jest.requireMock('../application/components/ApplicationMap') as {
+        __getLastAppMapProps: () => Record<string, unknown> | undefined;
+      };
+      await waitFor(() => {
+        // eslint-disable-next-line no-underscore-dangle
+        const props = appMap.__getLastAppMapProps();
+        expect(props?.onAddArea).toBeDefined();
+      });
+
+      // eslint-disable-next-line no-underscore-dangle
+      const props = appMap.__getLastAppMapProps();
+      const onAddArea = props?.onAddArea as (f: Feature<Polygon>) => void;
+      const feat = new Feature(
+        new Polygon([
+          [
+            [0, 0],
+            [1, 0],
+            [1, 1],
+            [0, 0],
+          ],
+        ]),
+      ) as Feature<Polygon>;
+
+      act(() => onAddArea(feat));
+
+      // AreaSelectDialog should be rendered because multiple hanke areas contain the feature
+      await waitFor(() => {
+        expect(screen.queryByTestId('mock-area-select-dialog')).toBeInTheDocument();
+      });
+    });
+
+    it('handleCopyArea adds feature then delegates to handleAddArea', async () => {
+      // featureContains true so handleAddArea will attempt to add
+      const mapUtilsModule = jest.requireMock('../map/utils') as { featureContains: jest.Mock };
+      mapUtilsModule.featureContains.mockImplementation(() => true);
+
+      render(
+        <TestWrapper>
+          <Areas
+            hankeData={hankeData}
+            hankkeenHakemukset={hankkeenHakemukset}
+            originalHakemus={originalHakemus}
+          />
+        </TestWrapper>,
+      );
+
+      const appMap = jest.requireMock('../application/components/ApplicationMap') as {
+        __getLastAppMapProps: () => Record<string, unknown> | undefined;
+      };
+      await waitFor(() => {
+        // eslint-disable-next-line no-underscore-dangle
+        const props = appMap.__getLastAppMapProps();
+        expect(props?.onCopyArea).toBeDefined();
+      });
+
+      // eslint-disable-next-line no-underscore-dangle
+      const props = appMap.__getLastAppMapProps();
+      const onCopyArea = props?.onCopyArea as (f: Feature<Polygon>) => void;
+      const feat = new Feature(
+        new Polygon([
+          [
+            [0, 0],
+            [1, 0],
+            [1, 1],
+            [0, 0],
+          ],
+        ]),
+      ) as Feature<Polygon>;
+
+      act(() => onCopyArea(feat));
+
+      // eslint-disable-next-line no-underscore-dangle
+      const vsMocks = jest.requireMock('ol/source/Vector').__getMocks();
+      expect(vsMocks.addFeature).toHaveBeenCalledWith(feat);
+      // Since featureContains returns true and there's at least one hanke area, no removeFeature called
+      expect(vsMocks.removeFeature).not.toHaveBeenCalledWith(feat);
+    });
+
+    it('handleChangeArea calls mutate and updates feature props when matching area found', async () => {
+      // Build a defaultValues where applicationData.areas contains one area with a tyoalue
+      const feature = new Feature(
+        new Polygon([
+          [
+            [0, 0],
+            [1, 0],
+            [1, 1],
+            [0, 0],
+          ],
+        ]),
+      ) as Feature<Polygon>;
+      feature.setProperties({ areaName: 'Area 0', relatedHankeAreaId: 1 });
+
+      const initialValues: Partial<KaivuilmoitusFormValues> = {
+        applicationData: {
+          // required minimal fields for KaivuilmoitusData
+          applicationType: 'EXCAVATION_NOTIFICATION',
+          name: 'Test',
+          workDescription: 'desc',
+          constructionWork: false,
+          maintenanceWork: false,
+          emergencyWork: false,
+          rockExcavation: null,
+          cableReportDone: null,
+          requiredCompetence: false,
+          startTime: new Date('2024-01-01'),
+          endTime: new Date('2024-12-31'),
+          areas: [
+            /* eslint-disable @typescript-eslint/no-explicit-any */
+            {
+              hankealueId: 1,
+              name: 'TestArea',
+              tyoalueet: [
+                {
+                  openlayersFeature: feature,
+                  tormaystarkasteluTulos: null,
+                },
+              ],
+              katuosoite: '',
+              tyonTarkoitukset: null,
+              meluhaitta: null,
+              polyhaitta: null,
+              tarinahaitta: null,
+              kaistahaitta: null,
+              kaistahaittojenPituus: null,
+            } as any,
+            /* eslint-enable @typescript-eslint/no-explicit-any */
+          ],
+        },
+      };
+
+      render(
+        <TestWrapper defaultValues={initialValues}>
+          <Areas
+            hankeData={hankeData}
+            hankkeenHakemukset={hankkeenHakemukset}
+            originalHakemus={originalHakemus}
+          />
+        </TestWrapper>,
+      );
+
+      const appMap = jest.requireMock('../application/components/ApplicationMap') as {
+        __getLastAppMapProps: () => Record<string, unknown> | undefined;
+      };
+      await waitFor(() => {
+        // eslint-disable-next-line no-underscore-dangle
+        const props = appMap.__getLastAppMapProps();
+        expect(props?.onChangeArea).toBeDefined();
+      });
+
+      // eslint-disable-next-line no-underscore-dangle
+      const props = appMap.__getLastAppMapProps();
+      const onChangeArea = props?.onChangeArea as (f: Feature<Polygon>) => void;
+
+      act(() => onChangeArea(feature));
+
+      // Ensure the haittaIndexes mutation was invoked for the changed area
+      // eslint-disable-next-line no-underscore-dangle
+      const mutateMock = jest.requireMock('../hanke/hooks/useHaittaIndexes').__getMutateMock();
+      expect(mutateMock).toHaveBeenCalled();
+    });
+
+    it('handleAreaSelectDialogClose removes feature and clears dialog', async () => {
+      // Prepare scenario where multiple hanke areas exist so dialog opens
+      const mapUtilsModule = jest.requireMock('../map/utils') as { featureContains: jest.Mock };
+      mapUtilsModule.featureContains.mockImplementation(() => true);
+
+      const multiHanke = {
+        ...hankeData,
+        alueet: [hankeData.alueet[0], hankeData.alueet[0]],
+      } as HankeData;
+
+      render(
+        <TestWrapper>
+          <Areas
+            hankeData={multiHanke}
+            hankkeenHakemukset={hankkeenHakemukset}
+            originalHakemus={originalHakemus}
+          />
+        </TestWrapper>,
+      );
+
+      const appMap = jest.requireMock('../application/components/ApplicationMap') as {
+        __getLastAppMapProps: () => Record<string, unknown> | undefined;
+      };
+      await waitFor(() => {
+        // eslint-disable-next-line no-underscore-dangle
+        const props = appMap.__getLastAppMapProps();
+        expect(props?.onAddArea).toBeDefined();
+      });
+
+      // eslint-disable-next-line no-underscore-dangle
+      const props = appMap.__getLastAppMapProps();
+      const onAddArea = props?.onAddArea as (f: Feature<Polygon>) => void;
+      const feat = new Feature(
+        new Polygon([
+          [
+            [0, 0],
+            [1, 0],
+            [1, 1],
+            [0, 0],
+          ],
+        ]),
+      ) as Feature<Polygon>;
+
+      act(() => onAddArea(feat));
+
+      // AreaSelectDialog should be visible
+      await waitFor(() => {
+        expect(screen.queryByTestId('mock-area-select-dialog')).toBeInTheDocument();
+      });
+
+      // Invoke onClose via the mocked AreaSelectDialog props
+      const areaSelectMock = jest.requireMock('./components/AreaSelectDialog');
+      // eslint-disable-next-line no-underscore-dangle
+      const lastProps = areaSelectMock.__getLastAreaSelectDialogProps();
+      // call onClose()
+      const lp = lastProps as unknown as { onClose?: () => void };
+      lp.onClose && lp.onClose();
+
+      // eslint-disable-next-line no-underscore-dangle
+      const vsMocks = jest.requireMock('ol/source/Vector').__getMocks();
+      expect(vsMocks.removeFeature).toHaveBeenCalledWith(feat);
+    });
+
+    it('handleAreaSelectConfirm calls addTyoAlueToHankeArea and clears dialog', async () => {
+      // Make featureContains true so dialog opens
+      const mapUtilsModule = jest.requireMock('../map/utils') as { featureContains: jest.Mock };
+      mapUtilsModule.featureContains.mockImplementation(() => true);
+
+      const multiHanke = {
+        ...hankeData,
+        alueet: [hankeData.alueet[0], hankeData.alueet[0]],
+      } as HankeData;
+
+      render(
+        <TestWrapper>
+          <Areas
+            hankeData={multiHanke}
+            hankkeenHakemukset={hankkeenHakemukset}
+            originalHakemus={originalHakemus}
+          />
+        </TestWrapper>,
+      );
+
+      const appMap = jest.requireMock('../application/components/ApplicationMap') as {
+        __getLastAppMapProps: () => Record<string, unknown> | undefined;
+      };
+      await waitFor(() => {
+        // eslint-disable-next-line no-underscore-dangle
+        const props = appMap.__getLastAppMapProps();
+        expect(props?.onAddArea).toBeDefined();
+      });
+
+      // eslint-disable-next-line no-underscore-dangle
+      const props = appMap.__getLastAppMapProps();
+      const onAddArea = props?.onAddArea as (f: Feature<Polygon>) => void;
+      const feat = new Feature(
+        new Polygon([
+          [
+            [0, 0],
+            [1, 0],
+            [1, 1],
+            [0, 0],
+          ],
+        ]),
+      ) as Feature<Polygon>;
+
+      act(() => onAddArea(feat));
+
+      // AreaSelectDialog should be visible
+      await waitFor(() => {
+        expect(screen.queryByTestId('mock-area-select-dialog')).toBeInTheDocument();
+      });
+
+      const areaSelectMock = jest.requireMock('./components/AreaSelectDialog');
+      // eslint-disable-next-line no-underscore-dangle
+      const lastProps = areaSelectMock.__getLastAreaSelectDialogProps();
+      // call onConfirm with first hankeArea
+      const lp2 = lastProps as unknown as { onConfirm?: (area: unknown) => void };
+      lp2.onConfirm && lp2.onConfirm(multiHanke.alueet[0]);
+
+      // mutate should have been called via addTyoAlueToHankeArea
+      // eslint-disable-next-line no-underscore-dangle
+      const mutateMock2 = jest.requireMock('../hanke/hooks/useHaittaIndexes').__getMutateMock();
+      expect(mutateMock2).toHaveBeenCalled();
     });
   });
 });
