@@ -161,6 +161,17 @@ export function hydrateKaivuAreasGeometryAfterHydrate(
   const { pathPrefix = 'applicationData.areas', snapshotKey = 'areas' } = options;
   hydrateArrayGeometry({ raw, formContext, pathPrefix, snapshotKey }, (entry, idx, currentItem) => {
     const en = entry as Record<string, unknown>;
+    // Ensure nuisance control plan object exists so validation & UI fields persist
+    const hasPlan = (currentItem as Record<string, unknown>).haittojenhallintasuunnitelma;
+    if (!hasPlan) {
+      formContext.setValue(
+        `${pathPrefix}.${idx}.haittojenhallintasuunnitelma`,
+        {},
+        {
+          shouldDirty: false,
+        },
+      );
+    }
     if (Array.isArray(en?.tyoalueet)) {
       const tyoalueSerials = en.tyoalueet as Array<SerializedGeometry | null>;
       tyoalueSerials.forEach((ts, j) => {
@@ -220,6 +231,30 @@ export function hydrateHankeAlueetGeometryAfterHydrate(
       (currentItem.feature as Feature<Geometry>) ?? new Feature<Geometry>();
     existing.setGeometry(geom);
     formContext.setValue(`${pathPrefix}.${idx}.feature`, existing, { shouldDirty: false });
+    // Reconstruct minimal geometriat.featureCollection if missing so consumers relying on server shape still work
+    const currentGeometriat = (currentItem as unknown as { geometriat?: Record<string, unknown> })
+      .geometriat;
+    if (!currentGeometriat || !currentGeometriat.featureCollection) {
+      const fc = serializeFeatureGeometry(existing) as SerializedGeometry | null; // single geometry
+      const hankeGeoJSON = fc
+        ? {
+            type: 'FeatureCollection',
+            features: [
+              {
+                type: 'Feature',
+                geometry: fc,
+                properties: {},
+              },
+            ],
+          }
+        : { type: 'FeatureCollection', features: [] };
+      // Avoid marking dirty – this mirrors server-provided structure.
+      formContext.setValue(
+        `${pathPrefix}.${idx}.geometriat`,
+        { featureCollection: hankeGeoJSON },
+        { shouldDirty: false },
+      );
+    }
   });
 }
 

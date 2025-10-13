@@ -47,6 +47,7 @@ export default function useAreasPersistence<T extends object = Record<string, un
           maintenanceWork: ad.maintenanceWork,
           emergencyWork: ad.emergencyWork,
           rockExcavation: ad.rockExcavation,
+          cableReportDone: ad.cableReportDone,
           startTime: ad.startTime,
           endTime: ad.endTime,
           customerWithContacts: (() => {
