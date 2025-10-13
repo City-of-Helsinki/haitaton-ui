@@ -114,6 +114,65 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
       type: 'KAIVU',
       extraSelect(values) {
         const ad = values.applicationData;
+        // Helper to pick minimal persisted subset for a CustomerWithContacts object.
+        // We intentionally exclude any react-hook-form meta data and only keep primitive fields
+        // needed to rehydrate user edits after language change.
+        function pickCustomerWithContacts(
+          cwc: Record<string, unknown> | null | undefined,
+        ): Record<string, unknown> | null | undefined {
+          if (!cwc) return cwc;
+          const customer = cwc.customer as Record<string, unknown> | undefined;
+          const contacts = (cwc.contacts as Array<Record<string, unknown>> | undefined) ?? [];
+          return {
+            customer: customer
+              ? {
+                  type: customer.type,
+                  name: customer.name,
+                  registryKey: customer.registryKey,
+                  registryKeyHidden: customer.registryKeyHidden,
+                  email: customer.email,
+                  phone: customer.phone,
+                }
+              : undefined,
+            contacts: contacts.map((c) => ({
+              firstName: c.firstName,
+              lastName: c.lastName,
+              email: c.email,
+              phone: c.phone,
+              orderer: c.orderer,
+            })),
+          };
+        }
+
+        // Persist invoicing customer minimal subset (include postalAddress fields explicitly).
+        function pickInvoicingCustomer(
+          ic: Record<string, unknown> | null | undefined,
+        ): Record<string, unknown> | null | undefined {
+          if (!ic) return ic;
+          const postalAddress = ic.postalAddress as Record<string, unknown> | undefined;
+          return {
+            type: ic.type,
+            name: ic.name,
+            registryKey: ic.registryKey,
+            registryKeyHidden: ic.registryKeyHidden,
+            ovt: ic.ovt,
+            invoicingOperator: ic.invoicingOperator,
+            customerReference: ic.customerReference,
+            email: ic.email,
+            phone: ic.phone,
+            postalAddress: postalAddress
+              ? {
+                  streetAddress: {
+                    streetName: (postalAddress.streetAddress as Record<string, unknown>)
+                      ?.streetName,
+                  },
+                  postalCode: postalAddress.postalCode,
+                  city: postalAddress.city,
+                }
+              : { streetAddress: { streetName: null }, postalCode: null, city: null },
+          };
+        }
+
         return {
           applicationData: {
             cableReports: ad.cableReports,
@@ -121,7 +180,28 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
             requiredCompetence: ad.requiredCompetence,
             existingCableReport: (ad as unknown as { existingCableReport?: string | null })
               .existingCableReport,
-            invoicingCustomer: ad.invoicingCustomer,
+            invoicingCustomer: pickInvoicingCustomer(
+              ad.invoicingCustomer as unknown as Record<string, unknown> | null | undefined,
+            ),
+            // Further information (lisätiedot) from Attachments page
+            additionalInfo: ad.additionalInfo,
+            // Persist all contact groups (työstä vastaava already handled in base select inside useAreasPersistence,
+            // but we include others here which were previously missing causing loss of data on language change).
+            contractorWithContacts: pickCustomerWithContacts(
+              ad.contractorWithContacts as unknown as Record<string, unknown> | null | undefined,
+            ),
+            propertyDeveloperWithContacts: pickCustomerWithContacts(
+              ad.propertyDeveloperWithContacts as unknown as
+                | Record<string, unknown>
+                | null
+                | undefined,
+            ),
+            representativeWithContacts: pickCustomerWithContacts(
+              ad.representativeWithContacts as unknown as
+                | Record<string, unknown>
+                | null
+                | undefined,
+            ),
             areas: ad.areas
               ? ad.areas.map((area: unknown) => {
                   const a = area as Record<string, unknown>;
