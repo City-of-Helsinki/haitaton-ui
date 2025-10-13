@@ -188,6 +188,28 @@ export function hydrateKaivuAreasGeometryAfterHydrate(
         formContext.setValue(`${pathPrefix}.${idx}.tyoalueet.${j}.openlayersFeature`, existing, {
           shouldDirty: false,
         });
+        // If the nested tyoalue.geometry object is missing or has empty coordinates placeholder, reconstruct it
+        const existingGeometryObj = nestedTyoalue?.geometry as
+          | { type?: unknown; coordinates?: unknown; crs?: unknown }
+          | undefined;
+        const serialized = serializeFeatureGeometry(existing);
+        if (
+          serialized &&
+          (!existingGeometryObj ||
+            !existingGeometryObj.coordinates ||
+            (Array.isArray(existingGeometryObj.coordinates) &&
+              existingGeometryObj.coordinates.length === 0))
+        ) {
+          formContext.setValue(
+            `${pathPrefix}.${idx}.tyoalueet.${j}.geometry`,
+            {
+              type: serialized.type,
+              coordinates: serialized.coordinates,
+              crs: { type: 'name' }, // minimal CRS structure to satisfy validation schema
+            },
+            { shouldDirty: false },
+          );
+        }
       });
       return; // handled nested case
     }
