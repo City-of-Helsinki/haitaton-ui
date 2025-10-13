@@ -205,6 +205,9 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
             areas: ad.areas
               ? ad.areas.map((area: unknown) => {
                   const a = area as Record<string, unknown>;
+                  // We must not overwrite geometry snapshot produced by useAreasPersistence base select.
+                  // However, to satisfy validation on initial render after hydration (before afterHydrate runs),
+                  // include minimal geometry placeholders for nested tyoalueet so yup required() does not mark them missing.
                   return {
                     name: (a.name as string) ?? null,
                     hankealueId: (a.hankealueId as unknown) ?? null,
@@ -216,14 +219,28 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
                     kaistahaitta: (a.kaistahaitta as unknown) ?? null,
                     kaistahaittojenPituus: (a.kaistahaittojenPituus as unknown) ?? null,
                     lisatiedot: (a.lisatiedot as string) ?? null,
-                    // Persist nuisance control plan fields so Haittojenhallinta page retains values across language change
                     haittojenhallintasuunnitelma:
                       (a.haittojenhallintasuunnitelma as Record<string, unknown> | undefined) ?? {},
                     tyoalueet: Array.isArray(a.tyoalueet)
-                      ? (a.tyoalueet as Array<Record<string, unknown>>).map((ta) => ({
-                          area: (ta.area as unknown) ?? null,
-                          tormaystarkasteluTulos: (ta.tormaystarkasteluTulos as unknown) ?? null,
-                        }))
+                      ? (a.tyoalueet as Array<Record<string, unknown>>).map((ta) => {
+                          const geom = ta.geometry as Record<string, unknown> | undefined;
+                          return {
+                            area: (ta.area as unknown) ?? null,
+                            tormaystarkasteluTulos: (ta.tormaystarkasteluTulos as unknown) ?? null,
+                            // Include minimal geometry shape if present (type + coordinates + crs.type) so yup required passes.
+                            geometry: geom
+                              ? {
+                                  type: geom.type,
+                                  crs: geom.crs
+                                    ? { type: (geom.crs as Record<string, unknown>)?.type }
+                                    : { type: 'name' },
+                                  coordinates: Array.isArray(geom.coordinates)
+                                    ? geom.coordinates
+                                    : [],
+                                }
+                              : undefined,
+                          };
+                        })
                       : [],
                   };
                 })
