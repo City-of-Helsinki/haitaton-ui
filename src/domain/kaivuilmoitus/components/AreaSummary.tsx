@@ -9,13 +9,50 @@ import {
 import { KaivuilmoitusFormValues } from '../types';
 import { formatSurfaceArea, getTotalSurfaceArea } from '../../map/utils';
 import { formatToFinnishDate } from '../../../common/utils/date';
-import { getAreaGeometry } from '../../johtoselvitys/utils';
+// IMPORTANT: The previous implementation imported getAreaGeometry from johtoselvitys utils,
+// which expects a JohtoselvitysArea shape (feature + geometry). Kaivuilmoitus uses Tyoalue objects
+// with either an openlayersFeature or an ApplicationGeometry directly under geometry. When areas
+// were persisted/hydrated without an openlayersFeature (e.g. language change snapshot) the foreign
+// helper attempted to read geometry.coordinates from undefined and crashed. We provide a local
+// safe accessor that tolerates missing geometry and returns a zero-area Polygon so summary page
+// never throws.
+import Polygon from 'ol/geom/Polygon';
+import Feature from 'ol/Feature';
+import { ApplicationGeometry } from '../../application/types/application';
 import { getAreaDefaultName } from '../../application/utils';
 import { KaivuilmoitusAlue } from '../../application/types/application';
 
+function getTyoalueGeometry(tyoalue: {
+  geometry?: ApplicationGeometry;
+  openlayersFeature?: Feature | unknown;
+}): Geometry {
+  try {
+    // Prefer hydrated OpenLayers feature geometry if present
+    const feature = (tyoalue as { openlayersFeature?: Feature }).openlayersFeature;
+    if (feature instanceof Feature) {
+      const g = feature.getGeometry();
+      if (g) return g;
+    }
+    const appGeom = tyoalue.geometry as ApplicationGeometry | undefined;
+    if (appGeom?.coordinates) {
+      return new Polygon(appGeom.coordinates);
+    }
+  } catch {
+    // fall through to empty polygon
+  }
+  // Return a minimal empty polygon (single point) so downstream formatters don't crash.
+  return new Polygon([[[0, 0]]]);
+}
+
 function AreaDetail({ area }: Readonly<{ area: KaivuilmoitusAlue }>) {
   const { t } = useTranslation();
-  const totalSurfaceArea = getTotalSurfaceArea(area.tyoalueet.map((alue) => getAreaGeometry(alue)));
+  const totalSurfaceArea = getTotalSurfaceArea(
+    area.tyoalueet.map((alue) =>
+      getTyoalueGeometry(
+        alue as unknown as { geometry?: ApplicationGeometry; openlayersFeature?: Feature },
+      ),
+    ),
+  );
 
   return (
     <Box marginBottom="var(--spacing-m)">
@@ -26,7 +63,9 @@ function AreaDetail({ area }: Readonly<{ area: KaivuilmoitusAlue }>) {
       </Box>
       <Box as="ul" marginBottom="var(--spacing-m)">
         {area.tyoalueet.map((tyoalue, index) => {
-          const geom = getAreaGeometry(tyoalue);
+          const geom = getTyoalueGeometry(
+            tyoalue as unknown as { geometry?: ApplicationGeometry; openlayersFeature?: Feature },
+          );
           return (
             <Box as="li" key={index} listStyleType="none">
               {getAreaDefaultName(t, index, area.tyoalueet.length)} ({formatSurfaceArea(geom)})
@@ -91,7 +130,11 @@ const AreaSummary: React.FC<Props> = ({ formData }) => {
   const safeAreas = Array.isArray(areas) ? areas : [];
   const geometries: Geometry[] = safeAreas
     .flatMap((area) => (Array.isArray(area?.tyoalueet) ? area.tyoalueet : []))
-    .map((alue) => getAreaGeometry(alue));
+    .map((alue) =>
+      getTyoalueGeometry(
+        alue as unknown as { geometry?: ApplicationGeometry; openlayersFeature?: Feature },
+      ),
+    );
   const totalSurfaceArea = getTotalSurfaceArea(geometries);
 
   return (
