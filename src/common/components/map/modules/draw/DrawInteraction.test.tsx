@@ -364,6 +364,81 @@ describe('DrawInteraction startDraw events', () => {
     spyIsSelfIntersecting.mockRestore();
   });
 
+  test('finishCondition blocks completion when closing segment introduces intersection', async () => {
+    // Arrange: first incremental validation returns false (no intersection); closing validation returns true
+    const spyAreLines = jest
+      .spyOn(utils, 'areLinesInPolygonIntersecting')
+      .mockImplementationOnce(() => false)
+      .mockImplementationOnce(() => true);
+    const { actions } = renderWithProviders();
+    await waitFor(() => expect(__getLastDrawInstance()).toBeDefined());
+    const draw: any = __getLastDrawInstance();
+    const options = draw.__getOptions();
+    expect(options.finishCondition).toBeDefined();
+
+    // Geometry with 4 committed points where closing segment self-intersects hypothetically
+    // Simulate in-progress drawing structure: [p0, p1, p2, p3, cursor, p0]
+    const fakePolygon = new Polygon([
+      [
+        [0, 0], // p0
+        [10, 0], // p1
+        [10, 10], // p2
+        [5, -5], // p3 (problematic)
+        [5, -5], // cursor mock (same as last fixed point for test simplicity)
+        [0, 0], // closing p0
+      ],
+    ]);
+    const feature = new Feature(fakePolygon);
+    feature.on = jest.fn();
+    feature.getGeometry = jest.fn(() => fakePolygon);
+    draw.emit('drawstart', { feature });
+    const changeHandler = (feature as any).on.mock.calls.find((c: any[]) => c[0] === 'change')[1];
+    changeHandler({ target: feature });
+
+    // Act: finishCondition should now block
+    const canFinish = options.finishCondition({} as any);
+    expect(spyAreLines).toHaveBeenCalledTimes(2);
+    expect(canFinish).toBe(false);
+    // Selected draw tool should remain active (not set to null yet)
+    expect(actions.setSelectedDrawToolType).not.toHaveBeenCalledWith(null);
+    spyAreLines.mockRestore();
+  });
+
+  test('finishCondition blocks completion when geometry is already closed and self-intersecting (no cursor point)', async () => {
+    // First call (incremental) -> false, second call (closed ring) -> true
+    const spyAreLines = jest
+      .spyOn(utils, 'areLinesInPolygonIntersecting')
+      .mockImplementationOnce(() => false)
+      .mockImplementationOnce(() => true);
+    renderWithProviders();
+    await waitFor(() => expect(__getLastDrawInstance()).toBeDefined());
+    const draw: any = __getLastDrawInstance();
+    const options = draw.__getOptions();
+    expect(options.finishCondition).toBeDefined();
+
+    // Geometry already closed: [p0,p1,p2,p3,p0]
+    const fakePolygon = new Polygon([
+      [
+        [0, 0],
+        [10, 0],
+        [10, 10],
+        [5, -5], // problematic
+        [0, 0], // closure
+      ],
+    ]);
+    const feature = new Feature(fakePolygon);
+    feature.on = jest.fn();
+    feature.getGeometry = jest.fn(() => fakePolygon);
+    draw.emit('drawstart', { feature });
+    const changeHandler = (feature as any).on.mock.calls.find((c: any[]) => c[0] === 'change')[1];
+    changeHandler({ target: feature });
+
+    const canFinish = options.finishCondition({} as any);
+    expect(spyAreLines).toHaveBeenCalledTimes(2);
+    expect(canFinish).toBe(false);
+    spyAreLines.mockRestore();
+  });
+
   test('modifyend (self-intersecting) reverts coordinates to original', async () => {
     renderWithProviders();
 

@@ -117,9 +117,20 @@ export default function DrawInteraction({
               return false;
             }
             const currentCoordinates = modifiedPolygon.getCoordinates();
-            // During drawing OL structure: [p0, p1, ..., pn, cursor, p0]. Exclude cursor & closing p0 for incremental ring.
-            const committedCount = currentCoordinates[0].length - 2;
-            const userDrawnRing = [...currentCoordinates[0].slice(0, committedCount)];
+            // During active drawing OL structure is typically: [p0, p1, ..., pn, cursor, p0].
+            // Just before finishing (depending on internal OL timing) the geometry provided to finishCondition
+            // may already have dropped the live cursor, yielding: [p0, p1, ..., pn, p0].
+            // We need to distinguish these two shapes to build the committed user ring reliably.
+            const ring = currentCoordinates[0];
+            const first = ring[0];
+            const last = ring[ring.length - 1];
+            const isAlreadyClosed = first[0] === last[0] && first[1] === last[1];
+            // If structure has cursor, length >= 4 and second to last is cursor; otherwise it's already closed.
+            // Heuristic: if closed and there are at least 4 points, treat (ring.length - 1) as committed count.
+            // Else subtract 2 (cursor + closing p0).
+            const committedCount = isAlreadyClosed ? ring.length - 1 : ring.length - 2;
+            if (committedCount < 3) return false; // insufficient points for polygon
+            const userDrawnRing = [...ring.slice(0, committedCount)];
             // Intersection check on the committed edges only (implicit closing segment evaluated separately on drawend or by turf if needed)
             if (areLinesInPolygonIntersecting([userDrawnRing])) {
               // Remove the last inserted point so user can continue adjusting
