@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
 import {
@@ -112,13 +112,21 @@ export default function Areas({ hankeData, hankkeenHakemukset, originalHakemus }
     name: 'applicationData.areas',
   });
   // Watch application areas; fall back to empty array defensively (tests may construct partial state)
-  const wathcApplicationAreas = watch('applicationData.areas') ?? [];
+  // Memoize watched areas to provide stable reference across renders unless array content changes
+  // Memoize watched application areas to avoid triggering effects every render.
+  const rawWatchApplicationAreas = watch('applicationData.areas') as
+    | KaivuilmoitusAlue[]
+    | undefined;
+  const watchApplicationAreas = React.useMemo<KaivuilmoitusAlue[]>(
+    () => (Array.isArray(rawWatchApplicationAreas) ? rawWatchApplicationAreas : []),
+    [rawWatchApplicationAreas],
+  );
   const haittaIndexesMutation = useHaittaIndexes();
 
   const totalSurfaceArea = getTotalSurfaceArea(
-    (Array.isArray(wathcApplicationAreas) ? wathcApplicationAreas : [])
+    watchApplicationAreas
       .flatMap((area) => (Array.isArray(area?.tyoalueet) ? area.tyoalueet : []))
-      .map((alue) => alue.openlayersFeature?.getGeometry())
+      .map((tyoalue) => tyoalue.openlayersFeature?.getGeometry())
       .filter((g): g is Geometry => Boolean(g)),
   );
 
@@ -166,6 +174,74 @@ export default function Areas({ hankeData, hankkeenHakemukset, originalHakemus }
     });
     return new VectorSource({ features });
   });
+
+  // Reconcile drawSource features after hydration/persistence (language change) or area modifications.
+  // Ensures features added by hydrateKaivuAreasGeometryAfterHydrate appear on map and removed ones are cleared.
+  // Rebuild map features when nested geometry changes even if field array structure (applicationAreas) stays the same.
+  // Using the watched areas array captures deep updates (openlayersFeature set via hydration) that useFieldArray will not emit.
+  // Track previous geometry signatures to detect newly added or removed geometries reliably.
+  const previousGeometrySignatureRef = React.useRef<string>('');
+  const hydrationComplete = (getValues() as unknown as { languagePersistenceHydrated?: boolean })
+    .languagePersistenceHydrated;
+  useEffect(() => {
+    if (!Array.isArray(watchApplicationAreas)) return;
+    // Delay initial reconciliation until after persistence hydration (prevents double-building during mount)
+    if (!hydrationComplete) return;
+    const rebuilt = watchApplicationAreas.flatMap((area) => {
+      return (Array.isArray(area?.tyoalueet) ? area.tyoalueet : []).flatMap((tyoalue, idx) => {
+        const feature = tyoalue.openlayersFeature;
+        if (!feature || !feature.getGeometry()) return [];
+        const areaName = getAreaDefaultName(t, idx, (area.tyoalueet || []).length);
+        feature.setProperties(
+          {
+            areaName,
+            hankeName: hankeData.nimi,
+            relatedHankeAreaName: area.name,
+            relatedHankeAreaId: area.hankealueId,
+            liikennehaittaindeksi: tyoalue.tormaystarkasteluTulos
+              ? tyoalue.tormaystarkasteluTulos.liikennehaittaindeksi.indeksi
+              : null,
+            overlayProps: new OverlayProps({
+              heading: areaName,
+              startDate: getValues('applicationData.startTime'),
+              endDate: getValues('applicationData.endTime'),
+              backgroundColor: 'var(--color-suomenlinna-light)',
+            }),
+          },
+          true,
+        );
+        return feature;
+      });
+    });
+    const existing = drawSource.getFeatures();
+
+    // Build a signature string of feature ids + geometry extents to detect deep changes
+    const signatureParts: string[] = [];
+    rebuilt.forEach((f) => {
+      const geom = f.getGeometry();
+      if (geom) {
+        const extent = geom.getExtent();
+        signatureParts.push(
+          `${f.get('relatedHankeAreaId')}:${f.get('areaName')}:${extent.join(',')}`,
+        );
+      }
+    });
+    const newSignature = signatureParts.sort((a, b) => a.localeCompare(b)).join('|');
+    const prevSignature = previousGeometrySignatureRef.current;
+    const signatureChanged = newSignature !== prevSignature;
+
+    const lengthChanged = existing.length !== rebuilt.length;
+    const membershipChanged =
+      existing.some((f) => !rebuilt.includes(f)) || rebuilt.some((f) => !existing.includes(f));
+
+    if (signatureChanged || lengthChanged || membershipChanged) {
+      previousGeometrySignatureRef.current = newSignature;
+      drawSource.clear(true);
+      if (rebuilt.length > 0) {
+        drawSource.addFeatures(rebuilt);
+      }
+    }
+  }, [watchApplicationAreas, hydrationComplete, t, hankeData.nimi, getValues, drawSource]);
 
   const selectedJohtoselvitysTunnukset = getValues('applicationData.cableReports');
   const selectedJohtoselvitykset = hankkeenHakemukset.filter((hakemus) =>
@@ -325,7 +401,7 @@ export default function Areas({ hankeData, hankkeenHakemukset, originalHakemus }
   }
 
   function handleChangeArea(feature: Feature<Geometry>) {
-    const changedApplicationArea = wathcApplicationAreas.find((alue) => {
+    const changedApplicationArea = watchApplicationAreas.find((alue) => {
       const changedTyoalue = (alue?.tyoalueet || []).find(
         (tyoalue) =>
           tyoalue.openlayersFeature?.get('relatedHankeAreaId') ===
@@ -354,7 +430,7 @@ export default function Areas({ hankeData, hankkeenHakemukset, originalHakemus }
             changedTyoalue.tormaystarkasteluTulos = data;
             feature.set('liikennehaittaindeksi', data.liikennehaittaindeksi.indeksi);
             refreshHaittaIndexesChanged(changedApplicationArea);
-            const existingAreaIndex = wathcApplicationAreas.indexOf(changedApplicationArea);
+            const existingAreaIndex = watchApplicationAreas.indexOf(changedApplicationArea);
             setSelectedTabIndex(existingAreaIndex);
           },
         });
@@ -686,8 +762,8 @@ export default function Areas({ hankeData, hankkeenHakemukset, originalHakemus }
                   <HaittaIndexes
                     heading={`${t('kaivuilmoitusForm:alueet:liikennehaittaindeksienYhteenveto')} (0-5)`}
                     haittaIndexData={
-                      wathcApplicationAreas &&
-                      calculateLiikennehaittaindeksienYhteenveto(wathcApplicationAreas[index])
+                      watchApplicationAreas &&
+                      calculateLiikennehaittaindeksienYhteenveto(watchApplicationAreas[index])
                     }
                     autoHaitanKestoHeading={t(
                       'kaivuilmoitusForm:haittojenHallinta:carTrafficNuisanceType:haitanKesto',

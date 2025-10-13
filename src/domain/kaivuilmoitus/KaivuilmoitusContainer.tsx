@@ -136,6 +136,9 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
                     kaistahaitta: (a.kaistahaitta as unknown) ?? null,
                     kaistahaittojenPituus: (a.kaistahaittojenPituus as unknown) ?? null,
                     lisatiedot: (a.lisatiedot as string) ?? null,
+                    // Persist nuisance control plan fields so Haittojenhallinta page retains values across language change
+                    haittojenhallintasuunnitelma:
+                      (a.haittojenhallintasuunnitelma as Record<string, unknown> | undefined) ?? {},
                     tyoalueet: Array.isArray(a.tyoalueet)
                       ? (a.tyoalueet as Array<Record<string, unknown>>).map((ta) => ({
                           area: (ta.area as unknown) ?? null,
@@ -152,6 +155,11 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
   );
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (formContext as any).persistence = persistence;
+  // Test-only escape hatch to manipulate form state in persistence tests without drilling
+  if (process.env.NODE_ENV === 'test') {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (window as any).kaivuFormContext = formContext;
+  }
   const {
     getValues,
     setValue,

@@ -179,6 +179,16 @@ export default function useFormLanguagePersistence<T extends object>(
       // ignore parse errors
     } finally {
       hydratedRef.current = true;
+      // Expose hydrated state for components that need to defer side-effects until after persistence hydration
+      try {
+        Object.defineProperty(form, 'languagePersistenceHydrated', {
+          value: true,
+          enumerable: false,
+          configurable: true,
+        });
+      } catch {
+        // ignore
+      }
       try {
         if (afterHydrate) {
           const raw = sessionStorage.getItem(storageKey);

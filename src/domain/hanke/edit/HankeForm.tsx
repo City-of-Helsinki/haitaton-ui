@@ -127,6 +127,10 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
             meluHaitta: a.meluHaitta,
             polyHaitta: a.polyHaitta,
             tarinaHaitta: a.tarinaHaitta,
+            // Persist nuisance control plan free-text fields so edits survive language change
+            haittojenhallintasuunnitelma: a.haittojenhallintasuunnitelma
+              ? { ...a.haittojenhallintasuunnitelma }
+              : undefined,
           })),
           omistajat,
           rakennuttajat,
