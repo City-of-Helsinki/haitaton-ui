@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
 import {
@@ -166,6 +166,50 @@ export default function Areas({ hankeData, hankkeenHakemukset, originalHakemus }
     });
     return new VectorSource({ features });
   });
+
+  // Reconcile drawSource features after hydration/persistence (language change) or area modifications.
+  // Ensures features added by hydrateKaivuAreasGeometryAfterHydrate appear on map and removed ones are cleared.
+  useEffect(() => {
+    if (!Array.isArray(applicationAreas)) return;
+    const rebuilt = applicationAreas.flatMap((area) => {
+      return (Array.isArray(area?.tyoalueet) ? area.tyoalueet : []).flatMap((tyoalue, idx) => {
+        const feature = tyoalue.openlayersFeature;
+        if (!feature || !feature.getGeometry()) return [];
+        const areaName = getAreaDefaultName(t, idx, area.tyoalueet.length);
+        feature.setProperties(
+          {
+            areaName,
+            hankeName: hankeData.nimi,
+            relatedHankeAreaName: area.name,
+            relatedHankeAreaId: area.hankealueId,
+            liikennehaittaindeksi: tyoalue.tormaystarkasteluTulos
+              ? tyoalue.tormaystarkasteluTulos.liikennehaittaindeksi.indeksi
+              : null,
+            overlayProps: new OverlayProps({
+              heading: areaName,
+              startDate: getValues('applicationData.startTime'),
+              endDate: getValues('applicationData.endTime'),
+              backgroundColor: 'var(--color-suomenlinna-light)',
+            }),
+          },
+          true,
+        );
+        return feature;
+      });
+    });
+    const existing = drawSource.getFeatures();
+    // Replace if counts differ or any feature reference not present (simple shallow diff)
+    if (
+      existing.length !== rebuilt.length ||
+      existing.some((f) => !rebuilt.includes(f)) ||
+      rebuilt.some((f) => !existing.includes(f))
+    ) {
+      drawSource.clear(true);
+      if (rebuilt.length > 0) {
+        drawSource.addFeatures(rebuilt);
+      }
+    }
+  }, [applicationAreas, t, hankeData.nimi, getValues, drawSource]);
 
   const selectedJohtoselvitysTunnukset = getValues('applicationData.cableReports');
   const selectedJohtoselvitykset = hankkeenHakemukset.filter((hakemus) =>

@@ -56,13 +56,22 @@ export default function BasicInfo({
   ]);
 
   useEffect(() => {
-    if (!cableReportDone) {
-      setValue('applicationData.rockExcavation', false, { shouldDirty: true });
-      setValue('applicationData.cableReports', [], { shouldDirty: true });
-    } else {
-      setValue('applicationData.rockExcavation', null, { shouldDirty: true });
+    // Initialize defaults only if not already set; avoid marking dirty so hydration can restore persisted values.
+    const currentRockExcavation = watch('applicationData.rockExcavation');
+    const currentCableReports = watch('applicationData.cableReports');
+    if (cableReportDone === false) {
+      if (currentRockExcavation === undefined) {
+        setValue('applicationData.rockExcavation', false, { shouldDirty: false });
+      }
+      if (currentCableReports === undefined) {
+        setValue('applicationData.cableReports', [], { shouldDirty: false });
+      }
+    } else if (cableReportDone === true) {
+      if (currentRockExcavation === undefined) {
+        setValue('applicationData.rockExcavation', null, { shouldDirty: false });
+      }
     }
-  }, [cableReportDone, setValue]);
+  }, [cableReportDone, setValue, watch]);
 
   // Trigger validation for constructionWork field
   function validateConstructionWork() {

@@ -161,6 +161,17 @@ export function hydrateKaivuAreasGeometryAfterHydrate(
   const { pathPrefix = 'applicationData.areas', snapshotKey = 'areas' } = options;
   hydrateArrayGeometry({ raw, formContext, pathPrefix, snapshotKey }, (entry, idx, currentItem) => {
     const en = entry as Record<string, unknown>;
+    // Ensure nuisance control plan object exists so validation & UI fields persist
+    const hasPlan = (currentItem as Record<string, unknown>).haittojenhallintasuunnitelma;
+    if (!hasPlan) {
+      formContext.setValue(
+        `${pathPrefix}.${idx}.haittojenhallintasuunnitelma`,
+        {},
+        {
+          shouldDirty: false,
+        },
+      );
+    }
     if (Array.isArray(en?.tyoalueet)) {
       const tyoalueSerials = en.tyoalueet as Array<SerializedGeometry | null>;
       tyoalueSerials.forEach((ts, j) => {
