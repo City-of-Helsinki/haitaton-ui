@@ -72,7 +72,7 @@ export default function HaittojenhallintaMap({
           const geom = f.getGeometry();
           return geom ? geom.getExtent().join(',') : 'no-geom';
         })
-        .sort()
+        .sort((a, b) => a.localeCompare(b))
         .join('|');
     const newSig = extentSignature(applicationFeatures);
     const oldSig = extentSignature(existing);

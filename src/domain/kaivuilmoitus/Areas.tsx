@@ -226,7 +226,7 @@ export default function Areas({ hankeData, hankkeenHakemukset, originalHakemus }
         );
       }
     });
-    const newSignature = signatureParts.sort().join('|');
+    const newSignature = signatureParts.sort((a, b) => a.localeCompare(b)).join('|');
     const prevSignature = previousGeometrySignatureRef.current;
     const signatureChanged = newSignature !== prevSignature;
 
