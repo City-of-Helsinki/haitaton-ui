@@ -131,6 +131,7 @@ it('persists all contact person groups & invoicing customer across language chan
       },
       contacts: [
         {
+          hankekayttajaId: 'contact-eta-beta',
           firstName: 'Eta',
           lastName: 'Beta',
           email: 'eta.beta@example.com',
@@ -152,6 +153,7 @@ it('persists all contact person groups & invoicing customer across language chan
       },
       contacts: [
         {
+          hankekayttajaId: 'contact-con-tractor',
           firstName: 'Con',
           lastName: 'Tractor',
           email: 'contractor.person@example.com',
@@ -173,6 +175,7 @@ it('persists all contact person groups & invoicing customer across language chan
       },
       contacts: [
         {
+          hankekayttajaId: 'contact-a-rep',
           firstName: 'A',
           lastName: 'Rep',
           email: 'a.rep@example.com',
@@ -194,6 +197,7 @@ it('persists all contact person groups & invoicing customer across language chan
       },
       contacts: [
         {
+          hankekayttajaId: 'contact-pro-dev',
           firstName: 'Pro',
           lastName: 'Dev',
           email: 'prop.dev@example.com',
@@ -253,6 +257,22 @@ it('persists all contact person groups & invoicing customer across language chan
     ),
   ).toBe('Laskukatu 5');
   expect(newFormCtx.getValues('applicationData.invoicingCustomer.ovt')).toBe('OVT123');
+  // Verify first contact person of each group persisted (name & email)
+  expect(newFormCtx.getValues('applicationData.customerWithContacts.contacts.0.firstName')).toBe(
+    'Eta',
+  );
+  expect(newFormCtx.getValues('applicationData.customerWithContacts.contacts.0.email')).toBe(
+    'eta.beta@example.com',
+  );
+  expect(newFormCtx.getValues('applicationData.contractorWithContacts.contacts.0.firstName')).toBe(
+    'Con',
+  );
+  expect(
+    newFormCtx.getValues('applicationData.representativeWithContacts.contacts.0.firstName'),
+  ).toBe('A');
+  expect(
+    newFormCtx.getValues('applicationData.propertyDeveloperWithContacts.contacts.0.firstName'),
+  ).toBe('Pro');
 });
 
 describe('invoicing customer registryKey language change persistence', () => {

@@ -135,6 +135,7 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
                 }
               : undefined,
             contacts: contacts.map((c) => ({
+              hankekayttajaId: (c as { hankekayttajaId?: string }).hankekayttajaId,
               firstName: c.firstName,
               lastName: c.lastName,
               email: c.email,
