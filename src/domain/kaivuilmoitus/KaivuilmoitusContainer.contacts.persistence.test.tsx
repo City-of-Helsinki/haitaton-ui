@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, act } from '@testing-library/react';
+import { render, act, waitFor, fireEvent, screen } from '@testing-library/react';
 import KaivuilmoitusContainer from './KaivuilmoitusContainer';
 import { HankeData } from '../types/hanke';
 import { Application, KaivuilmoitusData, ContactType } from '../application/types/application';
@@ -253,4 +253,165 @@ it('persists all contact person groups & invoicing customer across language chan
     ),
   ).toBe('Laskukatu 5');
   expect(newFormCtx.getValues('applicationData.invoicingCustomer.ovt')).toBe('OVT123');
+});
+
+describe('invoicing customer registryKey language change persistence', () => {
+  function mountEmpty() {
+    const qc = new QueryClient();
+    return render(
+      <MemoryRouter>
+        <GlobalNotificationProvider>
+          <QueryClientProvider client={qc}>
+            <KaivuilmoitusContainer hankeData={hankeData} application={application} />
+          </QueryClientProvider>
+        </GlobalNotificationProvider>
+      </MemoryRouter>,
+    );
+  }
+
+  test('keeps company Business ID after language change', () => {
+    const utils = mountEmpty();
+    const formCtx = (
+      window as unknown as {
+        kaivuFormContext: import('react-hook-form').UseFormReturn<
+          import('./types').KaivuilmoitusFormValues
+        >;
+      }
+    ).kaivuFormContext;
+    act(() => {
+      formCtx.setValue('applicationData.invoicingCustomer', {
+        type: ContactType.COMPANY,
+        name: 'Company Oy',
+        registryKey: '1234567-8',
+        registryKeyHidden: false,
+        ovt: null,
+        invoicingOperator: null,
+        customerReference: null,
+        postalAddress: {
+          streetAddress: { streetName: 'Testikatu 1' },
+          postalCode: '00100',
+          city: 'Helsinki',
+        },
+        email: 'comp@example.com',
+        phone: '0401231234',
+      });
+    });
+    act(() => {
+      window.dispatchEvent(new CustomEvent('haitaton:languageChanging'));
+    });
+    utils.unmount();
+    mountEmpty();
+    const newCtx = (
+      window as unknown as {
+        kaivuFormContext: import('react-hook-form').UseFormReturn<
+          import('./types').KaivuilmoitusFormValues
+        >;
+      }
+    ).kaivuFormContext;
+    expect(newCtx.getValues('applicationData.invoicingCustomer.registryKey')).toBe('1234567-8');
+  });
+
+  test('keeps person hetu after language change', () => {
+    const utils = mountEmpty();
+    const formCtx = (
+      window as unknown as {
+        kaivuFormContext: import('react-hook-form').UseFormReturn<
+          import('./types').KaivuilmoitusFormValues
+        >;
+      }
+    ).kaivuFormContext;
+    act(() => {
+      formCtx.setValue('applicationData.invoicingCustomer', {
+        type: ContactType.PERSON,
+        name: 'Henkilö Henkinen',
+        registryKey: '010101-123A',
+        registryKeyHidden: false,
+        ovt: null,
+        invoicingOperator: null,
+        customerReference: null,
+        postalAddress: {
+          streetAddress: { streetName: 'Testipolku 2' },
+          postalCode: '00200',
+          city: 'Helsinki',
+        },
+        email: 'person@example.com',
+        phone: '0409876543',
+      });
+    });
+    act(() => {
+      window.dispatchEvent(new CustomEvent('haitaton:languageChanging'));
+    });
+    utils.unmount();
+    mountEmpty();
+    const newCtx = (
+      window as unknown as {
+        kaivuFormContext: import('react-hook-form').UseFormReturn<
+          import('./types').KaivuilmoitusFormValues
+        >;
+      }
+    ).kaivuFormContext;
+    expect(newCtx.getValues('applicationData.invoicingCustomer.registryKey')).toBe('010101-123A');
+  });
+
+  test('clears registryKey only when switching type PERSON -> COMPANY (semantic change) but persists across subsequent language change', async () => {
+    const utils = mountEmpty();
+    const formCtx = (
+      window as unknown as {
+        kaivuFormContext: import('react-hook-form').UseFormReturn<
+          import('./types').KaivuilmoitusFormValues
+        >;
+      }
+    ).kaivuFormContext;
+    act(() => {
+      formCtx.setValue('applicationData.invoicingCustomer', {
+        type: ContactType.PERSON,
+        name: 'Henkilö Henkinen',
+        registryKey: '010101-123A',
+        registryKeyHidden: false,
+        ovt: null,
+        invoicingOperator: null,
+        customerReference: null,
+        postalAddress: {
+          streetAddress: { streetName: 'Testipolku 2' },
+          postalCode: '00200',
+          city: 'Helsinki',
+        },
+        email: 'person@example.com',
+        phone: '0409876543',
+      });
+    });
+    // Switch type to COMPANY -> should clear registryKey according to new logic when value existed
+    // Navigate to Contacts step so fields are registered and type change logic runs
+    const contactsStepButton = screen.getByRole('button', { name: /form:headers:yhteystiedot/i });
+    act(() => {
+      fireEvent.click(contactsStepButton);
+    });
+    act(() => {
+      formCtx.setValue('applicationData.invoicingCustomer.type', ContactType.COMPANY);
+    });
+    // Wait for effect cycle to process resetField
+    await act(async () => {
+      await new Promise((r) => setTimeout(r, 0));
+    });
+    await waitFor(() => {
+      expect(formCtx.getValues('applicationData.invoicingCustomer.registryKey')).toBeNull();
+    });
+    // Enter new business id
+    act(() => {
+      formCtx.setValue('applicationData.invoicingCustomer.registryKey', '2222222-2');
+    });
+    act(() => {
+      window.dispatchEvent(new CustomEvent('haitaton:languageChanging'));
+    });
+    utils.unmount();
+    mountEmpty();
+    const newCtx = (
+      window as unknown as {
+        kaivuFormContext: import('react-hook-form').UseFormReturn<
+          import('./types').KaivuilmoitusFormValues
+        >;
+      }
+    ).kaivuFormContext;
+    expect(newCtx.getValues('applicationData.invoicingCustomer.registryKey')).toBe('2222222-2');
+  });
 });
