@@ -12,6 +12,7 @@ import { KaivuilmoitusFormValues } from './types';
 import { TFunction } from 'i18next';
 import { HIDDEN_FIELD_VALUE } from '../application/constants';
 import Text from '../../common/components/text/Text';
+import { normalizeStringEmptyToNull } from '../../common/utils/normalize';
 
 function getInvoicingRegistryKeyLabel(
   t: TFunction<'translation', undefined>,
@@ -107,10 +108,17 @@ export default function Contacts({ hankeTunnus }: Readonly<{ hankeTunnus: string
         });
       }
     }
-
-    if (registryKey === '' || registryKey === undefined) {
-      // set the registry key to null when it is empty or undefined
-      setValue(`applicationData.invoicingCustomer.registryKey`, null, {
+    const regNorm = normalizeStringEmptyToNull(registryKey as string | null | undefined);
+    if (regNorm !== registryKey) {
+      setValue('applicationData.invoicingCustomer.registryKey', regNorm, { shouldValidate: true });
+    }
+    const ovtNorm = normalizeStringEmptyToNull(ovt as string | null | undefined);
+    if (ovtNorm !== ovt) {
+      setValue('applicationData.invoicingCustomer.ovt', ovtNorm, { shouldValidate: true });
+    }
+    const opNorm = normalizeStringEmptyToNull(invoicingOperator as string | null | undefined);
+    if (opNorm !== invoicingOperator) {
+      setValue('applicationData.invoicingCustomer.invoicingOperator', opNorm, {
         shouldValidate: true,
       });
     }
@@ -118,7 +126,7 @@ export default function Contacts({ hankeTunnus }: Readonly<{ hankeTunnus: string
     // mark the component as mounted
     isMounted.current = true;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [registryKey, setValue]);
+  }, [registryKey, ovt, invoicingOperator, setValue]);
 
   useEffect(() => {
     if (!postalAddressRequired) {

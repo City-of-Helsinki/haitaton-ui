@@ -1,4 +1,5 @@
 import { useEffect, useRef, useCallback } from 'react';
+import { unstable_batchedUpdates } from 'react-dom';
 import { UseFormReturn } from 'react-hook-form';
 import debounce from 'lodash/debounce';
 
@@ -26,6 +27,7 @@ export default function useFormLanguagePersistence<T extends object>(
     select?: (values: T) => unknown; // pick lightweight subset to persist
     debounceMs?: number;
     afterHydrate?: (rawPersisted: unknown) => void; // hook for extra side-effects (e.g. geometry rehydration)
+    testMode?: boolean; // when true, minimize async debounce + batch hydration to reduce act() warnings
   } = {},
 ) {
   const {
@@ -34,6 +36,7 @@ export default function useFormLanguagePersistence<T extends object>(
     select,
     debounceMs = 300,
     afterHydrate,
+    testMode = false,
   } = options;
   const { watch, getValues, formState } = form;
   const hydratedRef = useRef(false);
@@ -155,24 +158,27 @@ export default function useFormLanguagePersistence<T extends object>(
               setValue: (path: string, value: unknown, opts?: { shouldDirty?: boolean }) => void;
             }
           ).setValue;
-          Object.entries(persisted as Record<string, unknown>).forEach(([k, v]) => {
-            // Skip internal/meta keys prefixed with __ (reserved for auxiliary persistence like geometry)
-            if (k.startsWith('__')) return;
-
-            // For critical server-provided fields, only apply if the current form value is empty/undefined
-            // This prevents overwriting server data with stale persisted values
-            if (k === 'hankeTunnus') {
-              const currentValue = (
-                form as unknown as { getValues: (field: string) => unknown }
-              ).getValues('hankeTunnus');
-              if (currentValue && currentValue !== v) {
-                // Current form has a different hankeTunnus, don't overwrite with persisted value
-                return;
+          const entries = Object.entries(persisted as Record<string, unknown>);
+          const applyAll = () => {
+            entries.forEach(([k, v]) => {
+              if (k.startsWith('__')) return;
+              if (k === 'hankeTunnus') {
+                const currentValue = (
+                  form as unknown as { getValues: (field: string) => unknown }
+                ).getValues('hankeTunnus');
+                if (currentValue && currentValue !== v) {
+                  return;
+                }
               }
-            }
-
-            applyPersisted(setValue, dirtyFields, [k], v);
-          });
+              applyPersisted(setValue, dirtyFields, [k], v);
+            });
+          };
+          if (testMode) {
+            // Batch to single render / act frame in tests to avoid multiple overlapping act warnings
+            unstable_batchedUpdates(applyAll);
+          } else {
+            applyAll();
+          }
         }
       }
     } catch {
@@ -210,10 +216,15 @@ export default function useFormLanguagePersistence<T extends object>(
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [enabled, storageKey]);
 
-  // Persist on change (debounced)
+  // Persist on change (debounced unless testMode)
   useEffect(() => {
     if (!enabled) return;
     const subscription = watch(() => {
+      if (testMode) {
+        // immediate save to keep deterministic in tests
+        saveSnapshot();
+        return;
+      }
       if (!debounceRef.current) {
         debounceRef.current = debounce(
           () => {
@@ -227,11 +238,11 @@ export default function useFormLanguagePersistence<T extends object>(
     });
     return () => {
       subscription.unsubscribe();
-      if (debounceRef.current) {
+      if (debounceRef.current && !testMode) {
         debounceRef.current.flush();
       }
     };
-  }, [enabled, watch, saveSnapshot, debounceMs]);
+  }, [enabled, watch, saveSnapshot, debounceMs, testMode]);
 
   // Listen for custom language switching event to snapshot immediately before route change
   useEffect(() => {
