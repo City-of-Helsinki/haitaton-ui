@@ -471,8 +471,10 @@ export async function createAndFillKaivuilmoitusForm(page: Page, nimi: string) {
   await page.getByLabel('Työn kuvaus*').fill('Työn kuvaus');
   await page.getByLabel('Uuden rakenteen tai johdon').check();
   await page.getByText('Hae uusi johtoselvitys').click();
+  await page.locator('label[for="rockExcavationNo"]').click();
   await page.getByPlaceholder('SLXXXXXXX').fill('SL1111111');
   await page.getByTestId('placementContract-addButton').click();
+
   await page.getByTestId('applicationData.requiredCompetence').check();
   await nextAndCloseToast(page, 'Seuraava', 'Hakemus tallennettu');
   await page.getByLabel('Valitse päivämäärä').first().click();
