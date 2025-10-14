@@ -56,6 +56,7 @@ import HaittojenHallinta from './HaittojenHallinta';
 import FormErrorsNotification from './components/FormErrorsNotification';
 import Button from '../../common/components/button/Button';
 import useAreasPersistence from '../../common/hooks/useAreasPersistence';
+import { normalizeStringEmptyToNull } from '../../common/utils/normalize';
 
 type Props = {
   hankeData: HankeData;
@@ -128,13 +129,16 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
               ? {
                   type: customer.type,
                   name: customer.name,
-                  registryKey: customer.registryKey,
+                  registryKey: normalizeStringEmptyToNull(
+                    customer.registryKey as string | null | undefined,
+                  ),
                   registryKeyHidden: customer.registryKeyHidden,
                   email: customer.email,
                   phone: customer.phone,
                 }
               : undefined,
             contacts: contacts.map((c) => ({
+              hankekayttajaId: (c as { hankekayttajaId?: string }).hankekayttajaId,
               firstName: c.firstName,
               lastName: c.lastName,
               email: c.email,
@@ -153,10 +157,12 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
           return {
             type: ic.type,
             name: ic.name,
-            registryKey: ic.registryKey,
+            registryKey: normalizeStringEmptyToNull(ic.registryKey as string | null | undefined),
             registryKeyHidden: ic.registryKeyHidden,
-            ovt: ic.ovt,
-            invoicingOperator: ic.invoicingOperator,
+            ovt: normalizeStringEmptyToNull(ic.ovt as string | null | undefined),
+            invoicingOperator: normalizeStringEmptyToNull(
+              ic.invoicingOperator as string | null | undefined,
+            ),
             customerReference: ic.customerReference,
             email: ic.email,
             phone: ic.phone,

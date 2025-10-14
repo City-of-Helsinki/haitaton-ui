@@ -12,6 +12,7 @@ import { KaivuilmoitusFormValues } from './types';
 import { TFunction } from 'i18next';
 import { HIDDEN_FIELD_VALUE } from '../application/constants';
 import Text from '../../common/components/text/Text';
+import { normalizeStringEmptyToNull } from '../../common/utils/normalize';
 
 function getInvoicingRegistryKeyLabel(
   t: TFunction<'translation', undefined>,
@@ -55,6 +56,7 @@ export default function Contacts({ hankeTunnus }: Readonly<{ hankeTunnus: string
   const ovtRequired = !ovtDisabled && (!streetName || !postalCode || !city);
 
   const isMounted = useRef(false);
+  const previousContactType = useRef<string | null>(null);
   const [originalRegistryKeyIsHidden, setOriginalRegistryKeyIsHidden] = useState(false);
 
   useEffect(() => {
@@ -67,16 +69,30 @@ export default function Contacts({ hankeTunnus }: Readonly<{ hankeTunnus: string
 
   useEffect(() => {
     if (isMounted.current) {
-      if (selectedContactType === 'PERSON' || selectedContactType === 'OTHER') {
-        resetField('applicationData.invoicingCustomer.ovt', { defaultValue: null });
-        resetField('applicationData.invoicingCustomer.invoicingOperator', { defaultValue: null });
-      }
+      const prev = previousContactType.current;
+      const next = selectedContactType;
+      const semanticTypeChanged = prev && next && prev !== next;
 
-      // if the contact type is changed (after mount), clear the registry key
-      resetField('applicationData.invoicingCustomer.registryKey', { defaultValue: null });
-      setOriginalRegistryKeyIsHidden(false);
+      // Only clear registryKey if semantic type changed between PERSON/OTHER/company-like groups
+      if (semanticTypeChanged) {
+        // Clear auxiliary fields when switching to PERSON or OTHER (not applicable types)
+        if (next === 'PERSON' || next === 'OTHER') {
+          resetField('applicationData.invoicingCustomer.ovt', { defaultValue: null });
+          resetField('applicationData.invoicingCustomer.invoicingOperator', { defaultValue: null });
+        }
+        // Always clear registryKey on semantic type change (format requirements differ)
+        setValue('applicationData.invoicingCustomer.registryKey', null, {
+          shouldValidate: true,
+          shouldDirty: true,
+        });
+        setOriginalRegistryKeyIsHidden(false);
+      }
+      previousContactType.current = next ?? null;
+    } else {
+      // First mount: capture initial type without clearing values (language change hydration scenario)
+      previousContactType.current = selectedContactType ?? null;
     }
-  }, [selectedContactType, setValue, resetField]);
+  }, [selectedContactType, resetField, registryKey, setValue]);
 
   useEffect(() => {
     if (isMounted.current) {
@@ -92,10 +108,17 @@ export default function Contacts({ hankeTunnus }: Readonly<{ hankeTunnus: string
         });
       }
     }
-
-    if (registryKey === '' || registryKey === undefined) {
-      // set the registry key to null when it is empty or undefined
-      setValue(`applicationData.invoicingCustomer.registryKey`, null, {
+    const regNorm = normalizeStringEmptyToNull(registryKey as string | null | undefined);
+    if (regNorm !== registryKey) {
+      setValue('applicationData.invoicingCustomer.registryKey', regNorm, { shouldValidate: true });
+    }
+    const ovtNorm = normalizeStringEmptyToNull(ovt as string | null | undefined);
+    if (ovtNorm !== ovt) {
+      setValue('applicationData.invoicingCustomer.ovt', ovtNorm, { shouldValidate: true });
+    }
+    const opNorm = normalizeStringEmptyToNull(invoicingOperator as string | null | undefined);
+    if (opNorm !== invoicingOperator) {
+      setValue('applicationData.invoicingCustomer.invoicingOperator', opNorm, {
         shouldValidate: true,
       });
     }
@@ -103,7 +126,7 @@ export default function Contacts({ hankeTunnus }: Readonly<{ hankeTunnus: string
     // mark the component as mounted
     isMounted.current = true;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [registryKey, setValue]);
+  }, [registryKey, ovt, invoicingOperator, setValue]);
 
   useEffect(() => {
     if (!postalAddressRequired) {
@@ -165,7 +188,7 @@ export default function Contacts({ hankeTunnus }: Readonly<{ hankeTunnus: string
             label={getInvoicingRegistryKeyLabel(t, selectedContactType)}
             required
             autoComplete="on"
-            defaultValue={null}
+            data-testid="invoicing-registryKey"
             helperText={registryKeyHidden ? t('form:yhteystiedot:helperTexts:registryKey') : ''}
           />
         </ResponsiveGrid>
@@ -175,14 +198,12 @@ export default function Contacts({ hankeTunnus }: Readonly<{ hankeTunnus: string
             label={t('form:yhteystiedot:labels:ovt')}
             disabled={ovtDisabled}
             required={ovtRequired}
-            defaultValue={null}
           />
           <TextInput
             name="applicationData.invoicingCustomer.invoicingOperator"
             label={t('form:yhteystiedot:labels:invoicingOperator')}
             disabled={ovtDisabled}
             required={ovtRequired}
-            defaultValue={null}
           />
           <TextInput
             name="applicationData.invoicingCustomer.customerReference"

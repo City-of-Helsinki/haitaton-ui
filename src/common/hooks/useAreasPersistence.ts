@@ -1,4 +1,5 @@
 import useFormLanguagePersistence from './useFormLanguagePersistence';
+import { normalizeStringEmptyToNull } from '../utils/normalize';
 import { UseFormReturn } from 'react-hook-form';
 import merge from 'lodash/merge';
 import {
@@ -59,12 +60,20 @@ export default function useAreasPersistence<T extends object = Record<string, un
               customer: {
                 type: customer?.type,
                 name: customer?.name,
-                registryKey: customer?.registryKey,
+                registryKey: normalizeStringEmptyToNull(
+                  customer?.registryKey as string | null | undefined,
+                ),
                 registryKeyHidden: customer?.registryKeyHidden,
                 email: customer?.email,
                 phone: customer?.phone,
               },
               contacts: contacts.map((c: Record<string, unknown>) => ({
+                // Retain hankekayttajaId so DropdownMultiselect can reconcile selected
+                // contact persons after hydration. Previously omitted causing UI to
+                // show contact person as lost on language change because option value
+                // (stringified contact including hankekayttajaId) no longer matched
+                // persisted form value.
+                hankekayttajaId: (c as { hankekayttajaId?: string }).hankekayttajaId,
                 firstName: c.firstName,
                 lastName: c.lastName,
                 email: c.email,

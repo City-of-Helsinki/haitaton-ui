@@ -191,14 +191,31 @@ function AccessRightsView({ hankeUsers, hankeTunnus, signedInUser, readonly }: R
   );
 
   useEffect(() => {
-    // Only update state when the new mapped users differ from current state
+    // Update local state whenever any relevant user field changes. The previous implementation
+    // compared only id and name, causing permission (kayttooikeustaso) changes to be ignored
+    // and thus not rendered until a full page refresh. This fixes the regression by doing a
+    // lightweight shallow comparison of key fields; if any differ, we replace the array.
     const newUsers = hankeUsers.map(addWholeName);
     setUsersData((prev) => {
       if (
         prev.length === newUsers.length &&
-        prev.every((u, i) => u.id === newUsers[i].id && u.nimi === newUsers[i].nimi)
+        prev.every((u, i) => {
+          const nu = newUsers[i];
+          return (
+            u.id === nu.id &&
+            u.nimi === nu.nimi &&
+            u.kayttooikeustaso === nu.kayttooikeustaso &&
+            u.sahkoposti === nu.sahkoposti &&
+            u.puhelinnumero === nu.puhelinnumero &&
+            // Compare roles ignoring order to avoid unnecessary re-renders
+            u.roolit?.length === nu.roolit?.length &&
+            [...u.roolit]
+              .sort((a, b) => a.localeCompare(b))
+              .every((r, idx) => r === [...nu.roolit].sort((a, b) => a.localeCompare(b))[idx])
+          );
+        })
       ) {
-        return prev;
+        return prev; // No meaningful changes
       }
       return newUsers;
     });
