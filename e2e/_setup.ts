@@ -159,7 +159,6 @@ export async function nextAndCloseToast(
   const {
     networkIdleTimeout = 30_000,
     visibleTimeout = 10_000,
-    closeTimeout = 10_000,
     hiddenTimeout = 20_000,
   } = opts ?? {};
 
@@ -175,18 +174,23 @@ export async function nextAndCloseToast(
   // 3. wait for it to appear
   await expect(toast).toBeVisible({ timeout: visibleTimeout });
 
-  // 4a) find the close button inside the toast
+  // 4) Try to close the toast manually if the close button is available
+  // Note: Many toasts have autoClose enabled with short durations (2s), so the close button
+  // might not be clickable by the time we try. We use a short timeout and handle failures gracefully.
   const closeButton = toast.getByRole('button', { name: 'Close toast', exact: true });
 
-  // 4b) wait until it’s actually visible (or time out quickly if it never is)
-  try {
-    await expect(closeButton).toBeVisible({ timeout: closeTimeout });
-    await closeButton.click();
-  } catch (e) {
-    // if it never became visible, assume the toast auto-dismissed itself
+  // Check if close button is visible first to avoid unnecessary timeout waits
+  const isCloseButtonVisible = await closeButton.isVisible().catch(() => false);
+  if (isCloseButtonVisible) {
+    try {
+      // Short timeout since if it's not clickable quickly, the toast is likely auto-closing
+      await closeButton.click({ timeout: 1000 });
+    } catch (e) {
+      // Toast auto-closed or close button disappeared - this is expected behavior
+    }
   }
 
-  // 5) no matter what, ensure the toast is gone before moving on
+  // 5) Ensure the toast is gone before moving on (handles both manual close and auto-close)
   await expect(toast).toBeHidden({ timeout: hiddenTimeout });
 }
 
