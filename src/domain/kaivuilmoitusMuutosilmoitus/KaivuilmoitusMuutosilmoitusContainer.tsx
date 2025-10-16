@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FieldPath, FormProvider, useForm } from 'react-hook-form';
+import { FieldPath, FormProvider, useForm, UseFormReturn } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
   Button,
@@ -55,7 +55,7 @@ import {
   downloadAttachment,
 } from '../application/muutosilmoitus/muutosilmoitusAttachmentsApi';
 import LoadingSpinner from '../../common/components/spinner/LoadingSpinner';
-import useFormLanguagePersistence from '../../common/hooks/useFormLanguagePersistence';
+import useAreasPersistence from '../../common/hooks/useAreasPersistence';
 
 type Props = {
   muutosilmoitus: Muutosilmoitus<KaivuilmoitusData>;
@@ -84,14 +84,17 @@ export default function KaivuilmoitusMuutosilmoitusContainer({
     context: { application: muutosilmoitus },
   });
 
-  // Persist only lightweight textual fields across language change; geometry/area data intentionally excluded
-  // (temporary regression mitigation – reintroduce with versioned schema when stable)
-  const persistence = useFormLanguagePersistence(
+  // Persist lightweight textual + minimal areas metadata so new areas remain visible across language change.
+  // We intentionally exclude heavy nested data (tyoalueet geometries, haittojenhallintasuunnitelma) to
+  // avoid stale sub-data resurrection after deletion. Geometry snapshots are handled via __geometry in the helper.
+  const persistence = useAreasPersistence(
     `functional-muutosilmoitus-form-${muutosilmoitus.id || 'new'}-KAIVU`,
-    formContext,
+    formContext as unknown as UseFormReturn<Record<string, unknown>>, // widen for helper
     {
-      select(values) {
-        const ad = values.applicationData;
+      type: 'KAIVU',
+      extraSelect(values) {
+        const ad = (values as unknown as { applicationData: Record<string, unknown> })
+          .applicationData;
         return {
           applicationData: {
             name: ad.name,
@@ -106,10 +109,24 @@ export default function KaivuilmoitusMuutosilmoitusContainer({
             placementContracts: ad.placementContracts,
             startTime: ad.startTime,
             endTime: ad.endTime,
+            // Persist minimal subset of each area so newly added areas render after hydration.
+            // Omit tyoalueet & haittojenhallintasuunnitelma to prevent stale nested data after deletions.
+            areas: Array.isArray(ad.areas)
+              ? ad.areas.map((raw) => {
+                  const a = raw as Record<string, unknown>;
+                  return {
+                    id: a.id,
+                    name: a.name,
+                    katuosoite: a.katuosoite,
+                    rakennuttaja: a.rakennuttaja,
+                    // Provide empty array placeholder so consumer components relying on .map are safe
+                    tyoalueet: [],
+                  };
+                })
+              : undefined,
           },
         };
       },
-      debounceMs: 250,
     },
   );
 

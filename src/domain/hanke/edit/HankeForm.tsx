@@ -85,6 +85,7 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
     `functional-hanke-form-${formData.hankeTunnus || 'new'}`,
     formContext,
     {
+      hydratePhase: 'effect', // Hanke uses effect-phase to avoid layout hydration feedback loops
       select(values) {
         const {
           hankeTunnus,

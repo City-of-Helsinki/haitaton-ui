@@ -1,19 +1,68 @@
-import { useEffect, useRef, useCallback } from 'react';
+import { useEffect, useRef, useCallback, useLayoutEffect } from 'react';
 import { unstable_batchedUpdates } from 'react-dom';
 import { UseFormReturn } from 'react-hook-form';
 import debounce from 'lodash/debounce';
 
 /**
- * Persist react-hook-form values to sessionStorage so that navigation that unmounts the form
+ * Persist selected react-hook-form values to sessionStorage so that navigation that unmounts the form
  * (e.g. language change causing route change) does not lose unsaved draft edits.
  *
- * Hydration logic:
- *  - Runs only once on mount.
- *  - Restores persisted values if form is not dirty (prevents overwriting freshly loaded server data).
+ * Core responsibilities
+ * ---------------------
+ * 1. Hydrate previously persisted (subset) values back into a fresh form instance on the next mount.
+ * 2. Continuously (debounced) persist changes while the form is mounted so the latest draft survives a language change.
+ * 3. Provide safe serialization that strips out obviously non‑serializable or heavy objects (OpenLayers Features, Blobs, functions, circular refs).
+ * 4. Allow selective persistence via the `select` option so only a lightweight subset (e.g. textual fields, minimal area metadata) is stored.
+ * 5. Support post‑hydration side effects (e.g. geometry reconstruction) through `afterHydrate`.
  *
- * Persistence logic:
- *  - Watches form values and (debounced) stores them as JSON.
- *  - Failures (e.g. quota) are silently ignored.
+ * Hydration timing (`hydratePhase`)
+ * --------------------------------
+ * By default hydration runs in a layout effect (before the first paint) so that UI components relying on
+ * persisted values (e.g. newly added Areas rows) render immediately without an intermediate empty state.
+ * Some forms (like the Hanke form) perform additional mount‑time `setValue` calls or geometry processing
+ * that can cause deep update loops when executed during layout. For those cases switch to `hydratePhase: 'effect'`.
+ *
+ *  - 'layout' (default):
+ *      Pros: No flicker; values available to child components at initial render.
+ *      Cons: If the form (or children) synchronously call many `setValue` operations / side-effects on mount,
+ *            risk of "maximum update depth" warnings. Use only when mount side-effects are light / idempotent.
+ *  - 'effect':
+ *      Pros: Mimics original post-paint behaviour; safer for complex mount logic.
+ *      Cons: One paint may occur with defaultValues before persisted values appear (possible brief visual gap).
+ *
+ * Dirty field selective merge
+ * ---------------------------
+ * The hook replays persisted values field-by-field, skipping any exact paths already marked dirty in
+ * react-hook-form's `dirtyFields` tree. Parent nodes marked dirty do NOT block hydration of untouched
+ * nested children (intentional so programmatic setValue of a container does not starve deeper persisted edits).
+ *
+ * Arrays
+ * ------
+ * Arrays are traversed element-wise. Previously an entire array path marked dirty prevented new indices
+ * from hydrating (causing recently added items to disappear). The current algorithm sets the whole array
+ * when the path itself is pristine, otherwise it patches only pristine indices.
+ *
+ * Geometry / heavy data
+ * ---------------------
+ * Heavy structures (e.g. OpenLayers Features) should be persisted indirectly via a lightweight snapshot
+ * under a reserved meta key (e.g. `__geometry`). `select` can gather that snapshot; `afterHydrate` can then
+ * reconstruct live objects into the form after the base merge completes.
+ *
+ * Testing considerations
+ * ----------------------
+ * - `testMode` disables debouncing and batches hydration to reduce React act() warnings.
+ * - You can override timing with `hydratePhase` per test scenario to simulate legacy behaviour.
+ *
+ * Failure handling
+ * ----------------
+ * All storage operations are wrapped in try/catch and fail silently (quota exceeded, JSON errors, etc.).
+ *
+ * Return value
+ * ------------
+ * `{ clearPersisted, saveSnapshot, hydrated }`
+ * - `clearPersisted()`: manual removal of the session snapshot.
+ * - `saveSnapshot()`: force an immediate persistence (used before custom navigation events).
+ * - `hydrated`: boolean flag indicating hydration attempt has completed (useful for gating late side-effects).
  */
 // T can be any form value shape used by react-hook-form
 // We purposefully don't constrain to Record<string, unknown> because many form value
@@ -28,6 +77,7 @@ export default function useFormLanguagePersistence<T extends object>(
     debounceMs?: number;
     afterHydrate?: (rawPersisted: unknown) => void; // hook for extra side-effects (e.g. geometry rehydration)
     testMode?: boolean; // when true, minimize async debounce + batch hydration to reduce act() warnings
+    hydratePhase?: 'layout' | 'effect'; // default 'layout' to avoid first-render flicker
   } = {},
 ) {
   const {
@@ -37,6 +87,7 @@ export default function useFormLanguagePersistence<T extends object>(
     debounceMs = 300,
     afterHydrate,
     testMode = false,
+    hydratePhase = 'layout',
   } = options;
   const { watch, getValues, formState } = form;
   const hydratedRef = useRef(false);
@@ -130,18 +181,42 @@ export default function useFormLanguagePersistence<T extends object>(
     prefix: string[],
     value: unknown,
   ) {
-    if (value === null || typeof value !== 'object' || Array.isArray(value)) {
+    // Arrays need special handling: previously they were treated as atomic values which meant
+    // a dirty flag on the parent path (e.g. applicationData.areas) blocked updating newly added
+    // child indices from the persisted snapshot. We now traverse arrays element-wise while still
+    // respecting exact-path dirty semantics. If a specific index path is dirty it will not be
+    // overwritten, but pristine indices (including new ones) are safely hydrated.
+    if (Array.isArray(value)) {
+      if (!pathIsDirty(dirty, prefix)) {
+        // Ensure array container exists; set once then fill individual pristine indices.
+        // We avoid marking dirty to keep form pristine flags correct.
+        setValueFn(prefix.join('.'), value, { shouldDirty: false });
+      } else {
+        // Parent path dirty; still attempt to hydrate pristine child indices individually.
+        value.forEach((child, idx) => {
+          const childPath = [...prefix, String(idx)];
+          if (!pathIsDirty(dirty, childPath)) {
+            setValueFn(childPath.join('.'), child, { shouldDirty: false });
+          }
+        });
+      }
+      return;
+    }
+    if (value === null || typeof value !== 'object') {
       if (!pathIsDirty(dirty, prefix)) {
         setValueFn(prefix.join('.'), value, { shouldDirty: false });
       }
       return;
     }
-    Object.entries(value as Record<string, unknown>).forEach(([k, v]) =>
-      applyPersisted(setValueFn, dirty, [...prefix, k], v),
-    );
+    Object.entries(value as Record<string, unknown>).forEach(([k, v]) => {
+      applyPersisted(setValueFn, dirty, [...prefix, k], v);
+    });
   }
 
-  useEffect(() => {
+  const useHydrationEffect =
+    hydratePhase === 'layout' && typeof window !== 'undefined' ? useLayoutEffect : useEffect;
+
+  useHydrationEffect(() => {
     if (!enabled || hydratedRef.current) return;
     try {
       const raw = sessionStorage.getItem(storageKey);
@@ -214,7 +289,7 @@ export default function useFormLanguagePersistence<T extends object>(
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [enabled, storageKey]);
+  }, [enabled, storageKey, hydratePhase]);
 
   // Persist on change (debounced unless testMode)
   useEffect(() => {
@@ -247,7 +322,24 @@ export default function useFormLanguagePersistence<T extends object>(
   // Listen for custom language switching event to snapshot immediately before route change
   useEffect(() => {
     if (!enabled) return;
-    const handler = () => saveSnapshot();
+    const handler = () => {
+      // Flush any pending debounced save first so we don't lose the most recent partial write
+      if (debounceRef.current) {
+        try {
+          debounceRef.current.flush();
+        } catch {
+          // ignore
+        }
+      }
+      // Perform an immediate synchronous snapshot – critical for tests that dispatch the
+      // language change event and unmount in the same act() tick.
+      saveSnapshot();
+      // Schedule a microtask follow-up in case any final synchronous setValue calls occur
+      // inside other language change listeners after ours.
+      Promise.resolve().then(() => {
+        saveSnapshot();
+      });
+    };
     window.addEventListener('haitaton:languageChanging', handler);
     return () => window.removeEventListener('haitaton:languageChanging', handler);
   }, [enabled, saveSnapshot]);

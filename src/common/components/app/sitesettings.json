@@ -197,6 +197,36 @@
           "storageType": 3
         },
         {
+          "name": "functional-application-form-*",
+          "host": "haitaton.hel.fi",
+          "description": {
+            "fi": "Lomakkeen keskeneräisten hakemustietojen väliaikainen tallennus (istuntokohtainen, poistetaan uloskirjautuessa / välilehden sulkeutuessa).",
+            "sv": "Tillfällig lagring av ofullständiga ansökningsuppgifter i formuläret (sessionsbaserad, raderas vid utloggning / när fliken stängs).",
+            "en": "Temporary storage of unsaved application form draft data (session scoped, cleared on logout / tab close)."
+          },
+          "expiration": {
+            "fi": "Istunto",
+            "sv": "Session",
+            "en": "Session"
+          },
+          "storageType": 3
+        },
+        {
+          "name": "functional-application-form-step-*",
+          "host": "haitaton.hel.fi",
+          "description": {
+            "fi": "Monivaiheisen hakemuslomakkeen sivuindeksin muistaminen (istuntokohtainen).",
+            "sv": "Kom ihåg sidindex i flerstegs ansökningsformulär (sessionsbaserad).",
+            "en": "Remember active step index of multi-step application form (session scoped)."
+          },
+          "expiration": {
+            "fi": "Istunto",
+            "sv": "Session",
+            "en": "Session"
+          },
+          "storageType": 3
+        },
+        {
           "name": "oidc.*",
           "host": "haitaton.hel.fi",
           "description": {

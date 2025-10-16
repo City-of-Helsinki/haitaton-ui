@@ -116,29 +116,46 @@ export default function TyoalueTable({
     actions: { setSelectedFeature },
   } = useDrawContext();
   const { getValues, setValue } = useFormContext<KaivuilmoitusFormValues>();
-  const tyoalueet = getValues(`applicationData.areas.${alueIndex}.tyoalueet`) as Tyoalue[];
+  const rawTyoalueet = getValues(`applicationData.areas.${alueIndex}.tyoalueet`) as unknown as
+    | Tyoalue[]
+    | undefined
+    | null;
+  const tyoalueet: Tyoalue[] = Array.isArray(rawTyoalueet) ? rawTyoalueet : [];
   const [areaToRemove, setAreaToRemove] = useState<TableData | null>(null);
 
   const tableRows: TableData[] = tyoalueet.map((alue, index) => {
     const areaName = getAreaDefaultName(t, index, tyoalueet.length);
+    const feature = alue.openlayersFeature;
+    const geometry = feature?.getGeometry() as OlPolygon | undefined;
+
+    // If feature or geometry missing (e.g. immediately after hydration before geometry rehydration
+    // rebuilt features, or newly added area persisted via snapshot), render a placeholder row without
+    // triggering expensive spatial computations.
+    if (!feature || !geometry) {
+      return {
+        id: uniqueId(),
+        nimi: areaName,
+        notification: null,
+        pintaAla: 0,
+        feature: feature,
+        index,
+      };
+    }
+
+    // Overlap + surface calculations only when geometry available.
     const allJohtoselvitysAreas = johtoselvitykset.flatMap(
       (johtoselvitys) => johtoselvitys.applicationData.areas as ApplicationArea[],
     );
-
+    const alueGeometry = new ApplicationGeometry(geometry.getCoordinates());
     const overlappingJohtoselvitykset =
       johtoselvitykset.filter((application) => {
         return application.applicationData.areas?.find((area) => {
           const applicationArea = area as ApplicationArea;
-          const alueGeometry = new ApplicationGeometry(
-            (alue.openlayersFeature!.getGeometry()! as OlPolygon).getCoordinates(),
-          );
-
           const applicationAreaUnion = createUnionFromAreas(allJohtoselvitysAreas, applicationArea);
           const johtoselvitysAreasMultipolygon = createMultiPolygonFromAreas(
             allJohtoselvitysAreas,
             applicationArea,
           );
-
           const areaIntersects = booleanIntersects(applicationArea.geometry, alueGeometry);
           const areaContains = applicationGeometryContains(applicationArea.geometry, alueGeometry);
           const areaUnionIntersects = booleanIntersects(
@@ -150,14 +167,9 @@ export default function TyoalueTable({
             alueGeometry,
           );
           const multipolygonContains = johtoselvitysAreasMultipolygon.geometry.coordinates.some(
-            (coordinates) => {
-              return applicationGeometryContains(
-                new ApplicationGeometry(coordinates),
-                alueGeometry,
-              );
-            },
+            (coordinates) =>
+              applicationGeometryContains(new ApplicationGeometry(coordinates), alueGeometry),
           );
-
           return (
             areaIntersects &&
             !areaContains &&
@@ -174,8 +186,8 @@ export default function TyoalueTable({
       t,
       getApplicationPathView,
     );
-    const previousOverlayProps = alue.openlayersFeature?.get('overlayProps') as OverlayProps;
-    alue.openlayersFeature?.setProperties(
+    const previousOverlayProps = feature.get('overlayProps') as OverlayProps;
+    feature.setProperties(
       {
         areaName,
         overlayProps: new OverlayProps({ ...previousOverlayProps, heading: areaName }),
@@ -186,8 +198,8 @@ export default function TyoalueTable({
       id: uniqueId(),
       nimi: areaName,
       notification: overlappingNotification,
-      pintaAla: Number(getSurfaceArea(alue.openlayersFeature!.getGeometry()!).toFixed(0)),
-      feature: alue.openlayersFeature,
+      pintaAla: Number(getSurfaceArea(geometry).toFixed(0)),
+      feature,
       index,
     };
   });

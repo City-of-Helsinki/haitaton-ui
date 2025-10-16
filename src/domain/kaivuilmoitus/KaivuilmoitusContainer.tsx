@@ -57,6 +57,9 @@ import FormErrorsNotification from './components/FormErrorsNotification';
 import Button from '../../common/components/button/Button';
 import useAreasPersistence from '../../common/hooks/useAreasPersistence';
 import { normalizeStringEmptyToNull } from '../../common/utils/normalize';
+import { Feature } from 'ol';
+import Geometry from 'ol/geom/Geometry';
+import GeoJSON from 'ol/format/GeoJSON';
 
 type Props = {
   hankeData: HankeData;
@@ -208,12 +211,39 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
                 | null
                 | undefined,
             ),
-            areas: ad.areas
+            /**
+             * Persist a lightweight copy of areas so newly added (unsaved) areas survive language change.
+             * We deliberately:
+             *  - Exclude heavy OpenLayers objects (openlayersFeature) whose geometry is captured separately
+             *    in the base select's __geometry snapshot (buildKaivuAreasGeometrySnapshot).
+             *  - Keep minimal nuisance & identification fields needed for validation / UI labels.
+             *  - Include shallow tyoalueet entries preserving geometry object (without feature) so the
+             *    hydration step can attach Features back using the geometry snapshot. If geometry already
+             *    has coordinates we keep them; otherwise leave undefined and hydration will fill it.
+             */
+            areas: Array.isArray(ad.areas)
               ? ad.areas.map((area: unknown) => {
                   const a = area as Record<string, unknown>;
-                  // We must not overwrite geometry snapshot produced by useAreasPersistence base select.
-                  // However, to satisfy validation on initial render after hydration (before afterHydrate runs),
-                  // include minimal geometry placeholders for nested tyoalueet so yup required() does not mark them missing.
+                  const tyoalueet = Array.isArray(a.tyoalueet)
+                    ? (a.tyoalueet as Array<Record<string, unknown>>).map((ta) => {
+                        const geom = ta.geometry as Record<string, unknown> | undefined;
+                        return {
+                          area: (ta.area as unknown) ?? null,
+                          tormaystarkasteluTulos: (ta.tormaystarkasteluTulos as unknown) ?? null,
+                          geometry: geom
+                            ? {
+                                type: geom.type,
+                                crs: geom.crs
+                                  ? { type: (geom.crs as Record<string, unknown>)?.type }
+                                  : { type: 'name' },
+                                coordinates: Array.isArray(geom.coordinates)
+                                  ? geom.coordinates
+                                  : [],
+                              }
+                            : undefined,
+                        };
+                      })
+                    : [];
                   return {
                     name: (a.name as string) ?? null,
                     hankealueId: (a.hankealueId as unknown) ?? null,
@@ -227,27 +257,7 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
                     lisatiedot: (a.lisatiedot as string) ?? null,
                     haittojenhallintasuunnitelma:
                       (a.haittojenhallintasuunnitelma as Record<string, unknown> | undefined) ?? {},
-                    tyoalueet: Array.isArray(a.tyoalueet)
-                      ? (a.tyoalueet as Array<Record<string, unknown>>).map((ta) => {
-                          const geom = ta.geometry as Record<string, unknown> | undefined;
-                          return {
-                            area: (ta.area as unknown) ?? null,
-                            tormaystarkasteluTulos: (ta.tormaystarkasteluTulos as unknown) ?? null,
-                            // Include minimal geometry shape if present (type + coordinates + crs.type) so yup required passes.
-                            geometry: geom
-                              ? {
-                                  type: geom.type,
-                                  crs: geom.crs
-                                    ? { type: (geom.crs as Record<string, unknown>)?.type }
-                                    : { type: 'name' },
-                                  coordinates: Array.isArray(geom.coordinates)
-                                    ? geom.coordinates
-                                    : [],
-                                }
-                              : undefined,
-                          };
-                        })
-                      : [],
+                    tyoalueet,
                   };
                 })
               : undefined,
@@ -256,6 +266,54 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
       },
     },
   );
+
+  // Post-hydration repair: in rare timing cases the geometry hydration may run before the
+  // react-hook-form array placeholders for areas/työalueet are fully materialized, leaving
+  // raw geometry objects present but without reconstructed OpenLayers Feature instances.
+  // This effect runs once after the language persistence hydration flag is set and attaches
+  // missing openlayersFeature objects derived from the stored geometry.
+  useEffect(() => {
+    // languagePersistenceHydrated is a non-enumerable flag we set in the persistence hook
+    if (
+      !(formContext as unknown as { languagePersistenceHydrated?: boolean })
+        .languagePersistenceHydrated
+    ) {
+      return;
+    }
+    const geoJson = new GeoJSON();
+    try {
+      const areas = formContext.getValues('applicationData.areas') as unknown;
+      if (!Array.isArray(areas)) return;
+      areas.forEach((area, i) => {
+        const a = area as Record<string, unknown>;
+        const tyoalueet = a.tyoalueet as Array<Record<string, unknown>> | undefined;
+        if (!Array.isArray(tyoalueet)) return;
+        tyoalueet.forEach((ta, j) => {
+          const hasFeature = !!ta.openlayersFeature;
+          const geomObj = ta.geometry as { type?: string; coordinates?: unknown } | undefined;
+          if (!hasFeature && geomObj && geomObj.type && geomObj.coordinates) {
+            try {
+              const olGeom = geoJson.readGeometry({
+                type: geomObj.type as string,
+                coordinates: geomObj.coordinates as unknown[],
+              });
+              const feature = new Feature<Geometry>();
+              feature.setGeometry(olGeom as Geometry);
+              formContext.setValue(
+                `applicationData.areas.${i}.tyoalueet.${j}.openlayersFeature` as const,
+                feature,
+                { shouldDirty: false },
+              );
+            } catch {
+              // ignore malformed geometry
+            }
+          }
+        });
+      });
+    } catch {
+      // ignore repair errors
+    }
+  }, [formContext]);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (formContext as any).persistence = persistence;
   // Test-only escape hatch to manipulate form state in persistence tests without drilling
