@@ -85,6 +85,7 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
 
   // Persist draft values so that switching language (which changes route & unmounts) does not lose unsaved edits
   const storageKey = `functional-hanke-form-${formData.hankeTunnus || 'new'}`;
+  const stepPersistKey = `functional-hanke-form-step-${formData.hankeTunnus || 'new'}`;
 
   const persistence = useFormLanguagePersistence(storageKey, formContext, {
     hydratePhase: 'effect', // Hanke uses effect-phase to avoid layout hydration feedback loops
@@ -214,13 +215,6 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
     onIsDirtyChange(isDirty);
   }, [isDirty, onIsDirtyChange]);
 
-  function handleStepChange(stepIndex: number) {
-    setActiveStepIndex(stepIndex);
-    if (isDirty) {
-      save();
-    }
-  }
-
   const formSteps = [
     {
       element: <HankeFormPerustiedot errors={errors} register={register} hanke={formValues} />,
@@ -268,7 +262,6 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
       state: StepState.available,
     },
   ];
-
   const perustiedotErrors = useValidationErrors(hankePerustiedotPublicSchema, {
     nimi,
     kuvaus,
@@ -289,14 +282,87 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
     toteuttajat,
     muut,
   });
-  const formErrorsByPage = [
-    perustiedotErrors,
-    alueetErrors,
-    haittojenHallintaErrors,
-    yhteystiedotErrors,
-    [],
-    [],
-  ];
+
+  const formErrorsByPage = React.useMemo(
+    () => [perustiedotErrors, alueetErrors, haittojenHallintaErrors, yhteystiedotErrors, [], []],
+    [perustiedotErrors, alueetErrors, haittojenHallintaErrors, yhteystiedotErrors],
+  );
+
+  function handleStepChange(stepIndex: number) {
+    setActiveStepIndex(stepIndex);
+    if (isDirty) {
+      save();
+    }
+  }
+
+  // When user changes language, the form is unmounted and remounted. We listen to the
+  // same `haitaton:languageChanging` event so we can show the missing-items notification
+  // when the user will land on the Areas page (or is currently on it) and required data is missing.
+  useEffect(() => {
+    const handler = () => {
+      try {
+        // Determine target step from persisted active step if available
+        const raw = sessionStorage.getItem(
+          `functional-hanke-form-step-${formData.hankeTunnus || 'new'}-activeStep`,
+        );
+        const persistedStep = raw ? Number.parseInt(raw, 10) : undefined;
+        const targetStep =
+          typeof persistedStep === 'number' && !Number.isNaN(persistedStep)
+            ? persistedStep
+            : activeStepIndex;
+        if (
+          formErrorsByPage &&
+          formErrorsByPage[targetStep] &&
+          formErrorsByPage[targetStep].length > 0
+        ) {
+          // Mark that the form should show the missing-fields summary after the
+          // language change completes and the form remounts. We store a small
+          // flag next to the step persist key which will be read on mount and
+          // cause the local active step to be set so the topElement (error
+          // summary) renders inside the form (no popup notification).
+          try {
+            sessionStorage.setItem(`${stepPersistKey}-showMissing`, '1');
+          } catch {
+            // ignore sessionStorage errors
+          }
+        }
+      } catch {
+        // ignore errors reading sessionStorage
+      }
+    };
+    window.addEventListener('haitaton:languageChanging', handler);
+    return () => window.removeEventListener('haitaton:languageChanging', handler);
+  }, [formData.hankeTunnus, activeStepIndex, formErrorsByPage, setNotification, t, stepPersistKey]);
+
+  // On mount (or when persisted errors/step are available) pick up the persisted
+  // active step and a potential 'showMissing' flag set during language change.
+  // Setting `activeStepIndex` here ensures the computed `formErrorsNotification`
+  // (passed as `topElement` to `MultipageForm`) will render on initial mount
+  // when the user returns after switching language.
+  useEffect(() => {
+    try {
+      const raw = sessionStorage.getItem(`${stepPersistKey}-activeStep`);
+      const persistedStep = raw ? Number.parseInt(raw, 10) : undefined;
+      const targetStep =
+        typeof persistedStep === 'number' && !Number.isNaN(persistedStep)
+          ? persistedStep
+          : undefined;
+
+      const showMissing = sessionStorage.getItem(`${stepPersistKey}-showMissing`);
+      if (typeof targetStep === 'number') {
+        setActiveStepIndex(targetStep);
+      }
+
+      if (showMissing) {
+        // Clear the transient flag so it doesn't trigger repeatedly.
+        sessionStorage.removeItem(`${stepPersistKey}-showMissing`);
+      }
+    } catch {
+      // ignore sessionStorage errors
+    }
+    // Intentionally only depend on the form identity and current validation
+    // state so we re-run if validation results become available after mount.
+  }, [formData.hankeTunnus, formErrorsByPage, stepPersistKey]);
 
   const saveAndQuit = () => {
     // Check if there is missing data in alueet
