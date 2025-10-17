@@ -113,7 +113,6 @@ export default function Areas({ hankeData, hankkeenHakemukset, originalHakemus }
   });
   // Watch application areas; fall back to empty array defensively (tests may construct partial state)
   // Memoize watched areas to provide stable reference across renders unless array content changes
-  // Memoize watched application areas to avoid triggering effects every render.
   const rawWatchApplicationAreas = watch('applicationData.areas') as
     | KaivuilmoitusAlue[]
     | undefined;
