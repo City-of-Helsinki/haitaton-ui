@@ -437,9 +437,9 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
 
       // Ask react-hook-form to revalidate so validation errors populate.
       // Small timeout gives hydration/restore effects a chance to finish.
-      setTimeout(() => {
+      setTimeout(async () => {
         try {
-          trigger();
+          await trigger();
         } catch {
           // ignore
         }

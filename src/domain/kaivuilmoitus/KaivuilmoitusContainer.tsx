@@ -200,6 +200,33 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
   } = formContext;
   const watchFormValues = watch();
 
+  // Restore persisted draft into form and show a failure notification.
+  function restorePersistedDraftAndNotify() {
+    try {
+      const persisted = (persistence as { getPersisted?: () => unknown }).getPersisted?.();
+      if (persisted && (persisted as Record<string, unknown>).applicationData) {
+        const converted = convertApplicationDataToFormState(
+          persisted as unknown as Application<KaivuilmoitusData>,
+        );
+        if (converted && converted.applicationData) {
+          setValue('applicationData', converted.applicationData, { shouldDirty: false });
+        }
+      }
+    } catch {
+      // ignore restore errors
+    }
+    setNotification(true, {
+      position: 'top-right',
+      dismissible: true,
+      autoClose: true,
+      autoCloseDuration: 5000,
+      label: t('hakemus:notifications:saveFailLabel'),
+      message: t('hakemus:notifications:saveFailText'),
+      type: 'error',
+      closeButtonLabelText: t('common:components:notification:closeButtonLabelText'),
+    });
+  }
+
   // Gating state: controls when the top-level error summary (FormErrorsNotification)
   // is shown. Initially hidden to satisfy UX & test expectation that errors are
   // not displayed before the user interacts with the form.
@@ -311,30 +338,7 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
         {
           onSuccess: handleSuccess,
           onError: () => {
-            // On create error, rehydrate form from persisted draft
-            try {
-              const persisted = (persistence as { getPersisted?: () => unknown }).getPersisted?.();
-              if (persisted && (persisted as Record<string, unknown>).applicationData) {
-                const converted = convertApplicationDataToFormState(
-                  persisted as unknown as Application<KaivuilmoitusData>,
-                );
-                if (converted && converted.applicationData) {
-                  setValue('applicationData', converted.applicationData, { shouldDirty: false });
-                }
-              }
-            } catch {
-              // ignore restore errors
-            }
-            setNotification(true, {
-              position: 'top-right',
-              dismissible: true,
-              autoClose: true,
-              autoCloseDuration: 5000,
-              label: t('hakemus:notifications:saveFailLabel'),
-              message: t('hakemus:notifications:saveFailText'),
-              type: 'error',
-              closeButtonLabelText: t('common:components:notification:closeButtonLabelText'),
-            });
+            restorePersistedDraftAndNotify();
           },
         },
       );
@@ -353,30 +357,7 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
             persistence.clearPersisted();
           },
           onError: () => {
-            // On update error, rehydrate form from persisted draft
-            try {
-              const persisted = (persistence as { getPersisted?: () => unknown }).getPersisted?.();
-              if (persisted && (persisted as Record<string, unknown>).applicationData) {
-                const converted = convertApplicationDataToFormState(
-                  persisted as unknown as Application<KaivuilmoitusData>,
-                );
-                if (converted && converted.applicationData) {
-                  setValue('applicationData', converted.applicationData, { shouldDirty: false });
-                }
-              }
-            } catch {
-              // ignore
-            }
-            setNotification(true, {
-              position: 'top-right',
-              dismissible: true,
-              autoClose: true,
-              autoCloseDuration: 5000,
-              label: t('hakemus:notifications:saveFailLabel'),
-              message: t('hakemus:notifications:saveFailText'),
-              type: 'error',
-              closeButtonLabelText: t('common:components:notification:closeButtonLabelText'),
-            });
+            restorePersistedDraftAndNotify();
           },
         },
       );
