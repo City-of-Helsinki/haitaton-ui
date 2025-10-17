@@ -56,6 +56,7 @@ import {
 } from '../application/muutosilmoitus/muutosilmoitusAttachmentsApi';
 import LoadingSpinner from '../../common/components/spinner/LoadingSpinner';
 import useAreasPersistence from '../../common/hooks/useAreasPersistence';
+import { buildPersistedApplicationFromForm } from '../kaivuilmoitus/utils';
 
 type Props = {
   muutosilmoitus: Muutosilmoitus<KaivuilmoitusData>;
@@ -91,42 +92,11 @@ export default function KaivuilmoitusMuutosilmoitusContainer({
     `functional-muutosilmoitus-form-${muutosilmoitus.id || 'new'}-KAIVU`,
     formContext as unknown as UseFormReturn<Record<string, unknown>>, // widen for helper
     {
-      type: 'KAIVU',
-      extraSelect(values) {
-        const ad = (values as unknown as { applicationData: Record<string, unknown> })
-          .applicationData;
-        return {
-          applicationData: {
-            name: ad.name,
-            workDescription: ad.workDescription,
-            constructionWork: ad.constructionWork,
-            maintenanceWork: ad.maintenanceWork,
-            emergencyWork: ad.emergencyWork,
-            rockExcavation: ad.rockExcavation,
-            cableReportDone: ad.cableReportDone,
-            requiredCompetence: ad.requiredCompetence,
-            cableReports: ad.cableReports,
-            placementContracts: ad.placementContracts,
-            startTime: ad.startTime,
-            endTime: ad.endTime,
-            // Persist minimal subset of each area so newly added areas render after hydration.
-            // Omit tyoalueet & haittojenhallintasuunnitelma to prevent stale nested data after deletions.
-            areas: Array.isArray(ad.areas)
-              ? ad.areas.map((raw) => {
-                  const a = raw as Record<string, unknown>;
-                  return {
-                    id: a.id,
-                    name: a.name,
-                    katuosoite: a.katuosoite,
-                    rakennuttaja: a.rakennuttaja,
-                    // Provide empty array placeholder so consumer components relying on .map are safe
-                    tyoalueet: [],
-                  };
-                })
-              : undefined,
-          },
-        };
-      },
+      persistAsApiModel: true,
+      buildApiModel: (values) =>
+        buildPersistedApplicationFromForm(
+          values as unknown as import('../kaivuilmoitus/types').KaivuilmoitusFormValues,
+        ),
     },
   );
 

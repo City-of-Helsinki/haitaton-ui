@@ -49,6 +49,7 @@ import useNavigateToApplicationView from '../application/hooks/useNavigateToAppl
 import ApplicationSendDialog from '../application/components/ApplicationSendDialog';
 import Button from '../../common/components/button/Button';
 import useAreasPersistence from '../../common/hooks/useAreasPersistence';
+import { buildPersistedApplicationFromForm } from './utils';
 
 type Props = {
   hankeData?: HankeData;
@@ -110,7 +111,11 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
   const persistence = useAreasPersistence(
     `functional-application-form-${application?.id || 'new'}-JOHTO`,
     formContext,
-    { type: 'JOHTO' },
+    {
+      persistAsApiModel: true,
+      buildApiModel: (values) =>
+        buildPersistedApplicationFromForm(values as JohtoselvitysFormValues),
+    },
   );
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (formContext as any).persistence = persistence;
