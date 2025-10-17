@@ -18,6 +18,29 @@ import HankeCreateDialog from '../../../domain/hanke/hankeCreateDialog/HankeCrea
 import JohtoselvitysCreateDialog from '../../../domain/johtoselvitys/johtoselvitysCreateDialog/JohtoselvitysCreateDialog';
 import useIsAuthenticated from '../../../domain/auth/useIsAuthenticated';
 
+// Remove persisted functional form drafts when navigating away via header links
+function clearFunctionalPersistence() {
+  try {
+    const toRemove: string[] = [];
+    for (let i = 0; i < sessionStorage.length; i++) {
+      const key = sessionStorage.key(i);
+      if (!key) continue;
+      // patterns for draft and step persistence keys
+      if (
+        key.startsWith('functional-hanke-form-') ||
+        key.startsWith('functional-hanke-form-step-') ||
+        key.startsWith('functional-application-form-') ||
+        key.startsWith('functional-application-form-step-')
+      ) {
+        toRemove.push(key);
+      }
+    }
+    toRemove.forEach((k) => sessionStorage.removeItem(k));
+  } catch {
+    // ignore storage errors
+  }
+}
+
 const languageLabels = {
   fi: 'Suomi',
   en: 'English',
@@ -196,6 +219,7 @@ function HaitatonHeader() {
               as={NavLink}
               to={PUBLIC_HANKKEET.path}
               active={Boolean(isMapPath)}
+              onClick={() => clearFunctionalPersistence()}
             />
           )}
           {features.hanke && (
@@ -220,6 +244,7 @@ function HaitatonHeader() {
             as={NavLink}
             to={HANKEPORTFOLIO.path}
             active={Boolean(isHankePortfolioPath)}
+            onClick={() => clearFunctionalPersistence()}
             data-testid="hankeListLink"
           />
           {features.hanke ? (
@@ -228,6 +253,7 @@ function HaitatonHeader() {
               as={NavLink}
               to={WORKINSTRUCTIONS.path}
               active={Boolean(isWorkInstructionsPath)}
+              onClick={() => clearFunctionalPersistence()}
             >
               {t('routes:WORKINSTRUCTIONS:headerLabel')}
             </Header.Link>

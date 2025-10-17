@@ -1,10 +1,10 @@
 import useFormLanguagePersistence from './useFormLanguagePersistence';
 import { mapToKaivuilmoitusArea } from '../../domain/kaivuilmoitus/utils';
-import { KaivuilmoitusAlue } from '../../domain/application/types/application';
+import { mapToJohtoselvitysArea } from '../../domain/johtoselvitys/utils';
+import { KaivuilmoitusAlue, ApplicationArea } from '../../domain/application/types/application';
 import { normalizeStringEmptyToNull } from '../utils/normalize';
 import { UseFormReturn } from 'react-hook-form';
 import merge from 'lodash/merge';
-// persistenceGeometry helpers removed from useAreasPersistence imports
 
 /**
  * Helper to create a persistence instance for forms that store areas geometry.
@@ -176,10 +176,21 @@ export default function useAreasPersistence<T extends object = Record<string, un
                 const areasRaw = Array.isArray(appData.areas)
                   ? (appData.areas as Array<Record<string, unknown>>)
                   : undefined;
+                const appType =
+                  (persistedApp.applicationType as string | undefined) ??
+                  (appData.applicationType as string | undefined);
                 const updatedAreas = areasRaw
-                  ? areasRaw.map((a: Record<string, unknown>) =>
-                      mapToKaivuilmoitusArea(a as unknown as KaivuilmoitusAlue),
-                    )
+                  ? areasRaw.map((a: Record<string, unknown>) => {
+                      // Choose mapping based on application type: Johtoselvitys (CABLE_REPORT) uses mapToJohtoselvitysArea
+                      try {
+                        if (appType === 'CABLE_REPORT') {
+                          return mapToJohtoselvitysArea(a as unknown as ApplicationArea);
+                        }
+                      } catch {
+                        // fall back to kaivu mapper below
+                      }
+                      return mapToKaivuilmoitusArea(a as unknown as KaivuilmoitusAlue);
+                    })
                   : undefined;
                 const reconstructed: Record<string, unknown> = { ...(appData ?? {}) };
                 if (updatedAreas) reconstructed.areas = updatedAreas;
