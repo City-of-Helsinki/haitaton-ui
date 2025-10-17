@@ -202,11 +202,9 @@ it('hydrates työalue feature for HaittojenhallintaMap without crashing', async 
     await new Promise((res) => setTimeout(res, 30));
   });
 
-  // Expect no crash: test runner would have thrown. Additionally verify snapshot stored with geometry key.
+  // Expect no crash: test runner would have thrown. Persistence snapshot is written but no __geometry key
+  // is asserted because geometry is no longer duplicated into a reserved key.
   const raw = sessionStorage.getItem('functional-application-form-555-KAIVU');
   expect(raw).toBeTruthy();
-  const parsed = JSON.parse(raw!);
-  // eslint-disable-next-line no-underscore-dangle
-  expect(parsed.__geometry?.areas?.[0]?.tyoalueet?.[0]).toBeTruthy();
   utils.unmount();
 });

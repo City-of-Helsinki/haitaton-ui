@@ -42,6 +42,7 @@ import {
   convertApplicationDataToFormState,
   convertFormStateToKaivuilmoitusUpdateData,
 } from './utils';
+import { buildPersistedApplicationFromForm } from './utils';
 import ApplicationSaveNotification from '../application/components/ApplicationSaveNotification';
 import useSaveApplication from '../application/hooks/useSaveApplication';
 import useAttachments from '../application/hooks/useAttachments';
@@ -56,11 +57,19 @@ import HaittojenHallinta from './HaittojenHallinta';
 import FormErrorsNotification from './components/FormErrorsNotification';
 import Button from '../../common/components/button/Button';
 import useAreasPersistence from '../../common/hooks/useAreasPersistence';
-import { normalizeStringEmptyToNull } from '../../common/utils/normalize';
+
 import { Feature } from 'ol';
 import Geometry from 'ol/geom/Geometry';
 import GeoJSON from 'ol/format/GeoJSON';
 
+// Test-only global: expose form context to tests
+declare global {
+  interface Window {
+    kaivuFormContext?: import('react-hook-form').UseFormReturn<
+      import('./types').KaivuilmoitusFormValues
+    >;
+  }
+}
 type Props = {
   hankeData: HankeData;
   application?: Application<KaivuilmoitusData>;
@@ -115,155 +124,9 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
     `functional-application-form-${application?.id || 'new'}-KAIVU`,
     formContext,
     {
-      type: 'KAIVU',
-      extraSelect(values) {
-        const ad = values.applicationData;
-        // Helper to pick minimal persisted subset for a CustomerWithContacts object.
-        // We intentionally exclude any react-hook-form meta data and only keep primitive fields
-        // needed to rehydrate user edits after language change.
-        function pickCustomerWithContacts(
-          cwc: Record<string, unknown> | null | undefined,
-        ): Record<string, unknown> | null | undefined {
-          if (!cwc) return cwc;
-          const customer = cwc.customer as Record<string, unknown> | undefined;
-          const contacts = (cwc.contacts as Array<Record<string, unknown>> | undefined) ?? [];
-          return {
-            customer: customer
-              ? {
-                  type: customer.type,
-                  name: customer.name,
-                  registryKey: normalizeStringEmptyToNull(
-                    customer.registryKey as string | null | undefined,
-                  ),
-                  registryKeyHidden: customer.registryKeyHidden,
-                  email: customer.email,
-                  phone: customer.phone,
-                }
-              : undefined,
-            contacts: contacts.map((c) => ({
-              hankekayttajaId: (c as { hankekayttajaId?: string }).hankekayttajaId,
-              firstName: c.firstName,
-              lastName: c.lastName,
-              email: c.email,
-              phone: c.phone,
-              orderer: c.orderer,
-            })),
-          };
-        }
-
-        // Persist invoicing customer minimal subset (include postalAddress fields explicitly).
-        function pickInvoicingCustomer(
-          ic: Record<string, unknown> | null | undefined,
-        ): Record<string, unknown> | null | undefined {
-          if (!ic) return ic;
-          const postalAddress = ic.postalAddress as Record<string, unknown> | undefined;
-          return {
-            type: ic.type,
-            name: ic.name,
-            registryKey: normalizeStringEmptyToNull(ic.registryKey as string | null | undefined),
-            registryKeyHidden: ic.registryKeyHidden,
-            ovt: normalizeStringEmptyToNull(ic.ovt as string | null | undefined),
-            invoicingOperator: normalizeStringEmptyToNull(
-              ic.invoicingOperator as string | null | undefined,
-            ),
-            customerReference: ic.customerReference,
-            email: ic.email,
-            phone: ic.phone,
-            postalAddress: postalAddress
-              ? {
-                  streetAddress: {
-                    streetName: (postalAddress.streetAddress as Record<string, unknown>)
-                      ?.streetName,
-                  },
-                  postalCode: postalAddress.postalCode,
-                  city: postalAddress.city,
-                }
-              : { streetAddress: { streetName: null }, postalCode: null, city: null },
-          };
-        }
-
-        return {
-          applicationData: {
-            cableReports: ad.cableReports,
-            placementContracts: ad.placementContracts,
-            requiredCompetence: ad.requiredCompetence,
-            existingCableReport: (ad as unknown as { existingCableReport?: string | null })
-              .existingCableReport,
-            invoicingCustomer: pickInvoicingCustomer(
-              ad.invoicingCustomer as unknown as Record<string, unknown> | null | undefined,
-            ),
-            // Further information (lisätiedot) from Attachments page
-            additionalInfo: ad.additionalInfo,
-            // Persist all contact groups (työstä vastaava already handled in base select inside useAreasPersistence,
-            // but we include others here which were previously missing causing loss of data on language change).
-            contractorWithContacts: pickCustomerWithContacts(
-              ad.contractorWithContacts as unknown as Record<string, unknown> | null | undefined,
-            ),
-            propertyDeveloperWithContacts: pickCustomerWithContacts(
-              ad.propertyDeveloperWithContacts as unknown as
-                | Record<string, unknown>
-                | null
-                | undefined,
-            ),
-            representativeWithContacts: pickCustomerWithContacts(
-              ad.representativeWithContacts as unknown as
-                | Record<string, unknown>
-                | null
-                | undefined,
-            ),
-            /**
-             * Persist a lightweight copy of areas so newly added (unsaved) areas survive language change.
-             * We deliberately:
-             *  - Exclude heavy OpenLayers objects (openlayersFeature) whose geometry is captured separately
-             *    in the base select's __geometry snapshot (buildKaivuAreasGeometrySnapshot).
-             *  - Keep minimal nuisance & identification fields needed for validation / UI labels.
-             *  - Include shallow tyoalueet entries preserving geometry object (without feature) so the
-             *    hydration step can attach Features back using the geometry snapshot. If geometry already
-             *    has coordinates we keep them; otherwise leave undefined and hydration will fill it.
-             */
-            areas: Array.isArray(ad.areas)
-              ? ad.areas.map((area: unknown) => {
-                  const a = area as Record<string, unknown>;
-                  const tyoalueet = Array.isArray(a.tyoalueet)
-                    ? (a.tyoalueet as Array<Record<string, unknown>>).map((ta) => {
-                        const geom = ta.geometry as Record<string, unknown> | undefined;
-                        return {
-                          area: (ta.area as unknown) ?? null,
-                          tormaystarkasteluTulos: (ta.tormaystarkasteluTulos as unknown) ?? null,
-                          geometry: geom
-                            ? {
-                                type: geom.type,
-                                crs: geom.crs
-                                  ? { type: (geom.crs as Record<string, unknown>)?.type }
-                                  : { type: 'name' },
-                                coordinates: Array.isArray(geom.coordinates)
-                                  ? geom.coordinates
-                                  : [],
-                              }
-                            : undefined,
-                        };
-                      })
-                    : [];
-                  return {
-                    name: (a.name as string) ?? null,
-                    hankealueId: (a.hankealueId as unknown) ?? null,
-                    katuosoite: (a.katuosoite as string) ?? null,
-                    tyonTarkoitukset: (a.tyonTarkoitukset as unknown) ?? null,
-                    meluhaitta: (a.meluhaitta as unknown) ?? null,
-                    polyhaitta: (a.polyhaitta as unknown) ?? null,
-                    tarinahaitta: (a.tarinahaitta as unknown) ?? null,
-                    kaistahaitta: (a.kaistahaitta as unknown) ?? null,
-                    kaistahaittojenPituus: (a.kaistahaittojenPituus as unknown) ?? null,
-                    lisatiedot: (a.lisatiedot as string) ?? null,
-                    haittojenhallintasuunnitelma:
-                      (a.haittojenhallintasuunnitelma as Record<string, unknown> | undefined) ?? {},
-                    tyoalueet,
-                  };
-                })
-              : undefined,
-          },
-        };
-      },
+      persistAsApiModel: true,
+      buildApiModel: (values) =>
+        buildPersistedApplicationFromForm(values as KaivuilmoitusFormValues),
     },
   );
 
@@ -314,12 +177,18 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
       // ignore repair errors
     }
   }, [formContext]);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (formContext as any).persistence = persistence;
+  // Attach persistence helpers to the form context in a typed way for internal/test use.
+  type PersistenceIface = {
+    clearPersisted?: () => void;
+    saveSnapshot?: () => void;
+    getPersisted?: () => unknown;
+  };
+  (formContext as unknown as { persistence?: PersistenceIface }).persistence =
+    persistence as unknown as PersistenceIface;
   // Test-only escape hatch to manipulate form state in persistence tests without drilling
   if (process.env.NODE_ENV === 'test') {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (window as any).kaivuFormContext = formContext;
+    // Expose the form context to tests via a typed window property
+    window.kaivuFormContext = formContext;
   }
   const {
     getValues,
@@ -418,6 +287,12 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
   function saveApplication(handleSuccess?: (data: Application<KaivuilmoitusData>) => void) {
     const formData = getValues();
     if (!formData.id) {
+      // Ensure we persist current draft immediately before creating
+      try {
+        persistence.saveSnapshot();
+      } catch {
+        // ignore
+      }
       applicationCreateMutation.mutate(
         {
           applicationType: formData.applicationType,
@@ -433,15 +308,75 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
           placementContracts: formData.applicationData.placementContracts,
           requiredCompetence: formData.applicationData.requiredCompetence,
         },
-        { onSuccess: handleSuccess },
+        {
+          onSuccess: handleSuccess,
+          onError: () => {
+            // On create error, rehydrate form from persisted draft
+            try {
+              const persisted = (persistence as { getPersisted?: () => unknown }).getPersisted?.();
+              if (persisted && (persisted as Record<string, unknown>).applicationData) {
+                const converted = convertApplicationDataToFormState(
+                  persisted as unknown as Application<KaivuilmoitusData>,
+                );
+                if (converted && converted.applicationData) {
+                  setValue('applicationData', converted.applicationData, { shouldDirty: false });
+                }
+              }
+            } catch {
+              // ignore restore errors
+            }
+            setNotification(true, {
+              position: 'top-right',
+              dismissible: true,
+              autoClose: true,
+              autoCloseDuration: 5000,
+              label: t('hakemus:notifications:saveFailLabel'),
+              message: t('hakemus:notifications:saveFailText'),
+              type: 'error',
+              closeButtonLabelText: t('common:components:notification:closeButtonLabelText'),
+            });
+          },
+        },
       );
     } else {
+      // Ensure we persist current draft before updating
+      try {
+        persistence.saveSnapshot();
+      } catch {
+        // ignore
+      }
       applicationUpdateMutation.mutate(
         { id: formData.id, data: convertFormStateToKaivuilmoitusUpdateData(formData) },
         {
           onSuccess(data) {
             handleSuccess?.(data);
             persistence.clearPersisted();
+          },
+          onError: () => {
+            // On update error, rehydrate form from persisted draft
+            try {
+              const persisted = (persistence as { getPersisted?: () => unknown }).getPersisted?.();
+              if (persisted && (persisted as Record<string, unknown>).applicationData) {
+                const converted = convertApplicationDataToFormState(
+                  persisted as unknown as Application<KaivuilmoitusData>,
+                );
+                if (converted && converted.applicationData) {
+                  setValue('applicationData', converted.applicationData, { shouldDirty: false });
+                }
+              }
+            } catch {
+              // ignore
+            }
+            setNotification(true, {
+              position: 'top-right',
+              dismissible: true,
+              autoClose: true,
+              autoCloseDuration: 5000,
+              label: t('hakemus:notifications:saveFailLabel'),
+              message: t('hakemus:notifications:saveFailText'),
+              type: 'error',
+              closeButtonLabelText: t('common:components:notification:closeButtonLabelText'),
+            });
           },
         },
       );

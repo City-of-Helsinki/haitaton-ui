@@ -99,7 +99,8 @@ export default function useFormLanguagePersistence<T extends object>(
     try {
       return JSON.stringify(value, (k, v) => {
         // Exclude OpenLayers Feature instances (non-serializable) so original instances from defaults remain.
-        if (k === 'feature') return undefined;
+        // Historically geometry features were stored under different property names; strip both common keys.
+        if (k === 'feature' || k === 'openlayersFeature') return undefined;
         if (typeof v === 'function' || typeof v === 'symbol') return undefined;
         if (v instanceof File || v instanceof Blob) return undefined;
         if (typeof v === 'object' && v !== null) {
@@ -365,5 +366,15 @@ export default function useFormLanguagePersistence<T extends object>(
     }
   }
 
-  return { clearPersisted, saveSnapshot, hydrated: hydratedRef.current };
+  function getPersisted() {
+    try {
+      const raw = sessionStorage.getItem(storageKey);
+      if (!raw) return undefined;
+      return JSON.parse(raw);
+    } catch {
+      return undefined;
+    }
+  }
+
+  return { clearPersisted, saveSnapshot, hydrated: hydratedRef.current, getPersisted };
 }
