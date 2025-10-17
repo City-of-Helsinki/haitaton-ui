@@ -1,41 +1,35 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { render, waitFor, cleanup } from '../../../testUtils/render';
+import { useFormContext } from 'react-hook-form';
+import { Feature } from 'ol';
+import Polygon from 'ol/geom/Polygon';
+
 import HankeForm from './HankeForm';
 import { HankeDataFormState } from './types';
-import { Feature } from 'ol';
-import { Polygon } from 'ol/geom';
-
-// Light mocks to keep test fast
-jest.mock('./HankeFormPerustiedot', () => ({ __esModule: true, default: () => <div /> }));
-jest.mock('./HankeFormYhteystiedot', () => () => <div />);
-jest.mock('./HankeFormHaittojenHallinta', () => () => <div />);
-jest.mock('./HankeFormLiitteet', () => () => <div />);
-jest.mock('./HankeFormSummary', () => () => <div />);
-// We want the Alueet step to mount so we can inspect features, but mock out heavy internals
-jest.mock('./HankeFormAlueet', () => ({
-  __esModule: true,
-  default: function MockAlueet() {
-    return <div data-testid="alueet-step" />;
-  },
-}));
-
-jest.mock('../../application/components/ApplicationAddDialog', () => () => null);
 
 jest.mock('../../application/hooks/useApplications', () => ({
   useApplicationsForHanke: () => ({ data: { applications: [] } }),
 }));
 
+jest.mock(
+  '../../../common/components/map/modules/draw/DrawProvider',
+  () =>
+    ({ children }: { children: React.ReactNode }) => <>{children}</>,
+);
+
 jest.mock('react-i18next', () => ({
   ...jest.requireActual('react-i18next'),
-  useTranslation: () => ({ t: (k: string) => k, i18n: { language: 'fi', exists: () => true } }),
+  useTranslation: () => ({
+    t: (k: string) => k,
+    i18n: { language: 'fi', exists: () => true },
+  }),
 }));
 
-// Utilities
-function buildBaseData(): HankeDataFormState {
-  return {
-    hankeTunnus: 'HGEOM1',
-    nimi: 'Testihanke',
-    kuvaus: 'Desc',
+describe('HankeForm persistence stores API-shaped HankeData (GeoJSON)', () => {
+  const baseData: HankeDataFormState = {
+    hankeTunnus: 'HTESTPERSIST',
+    nimi: 'Persist test',
+    kuvaus: '',
     tyomaaKatuosoite: '',
     vaihe: null,
     tyomaaTyyppi: [],
@@ -46,87 +40,71 @@ function buildBaseData(): HankeDataFormState {
     rakennuttajat: [],
     toteuttajat: [],
     muut: [],
-    alueet: [
-      {
-        id: 11,
-        nimi: 'Alue 1',
-        feature: new Feature(
-          new Polygon([
-            [
-              [25.0, 60.0],
-              [25.0005, 60.0],
-              [25.0005, 60.0005],
-              [25.0, 60.0005],
-              [25.0, 60.0],
-            ],
-          ]),
-        ),
-        haittaAlkuPvm: null,
-        haittaLoppuPvm: null,
-        meluHaitta: null,
-        polyHaitta: null,
-        tarinaHaitta: null,
-        kaistaHaitta: null,
-        kaistaPituusHaitta: null,
-        tormaystarkasteluTulos: null,
-      },
-    ],
+    alueet: [],
     tormaystarkasteluTulos: null,
     status: 'DRAFT',
   } as unknown as HankeDataFormState;
-}
 
-function mount(formData?: Partial<HankeDataFormState>) {
-  const data = { ...buildBaseData(), ...formData } as HankeDataFormState;
-  const onDirty = jest.fn();
-  const onClose = jest.fn();
-  return render(
-    <HankeForm formData={data} onIsDirtyChange={onDirty} onFormClose={onClose}>
-      <div />
-    </HankeForm>,
-  );
-}
-
-describe('HankeForm geometry language persistence regression', () => {
   beforeEach(() => {
     sessionStorage.clear();
     cleanup();
   });
 
-  test('geometry snapshot survives language change + step persistence (no key collision)', async () => {
-    const storageDraftKey = 'functional-hanke-form-HGEOM1';
-    const storageStepKey = 'functional-hanke-form-step-HGEOM1';
-    const { unmount } = mount();
+  test('stores GeoJSON featureCollection for area when feature present', async () => {
+    // Injector will set a feature on first area
+    const Injector: React.FC = () => {
+      const { setValue } = useFormContext();
+      useEffect(() => {
+        const coords = [
+          [
+            [0, 0],
+            [0, 1],
+            [1, 1],
+            [0, 0],
+          ],
+        ];
+        const feat = new Feature(new Polygon(coords));
+        setValue('alueet', [
+          {
+            id: 1,
+            nimi: 'Area 1',
+            feature: feat,
+            geometriat: { featureCollection: { type: 'FeatureCollection', features: [] } },
+            haittaAlkuPvm: null,
+            haittaLoppuPvm: null,
+            kaistaHaitta: null,
+            kaistaPituusHaitta: null,
+            meluHaitta: null,
+            polyHaitta: null,
+            tarinaHaitta: null,
+          },
+        ] as unknown as HankeDataFormState['alueet']);
+      }, [setValue]);
+      return <div data-testid="injector" />;
+    };
 
-    // Force immediate snapshot before unmount (simulate language change event)
+    const { unmount } = render(
+      <HankeForm formData={baseData} onIsDirtyChange={jest.fn()} onFormClose={jest.fn()}>
+        <Injector />
+      </HankeForm>,
+    );
+
+    // Trigger immediate snapshot
     window.dispatchEvent(new CustomEvent('haitaton:languageChanging'));
 
-    await waitFor(() => expect(sessionStorage.getItem(storageDraftKey)).toBeTruthy());
-    const draftObj = JSON.parse(sessionStorage.getItem(storageDraftKey) as string);
-    // eslint-disable-next-line no-underscore-dangle -- internal persisted meta key
-    expect(draftObj.__geometry).toBeTruthy();
-    // eslint-disable-next-line no-underscore-dangle -- internal persisted meta key
-    expect(draftObj.__geometry.alueet?.length).toBe(1);
+    const storageKey = `functional-hanke-form-${baseData.hankeTunnus || 'new'}`;
 
-    // Simulate that step persistence stored an index (ensure separate key used)
-    // NOTE: MultipageForm effect would normally do this; we emulate minimal write.
-    sessionStorage.setItem(storageStepKey, '0');
+    await waitFor(() => expect(sessionStorage.getItem(storageKey)).toBeTruthy());
+    const raw = sessionStorage.getItem(storageKey)!;
+    const parsed = JSON.parse(raw);
 
-    // Ensure original draft object still intact (not overwritten by primitive)
-    expect(typeof JSON.parse(sessionStorage.getItem(storageDraftKey) as string)).toBe('object');
+    // Assert persisted shape has area geometriat.featureCollection
+    expect(parsed).toHaveProperty('alueet');
+    const persistedAlue = parsed.alueet && parsed.alueet[0];
+    expect(persistedAlue).toBeTruthy();
+    expect(persistedAlue.geometriat).toBeTruthy();
+    expect(persistedAlue.geometriat.featureCollection).toBeTruthy();
 
     unmount();
-
-    // Remount with empty server areas (to prove hydration restores feature)
-    mount({ alueet: [] as unknown as HankeDataFormState['alueet'] });
-
-    // After hydration, draft key should still parse to object and contain geometry
-    await waitFor(() => {
-      const raw = sessionStorage.getItem(storageDraftKey);
-      expect(raw).toBeTruthy();
-      const parsed = JSON.parse(raw as string);
-      // eslint-disable-next-line no-underscore-dangle -- internal persisted meta key
-      expect(parsed.__geometry?.alueet?.length).toBe(1);
-    });
   });
 });

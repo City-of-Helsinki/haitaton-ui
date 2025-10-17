@@ -81,12 +81,14 @@ const HankeFormAlueet: React.FC<FormProps & { drawSource: VectorSource }> = ({
   useEffect(() => {
     // If there are hanke areas with no name on unmount, set default names for them
     return function cleanup() {
-      const areas = getValues(FORMFIELD.HANKEALUEET) as HankeAlue[];
-      areas.forEach((area, i) => {
-        if (!area.nimi) {
-          setValue(`${FORMFIELD.HANKEALUEET}.${i}.nimi`, getAreaDefaultName(areas));
-        }
-      });
+      const areas = (getValues(FORMFIELD.HANKEALUEET) as HankeAlue[]) || [];
+      if (areas.length > 0) {
+        areas.forEach((area, i) => {
+          if (!area.nimi) {
+            setValue(`${FORMFIELD.HANKEALUEET}.${i}.nimi`, getAreaDefaultName(areas));
+          }
+        });
+      }
     };
   }, [getValues, setValue]);
 

@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import {
-  buildHankeAlueetGeometrySnapshot,
-  hydrateHankeAlueetGeometryAfterHydrate,
-} from '../../common/utils/persistenceGeometry';
+// persistenceGeometry helpers no longer used directly here; we persist API-shaped Hanke data
+// and rebuild form state via convertHankeDataToFormState.
 import { FieldPath, FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation, useQueryClient } from 'react-query';
@@ -34,7 +32,12 @@ import ApplicationAddDialog from '../../application/components/ApplicationAddDia
 import { useGlobalNotification } from '../../../common/components/globalNotification/GlobalNotificationContext';
 import { changeFormStep, getFieldPaths } from '../../forms/utils';
 import { updateHanke } from './hankeApi';
-import { convertHankeAlueToFormState, mapValidationErrorToErrorListItem } from './utils';
+import {
+  convertHankeAlueToFormState,
+  convertFormStateToHankeData,
+  convertHankeDataToFormState,
+  mapValidationErrorToErrorListItem,
+} from './utils';
 import { useValidationErrors } from '../../forms/hooks/useValidationErrors';
 import DrawProvider from '../../../common/components/map/modules/draw/DrawProvider';
 import FormPagesErrorSummary from '../../forms/components/FormPagesErrorSummary';
@@ -81,76 +84,36 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
   });
 
   // Persist draft values so that switching language (which changes route & unmounts) does not lose unsaved edits
-  const persistence = useFormLanguagePersistence(
-    `functional-hanke-form-${formData.hankeTunnus || 'new'}`,
-    formContext,
-    {
-      hydratePhase: 'effect', // Hanke uses effect-phase to avoid layout hydration feedback loops
-      select(values) {
-        const {
-          hankeTunnus,
-          nimi,
-          kuvaus,
-          tyomaaKatuosoite,
-          vaihe,
-          tyomaaTyyppi,
-          onYKTHanke,
-          alkuPvm,
-          loppuPvm,
-          omistajat,
-          rakennuttajat,
-          toteuttajat,
-          muut,
-        } = values as typeof values & { tyomaaTyyppi?: string[] };
-        // Lightweight geometry snapshot (only polygon coordinates), separate meta key so hook skips applying directly
-        // eslint-disable-next-line no-underscore-dangle -- internal meta key for persisted geometry snapshot
-        const __geometry = buildHankeAlueetGeometrySnapshot(
-          values.alueet as unknown as Array<Record<string, unknown>>,
-        );
-        return {
-          hankeTunnus, // Include hankeTunnus to ensure it's preserved
-          nimi,
-          kuvaus,
-          tyomaaKatuosoite,
-          vaihe,
-          tyomaaTyyppi,
-          onYKTHanke,
-          alkuPvm,
-          loppuPvm,
-          // Persist minimal subset of each alue (omit geometry + heavy objects)
-          alueet: values.alueet?.map((a) => ({
-            id: a.id,
-            nimi: a.nimi,
-            haittaAlkuPvm: a.haittaAlkuPvm,
-            haittaLoppuPvm: a.haittaLoppuPvm,
-            kaistaHaitta: a.kaistaHaitta,
-            kaistaPituusHaitta: a.kaistaPituusHaitta,
-            meluHaitta: a.meluHaitta,
-            polyHaitta: a.polyHaitta,
-            tarinaHaitta: a.tarinaHaitta,
-            // Persist nuisance control plan free-text fields so edits survive language change
-            haittojenhallintasuunnitelma: a.haittojenhallintasuunnitelma
-              ? { ...a.haittojenhallintasuunnitelma }
-              : undefined,
-          })),
-          omistajat,
-          rakennuttajat,
-          toteuttajat,
-          muut,
-          __geometry,
-        };
-      },
-      debounceMs: 200,
-      afterHydrate(raw) {
-        // formContext uses react-hook-form generics; cast to any for compatibility
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        hydrateHankeAlueetGeometryAfterHydrate(raw, formContext as any, {
-          pathPrefix: 'alueet',
-          snapshotKey: 'alueet',
-        });
-      },
+  const storageKey = `functional-hanke-form-${formData.hankeTunnus || 'new'}`;
+
+  const persistence = useFormLanguagePersistence(storageKey, formContext, {
+    hydratePhase: 'effect', // Hanke uses effect-phase to avoid layout hydration feedback loops
+    // Persist the form as Hanke API shape (GeoJSON) so geometries serialize cleanly
+    select(values) {
+      try {
+        // Persist the API-shaped HankeData only; do not include separate geometry snapshots.
+        return convertFormStateToHankeData(values as HankeDataFormState);
+      } catch {
+        return {};
+      }
     },
-  );
+    debounceMs: 200,
+    afterHydrate(raw) {
+      try {
+        if (!raw || typeof raw !== 'object') return;
+        const parsed = raw as Record<string, unknown>;
+        // Determine whether persisted object contains meaningful Hanke fields
+        const meaningful = Object.keys(parsed).some((k) => parsed[k] != null);
+        if (meaningful) {
+          const converted = convertHankeDataToFormState(parsed as unknown as HankeData);
+          // Replace whole form state with converted values (includes features from geometriat)
+          formContext.reset(converted as HankeDataFormState);
+        }
+      } catch {
+        // ignore malformed persisted data
+      }
+    },
+  });
   // Expose persistence on formContext for nested map components to trigger saveSnapshot after geometry edits
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (formContext as any).persistence = persistence;
@@ -199,6 +162,17 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
     },
     onError() {
       setShowNotification('error');
+      // Attempt to restore persisted draft so the user sees their unsaved edits
+      try {
+        const raw = sessionStorage.getItem(storageKey);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          const converted = convertHankeDataToFormState(parsed as unknown as HankeData);
+          formContext.reset(converted as HankeDataFormState);
+        }
+      } catch {
+        // ignore restore errors
+      }
     },
     onSuccess(data) {
       queryClient.setQueryData(['hanke', data.hankeTunnus], data);
@@ -353,6 +327,9 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
       }
       return;
     }
+
+    // Ensure snapshot prior to server mutation
+    persistence.saveSnapshot?.();
 
     hankeMutation.mutate(getValues(), {
       onSuccess(data) {
