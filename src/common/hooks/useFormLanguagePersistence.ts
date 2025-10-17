@@ -42,12 +42,6 @@ import debounce from 'lodash/debounce';
  * from hydrating (causing recently added items to disappear). The current algorithm sets the whole array
  * when the path itself is pristine, otherwise it patches only pristine indices.
  *
- * Geometry / heavy data
- * ---------------------
- * Heavy structures (e.g. OpenLayers Features) should be persisted indirectly via a lightweight snapshot
- * under a reserved meta key (e.g. `__geometry`). `select` can gather that snapshot; `afterHydrate` can then
- * reconstruct live objects into the form after the base merge completes.
- *
  * Testing considerations
  * ----------------------
  * - `testMode` disables debouncing and batches hydration to reduce React act() warnings.

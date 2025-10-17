@@ -50,5 +50,3 @@ test('useAreasPersistence accepts Johto form shape', () => {
 test('useAreasPersistence accepts Kaivu form shape', () => {
   render(<KaivuConsumer />);
 });
-
-// Note: __geometry snapshot is no longer persisted; related regression tests removed.

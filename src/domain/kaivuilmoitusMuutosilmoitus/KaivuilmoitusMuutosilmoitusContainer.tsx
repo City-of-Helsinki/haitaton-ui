@@ -87,7 +87,7 @@ export default function KaivuilmoitusMuutosilmoitusContainer({
 
   // Persist lightweight textual + minimal areas metadata so new areas remain visible across language change.
   // We intentionally exclude heavy nested data (tyoalueet geometries, haittojenhallintasuunnitelma) to
-  // avoid stale sub-data resurrection after deletion. Geometry snapshots are handled via __geometry in the helper.
+  // avoid stale sub-data resurrection after deletion.
   const persistence = useAreasPersistence(
     `functional-muutosilmoitus-form-${muutosilmoitus.id || 'new'}-KAIVU`,
     formContext as unknown as UseFormReturn<Record<string, unknown>>, // widen for helper

@@ -4,11 +4,7 @@ import { KaivuilmoitusAlue } from '../../domain/application/types/application';
 import { normalizeStringEmptyToNull } from '../utils/normalize';
 import { UseFormReturn } from 'react-hook-form';
 import merge from 'lodash/merge';
-import {
-  hydrateJohtoAreasGeometryAfterHydrate,
-  hydrateKaivuAreasGeometryAfterHydrate,
-  FormContextLike,
-} from '../../domain/common/utils/persistenceGeometry';
+// persistenceGeometry helpers removed from useAreasPersistence imports
 
 /**
  * Helper to create a persistence instance for forms that store areas geometry.
@@ -24,9 +20,6 @@ export default function useAreasPersistence<T extends object = Record<string, un
   formContext: UseFormReturn<T>,
   options?: AreasPersistenceOptions<T>,
 ) {
-  const type = options && 'type' in options && options.type ? options.type : 'JOHTO';
-
-  // If caller requested API-model persistence for Kaivu, persist the API-shaped model
   const persistAsApiModel = Boolean(
     options && 'persistAsApiModel' in options && options.persistAsApiModel,
   );
@@ -101,16 +94,11 @@ export default function useAreasPersistence<T extends object = Record<string, un
         }
       }
 
-      // legacy path: lightweight base + __geometry snapshot used today
       const valuesObj = values as unknown as
         | { applicationData?: Record<string, unknown> }
         | undefined;
       const ad = (valuesObj?.applicationData ?? {}) as Record<string, unknown>;
 
-      // Persist a base lightweight applicationData subset. Geometry is no longer
-      // stored under a reserved '__geometry' key; reconstruction should rely on
-      // the API-shaped persisted model or live values. This keeps persistence
-      // payloads smaller and avoids duplicating geometry data.
       const base: Record<string, unknown> = {
         applicationData: {
           name: ad.name,
@@ -167,8 +155,6 @@ export default function useAreasPersistence<T extends object = Record<string, un
     },
     debounceMs: 250,
     afterHydrate(raw: unknown) {
-      const formCtx = formContext as unknown as FormContextLike;
-      // If API-shaped persisted object detected, prefer converting via convertApplicationDataToFormState
       try {
         if (raw && typeof raw === 'object' && (raw as Record<string, unknown>).applicationData) {
           // Attempt to convert persisted API-shaped application into form defaults
@@ -206,28 +192,15 @@ export default function useAreasPersistence<T extends object = Record<string, un
                   setValue('applicationType', root.applicationType, { shouldDirty: false });
                 return;
               } catch {
-                // fall back to legacy geometry hydration on any reconstruction error
+                // ignore
               }
             }
           } catch {
-            // fall back to legacy geometry hydration
+            // ignore
           }
         }
       } catch {
         // ignore
-      }
-
-      // fallback: legacy geometry hydration path
-      if (type === 'JOHTO') {
-        hydrateJohtoAreasGeometryAfterHydrate(raw, formCtx, {
-          pathPrefix: 'applicationData.areas',
-          snapshotKey: 'areas',
-        });
-      } else {
-        hydrateKaivuAreasGeometryAfterHydrate(raw, formCtx, {
-          pathPrefix: 'applicationData.areas',
-          snapshotKey: 'areas',
-        });
       }
     },
   });

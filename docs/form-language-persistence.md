@@ -42,15 +42,20 @@ Switch phases per form:
 useFormLanguagePersistence(key, form, { hydratePhase: 'effect' });
 ```
 
-## Select option
+## Select option (API-shaped persistence)
 
-`select(values)` should return a _plain_, serializable object. Avoid:
+In the current approach `select(values)` should return the same API-shaped data model the backend uses when
+reading/writing the application (for example an `Application` object or the `applicationData` payload). This
+keeps persisted drafts aligned with the objects used by the server and avoids special-case snapshot keys.
 
-- Live OpenLayers Features
-- Large binary blobs
-- Deep reference cycles
+Guidelines:
 
-Persist geometry via a snapshot under a meta key (e.g. `__geometry`) and rebuild in `afterHydrate`.
+- Persist only plain, serializable data. Avoid including OpenLayers Feature instances, functions, or binary blobs.
+- Geometry objects are persisted as plain GeoJSON-like entries
+  inside the API-shaped model (coordinates + type) that the server's model expects for `areas`/`tyoalueet`.
+- The hook's `afterHydrate` can still be used to reconstruct runtime-only artifacts (recreate Features from
+  plain geometry objects) and to merge the persisted API-shaped object into the form state using the same
+  conversion helpers used when reading server responses.
 
 ## Dirty merge semantics
 
@@ -100,19 +105,23 @@ window.dispatchEvent(new CustomEvent('haitaton:languageChanging'));
 
 The hook listens and immediately snapshots (bypassing debounce) to minimize lost changes.
 
-## Geometry pattern example
+## API-shaped persistence example
+
+Persist the DTO the backend expects and convert it back into form state when hydrating. Keep geometry as
+plain geometry objects inside the persisted model and recreate map Features during `afterHydrate`.
 
 ```ts
 useFormLanguagePersistence(key, form, {
   select(values) {
-    return {
-      name: values.name,
-      // lightweight geometry snapshot under meta key
-      __geometry: buildSnapshot(values.areas),
-    };
+    // build the same shape that the backend accepts when creating/updating the application
+    return buildPersistedApplicationFromForm(values);
   },
   afterHydrate(raw) {
-    hydrateGeometry(raw, form, { pathPrefix: 'areas', snapshotKey: 'areas' });
+    // raw is the persisted API-shaped object; convert it back into the form state the UI expects
+    const formState = convertApplicationDataToFormState(raw.applicationData ?? raw);
+    // apply the converted form state and then recreate runtime-only Features from geometry objects
+    applyFormStateIntoRHF(formState, form);
+    recreateFeaturesFromGeometry(raw, { pathPrefix: 'applicationData.areas' });
   },
 });
 ```

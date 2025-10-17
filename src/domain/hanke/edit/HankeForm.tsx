@@ -636,9 +636,7 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
           formSteps={formSteps}
           // IMPORTANT: use a distinct key for step index persistence to avoid
           // clobbering the form draft persistence JSON (which uses
-          // `hanke-form-<id>`). A prior regression overwrote the draft object
-          // (with __geometry snapshot) with a bare number, losing area
-          // geometries on language change.
+          // `hanke-form-<id>`).
           stepPersistKey={`functional-hanke-form-step-${formData.hankeTunnus || 'new'}`}
           onStepChange={handleStepChange}
           topElement={formErrorsNotification}

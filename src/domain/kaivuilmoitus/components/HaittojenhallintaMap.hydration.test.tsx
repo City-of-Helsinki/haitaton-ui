@@ -201,9 +201,7 @@ it('hydrates työalue feature for HaittojenhallintaMap without crashing', async 
     window.dispatchEvent(new CustomEvent('haitaton:languageChanging'));
     await new Promise((res) => setTimeout(res, 30));
   });
-
-  // Expect no crash: test runner would have thrown. Persistence snapshot is written but no __geometry key
-  // is asserted because geometry is no longer duplicated into a reserved key.
+  // Verify persistence contains the snapshot (indirect verification that hydration path was triggered)
   const raw = sessionStorage.getItem('functional-application-form-555-KAIVU');
   expect(raw).toBeTruthy();
   utils.unmount();
