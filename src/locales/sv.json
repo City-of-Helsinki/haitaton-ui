@@ -626,10 +626,6 @@
       "titleText": "Återta projektet?",
       "bodyText": "Är du säker på att du vill återta projektet? Det raderas helt ur systemet."
     },
-    "validationError": {
-      "header": "Uppgifter saknas",
-      "haittojenHallintaRequired": "Fyll i åtgärderna för hantering av olägenheter för projektområdet och övriga obligatoriska uppgifter för att kunna spara projektet."
-    },
     "labels": {
       "hankeTunnus": "Projektets kod",
       "nimi": "Projektets namn",
@@ -877,17 +873,23 @@
           {
             "heading": "Åtskiljning av cykeltrafiken från andra färdsätt",
             "tip": "Planera och genomför de tillfälliga arrangemangen för cykeltrafiken i regel i enlighet med de ursprungliga permanenta arrangemangen (t.ex. enkelriktade cykelvägar/cykelbanor eller dubbelriktade cykelvägar). Försök att bevara lösningen för cykeltrafiken åtskild från gångtrafiken, om sådan finns i nuläget. När mängden biltrafik överstiger 7 000 fordon per dygn, ska cykeltrafik i allmänhet avskiljas också från biltrafiken. Det är nödvändigt att göra en åtskiljning på de huvudsakliga rutterna för cykeltrafik även i fråga om mindre trafikmängder inom biltrafiken. Det är endast möjligt att föreslå att arrangemang för cykeltrafiken i en riktning ersätts i fråga om en arbetsplats med en blandad trafiklösning, och då anvisas en hastighetsbegränsning på 30 km/h för gatan.",
-            "cardLinks": [4]
+            "cardLinks": [
+              4
+            ]
           },
           {
             "heading": "Korsningsarrangemang",
             "tip": "Planera och genomför tillfälliga korsningar inom cykeltrafiken särskilt i trafikljusstyrda anslutningar när det gäller hur olika körriktningar fungerar, men i synnerhet när det gäller vänstersvängning samt sikt och belysning.",
-            "cardLinks": [4]
+            "cardLinks": [
+              4
+            ]
           },
           {
             "heading": "Omvägar",
             "tip": "Planera och genomför tydlig handledning för omvägar som beaktar cykeltrafik separat och som installerats tryggt. Definiera cykeltrafikens konsekvenser och behövliga övriga åtgärder för omväg.",
-            "cardLinks": [5]
+            "cardLinks": [
+              5
+            ]
           },
           {
             "heading": "Tillgänglighet",
@@ -900,12 +902,17 @@
           {
             "heading": "Förhandsinformation och information om ändringar",
             "tip": "Informera de olika parterna om betydande arbeten och eventuella ändringar av cykeltrafikens rutt redan i planeringsfasen och i god tid före genomförandet av de nya arrangemangen (allmänna meddelanden, lokala meddelanden). Markera omvägen i terrängen innan arbetet inleds. Informera de olika parterna om eventuella ändringar i rutterna i god tid före genomförandet av de nya arrangemangen.",
-            "cardLinks": [1]
+            "cardLinks": [
+              1
+            ]
           },
           {
             "heading": "Skydd av cykeltrafiken från byggplatsen",
             "tip": "Genomför genast skyddet av cykeltrafiken från byggplatsområdet med räcken och spärranordningar.",
-            "cardLinks": [6, 7]
+            "cardLinks": [
+              6,
+              7
+            ]
           },
           {
             "heading": "Underhåll",
@@ -914,7 +921,9 @@
           {
             "heading": "Kvaliteten på cykelvägarnas yta",
             "tip": "Bygg och underhåll hårda och rena ytor på cykelvägarna (tillfällig vägbeläggning) samt sluttande nivåbyten.",
-            "cardLinks": [2]
+            "cardLinks": [
+              2
+            ]
           },
           {
             "heading": "Anvisningar om trafikarrangemangen under arbetet",
@@ -964,7 +973,9 @@
           {
             "heading": "Förhandsinformation och information om ändringar",
             "tip": "Informera de olika parterna om betydande arbeten och eventuella ändringar av biltrafikens rutter redan i planeringsfasen och i god tid före genomförandet (allmänna meddelanden, lokala meddelanden). Informera de olika parterna om eventuella ändringar i rutterna i god tid före genomförandet av de nya arrangemangen.",
-            "cardLinks": [1]
+            "cardLinks": [
+              1
+            ]
           },
           {
             "heading": "Skyltning",
@@ -977,7 +988,10 @@
           {
             "heading": "Åtskiljning av färdmedel",
             "tip": "Hänvisa inte fotgängare till körbanan, om inte en egen säker och tillräckligt bred förbindelseled från körbanan har avskilts för dem. Hänvisa inte cykeltrafiken till körbanan bland biltrafiken, utom i motiverade situationer (se åtgärdstipsen för cykeltrafik).",
-            "cardLinks": [3, 4]
+            "cardLinks": [
+              3,
+              4
+            ]
           },
           {
             "heading": "Körbanebeläggningar och -markeringar",
@@ -1002,17 +1016,23 @@
           {
             "heading": "Kontakt på förhand och trafikeringsarrangemang att avtala",
             "tip": "<p>Kontakta HRT (<mailto href=\"mailto:infra@hsl.fi\"> infra@hsl.fi</mailto>) i planeringsskedet när ditt projekt är beläget längs HRT:s busstrafikrutter och ställ fast om ditt projekt medför olägenheter för HRT:s busstrafik, såsom minskning av körfält, dröjsmål, förlängning av restiden, omvägar, parkeringar osv. Planera eventuella omvägar för busstrafiken och skyltningen till omvägar samt behövliga kollektivtrafikförmåner i tid. Säkerställ att rutten fungerar med HRT och kom överens om ljusstyrningen med huvudstadsregionens trafikledningscentral (<mailto href=\"mailto:liikenteenhallintakeskus@hel.fi\">liikenteenhallintakeskus@hel.fi</mailto>, tfn 09 310 37555) (även tillfällig ljusstyrning). Kom vid behov överens med HRT om provkörning för att säkerställa smidig trafik.</p><br><p>Om byggplatsen ligger vid ändhållplatsen för en buss eller om den hindrar busstrafik på gatan i fråga, ta kontakt minst 2,5 månader innan arbetena börjar. Om arbetsplatsen inte är akut, t.ex. på grund av rörbrott, ta kontakt minst 2 veckor innan arbetena börjar. Mer information: <external href=\"https://www.hsl.fi/hsl/urakoitsijat\">Urakoitsija - ota joukkoliikenne huomioon työmaalla <span className=\"hds-icon icon hds-icon--link-external hds-icon--size-s vertical-align-medium-icon\" aria-hidden=\"true\"></span></external>.</p>",
-            "cardLinks": [8]
+            "cardLinks": [
+              8
+            ]
           },
           {
             "heading": "Hållplatsarrangemang och passage till hållplatserna",
             "tip": "Genomför tillgänglig passage till de nuvarande hållplatserna eller planera och genomför flytten av hållplatserna, skyltningen och tillgängliga förbindelser för fotgängare. Järnvägs - och busshållplatser får inte flyttas eller tas ur bruk utan tillstånd av HRT (<mailto href=\"mailto:infra@hsl.fi\">infra@hsl.fi</mailto>). Mer information: <external href=\"https://www.hsl.fi/hsl/urakoitsijat\">Urakoitsija - ota joukkoliikenne huomioon työmaalla <span className=\"hds-icon icon hds-icon--link-external hds-icon--size-s vertical-align-medium-icon\" aria-hidden=\"true\"></span></external>.",
-            "cardLinks": [8]
+            "cardLinks": [
+              8
+            ]
           },
           {
             "heading": "Förhandsinformation och information om ändringar",
             "tip": "Informera de olika parterna om betydande arbeten och eventuella ändringar av busstrafikens rutt redan i planeringsfasen och i god tid före genomförandet (allmänna meddelanden, lokala meddelanden). Informera de olika parterna om eventuella ändringar i rutterna i god tid före genomförandet av de nya arrangemangen.",
-            "cardLinks": [1]
+            "cardLinks": [
+              1
+            ]
           },
           {
             "heading": "Skyltning",
@@ -1040,7 +1060,9 @@
           {
             "heading": "Kontakt på förhand och trafikeringsarrangemang att avtala",
             "tip": "<p>Bedöm i god tid tidpunkten för projektets enskilda arbeten och kontakta HRT på förhand (trafikering:<mailto href=\"mailto:infra@hsl.fi\">infra@hsl.fi</mailto>) och Stadstrafik Ab:s (baninfo och system: <mailto href=\"mailto:urakoitsijaohjeistus@kaupunkiliikenne.fi\">entreprenörsanvisningar @kaupunkiliikenne.fi</mailto>) för att samordna eventuella undantagsarrangemang med andra. Planera eventuella omvägar för spårbunden trafik och kollektivtrafikförmåner samt försäkra dig om att rutten fungerar med HRT, Stadstrafik Ab samt i fråga om trafikljus med Huvudstadsregionens trafikledningscentral (<mailto href=\"mailto:liikenteenhallintakeskus@hel.fi\">liikenteenhallintakeskus@hel.fi</mailto>, tfn 09 310 37555).</p><br><p>I fråga om undantagsrutter för spårbunden trafik ska du göra en anmälan till HRT 8 veckor före arbetets början då arbetet varar högst 3 dygn och 5 månader före arbetets början då arbetet varar mer än 3 dygn. I fråga om busstrafik som ersätter spårtrafik ska du göra en anmälan till HRT 3 månader innan arbetena börjar för arbeten som varar högst 3 dygn och 5 månader innan arbetena börjar för arbeten som varar i mer än 3 dygn. Mer information: <external href=\"https://www.hsl.fi/hsl/urakoitsijat\">Entreprenör – beakta kollektivtrafiken på byggarbetsplatsen <span className=\"hds-icon icon hds-icon--link-external hds-icon--size-s vertical-align-medium-icon\" aria-hidden=\"true\"></span></external> samt <external href=\"https://kaupunkiliikenne.fi/kaupunkiraidehankkeet-ja-kunnossapito/urakoitsijalle/tyot-raitiotieradan-laheisyydessa/”Arbeten nära spårbanan – Stadstrafik Ab <span className=\"hds-icon icon hds-icon--link-external hds-icon--size-s vertical-align-medium-icon\" aria-hidden=\"true\"></span></external></p>",
-            "cardLinks": [8]
+            "cardLinks": [
+              8
+            ]
           },
           {
             "heading": "Spårvägens konstruktioner och arbeten i närheten av banområdet",
@@ -1049,12 +1071,16 @@
           {
             "heading": "Hållplatsarrangemang och passage till hållplatserna",
             "tip": "Genomför tillgänglig passage till de nuvarande hållplatserna eller planera och genomför flytten av hållplatserna, skyltningen och tillgängliga förbindelser för fotgängare. Järnvägs - och busshållplatser får inte flyttas eller tas ur bruk utan tillstånd av HRT (<mailto href=\"mailto:infra@hsl.fi\">infra@hsl.fi</mailto>). Mer information: <external href=\"http://hsl.fi/hsl/urakoitsijat\">Urakoitsija - ota joukkoliikenne huomioon työmaalla <span className=\"hds-icon icon hds-icon--link-external hds-icon--size-s vertical-align-medium-icon\" aria-hidden=\"true\"></span></external>.",
-            "cardLinks": [8]
+            "cardLinks": [
+              8
+            ]
           },
           {
             "heading": "Förhandsinformation och information om ändringar",
             "tip": "Informera de olika parterna om betydande arbeten och eventuella ändringar av spårvägstrafikens rutt redan i planeringsfasen och i god tid före genomförandet (allmänna meddelanden, lokala meddelanden). Informera de olika parterna om eventuella ändringar i rutterna i god tid före genomförandet av de nya arrangemangen.",
-            "cardLinks": [1]
+            "cardLinks": [
+              1
+            ]
           },
           {
             "heading": "Trafikljusstyrning",
@@ -1069,12 +1095,16 @@
           {
             "heading": "Förhandsinformation och information om ändringar",
             "tip": "Informera aktörerna och fastigheterna minst en vecka före eller genast när tidpunkten för arbetena är känd, när arbete som medför buller-, damm- eller vibrationsolägenhet utförs. Anmälan om mycket störande arbete ska göras senast 30 dygn innan arbetet inleds. Ge invånarna och olika aktörer tid att på förhand förbereda sig på kända störningar och förhandla särskilt med aktörerna om olägenheter nära känsliga funktioner.",
-            "cardLinks": [1]
+            "cardLinks": [
+              1
+            ]
           },
           {
             "heading": "Tidtabell för arbetet och arbetsmetoder",
             "tip": "Utred möjligheterna att planera ditt arbete och arbetsmetoderna för att minimera olägenheterna för utsläppen från funktionerna.",
-            "cardLinks": [10]
+            "cardLinks": [
+              10
+            ]
           }
         ],
         "MELU": [
@@ -1089,7 +1119,9 @@
           {
             "heading": "Lösningar som minskar bullret",
             "tip": "Genomför lösningar som minskar bullereffekterna, såsom flyttbara bullerstängsel.",
-            "cardLinks": [10]
+            "cardLinks": [
+              10
+            ]
           }
         ],
         "POLY": [
@@ -1895,13 +1927,7 @@
     },
     "attribution": "Material &copy; <a href='https://kartta.hel.fi'>Helsingin kaupunki</a>",
     "drawSquareButtonAria": "Rita en fyrkant på kartan",
-    "drawPolygonButtonAria": "Rita en polygon på kartan",
-    "notifications": {
-      "selfIntersectingLabel": "Felaktig geometri",
-      "selfIntersectingText": "Monopolyt kan inte skära sig själv. Ändringarna har återkallats.",
-      "drawingOutsideHankeAreaLabel": "Ritning förhindrad",
-      "drawingOutsideHankeAreaText": "Ritning utanför projektområdet är inte tillåten."
-    }
+    "drawPolygonButtonAria": "Rita en polygon på kartan"
   },
   "staticPages": {
     "infoPage": {
@@ -1970,7 +1996,7 @@
       },
       "asioinninToimintokokonaisuudet": {
         "heading": "Verksamhetshelheter för uträttande av ärenden",
-        "content": "<p>Första sidan för Haitaton-ärendehanteringen består av följande huvuddelar och andra systembeskrivande delar:</p> <br /> <ul> <li><strong>Bekanta dig med projekten </strong>: I det här avsnittet går vi igenom projektområdena i anslutning till projekten i kartvyn. Genom att välja projektområde på kartan syns basinformation om kartan och uppgifter om index för olägenheter på kartan. Innehållet i indexen för olägenheter beskrivs i punkten <a href=\"./haittaindeksit\">Beräkning av index för olägenheter och plan för hantering av olägenheter.</a></li> <li><strong>Skapa nytt projekt</strong>: I det här avsnittet kan du skapa ett nytt projekt. Efter att de obligatoriska fälten på projektblanketten har fyllts i är projektet offentligt, dvs. syns för andra användare, varefter du också kan utarbeta ansökningar (grävningsanmälan, ledningsutredning) under projektet. Som grundare av projektet får du automatiskt alla rättigheter att bearbeta projektet. Läs mer om projektets användarrättigheter i punkten <a href=\"./yhteyshenkilot\">Att lägga till och redigera kontaktuppgifter samt deras användarrättigheter</a>.</li> <li><strong>Gör en ansökan om ledningsutredning</strong>: I avsnittet kan du lämna in en enskild ansökan om ledningsutredning. Haiaton grundar i detta sammanhang automatiskt projektstommen som gällande projektuppgifterna endast har ett namn som hämtas från ledningsutredningen. Som grundare av projektstommen får du automatiskt alla rättigheter att redigera projektstommen. Dina egna ledningsutredningar syns inte för övriga användare. Du kan dock komplettera projektstommen genom att fylla i de obligatoriska projektuppgifterna. Då blir projektstommen ett projekt som syns för alla användare. Då kan du i fortsättningen lägga till också andra ansökningar för projektet utöver den ursprungliga ledningsutredningen</li> <li><strong>Egna projekt</strong>: I det här avsnittet kan du granska projekten och deras ansökningar samt projektgrupper (dvs. enskilda ledningsutredningar) där du är med som grundare eller som kontaktperson som lagts till i efterhand. Med tillräckliga användarrättigheter kan du behärska användarrättigheterna för övriga personer som deltar i projekten. Läs mer om användarrättigheter i punkten <a href=\"./yhteyshenkilot\">Att lägga till och redigera kontaktuppgifter samt deras användarrättigheter</a>. Med tillräckliga nyttjanderätter kan du också lägga till nya ansökningar för projektet via projektsidan och/eller redigera redan gjorda ansökningar via ansökningssidan. På dessa sidor kan du följa myndighetssituationen för enskilda ansökningar också med granskningsrätt.</li> <li><strong>Arbetsanvisningar:</strong> Avsnittet ger dig tillgång till stadens officiella arbetsanvisningar och andra viktiga uppgifter. I det här avsnittet kan du också granska tilläggsinformationskorten som kompletterar åtgärdstipsen för projektet och ansökningarnas hantering av olägenheter. Innehållet i tilläggsinformationskorten baserar sig på Helsingfors stads publicerade Byggplatshandbok (Työmaaopas), som redan har tagits ur bruk. Innehållet har dessutom kompletterats med bästa praxis som samlats in genom tävlingen Årets gatuarbete och bearbetats till en form som stöder åtgärdstips för Haitatons hantering av olägenheter.</li> </ul> <br /> <p>Andra avsnitt som beskriver systemet är <strong>Användaranvisningar och support</strong>, <strong>Information om Haitaton</strong>, <strong>Tillgänglighetsbeskrivning</strong> sekä <strong>Dataskyddsbeskrivningar</strong>. Dessa samt <strong>Projekten på kartan</strong> och <strong>Arbesanvisningarna</strong> finns tillgängliga i Haitaton-tjänsten även för användare som inte loggat in.</p>"
+        "content": "<p>Första sidan för Haitaton-ärendehanteringen består av följande huvuddelar och andra systembeskrivande delar:</p> <br /> <ul> <li><strong>Bekanta dig med projekten </strong>: I det här avsnittet går vi igenom projektområdena i anslutning till projekten i kartvyn. Genom att välja projektområde på kartan syns basinformation om kartan och uppgifter om index för olägenheter på kartan. Innehållet i indexen för olägenheter beskrivs i punkten <a href=”./haittaindeksit”>Beräkning av index för olägenheter och plan för hantering av olägenheter.</a></li> <li><strong>Utföra ärenden på de allmänna områdena</strong>: I det här avsnittet kan du utföra ärenden som gäller allmänt område. Man börjar med att skapa ett nytt projekt. Efter att de obligatoriska fälten på projektblanketten har fyllts i är projektet offentligt, dvs. syns för andra användare. Därefter kan du utarbeta de ansökningar som krävs för att arbeta på allmänna områden (grävningsanmälan, ledningsutredning) under projektet. Som grundare av projektet får du automatiskt alla rättigheter att bearbeta projektet. Läs mer om projektets användarrättigheter i punkten <a href=”./yhteyshenkilot”>Att lägga till och redigera kontaktuppgifter samt deras användarrättigheter</a>.</li> <li><strong>Utföra ärenden på de privata områdena</strong>: I avsnittet kan du lämna in en enskild ansökan om ledningsutredning. Haitaton grundar i detta sammanhang automatiskt projektstommen som gällande projektuppgifterna endast har ett namn som hämtas från ledningsutredningen. Som grundare av projektstommen får du automatiskt alla rättigheter att redigera projektstommen. Dina egna ledningsutredningar syns inte för övriga användare. Du kan dock komplettera projektstommen genom att fylla i de obligatoriska projektuppgifterna. Då blir projektstommen ett projekt som syns för alla användare. Då kan du i fortsättningen lägga till också andra ansökningar för projektet utöver den ursprungliga ledningsutredningen. Det går inte att göra grävningsanmälningar på privat område.</li> <li><strong>Egna projekt</strong>: I det här avsnittet kan du granska projekten och deras ansökningar samt projektgrupper (dvs. enskilda ledningsutredningar) där du är med som grundare eller som kontaktperson som lagts till i efterhand. Med tillräckliga användarrättigheter kan du behärska användarrättigheterna för övriga personer som deltar i projekten. Läs mer om användarrättigheter i punkten <a href=”./yhteyshenkilot”>Att lägga till och redigera kontaktuppgifter samt deras användarrättigheter</a>. Med tillräckliga nyttjanderätter kan du också lägga till nya ansökningar för projektet via projektsidan och/eller redigera redan gjorda ansökningar via ansökningssidan. På dessa sidor kan du följa myndighetssituationen för enskilda ansökningar också med granskningsrätt.</li> <li><strong>Arbetsanvisningar:</strong>Avsnittet ger dig tillgång till stadens officiella arbetsanvisningar och andra viktiga uppgifter. I det här avsnittet kan du också granska tilläggsinformationskorten som kompletterar åtgärdstipsen för projektet och ansökningarnas hantering av olägenheter. Innehållet i tilläggsinformationskorten baserar sig på Helsingfors stads publicerade Byggplatshandbok (Työmaaopas), som redan har tagits ur bruk. Innehållet har dessutom kompletterats med bästa praxis som samlats in genom tävlingen Årets gatuarbete och bearbetats till en form som stöder åtgärdstips för Haitatons hantering av olägenheter.</li> </ul> <br /> <p>Andra avsnitt som beskriver systemet är <strong>Användaranvisningar och support</strong>, <strong>Information om Haitaton</strong>, <strong>Tillgänglighetsbeskrivning</strong> sekä <strong>Dataskyddsbeskrivningar</strong>. Dessa samt <strong>Projekten på kartan</strong> och <strong>Arbesanvisningarna</strong> finns tillgängliga i Haitaton-tjänsten även för användare som inte loggat in.</p>"
       },
       "asioinninKulku": {
         "heading": "Ärendehanteringens gång",
@@ -1978,7 +2004,7 @@
       },
       "hankkeenPerustaminen": {
         "heading": "Att bilda ett projekt",
-        "content": "<p><strong>Skapa ett nytt projekt</strong> i Haitaton-systemet i ett så tidigt skede av projektets livscykel som möjligt för en förhandsgranskning av olägenheterna och för <a href=\"./haittaindeksit\">planen för hantering av olägenheter</a> samt för samordning av olika projekt. Detta är även en fördel för ditt projekt. <a href=\"./hankkeenJaHakemuksenTilat\">Projektets status</a> sparas först som utkast och syns för allmänheten först när du har fyllt i de obligatoriska uppgifterna på projektblanketten. Via ett offentligt projekt kan du också gå vidare till att skapa ansökningar (grävningsanmälan, ledningsutredning).</p><br/><p><strong> Aspekter som gäller ritning av projektområden</strong> och aspekter som hänför sig till kartorna behandlas i underpunkt <a href=\"./karttatoiminnot\"> Kartfunktioner och kartverktyg</a>. Ange bedömningarna av olägenheter som begärts för varje projektområde. Efter det räknar Haitaton ut <a href=\"./haittaindeksit\">index för olägenheterna</a> som grund för planen för hantering av olägenheter för varje enskilt projektområde</p><br /><p><strong>Utarbeta de förutsägbara</strong> <a href=\"./haittaindeksit\">planerna för hantering av olägenheter</a> och genomför dem till den del det är möjligt med tanke på projektets skeden.</p><br /><p><strong>När du lägger till</strong> <a href=\"./yhteyshenkilot\">nya personer för projektet</a> skickar Haitaton två <a href=\"./sahkopostiheratteet\">notifikationer</a> till personens e-post. Den första hänvisar till identifiering för projektet för att det i fortsättningen ska finnas bland användarens Egna projekt. När personen har identifierat sig för projektet används länken i den andra notifikationen för att direkt till det projekt till vilken personen har fogats. Samma praxis gäller även projektets ansökningar. I Haitaton administreras kontaktpersoner och deras personuppgifter projektvis. Således måste användarrättigheter för personer som lagts till i projektet identifieras separat för varje projekt.</p><br/><p><strong> Administration av användarrättigheter för personer som lagts till för projektet</strong> i avsnittet Användaradministration på projektsidan. För de listade projekten har du antingen alla rättigheter som du automatiskt fått som grundare av projektet eller de användarrättigheter som fogats till dig för ett projekt som <a href=\"./kayttooikeustasot\">rättigheter</a> Med redigeringsrätten som du fått kan du behärska användarrättigheterna på samma nivå eller i mindre omfattning. Med granskningsrättigheter är det inte möjligt att administrera användarrättigheter i avsnittet Användarhantering. När användarrättigheterna ändras skickas en notifikation till den person vars rättigheter har ändrats.</p><br /><p><strong>När bilagor</strong> läggs till lönar det sig att ge dem ett beskrivande filnamn, eftersom en separat beskrivning inte kan fogas till dem. Det går fritt att ta bort bilagor från projektet. Kontrollera tillåtna filformat och filstorlek på sidan Bilagor till blanketterna.</p>"
+        "content": "<p><strong>När du utförar ärenden på ett allmänt område</strong> skapa ett nytt projekt i Haitaton-systemet i ett så tidigt skede av projektets livscykel som möjligt för en förhandsgranskning av olägenheterna och för <a href=\"./haittaindeksit\">planen för hantering av olägenheter</a> samt för samordning av olika projekt. Detta är även en fördel för ditt projekt. <a href=\"./hankkeenJaHakemuksenTilat\">Projektets status</a> sparas först som utkast och syns för allmänheten först när du har fyllt i de obligatoriska uppgifterna på projektblanketten. Via ett offentligt projekt kan du också gå vidare till att skapa ansökningar (grävningsanmälan, ledningsutredning).</p><br/><p><strong> Aspekter som gäller ritning av projektområden</strong> och aspekter som hänför sig till kartorna behandlas i underpunkt <a href=\"./karttatoiminnot\"> Kartfunktioner och kartverktyg</a>. Ange bedömningarna av olägenheter som begärts för varje projektområde. Efter det räknar Haitaton ut <a href=\"./haittaindeksit\">index för olägenheterna</a> som grund för planen för hantering av olägenheter för varje enskilt projektområde</p><br /><p><strong>Utarbeta de förutsägbara</strong> <a href=\"./haittaindeksit\">planerna för hantering av olägenheter</a> och genomför dem till den del det är möjligt med tanke på projektets skeden.</p><br /><p><strong>När du lägger till</strong> <a href=\"./yhteyshenkilot\">nya personer för projektet</a> skickar Haitaton två <a href=\"./sahkopostiheratteet\">notifikationer</a> till personens e-post. Den första hänvisar till identifiering för projektet för att det i fortsättningen ska finnas bland användarens Egna projekt. När personen har identifierat sig för projektet används länken i den andra notifikationen för att direkt till det projekt till vilken personen har fogats. Samma praxis gäller även projektets ansökningar. I Haitaton administreras kontaktpersoner och deras personuppgifter projektvis. Således måste användarrättigheter för personer som lagts till i projektet identifieras separat för varje projekt.</p><br/><p><strong> Administration av användarrättigheter för personer som lagts till för projektet</strong> i avsnittet Användaradministration på projektsidan. För de listade projekten har du antingen alla rättigheter som du automatiskt fått som grundare av projektet eller de användarrättigheter som fogats till dig för ett projekt som <a href=\"./kayttooikeustasot\">rättigheter</a> Med redigeringsrätten som du fått kan du behärska användarrättigheterna på samma nivå eller i mindre omfattning. Med granskningsrättigheter är det inte möjligt att administrera användarrättigheter i avsnittet Användarhantering. När användarrättigheterna ändras skickas en notifikation till den person vars rättigheter har ändrats.</p><br /><p><strong>När bilagor</strong> läggs till lönar det sig att ge dem ett beskrivande filnamn, eftersom en separat beskrivning inte kan fogas till dem. Det går fritt att ta bort bilagor från projektet. Kontrollera tillåtna filformat och filstorlek på sidan Bilagor till blanketterna.</p>"
       },
       "hakemuksienTekeminen": {
         "heading": "Att lämna in ansökningar och skicka dem för behandling",
@@ -1998,7 +2024,7 @@
       },
       "johtoselvitys": {
         "heading": "Att enbart göra en ansökan om ledningsutredning",
-        "content": "<p>På Haitaton-ärendehanteringens startsida och punkten <strong>Gör ansökan om ledningsutredning</strong>kan du göra enbart en separat enskild ledningsutredning till exempel för ledningsutredningar för en privat tomt. Haitaton bildar då automatiskt en s.k. projektstomme under namnet på ansökan.  Projektstommen finns i fortsättningen i listan på sidan Egna projekt. Inga andra ansökningar kan fogas till projektstommen.</p><br/><p> Ansökan om ledningsutredning kan sändas till myndigheterna för behandling när de obligatoriska ansökningsuppgifterna för ansökan är ifyllda. Status för behandlingen av ansökan om ledningsutredning kan följas via ansökningslistan eller ansökningssidan. Här kan du också ladda ner det senaste beslutet. Ansökan om ledningsutredning kan få <a href=\"./taydennyspyynto\">en begäran om komplettering</a> av myndigheten.</p><br /><p>Projektstommen kan kompletteras till ett projekt senare genom att lägga obligatoriska uppgifter om projektet till ansökan. Efter det kan du lägga till andra ansökningar under projektet.</p>        <figure><JohtoselvitysImg1Component alt=\"Kaaviokuva hankkeen luomiseksi automaattisesta hankerungosta.\" /><figcaption><strong>Bild:</strong> Ansökan om separat enskild ledningsutredning utgör projektstommen i Haitaton och till den kan inga andra ansökningar kan fogas. Projektstommen kan kompletteras till ett projekt senare genom att fylla i obligatoriska uppgifter om projektet varefter du kan foga också andra ansökningar till projektet.</figcaption></figure>"
+        "content": "<p>På Haitaton-ärendehanteringens startsida och punkten <strong>Utföra ärenden på ett privat område</strong>kan du göra enbart en separat enskild ledningsutredning för ett privat område till exempell en tomt. Haitaton bildar då automatiskt en s.k. projektstomme under namnet på ansökan.  Projektstommen finns i fortsättningen i listan på sidan Egna projekt. Inga andra ansökningar kan fogas till projektstommen.</p><br/><p> Ansökan om ledningsutredning kan sändas till myndigheterna för behandling när de obligatoriska ansökningsuppgifterna för ansökan är ifyllda. Status för behandlingen av ansökan om ledningsutredning kan följas via ansökningslistan eller ansökningssidan. Här kan du också ladda ner det senaste beslutet. Ansökan om ledningsutredning kan få <a href=”./taydennyspyynto”>en begäran om komplettering</a> av myndigheten.</p><br /><p>Projektstommen kan kompletteras till ett projekt senare genom att lägga obligatoriska uppgifter om projektet till ansökan. Efter det kan du lägga till andra ansökningar under projektet.</p>        <figure><JohtoselvitysImg1Component alt=\"Kaaviokuva hankkeen luomiseksi automaattisesta hankerungosta.\" /><figcaption><strong>Bild:</strong>Ansökan om separat enskild ledningsutredning utgör projektstommen i Haitaton och till den kan inga andra ansökningar kan fogas. Projektstommen kan kompletteras till ett projekt senare genom att fylla i obligatoriska uppgifter om projektet varefter du kan foga också andra ansökningar till projektet.Grävanmälningar görs inte på privat område. </figcaption></figure>"
       },
       "hankkeenJaHakemuksenTilat": {
         "heading": "Status för projektet och ansökningar",

@@ -68,7 +68,6 @@ const OverviewMapControl: React.FC<React.PropsWithChildren<Props>> = ({ classNam
         }),
       });
 
-      overviewCtrl = overviewMapControl; // Assign to the cleanup variable
       map.addControl(overviewMapControl);
       dragZoom = new DragZoom();
       map.addInteraction(dragZoom);

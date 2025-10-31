@@ -12,7 +12,7 @@ import {
   NotificationSize,
   StepState,
 } from 'hds-react';
-import { Box } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/layout';
 import { KaivuilmoitusTaydennysFormValues } from './types';
 import { validationSchema } from './validationSchema';
 import { convertTaydennysDataToFormState } from './utils';

@@ -4,7 +4,8 @@ import OverviewMapControl from '../../../../common/components/map/controls/Overv
 import Kantakartta from '../Layers/Kantakartta';
 import styles from './FullPageMap.module.scss';
 import AddressSearchContainer from '../AddressSearch/AddressSearchContainer';
-import SimpleHankeLayer from '../Layers/SimpleHankeLayer';
+import HankkeetProvider from '../../HankkeetProvider';
+import HankeLayer from '../Layers/HankeLayer';
 import GeometryHover from '../../../../common/components/map/interactions/hover/GeometryHover';
 import HankeHoverBox from '../HankeHover/HankeHoverBox';
 import FeatureClick from '../../../../common/components/map/interactions/FeatureClick';
@@ -21,13 +22,14 @@ const FullPageMap: React.FC<Props> = () => {
         <AddressSearchContainer position={{ top: '1rem', left: '1rem' }} />
         <Kantakartta />
         <OverviewMapControl />
-
-        <HankeSidebarContainer />
-        <FeatureClick />
-        <GeometryHover>
-          <HankeHoverBox />
-          <SimpleHankeLayer startDate={null} endDate={null} />
-        </GeometryHover>
+        <HankkeetProvider>
+          <HankeSidebarContainer />
+          <FeatureClick />
+          <GeometryHover>
+            <HankeHoverBox />
+            <HankeLayer />
+          </GeometryHover>
+        </HankkeetProvider>
       </Map>
     </div>
   );
