@@ -12,7 +12,7 @@ import {
   MuutosilmoitusAttachmentMetadata,
 } from '../application/muutosilmoitus/types';
 import { HankeData } from '../types/hanke';
-import { render, screen, waitFor, within } from '../../testUtils/render';
+import { fireEvent, render, screen, waitFor, within } from '../../testUtils/render';
 import KaivuilmoitusMuutosilmoitusContainer from './KaivuilmoitusMuutosilmoitusContainer';
 import hankkeet from '../mocks/data/hankkeet-data';
 import hakemukset from '../mocks/data/hakemukset-data';
@@ -152,7 +152,9 @@ async function fillAttachments(
   }
 
   if (additionalInfo) {
-    await user.type(screen.getByLabelText(/lisätietoja hakemuksesta/i), additionalInfo);
+    fireEvent.change(screen.getByLabelText(/lisätietoja hakemuksesta/i), {
+      target: { value: additionalInfo },
+    });
   }
 }
 
@@ -167,8 +169,9 @@ describe('Saving the form', () => {
 
   test('Should save on page change', async () => {
     const { user } = setup();
-    await user.clear(screen.getByLabelText(/työn kuvaus/i));
-    await user.type(screen.getByLabelText(/työn kuvaus/i), 'Muuttunut kuvaus');
+    fireEvent.change(screen.getByLabelText(/työn kuvaus/i), {
+      target: { value: 'Muuttunut kuvaus' },
+    });
     await user.click(screen.getByRole('button', { name: /seuraava/i }));
 
     expect(screen.getByText(/hakemus tallennettu/i)).toBeInTheDocument();
@@ -176,8 +179,9 @@ describe('Saving the form', () => {
 
   test('Should show error message if saving fails', async () => {
     const { user } = setup({ responseStatus: 500 });
-    await user.clear(screen.getByLabelText(/työn kuvaus/i));
-    await user.type(screen.getByLabelText(/työn kuvaus/i), 'Muuttunut kuvaus');
+    fireEvent.change(screen.getByLabelText(/työn kuvaus/i), {
+      target: { value: 'Muuttunut kuvaus' },
+    });
     await user.click(screen.getByRole('button', { name: /seuraava/i }));
 
     expect(screen.getAllByText(/tallentaminen epäonnistui/i)[0]).toBeInTheDocument();

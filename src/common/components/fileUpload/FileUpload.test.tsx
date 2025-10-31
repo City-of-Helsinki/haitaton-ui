@@ -1,6 +1,5 @@
 import { http, HttpResponse } from 'msw';
-import { render, screen, waitFor, within } from '../../../testUtils/render';
-import userEvent from '@testing-library/user-event';
+import { fireEvent, render, screen, waitFor, within } from '../../../testUtils/render';
 import api from '../../../domain/api/api';
 import FileUpload from './FileUpload';
 import { server } from '../../../domain/mocks/test-server';
@@ -222,7 +221,11 @@ test('Should upload files when user drops them into drag-and-drop area', async (
   const file2 = new File(['test-file'], 'test-file-b', { type: 'image/png' });
   const file3 = new File(['test-file'], 'test-file-c', { type: 'image/png' });
   getFileUpload({ dragAndDrop: true, accept: '', upload: uploadMock });
-  await userEvent.upload(screen.getByLabelText('Choose a file'), [file, file2, file3]);
+  fireEvent.drop(screen.getByText('Raahaa tiedostot tänne'), {
+    dataTransfer: {
+      files: [file, file2, file3],
+    },
+  });
 
   expect(
     await screen.findByText('3/3 tiedosto(a) tallennettu', {}, { timeout: 10000 }),

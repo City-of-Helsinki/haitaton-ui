@@ -1,32 +1,27 @@
-import { useEffect, useContext, useRef, useState, useCallback } from 'react';
+import React, { useEffect, useContext, useRef, useState, useCallback } from 'react';
 import Feature, { FeatureLike } from 'ol/Feature';
 import Select from 'ol/interaction/Select';
 import { createBox } from 'ol/interaction/Draw';
+import Collection from 'ol/Collection';
 import { Draw, Snap, Modify } from 'ol/interaction';
 import { Condition } from 'ol/events/condition';
 import Geometry from 'ol/geom/Geometry';
 import Polygon from 'ol/geom/Polygon';
 import Style from 'ol/style/Style';
 import { ModifyEvent } from 'ol/interaction/Modify';
-import { useTranslation } from 'react-i18next';
-import { DRAWTOOLTYPE, DrawSegmentGuard } from './types';
+import { DRAWTOOLTYPE } from './types';
 import MapContext from '../../MapContext';
 import useDrawContext from './useDrawContext';
-import {
-  areLinesInPolygonIntersecting,
-  getSurfaceArea,
-  isPolygonSelfIntersecting,
-} from '../../utils';
+import { getSurfaceArea, isPolygonSelfIntersecting } from '../../utils';
 import { styleFunction } from '../../../../../domain/map/utils/geometryStyle';
 import { Map, MapBrowserEvent } from 'ol';
-import { useGlobalNotification } from '../../../globalNotification/GlobalNotificationContext';
 
 type Props = {
+  features?: Collection<Feature>;
   onSelfIntersectingPolygon?: (feature: Feature<Geometry> | null) => void;
   drawCondition?: Condition;
   drawFinishCondition?: (event: MapBrowserEvent<UIEvent>, feature: Feature) => boolean;
   drawStyleFunction?: (map: Map, feature: FeatureLike) => Style | Style[];
-  drawSegmentGuard?: DrawSegmentGuard;
   handleModifyEnd?: (
     event: ModifyEvent,
     originalFeature: Feature | null,
@@ -36,16 +31,13 @@ type Props = {
 
 type Interaction = Draw | Snap | Modify;
 
-export default function DrawInteraction({
+const DrawInteraction: React.FC<React.PropsWithChildren<Props>> = ({
   onSelfIntersectingPolygon,
   drawCondition,
   drawFinishCondition,
   drawStyleFunction,
-  drawSegmentGuard,
   handleModifyEnd,
-}: Readonly<Props>) {
-  const { t } = useTranslation();
-  const { setNotification } = useGlobalNotification();
+}) => {
   const selection = useRef<null | Select>(null);
   const { map } = useContext(MapContext);
   const { state, actions, source } = useDrawContext();
@@ -54,7 +46,6 @@ export default function DrawInteraction({
 
   const drawnFeature = useRef<null | Feature>(null);
   const originalModifiedFeature = useRef<null | Feature>(null);
-  const lastCoordinateCount = useRef<number>(0);
 
   const clearSelection = useCallback(() => {
     if (selection.current) selection.current.getFeatures().clear();
@@ -113,76 +104,10 @@ export default function DrawInteraction({
           return true;
         },
       });
+
       drawInstance.on('drawstart', (event) => {
         selection.current?.setActive(false);
-        lastCoordinateCount.current = 0; // Reset coordinate count for new drawing
         event.feature.on('change', (changeEvent) => {
-          const currentFeature = event.feature;
-          const modifiedPolygon: Polygon = currentFeature.getGeometry() as Polygon;
-          const currentCoordinates = modifiedPolygon.getCoordinates();
-
-          // current coordinates contain always 3 points.
-          // When starting drawing polygon, OL adds 2 coordinates to form a polygon
-          //    1. point is start point for the polygon
-          //    a minimum of 3 coordinates are needed to form a polygon
-          // Number of actual drawn points is array length - 2 because
-          //    2. last point is the cursor position (that is in this context same as last drawn point)
-          //    last point is to link the starting point to get full polygon
-
-          // Only validate when a new point is actually added (not just cursor movement)
-          const actualPointCount = currentCoordinates[0].length - 2; // Exclude cursor position and starting point link
-          // Only process change events that are triggered by user interaction (mouse clicks i.e. new point is added)
-          if (actualPointCount <= lastCoordinateCount.current) {
-            return; // No new point added, just cursor movement
-          }
-          lastCoordinateCount.current = actualPointCount;
-
-          // NEW: Guard against leaving the hanke area while drawing
-          if (drawSegmentGuard && actualPointCount >= 2) {
-            const ring = currentCoordinates[0];
-            // Get the actual segment between the last two fixed points (ignoring cursor)
-            const start = ring[actualPointCount - 2];
-            const end = ring[actualPointCount - 1];
-            const ok = drawSegmentGuard(map, [start, end]);
-            if (!ok) {
-              // Disallow this segment: revert last point
-              drawInstance.removeLastPoint();
-              lastCoordinateCount.current = actualPointCount - 1; // Update count after removal
-              // Show notification for not allowed to draw outside hanke area
-              setNotification(true, {
-                position: 'top-right',
-                dismissible: true,
-                autoClose: true,
-                autoCloseDuration: 5000,
-                label: t('map:notifications:drawingOutsideHankeAreaLabel'),
-                message: t('map:notifications:drawingOutsideHankeAreaText'),
-                type: 'error',
-                closeButtonLabelText: t('common:components:notification:closeButtonLabelText'),
-              });
-              return;
-            }
-          }
-          // Check for self-intersection with the actual drawn points (excluding cursor position)
-          // OpenLayers creates minimum set of 3 coordinates when draw starts for polygon
-          // We are interested only with set of coordinates where there are only those
-          // that we have drawn. Discard the 2 coordinates the polygon inheritly gets.
-          currentCoordinates[0].splice(currentCoordinates[0].length - 2, 2);
-          const intersecting: boolean = areLinesInPolygonIntersecting(currentCoordinates);
-          if (intersecting) {
-            drawInstance.removeLastPoint();
-            lastCoordinateCount.current = actualPointCount - 1; // Update count after removal
-            setNotification(true, {
-              position: 'top-right',
-              dismissible: true,
-              autoClose: true,
-              autoCloseDuration: 5000,
-              label: t('map:notifications:selfIntersectingLabel'),
-              message: t('map:notifications:selfIntersectingText'),
-              type: 'alert',
-              closeButtonLabelText: t('common:components:notification:closeButtonLabelText'),
-            });
-            return;
-          }
           drawnFeature.current = changeEvent.target;
         });
       });
@@ -216,44 +141,32 @@ export default function DrawInteraction({
       drawCondition,
       drawFinishCondition,
       drawStyleFunction,
-      drawSegmentGuard,
-      t,
-      setNotification,
     ],
   );
 
   useEffect(() => {
     if (!map || !source || process.env.NODE_ENV === 'test') return;
-    let originalGeometry: Polygon;
+
     modify.current = new Modify({ source });
     map.addInteraction(modify.current);
 
     modify.current.on('modifystart', (event) => {
-      const currentFeature = event.features.item(0) as Feature<Polygon>;
-      originalGeometry = currentFeature.getGeometry()?.clone() as Polygon;
-      originalModifiedFeature.current = currentFeature.clone();
+      originalModifiedFeature.current = event.features.getArray()[0].clone();
     });
 
     modify.current.on('modifyend', (event) => {
-      // if modify would result into self intersecting polygon, revert to original geometry
-      const modifiedFeature = event.features.item(0) as Feature<Polygon>;
-      const modifiedPolygon: Polygon = modifiedFeature.getGeometry() as Polygon;
+      handleModifyEnd?.(event, originalModifiedFeature.current, event.features.getArray()[0]);
 
-      if (isPolygonSelfIntersecting(modifiedPolygon)) {
-        modifiedPolygon.setCoordinates(originalGeometry.getCoordinates());
-        // Show notification for self-intersecting polygon
-        setNotification(true, {
-          position: 'top-right',
-          dismissible: true,
-          autoClose: true,
-          autoCloseDuration: 5000,
-          label: t('map:notifications:selfIntersectingLabel'),
-          message: t('map:notifications:selfIntersectingText'),
-          type: 'alert',
-          closeButtonLabelText: t('common:components:notification:closeButtonLabelText'),
-        });
-      } else {
-        handleModifyEnd?.(event, originalModifiedFeature.current, modifiedFeature);
+      const selfIntersectingFeature = source
+        .getFeatures()
+        .find((feature) => isPolygonSelfIntersecting(feature.getGeometry() as Polygon));
+
+      if (onSelfIntersectingPolygon) {
+        if (selfIntersectingFeature) {
+          onSelfIntersectingPolygon(selfIntersectingFeature);
+        } else {
+          onSelfIntersectingPolygon(null);
+        }
       }
     });
 
@@ -301,7 +214,7 @@ export default function DrawInteraction({
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [map, source, t, setNotification]);
+  }, [map, source]);
 
   useEffect(() => {
     removeAllInteractions();
@@ -334,4 +247,6 @@ export default function DrawInteraction({
   }, []);
 
   return null;
-}
+};
+
+export default DrawInteraction;

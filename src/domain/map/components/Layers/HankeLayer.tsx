@@ -1,4 +1,4 @@
-import { useRef, useMemo } from 'react';
+import { useRef, useMemo, useContext } from 'react';
 import { Vector as VectorSource } from 'ol/source';
 import VectorLayer from '../../../../common/components/map/layers/VectorLayer';
 import { styleFunction } from '../../utils/geometryStyle';
@@ -7,6 +7,7 @@ import HighlightFeatureOnMap from '../interations/HighlightFeatureOnMap';
 import useHankeFeatures from '../../hooks/useHankeFeatures';
 import { HankeAlue, HankeData } from '../../../types/hanke';
 import FitSource from '../interations/FitSource';
+import HankkeetContext from '../../HankkeetProviderContext';
 
 type Props = {
   hankeData?: HankeData[];
@@ -23,16 +24,19 @@ function HankeLayer({
   fitSource = false,
   filterHankeAlueet,
 }: Readonly<Props>) {
+  const { hankkeet: hankkeetFromContext } = useContext(HankkeetContext);
   const hankeSource = useRef(new VectorSource());
   hankeSource.current.set('sourceName', 'hankeSource');
+  const hankkeet = hankeData || hankkeetFromContext;
 
-  const hankkeetFilteredByDates = useMemo(() => {
-    const hankkeet = hankeData || [];
-    return hankkeet.map((hanke) => ({
-      ...hanke,
-      alueet: filterHankeAlueet ? filterHankeAlueet(hanke.alueet) : hanke.alueet,
-    }));
-  }, [hankeData, filterHankeAlueet]);
+  const hankkeetFilteredByDates = useMemo(
+    () =>
+      hankkeet.map((hanke) => ({
+        ...hanke,
+        alueet: filterHankeAlueet ? filterHankeAlueet(hanke.alueet) : hanke.alueet,
+      })),
+    [hankkeet, filterHankeAlueet],
+  );
 
   useHankeFeatures(hankeSource.current, hankkeetFilteredByDates);
 

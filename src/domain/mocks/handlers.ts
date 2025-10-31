@@ -24,7 +24,6 @@ import {
 import { defaultJohtoselvitysData } from './data/defaultJohtoselvitysData';
 import { PathParams } from 'msw/lib/core/utils/matching/matchRequestUrl';
 import ApiError from './apiError';
-import { GridMetadata } from '../map/components/Layers/SimpleHankeLayer';
 
 const apiUrl = '/api';
 
@@ -95,84 +94,6 @@ export const handlers = [
       return HttpResponse.json({ applications: hakemukset });
     },
   ),
-
-  http.get<PathParams, undefined, GridMetadata>(
-    `${apiUrl}/public-hankkeet/grid/metadata`,
-    async () => {
-      const metadata = {
-        cellSizeMeters: 1000,
-        originX: 25486422.0,
-        originY: 6643836.0,
-        maxX: 25515423.0,
-        maxY: 6687837.0,
-      };
-      return HttpResponse.json(metadata);
-    },
-  ),
-
-  http.post('/api/public-hankkeet/grid', async ({ request }) => {
-    const body = (await request.json()) as {
-      startDate: string;
-      endDate: string;
-      cells: Array<{ x: number; y: number }>;
-    };
-    const { startDate, endDate, cells } = body;
-
-    // Simulate different responses based on request
-    if (!startDate || !endDate) {
-      return new HttpResponse(JSON.stringify({ error: 'Start and end dates are required' }), {
-        status: 400,
-      });
-    }
-
-    if (!cells || cells.length === 0) {
-      return HttpResponse.json([]);
-    }
-
-    // Return mock data proportional to cell count
-    const mockData = Array.from({ length: Math.min(cells.length, 5) }, (_, i) => ({
-      hankeTunnus: `HAI22-${i + 1}`,
-      nimi: `Test Hanke ${i + 1}`,
-      alueet: [
-        {
-          id: i + 1,
-          nimi: `Test Area ${i + 1}`,
-          haittaAlkuPvm: startDate,
-          haittaLoppuPvm: endDate,
-          geometriat: {
-            featureCollection: {
-              type: 'FeatureCollection',
-              features: [
-                {
-                  type: 'Feature',
-                  geometry: {
-                    type: 'Polygon',
-                    coordinates: [
-                      [
-                        [25445000 + i * 100, 6635000 + i * 100],
-                        [25446000 + i * 100, 6635000 + i * 100],
-                        [25446000 + i * 100, 6636000 + i * 100],
-                        [25445000 + i * 100, 6636000 + i * 100],
-                        [25445000 + i * 100, 6635000 + i * 100],
-                      ],
-                    ],
-                  },
-                  properties: {},
-                },
-              ],
-            },
-          },
-          tormaystarkastelu: {
-            liikennehaittaindeksi: {
-              indeksi: 3,
-            },
-          },
-        },
-      ],
-    }));
-
-    return HttpResponse.json(mockData);
-  }),
 
   http.get<PathParams, undefined, HankeDataDraft[]>(`${apiUrl}/public-hankkeet`, async () => {
     const hankkeet = await hankkeetDB.readAll();

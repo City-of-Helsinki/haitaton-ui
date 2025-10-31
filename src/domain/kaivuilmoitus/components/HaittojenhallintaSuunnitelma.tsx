@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { $enum } from 'ts-enum-util';
-import { Box, Flex } from '@chakra-ui/react';
+import { Box, Flex } from '@chakra-ui/layout';
 import { Button, ButtonVariant, IconPlusCircle, Notification } from 'hds-react';
 import TextArea from '../../../common/components/textArea/TextArea';
 import { KaivuilmoitusAlue } from '../../application/types/application';

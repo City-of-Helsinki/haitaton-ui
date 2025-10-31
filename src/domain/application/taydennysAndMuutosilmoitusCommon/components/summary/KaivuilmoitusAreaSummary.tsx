@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { Geometry } from 'ol/geom';
-import { Box } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/layout';
 import { differenceBy } from 'lodash';
 import { KaivuilmoitusAlue, KaivuilmoitusData } from '../../../types/application';
 import { PartialExcept } from '../../../../../common/types/utils';

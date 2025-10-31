@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import VectorSource from 'ol/source/Vector';
-import { Box, BoxProps } from '@chakra-ui/react';
+import { Box, BoxProps } from '@chakra-ui/layout';
 import { Feature } from 'ol';
 import { Geometry } from 'ol/geom';
 import Map from '../../../common/components/map/Map';

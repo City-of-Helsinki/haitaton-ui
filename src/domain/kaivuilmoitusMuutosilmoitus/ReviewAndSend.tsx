@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { Tab, TabList, TabPanel, Tabs } from 'hds-react';
-import { Box } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/layout';
 import {
   Application,
   ApplicationAttachmentMetadata,

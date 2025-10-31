@@ -7,7 +7,6 @@ import { ModifyEvent } from 'ol/interaction/Modify';
 import { FeatureLike } from 'ol/Feature';
 import { Style } from 'ol/style';
 import DrawControl from './DrawControl';
-import { DrawSegmentGuard } from './types';
 
 type Props = {
   /**
@@ -18,7 +17,6 @@ type Props = {
   drawCondition?: Condition;
   drawFinishCondition?: (event: MapBrowserEvent<UIEvent>, feature: Feature) => boolean;
   drawStyleFunction?: (map: Map, feature: FeatureLike) => Style | Style[];
-  drawSegmentGuard?: DrawSegmentGuard;
   handleModifyEnd?: (
     event: ModifyEvent,
     originalFeature: Feature | null,
@@ -31,22 +29,18 @@ const DrawModule: React.FC<React.PropsWithChildren<Props>> = ({
   drawCondition,
   drawFinishCondition,
   drawStyleFunction,
-  drawSegmentGuard,
   handleModifyEnd,
-}) => {
-  return (
-    <>
-      <DrawIntercation
-        onSelfIntersectingPolygon={onSelfIntersectingPolygon}
-        drawCondition={drawCondition}
-        drawFinishCondition={drawFinishCondition}
-        drawStyleFunction={drawStyleFunction}
-        drawSegmentGuard={drawSegmentGuard}
-        handleModifyEnd={handleModifyEnd}
-      />
-      <DrawControl />
-    </>
-  );
-};
+}) => (
+  <>
+    <DrawIntercation
+      onSelfIntersectingPolygon={onSelfIntersectingPolygon}
+      drawCondition={drawCondition}
+      drawFinishCondition={drawFinishCondition}
+      drawStyleFunction={drawStyleFunction}
+      handleModifyEnd={handleModifyEnd}
+    />
+    <DrawControl />
+  </>
+);
 
 export default DrawModule;
