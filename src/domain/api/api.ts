@@ -10,10 +10,7 @@ api.defaults.headers.post['Content-Type'] = 'application/json';
 
 api.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
-    if (
-      (config.url && publicEndpoints.includes(config.url)) ||
-      config.url?.startsWith('/public-hankkeet/')
-    ) {
+    if (config.url && publicEndpoints.includes(config.url)) {
       return config;
     }
     const token = getApiTokenFromStorage(window._env_.REACT_APP_OIDC_AUDIENCE_BACKEND);
