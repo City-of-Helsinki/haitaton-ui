@@ -93,3 +93,35 @@ export function convertApplicationDataToFormState(
 
   return data;
 }
+
+/**
+ * Build an API-shaped Application object from current Johtoselvitys form values so it can be
+ * persisted and later rehydrated via the same conversion used for server responses.
+ */
+export function buildPersistedApplicationFromForm(
+  formState: JohtoselvitysFormValues,
+): Application<JohtoselvitysData> {
+  // Build the canonical update-shaped applicationData (ensures areas geometries are converted)
+  const processed = convertFormStateToJohtoselvitysUpdateData(
+    formState as JohtoselvitysFormValues,
+  ) as JohtoselvitysData;
+
+  // Start from a deep clone of the original form applicationData to preserve
+  // rich contact and optional fields that the update-shaped processed object
+  // may omit. Replace only areas with the geometry-updated processed areas so
+  // we don't lose firstName/lastName etc. stored in form state.
+  const fullAppData: JohtoselvitysData = cloneDeep(
+    formState.applicationData || {},
+  ) as JohtoselvitysData;
+  // Ensure areas from processed (which normalize geometries) are used
+  fullAppData.areas = processed.areas;
+
+  const app: Application<JohtoselvitysData> = {
+    id: formState.id ?? null,
+    alluStatus: formState.alluStatus ?? null,
+    applicationType: formState.applicationType ?? 'CABLE_REPORT',
+    hankeTunnus: formState.hankeTunnus ?? undefined,
+    applicationData: fullAppData,
+  } as Application<JohtoselvitysData>;
+  return app;
+}

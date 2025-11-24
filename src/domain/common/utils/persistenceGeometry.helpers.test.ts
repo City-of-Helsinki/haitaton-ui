@@ -1,4 +1,9 @@
-import { extractPersistedArray, getCurrentArray, FormContextLike } from './persistenceGeometry';
+import {
+  extractPersistedArray,
+  getCurrentArray,
+  FormContextLike,
+  areasInclude,
+} from './persistenceGeometry';
 
 describe('extractPersistedArray', () => {
   test('returns undefined for non-object raw', () => {
@@ -11,13 +16,6 @@ describe('extractPersistedArray', () => {
     const result = extractPersistedArray(raw, 'areas');
     expect(Array.isArray(result)).toBe(true);
     expect((result as unknown[]).length).toBe(1);
-  });
-
-  test('extracts __geometry fallback', () => {
-    const raw = { __geometry: { areas: [{ geometry: null }, { geometry: null }] } };
-    const result = extractPersistedArray(raw, 'areas');
-    expect(Array.isArray(result)).toBe(true);
-    expect((result as unknown[]).length).toBe(2);
   });
 });
 
@@ -41,5 +39,16 @@ describe('getCurrentArray', () => {
     const arr = getCurrentArray(ctx, 'foo');
     expect(Array.isArray(arr)).toBe(true);
     expect((arr as unknown[]).length).toBe(2);
+  });
+});
+
+describe('areasInclude', () => {
+  test('returns false for null arrays', () => {
+    expect(areasInclude(null, { hankealueId: 1 } as Record<string, unknown>)).toBe(false);
+  });
+
+  test('detects matching area by hankealueId', () => {
+    const areas = [{ hankealueId: 1 }, { hankealueId: 2 }].map((a) => a as Record<string, unknown>);
+    expect(areasInclude(areas, { hankealueId: 2 } as Record<string, unknown>)).toBe(true);
   });
 });

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { FieldPath, FormProvider, useForm } from 'react-hook-form';
 import { merge } from 'lodash';
 import {
@@ -41,6 +41,7 @@ import { useGlobalNotification } from '../../common/components/globalNotificatio
 import {
   convertApplicationDataToFormState,
   convertFormStateToKaivuilmoitusUpdateData,
+  buildPersistedApplicationFromForm,
 } from './utils';
 import ApplicationSaveNotification from '../application/components/ApplicationSaveNotification';
 import useSaveApplication from '../application/hooks/useSaveApplication';
@@ -56,8 +57,19 @@ import HaittojenHallinta from './HaittojenHallinta';
 import FormErrorsNotification from './components/FormErrorsNotification';
 import Button from '../../common/components/button/Button';
 import useAreasPersistence from '../../common/hooks/useAreasPersistence';
-import { normalizeStringEmptyToNull } from '../../common/utils/normalize';
 
+import { Feature } from 'ol';
+import Geometry from 'ol/geom/Geometry';
+import GeoJSON from 'ol/format/GeoJSON';
+
+// Test-only global: expose form context to tests
+declare global {
+  interface Window {
+    kaivuFormContext?: import('react-hook-form').UseFormReturn<
+      import('./types').KaivuilmoitusFormValues
+    >;
+  }
+}
 type Props = {
   hankeData: HankeData;
   application?: Application<KaivuilmoitusData>;
@@ -112,156 +124,85 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
     `functional-application-form-${application?.id || 'new'}-KAIVU`,
     formContext,
     {
-      type: 'KAIVU',
-      extraSelect(values) {
-        const ad = values.applicationData;
-        // Helper to pick minimal persisted subset for a CustomerWithContacts object.
-        // We intentionally exclude any react-hook-form meta data and only keep primitive fields
-        // needed to rehydrate user edits after language change.
-        function pickCustomerWithContacts(
-          cwc: Record<string, unknown> | null | undefined,
-        ): Record<string, unknown> | null | undefined {
-          if (!cwc) return cwc;
-          const customer = cwc.customer as Record<string, unknown> | undefined;
-          const contacts = (cwc.contacts as Array<Record<string, unknown>> | undefined) ?? [];
-          return {
-            customer: customer
-              ? {
-                  type: customer.type,
-                  name: customer.name,
-                  registryKey: normalizeStringEmptyToNull(
-                    customer.registryKey as string | null | undefined,
-                  ),
-                  registryKeyHidden: customer.registryKeyHidden,
-                  email: customer.email,
-                  phone: customer.phone,
-                }
-              : undefined,
-            contacts: contacts.map((c) => ({
-              hankekayttajaId: (c as { hankekayttajaId?: string }).hankekayttajaId,
-              firstName: c.firstName,
-              lastName: c.lastName,
-              email: c.email,
-              phone: c.phone,
-              orderer: c.orderer,
-            })),
-          };
-        }
-
-        // Persist invoicing customer minimal subset (include postalAddress fields explicitly).
-        function pickInvoicingCustomer(
-          ic: Record<string, unknown> | null | undefined,
-        ): Record<string, unknown> | null | undefined {
-          if (!ic) return ic;
-          const postalAddress = ic.postalAddress as Record<string, unknown> | undefined;
-          return {
-            type: ic.type,
-            name: ic.name,
-            registryKey: normalizeStringEmptyToNull(ic.registryKey as string | null | undefined),
-            registryKeyHidden: ic.registryKeyHidden,
-            ovt: normalizeStringEmptyToNull(ic.ovt as string | null | undefined),
-            invoicingOperator: normalizeStringEmptyToNull(
-              ic.invoicingOperator as string | null | undefined,
-            ),
-            customerReference: ic.customerReference,
-            email: ic.email,
-            phone: ic.phone,
-            postalAddress: postalAddress
-              ? {
-                  streetAddress: {
-                    streetName: (postalAddress.streetAddress as Record<string, unknown>)
-                      ?.streetName,
-                  },
-                  postalCode: postalAddress.postalCode,
-                  city: postalAddress.city,
-                }
-              : { streetAddress: { streetName: null }, postalCode: null, city: null },
-          };
-        }
-
-        return {
-          applicationData: {
-            cableReports: ad.cableReports,
-            placementContracts: ad.placementContracts,
-            requiredCompetence: ad.requiredCompetence,
-            existingCableReport: (ad as unknown as { existingCableReport?: string | null })
-              .existingCableReport,
-            invoicingCustomer: pickInvoicingCustomer(
-              ad.invoicingCustomer as unknown as Record<string, unknown> | null | undefined,
-            ),
-            // Further information (lisätiedot) from Attachments page
-            additionalInfo: ad.additionalInfo,
-            // Persist all contact groups (työstä vastaava already handled in base select inside useAreasPersistence,
-            // but we include others here which were previously missing causing loss of data on language change).
-            contractorWithContacts: pickCustomerWithContacts(
-              ad.contractorWithContacts as unknown as Record<string, unknown> | null | undefined,
-            ),
-            propertyDeveloperWithContacts: pickCustomerWithContacts(
-              ad.propertyDeveloperWithContacts as unknown as
-                | Record<string, unknown>
-                | null
-                | undefined,
-            ),
-            representativeWithContacts: pickCustomerWithContacts(
-              ad.representativeWithContacts as unknown as
-                | Record<string, unknown>
-                | null
-                | undefined,
-            ),
-            areas: ad.areas
-              ? ad.areas.map((area: unknown) => {
-                  const a = area as Record<string, unknown>;
-                  // We must not overwrite geometry snapshot produced by useAreasPersistence base select.
-                  // However, to satisfy validation on initial render after hydration (before afterHydrate runs),
-                  // include minimal geometry placeholders for nested tyoalueet so yup required() does not mark them missing.
-                  return {
-                    name: (a.name as string) ?? null,
-                    hankealueId: (a.hankealueId as unknown) ?? null,
-                    katuosoite: (a.katuosoite as string) ?? null,
-                    tyonTarkoitukset: (a.tyonTarkoitukset as unknown) ?? null,
-                    meluhaitta: (a.meluhaitta as unknown) ?? null,
-                    polyhaitta: (a.polyhaitta as unknown) ?? null,
-                    tarinahaitta: (a.tarinahaitta as unknown) ?? null,
-                    kaistahaitta: (a.kaistahaitta as unknown) ?? null,
-                    kaistahaittojenPituus: (a.kaistahaittojenPituus as unknown) ?? null,
-                    lisatiedot: (a.lisatiedot as string) ?? null,
-                    haittojenhallintasuunnitelma:
-                      (a.haittojenhallintasuunnitelma as Record<string, unknown> | undefined) ?? {},
-                    tyoalueet: Array.isArray(a.tyoalueet)
-                      ? (a.tyoalueet as Array<Record<string, unknown>>).map((ta) => {
-                          const geom = ta.geometry as Record<string, unknown> | undefined;
-                          return {
-                            area: (ta.area as unknown) ?? null,
-                            tormaystarkasteluTulos: (ta.tormaystarkasteluTulos as unknown) ?? null,
-                            // Include minimal geometry shape if present (type + coordinates + crs.type) so yup required passes.
-                            geometry: geom
-                              ? {
-                                  type: geom.type,
-                                  crs: geom.crs
-                                    ? { type: (geom.crs as Record<string, unknown>)?.type }
-                                    : { type: 'name' },
-                                  coordinates: Array.isArray(geom.coordinates)
-                                    ? geom.coordinates
-                                    : [],
-                                }
-                              : undefined,
-                          };
-                        })
-                      : [],
-                  };
-                })
-              : undefined,
-          },
-        };
-      },
+      persistAsApiModel: true,
+      buildApiModel: (values) =>
+        buildPersistedApplicationFromForm(values as KaivuilmoitusFormValues),
     },
   );
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (formContext as any).persistence = persistence;
+
+  // Post-hydration repair: in rare timing cases the geometry hydration may run before the
+  // react-hook-form array placeholders for areas/työalueet are fully materialized, leaving
+  // raw geometry objects present but without reconstructed OpenLayers Feature instances.
+  // This effect runs once after the language persistence hydration flag is set and attaches
+  // missing openlayersFeature objects derived from the stored geometry.
+
+  const repairAreaFeatures = useCallback(
+    (
+      context: import('react-hook-form').UseFormReturn<KaivuilmoitusFormValues>,
+      geoJson: GeoJSON,
+    ) => {
+      try {
+        const areas = formContext.getValues('applicationData.areas') as unknown;
+        if (!Array.isArray(areas)) return;
+        for (let i = 0; i < areas.length; i++) {
+          const area = areas[i];
+          const a = area as Record<string, unknown>;
+          const tyoalueet = a.tyoalueet as Array<Record<string, unknown>> | undefined;
+          if (!Array.isArray(tyoalueet)) continue;
+          for (let j = 0; j < tyoalueet.length; j++) {
+            const ta = tyoalueet[j];
+            const hasFeature = !!ta.openlayersFeature;
+            const geomObj = ta.geometry as { type?: string; coordinates?: unknown } | undefined;
+            if (!hasFeature && geomObj?.type && geomObj?.coordinates) {
+              try {
+                const olGeom = geoJson.readGeometry({
+                  type: geomObj.type,
+                  coordinates: geomObj.coordinates as unknown[],
+                });
+                const feature = new Feature<Geometry>();
+                feature.setGeometry(olGeom);
+                formContext.setValue(
+                  `applicationData.areas.${i}.tyoalueet.${j}.openlayersFeature` as const,
+                  feature,
+                  { shouldDirty: false },
+                );
+              } catch {
+                // ignore malformed geometry
+              }
+            }
+          }
+        }
+      } catch {
+        // ignore repair errors
+      }
+    },
+    [formContext],
+  );
+
+  useEffect(() => {
+    // languagePersistenceHydrated is a non-enumerable flag we set in the persistence hook
+    if (
+      !(formContext as unknown as { languagePersistenceHydrated?: boolean })
+        .languagePersistenceHydrated
+    ) {
+      return;
+    }
+    const geoJson = new GeoJSON();
+    repairAreaFeatures(formContext, geoJson);
+  }, [formContext, repairAreaFeatures]);
+  // Attach persistence helpers to the form context in a typed way for internal/test use.
+  type PersistenceIface = {
+    clearPersisted?: () => void;
+    saveSnapshot?: () => void;
+    getPersisted?: () => unknown;
+  };
+  (formContext as unknown as { persistence?: PersistenceIface }).persistence =
+    persistence as unknown as PersistenceIface;
   // Test-only escape hatch to manipulate form state in persistence tests without drilling
   if (process.env.NODE_ENV === 'test') {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (window as any).kaivuFormContext = formContext;
+    // Expose the form context to tests via a typed window property
+    (globalThis as typeof globalThis & { kaivuFormContext?: typeof formContext }).kaivuFormContext =
+      formContext;
   }
   const {
     getValues,
@@ -272,6 +213,33 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
     formState: { isDirty, isValid, errors },
   } = formContext;
   const watchFormValues = watch();
+
+  // Restore persisted draft into form and show a failure notification.
+  function restorePersistedDraftAndNotify() {
+    try {
+      const persisted = (persistence as { getPersisted?: () => unknown }).getPersisted?.();
+      if (persisted && (persisted as Record<string, unknown>).applicationData) {
+        const converted = convertApplicationDataToFormState(
+          persisted as unknown as Application<KaivuilmoitusData>,
+        );
+        if (converted?.applicationData) {
+          setValue('applicationData', converted.applicationData, { shouldDirty: false });
+        }
+      }
+    } catch {
+      // ignore restore errors
+    }
+    setNotification(true, {
+      position: 'top-right',
+      dismissible: true,
+      autoClose: true,
+      autoCloseDuration: 5000,
+      label: t('hakemus:notifications:saveFailLabel'),
+      message: t('hakemus:notifications:saveFailText'),
+      type: 'error',
+      closeButtonLabelText: t('common:components:notification:closeButtonLabelText'),
+    });
+  }
 
   // Gating state: controls when the top-level error summary (FormErrorsNotification)
   // is shown. Initially hidden to satisfy UX & test expectation that errors are
@@ -359,7 +327,32 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
 
   function saveApplication(handleSuccess?: (data: Application<KaivuilmoitusData>) => void) {
     const formData = getValues();
-    if (!formData.id) {
+    if (formData.id) {
+      // Ensure we persist current draft before updating
+      try {
+        persistence.saveSnapshot();
+      } catch {
+        // ignore
+      }
+      applicationUpdateMutation.mutate(
+        { id: formData.id, data: convertFormStateToKaivuilmoitusUpdateData(formData) },
+        {
+          onSuccess(data) {
+            handleSuccess?.(data);
+            persistence.clearPersisted();
+          },
+          onError: () => {
+            restorePersistedDraftAndNotify();
+          },
+        },
+      );
+    } else {
+      // Ensure we persist current draft immediately before creating
+      try {
+        persistence.saveSnapshot();
+      } catch {
+        // ignore
+      }
       applicationCreateMutation.mutate(
         {
           applicationType: formData.applicationType,
@@ -375,15 +368,10 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
           placementContracts: formData.applicationData.placementContracts,
           requiredCompetence: formData.applicationData.requiredCompetence,
         },
-        { onSuccess: handleSuccess },
-      );
-    } else {
-      applicationUpdateMutation.mutate(
-        { id: formData.id, data: convertFormStateToKaivuilmoitusUpdateData(formData) },
         {
-          onSuccess(data) {
-            handleSuccess?.(data);
-            persistence.clearPersisted();
+          onSuccess: handleSuccess,
+          onError: () => {
+            restorePersistedDraftAndNotify();
           },
         },
       );
@@ -506,7 +494,7 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
 
   // Track which steps have had validation errors revealed. Replaces single showErrors flag.
   const [showErrorsPerStep, setShowErrorsPerStep] = useState<boolean[]>(() =>
-    Array(formSteps.length).fill(false),
+    new Array(formSteps.length).fill(false),
   );
 
   function markErrorsVisible(stepIndex: number) {

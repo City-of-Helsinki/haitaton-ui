@@ -23,16 +23,18 @@ App load / language change -> useFormLanguagePersistence.hydrate() -> afterHydra
 
 ### Storage Shape
 
-Session storage entry (one per form) already held a JSON object of field values. We extend it with a
-reserved meta key: `"__geometry"` that is ignored by automatic field hydration.
+Session storage entry (one per form) already held a JSON object of field values. The current approach persists the
+same API-shaped object that the backend uses (an application DTO) and embeds plain geometry objects inside
+that DTO. See the migration note below if your environment may contain old drafts.
 
-Example (trimmed):
+Example (trimmed): the persistence now stores the same API-shaped object that the backend uses. Geometry
+is included as plain geometry objects inside the persisted application payload.
 
 ```json
 {
   "nimi": "Test Hanke",
   "kuvaus": "...",
-  "__geometry": {
+  "applicationData": {
     "alueet": [
       { "type": "Polygon", "coordinates": [[[24.93, 60.17], ...]] },
       { "type": "Polygon", "coordinates": [[[24.94, 60.18], ...]] }
@@ -41,7 +43,9 @@ Example (trimmed):
 }
 ```
 
-Only raw GeoJSON geometry objects (no Feature wrappers, no projection transforms beyond what the map already uses).
+Only raw GeoJSON-like geometry objects are stored (no Feature wrappers, no style/meta). The persisted shape
+matches the server DTO so conversion helpers can be reused both for hydrating drafts and for preparing
+update/create requests.
 
 ### Supported geometry shapes
 
@@ -58,13 +62,13 @@ If you need to persist additional geometry types in future (for example `Geometr
 
 ### Key Components
 
-| Component / File                                                              | Responsibility                                                                                    |
-| ----------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
-| `geometrySerialization.ts`                                                    | `serializeFeatureGeometry`, `deserializeGeometry`, batch helpers for arrays & nested structures   |
-| `useFormLanguagePersistence.ts`                                               | Extended to add `afterHydrate`, skip keys beginning with `__`, expose `hydrated` + `saveSnapshot` |
-| `HankeForm.tsx` / `JohtoselvitysContainer.tsx` / `KaivuilmoitusContainer.tsx` | Provide `select()` (filter + inject `__geometry`) and `afterHydrate()` (reconstruct Features)     |
-| Draw / Modify interaction wrappers                                            | Emit `onGeometryFinalized` on `drawend` & successful `modifyend`                                  |
-| Map container (e.g. `ApplicationMap`, drawers)                                | Wire `onGeometryFinalized` -> persistence `saveSnapshot`                                          |
+| Component / File                                                              | Responsibility                                                                                                                                                     |
+| ----------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `geometrySerialization.ts`                                                    | `serializeFeatureGeometry`, `deserializeGeometry`, batch helpers for arrays & nested structures                                                                    |
+| `useFormLanguagePersistence.ts`                                               | Extended to add `afterHydrate` and expose `hydrated` + `saveSnapshot`. It expects API-shaped persisted DTOs and recreates runtime-only artifacts during hydration. |
+| `HankeForm.tsx` / `JohtoselvitysContainer.tsx` / `KaivuilmoitusContainer.tsx` | Provide `select()` (return API-shaped application DTO including plain geometry objects) and `afterHydrate()` (reconstruct Features)                                |
+| Draw / Modify interaction wrappers                                            | Emit `onGeometryFinalized` on `drawend` & successful `modifyend`                                                                                                   |
+| Map container (e.g. `ApplicationMap`, drawers)                                | Wire `onGeometryFinalized` -> persistence `saveSnapshot`                                                                                                           |
 
 ### Serialization Strategy
 
@@ -72,13 +76,17 @@ We capture only `feature.getGeometry()?.getType()` and `getCoordinates()`. This 
 GeoJSON geometry object `{ type, coordinates }`. De/serialization is O(n) in number of features and
 memory‑lean. Style, ids, selection state or derived measurements are intentionally omitted.
 
-### Hydration Flow
+### Hydration Flow (API-shaped persistence)
 
-1. Raw form values load from session storage.
-2. Hook filters out keys starting with `__` when writing RHF default values.
-3. After RHF has mounted, `afterHydrate` receives the full object (including `__geometry`).
-4. Each stored geometry is turned back into a new OpenLayers `Feature` with a geometry instance of the appropriate type.
-5. Feature arrays are injected into the map layer state providers.
+1. The persisted API-shaped object is read from session storage (keyed by form + application id).
+2. `useFormLanguagePersistence` applies the persisted DTO by converting it into the form's expected state using
+   the same conversion functions used when reading server responses (for example `convertApplicationDataToFormState`).
+3. After RHF has mounted, `afterHydrate` receives the persisted DTO and recreates runtime-only artifacts:
+
+- Convert plain geometry objects into new OpenLayers `Feature` instances.
+- Inject those features into the map layer providers or into RHF's fields (e.g. `applicationData.areas[i].feature`).
+
+4. On success (for example after saving the application to backend), the persisted draft is cleared to avoid stale drafts.
 
 ### Triggers for Snapshot
 
@@ -91,14 +99,15 @@ Snapshots occur when:
 ### Defensive Measures
 
 - Guards ensure undefined or null features are skipped instead of throwing.
-- Meta key prefix `__` prevents accidental form field collisions.
+- Previously we avoided clashing form fields by using a `__` meta prefix for internal snapshots; the API-shaped approach reduces the need for special meta keys, but migration-aware hydration should still avoid touching fields marked dirty.
 - Batch helpers avoid code duplication for nested Kaivuilmoitus `tyoalueet` geometry arrays.
 
 ### Testing Adjustments
 
 - Refactored brittle Hanke form test to rely on accessible step button names instead of composite heading text.
 - Left console error surfacing intact except for filtered noisy categories already handled in `setupTests.ts`.
-- Full suite (86 suites / 789 tests / 13 snapshots) passes after integration.
+- Updated persistence tests to assert on API-shaped DTO persistence and on recreation of Features during `afterHydrate`.
+- Full suite (after changes) should validate that persisted drafts are applied using the same conversion helpers as server responses.
 
 ### Performance Considerations
 
@@ -126,8 +135,7 @@ Snapshots occur when:
 
 The multi‑page forms (Hanke, Johtoselvitys, Kaivuilmoitus…) also persist the **active step index** so
 that a language change brings the user back to the same logical place. This is handled by
-`MultipageForm` and intentionally **uses a distinct key namespace** to avoid clobbering the draft
-JSON object that contains `__geometry`.
+`MultipageForm` and intentionally **uses a distinct key namespace**.
 
 Key pattern:
 
@@ -159,7 +167,7 @@ It verifies:
 
 1. User navigates to Areas step (persisting active step = 1).
 2. Language change event `haitaton:languageChanging` fires while on Areas step, persisting both
-   the draft (with `__geometry`) and the active step.
+   the API-shaped draft and the active step.
 3. Component remounts with server data that purposely omits `feature` objects (simulates a fresh
    fetch lacking client‑only instances).
 4. Hydration reconstructs features and they are immediately visible (tab label "Area 1" present)
@@ -175,12 +183,12 @@ store the user's in‑progress form content and UI navigation context required t
 user action (editing a form during a language change). They contain no analytics identifiers, no
 cross‑session tracking data, and expire with the browser session.
 
-| Purpose                     | Key Pattern                      | Value Shape      | Essential Justification    |
-| --------------------------- | -------------------------------- | ---------------- | -------------------------- | --------------------------------------------------------- |
-| Form draft (incl. geometry) | `functional-hanke-form-<id       | new>`            | JSON object + `__geometry` | Prevents accidental data loss on language change mid‑edit |
-| Active step index           | `functional-hanke-form-step-<id  | new>-activeStep` | Integer (stringified)      | Returns user to same step; avoids confusion & rework      |
-| (Analogous for other forms) | `functional-<form>-form-<id      | new>`            | JSON object                | Same functional necessity                                 |
-| Step index (other forms)    | `functional-<form>-form-step-<id | new>-activeStep` | Integer                    | Same functional necessity                                 |
+| Purpose                     | Key Pattern                      | Value Shape      | Essential Justification                                       |
+| --------------------------- | -------------------------------- | ---------------- | ------------------------------------------------------------- | --------------------------------------------------------- |
+| Form draft (incl. geometry) | `functional-hanke-form-<id       | new>`            | JSON object (API-shaped DTO, includes plain geometry objects) | Prevents accidental data loss on language change mid‑edit |
+| Active step index           | `functional-hanke-form-step-<id  | new>-activeStep` | Integer (stringified)                                         | Returns user to same step; avoids confusion & rework      |
+| (Analogous for other forms) | `functional-<form>-form-<id      | new>`            | JSON object                                                   | Same functional necessity                                 |
+| Step index (other forms)    | `functional-<form>-form-step-<id | new>-activeStep` | Integer                                                       | Same functional necessity                                 |
 
 Because these keys are sessionStorage (not persistent cookies) and purely operational, they should
 be allow‑listed as "essential" in the cookie consent configuration. If the consent tool surfaces a
@@ -206,9 +214,9 @@ public API surfaces.
 
 To add geometry persistence for a new form with map features:
 
-1. Extend its `select()` to inject `__geometry` with serialized geometry list.
-2. Implement `afterHydrate()` to reconstruct Features and set into state providers.
-3. Ensure draw / modify interactions call `onGeometryFinalized`.
+1. Ensure `select()` returns an API-shaped DTO (or an object matching the server's expected payload) that contains plain geometry objects (type + coordinates) in the same locations the server uses (for example under `applicationData.areas`).
+2. Implement `afterHydrate()` to reconstruct Features from plain geometry objects and set them into state providers or RHF fields.
+3. Ensure draw / modify interactions call `onGeometryFinalized` to snapshot a finalized geometry.
 4. (Optional) Provide a manual button invoking `saveSnapshot()` if needed.
 
 ### Maintenance Checklist

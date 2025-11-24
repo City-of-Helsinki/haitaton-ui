@@ -167,6 +167,10 @@ it('keeps työalue geometry visible across language change on Areas page', async
 
   const newFormCtx = // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (window as any).kaivuFormContext as import('react-hook-form').UseFormReturn<any>;
+  // Allow queued hydration + repair pass (which runs inside afterHydrate) to complete
+  await act(async () => {
+    await new Promise((r) => setTimeout(r, 0));
+  });
   const areas = newFormCtx.getValues('applicationData.areas');
   expect(Array.isArray(areas)).toBe(true);
   const first = areas[0];

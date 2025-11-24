@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Feature } from 'ol';
 import VectorSource from 'ol/source/Vector';
 import Polygon from 'ol/geom/Polygon';
@@ -140,6 +140,32 @@ export function Geometries({ hankeData }: Readonly<Props>) {
     const features = applicationAreas.flatMap((area) => (area.feature ? area.feature : []));
     return new VectorSource({ features });
   });
+
+  // Ensure drawSource stays in sync with applicationAreas. Hydration can set
+  // applicationData.areas after initial render (language change), so drawSource
+  // must be updated to include reconstructed OL Feature instances.
+  // Also remove any stale features that no longer exist in applicationAreas.
+  useEffect(() => {
+    const currentFeatures = drawSource.getFeatures();
+    const desiredFeatures = applicationAreas.flatMap((area) =>
+      area.feature ? [area.feature] : [],
+    );
+
+    // Add missing features
+    desiredFeatures.forEach((f) => {
+      if (!currentFeatures.includes(f)) {
+        drawSource.addFeature(f);
+      }
+    });
+
+    // Remove features that are no longer desired
+    currentFeatures.forEach((f) => {
+      if (!desiredFeatures.includes(f)) {
+        drawSource.removeFeature(f);
+      }
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [applicationAreas]);
 
   const startTime = watch('applicationData.startTime');
   const endTime = watch('applicationData.endTime');

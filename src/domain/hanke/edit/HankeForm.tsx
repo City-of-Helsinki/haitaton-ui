@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import {
-  buildHankeAlueetGeometrySnapshot,
-  hydrateHankeAlueetGeometryAfterHydrate,
-} from '../../common/utils/persistenceGeometry';
+// persistenceGeometry helpers no longer used directly here; we persist API-shaped Hanke data
+// and rebuild form state via convertHankeDataToFormState.
 import { FieldPath, FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation, useQueryClient } from 'react-query';
@@ -34,7 +32,12 @@ import ApplicationAddDialog from '../../application/components/ApplicationAddDia
 import { useGlobalNotification } from '../../../common/components/globalNotification/GlobalNotificationContext';
 import { changeFormStep, getFieldPaths } from '../../forms/utils';
 import { updateHanke } from './hankeApi';
-import { convertHankeAlueToFormState, mapValidationErrorToErrorListItem } from './utils';
+import {
+  convertHankeAlueToFormState,
+  convertFormStateToHankeData,
+  convertHankeDataToFormState,
+  mapValidationErrorToErrorListItem,
+} from './utils';
 import { useValidationErrors } from '../../forms/hooks/useValidationErrors';
 import DrawProvider from '../../../common/components/map/modules/draw/DrawProvider';
 import FormPagesErrorSummary from '../../forms/components/FormPagesErrorSummary';
@@ -64,11 +67,14 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
   const [showNotification, setShowNotification] = useState<FormNotification | null>(null);
   const [showAddApplicationDialog, setShowAddApplicationDialog] = useState(false);
   const hakemukset = useApplicationsForHanke(formData.hankeTunnus, true);
-  const validationContext = {
-    hanke: formData,
-    hakemukset: hakemukset.data?.applications,
-    dateConflictWithWorkAreasErrorKey: 'dateConflictWithWorkAreas',
-  };
+  const validationContext = React.useMemo(
+    () => ({
+      hanke: formData,
+      hakemukset: hakemukset.data?.applications,
+      dateConflictWithWorkAreasErrorKey: 'dateConflictWithWorkAreas',
+    }),
+    [formData, hakemukset.data?.applications],
+  );
   const formContext = useForm<HankeDataFormState>({
     mode: 'onTouched',
     reValidateMode: 'onChange',
@@ -81,75 +87,52 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
   });
 
   // Persist draft values so that switching language (which changes route & unmounts) does not lose unsaved edits
-  const persistence = useFormLanguagePersistence(
-    `functional-hanke-form-${formData.hankeTunnus || 'new'}`,
-    formContext,
-    {
-      select(values) {
-        const {
-          hankeTunnus,
-          nimi,
-          kuvaus,
-          tyomaaKatuosoite,
-          vaihe,
-          tyomaaTyyppi,
-          onYKTHanke,
-          alkuPvm,
-          loppuPvm,
-          omistajat,
-          rakennuttajat,
-          toteuttajat,
-          muut,
-        } = values as typeof values & { tyomaaTyyppi?: string[] };
-        // Lightweight geometry snapshot (only polygon coordinates), separate meta key so hook skips applying directly
-        // eslint-disable-next-line no-underscore-dangle -- internal meta key for persisted geometry snapshot
-        const __geometry = buildHankeAlueetGeometrySnapshot(
-          values.alueet as unknown as Array<Record<string, unknown>>,
-        );
-        return {
-          hankeTunnus, // Include hankeTunnus to ensure it's preserved
-          nimi,
-          kuvaus,
-          tyomaaKatuosoite,
-          vaihe,
-          tyomaaTyyppi,
-          onYKTHanke,
-          alkuPvm,
-          loppuPvm,
-          // Persist minimal subset of each alue (omit geometry + heavy objects)
-          alueet: values.alueet?.map((a) => ({
-            id: a.id,
-            nimi: a.nimi,
-            haittaAlkuPvm: a.haittaAlkuPvm,
-            haittaLoppuPvm: a.haittaLoppuPvm,
-            kaistaHaitta: a.kaistaHaitta,
-            kaistaPituusHaitta: a.kaistaPituusHaitta,
-            meluHaitta: a.meluHaitta,
-            polyHaitta: a.polyHaitta,
-            tarinaHaitta: a.tarinaHaitta,
-            // Persist nuisance control plan free-text fields so edits survive language change
-            haittojenhallintasuunnitelma: a.haittojenhallintasuunnitelma
-              ? { ...a.haittojenhallintasuunnitelma }
-              : undefined,
-          })),
-          omistajat,
-          rakennuttajat,
-          toteuttajat,
-          muut,
-          __geometry,
-        };
-      },
-      debounceMs: 200,
-      afterHydrate(raw) {
-        // formContext uses react-hook-form generics; cast to any for compatibility
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        hydrateHankeAlueetGeometryAfterHydrate(raw, formContext as any, {
-          pathPrefix: 'alueet',
-          snapshotKey: 'alueet',
-        });
-      },
+  const storageKey = `functional-hanke-form-${formData.hankeTunnus || 'new'}`;
+  const stepPersistKey = `functional-hanke-form-step-${formData.hankeTunnus || 'new'}`;
+
+  // Try to read persisted per-step states (set during language change) so we can
+  // apply the same attention/completed markers when the form remounts.
+  const persistedStepStates: Array<'completed' | 'attention' | 'available'> | undefined =
+    React.useMemo(() => {
+      try {
+        const raw = sessionStorage.getItem(`${stepPersistKey}-stepStates`);
+        if (!raw) return undefined;
+        const parsed = JSON.parse(raw);
+        if (!Array.isArray(parsed)) return undefined;
+        return parsed.filter((v) => v === 'completed' || v === 'attention' || v === 'available');
+      } catch {
+        return undefined;
+      }
+    }, [stepPersistKey]);
+
+  const persistence = useFormLanguagePersistence(storageKey, formContext, {
+    hydratePhase: 'effect', // Hanke uses effect-phase to avoid layout hydration feedback loops
+    // Persist the form as Hanke API shape (GeoJSON) so geometries serialize cleanly
+    select(values) {
+      try {
+        // Persist the API-shaped HankeData only; do not include separate geometry snapshots.
+        return convertFormStateToHankeData(values as HankeDataFormState);
+      } catch {
+        return {};
+      }
     },
-  );
+    debounceMs: 200,
+    afterHydrate(raw) {
+      try {
+        if (!raw || typeof raw !== 'object') return;
+        const parsed = raw as Record<string, unknown>;
+        // Determine whether persisted object contains meaningful Hanke fields
+        const meaningful = Object.keys(parsed).some((k) => parsed[k] != null);
+        if (meaningful) {
+          const converted = convertHankeDataToFormState(parsed as unknown as HankeData);
+          // Replace whole form state with converted values (includes features from geometriat)
+          formContext.reset(converted as HankeDataFormState);
+        }
+      } catch {
+        // ignore malformed persisted data
+      }
+    },
+  });
   // Expose persistence on formContext for nested map components to trigger saveSnapshot after geometry edits
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (formContext as any).persistence = persistence;
@@ -191,6 +174,20 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
   const formHeading = `${watch('nimi')} (${formData.hankeTunnus})`;
 
   const [activeStepIndex, setActiveStepIndex] = useState(0);
+  const [showMissingLocal, setShowMissingLocal] = useState(false);
+
+  // Sync local active step with the persisted step stored by MultipageForm on mount
+  useEffect(() => {
+    try {
+      const raw = sessionStorage.getItem(`${stepPersistKey}-activeStep`);
+      const parsed = raw ? Number.parseInt(raw, 10) : Number.NaN;
+      if (Number.isFinite(parsed) && !Number.isNaN(parsed)) {
+        setActiveStepIndex(parsed);
+      }
+    } catch {
+      // ignore
+    }
+  }, [stepPersistKey]);
 
   const hankeMutation = useMutation(updateHanke, {
     onMutate() {
@@ -198,6 +195,17 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
     },
     onError() {
       setShowNotification('error');
+      // Attempt to restore persisted draft so the user sees their unsaved edits
+      try {
+        const raw = sessionStorage.getItem(storageKey);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          const converted = convertHankeDataToFormState(parsed as unknown as HankeData);
+          formContext.reset(converted as HankeDataFormState);
+        }
+      } catch {
+        // ignore restore errors
+      }
     },
     onSuccess(data) {
       queryClient.setQueryData(['hanke', data.hankeTunnus], data);
@@ -239,61 +247,71 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
     onIsDirtyChange(isDirty);
   }, [isDirty, onIsDirtyChange]);
 
-  function handleStepChange(stepIndex: number) {
-    setActiveStepIndex(stepIndex);
-    if (isDirty) {
-      save();
-    }
-  }
+  const formSteps = React.useMemo(() => {
+    const mapPersisted = (idx: number) => {
+      if (!persistedStepStates) return StepState.available;
+      const val = persistedStepStates[idx];
+      if (val === 'completed') return StepState.completed;
+      if (val === 'attention') return StepState.attention;
+      return StepState.available;
+    };
 
-  const formSteps = [
-    {
-      element: <HankeFormPerustiedot errors={errors} register={register} hanke={formValues} />,
-      label: t('hankeForm:perustiedotForm:header'),
-      state: StepState.available,
-      validationSchema: hankePerustiedotPublicSchema,
-    },
-    {
-      element: (
-        <DrawProvider source={drawSource}>
-          <HankeFormAlueet
-            errors={errors}
-            register={register}
-            hanke={formValues}
-            drawSource={drawSource}
-          />
-        </DrawProvider>
-      ),
-      label: t('hankeForm:hankkeenAlueForm:header'),
-      state: StepState.available,
-      validationSchema: hankeAlueetPublicSchema,
-    },
-    {
-      element: (
-        <HankeFormHaittojenHallinta errors={errors} register={register} hanke={formValues} />
-      ),
-      label: t('hankeForm:haittojenHallintaForm:header'),
-      state: StepState.available,
-      validationSchema: haittojenhallintaPublicSchema,
-    },
-    {
-      element: <HankeFormYhteystiedot errors={errors} register={register} hanke={formValues} />,
-      label: t('form:yhteystiedot:header'),
-      state: StepState.available,
-      validationSchema: hankeYhteystiedotPublicSchema,
-    },
-    {
-      element: <HankeFormLiitteet />,
-      label: t('hankePortfolio:tabit:liitteet'),
-      state: StepState.available,
-    },
-    {
-      element: <HankeFormSummary formData={formValues} />,
-      label: t('hankeForm:hankkeenYhteenvetoForm:header'),
-      state: StepState.available,
-    },
-  ];
-
+    return [
+      {
+        element: <HankeFormPerustiedot errors={errors} register={register} hanke={formValues} />,
+        label: t('hankeForm:perustiedotForm:header'),
+        state: mapPersisted(0),
+        validationSchema: hankePerustiedotPublicSchema,
+      },
+      {
+        element: (
+          <DrawProvider source={drawSource}>
+            <HankeFormAlueet
+              errors={errors}
+              register={register}
+              hanke={formValues}
+              drawSource={drawSource}
+            />
+          </DrawProvider>
+        ),
+        label: t('hankeForm:hankkeenAlueForm:header'),
+        state: mapPersisted(1),
+        validationSchema: hankeAlueetPublicSchema,
+      },
+      {
+        element: (
+          <HankeFormHaittojenHallinta errors={errors} register={register} hanke={formValues} />
+        ),
+        label: t('hankeForm:haittojenHallintaForm:header'),
+        state: mapPersisted(2),
+        validationSchema: haittojenhallintaPublicSchema,
+      },
+      {
+        element: <HankeFormYhteystiedot errors={errors} register={register} hanke={formValues} />,
+        label: t('form:yhteystiedot:header'),
+        state: mapPersisted(3),
+        validationSchema: hankeYhteystiedotPublicSchema,
+      },
+      {
+        element: <HankeFormLiitteet />,
+        label: t('hankePortfolio:tabit:liitteet'),
+        state: mapPersisted(4),
+      },
+      {
+        element: <HankeFormSummary formData={formValues} />,
+        label: t('hankeForm:hankkeenYhteenvetoForm:header'),
+        state: mapPersisted(5),
+      },
+    ];
+  }, [
+    // memo dependencies
+    errors,
+    register,
+    formValues,
+    drawSource,
+    t,
+    persistedStepStates,
+  ]);
   const perustiedotErrors = useValidationErrors(hankePerustiedotPublicSchema, {
     nimi,
     kuvaus,
@@ -314,14 +332,150 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
     toteuttajat,
     muut,
   });
-  const formErrorsByPage = [
-    perustiedotErrors,
-    alueetErrors,
-    haittojenHallintaErrors,
-    yhteystiedotErrors,
-    [],
-    [],
-  ];
+
+  const formErrorsByPage = React.useMemo(
+    () => [perustiedotErrors, alueetErrors, haittojenHallintaErrors, yhteystiedotErrors, [], []],
+    [perustiedotErrors, alueetErrors, haittojenHallintaErrors, yhteystiedotErrors],
+  );
+
+  // Clear the local missing flag and persistedErrors when the user navigates to another step.
+  function handleStepChange(stepIndex: number) {
+    setActiveStepIndex(stepIndex);
+    setShowMissingLocal(false);
+    try {
+      // Remove any leftover persisted errors for this step to avoid stale state.
+      sessionStorage.removeItem(`${stepPersistKey}-errors-${stepIndex}`);
+    } catch {
+      // ignore
+    }
+    if (isDirty) {
+      save();
+    }
+  }
+
+  // When user changes language, the form is unmounted and remounted. We listen to the
+  // same `haitaton:languageChanging` event so we can show the missing-items notification
+  // when the user will land on the Areas page (or is currently on it) and required data is missing.
+  useEffect(() => {
+    const handler = () => {
+      try {
+        // IMPORTANT: do NOT persist the active step here. MultipageForm persists
+        // the active step on language change. Persisting it here using this
+        // component's local value may overwrite the correct value and reset
+        // the page to the first step after a language switch.
+
+        // Compute per-step validation state so the stepper can render the
+        // correct attention/completed markers after language change. We store
+        // an array of 'completed'|'attention'|'available' strings.
+        const states: ('completed' | 'attention' | 'available')[] = formSteps.map((step) => {
+          if (!step.validationSchema) return 'available';
+          try {
+            const valid = step.validationSchema.isValidSync(getValues(), {
+              context: validationContext,
+            });
+            return valid ? 'completed' : 'attention';
+          } catch {
+            return 'available';
+          }
+        });
+        try {
+          sessionStorage.setItem(`${stepPersistKey}-stepStates`, JSON.stringify(states));
+        } catch {
+          // ignore
+        }
+        // Also mark if the target step (persisted or current) has missing fields
+        const raw = sessionStorage.getItem(`${stepPersistKey}-activeStep`);
+        const persistedStep = raw ? Number.parseInt(raw, 10) : undefined;
+        const targetStep =
+          typeof persistedStep === 'number' && !Number.isNaN(persistedStep)
+            ? persistedStep
+            : activeStepIndex;
+        if (formErrorsByPage?.[targetStep]?.length > 0) {
+          try {
+            sessionStorage.setItem(`${stepPersistKey}-showMissing`, '1');
+            // Persist the error paths for this step so we can show the same
+            // list after remount (when validation may have been re-run).
+            const paths = formErrorsByPage[targetStep].map((err) => err.path).filter(Boolean);
+            sessionStorage.setItem(`${stepPersistKey}-errors-${targetStep}`, JSON.stringify(paths));
+          } catch {
+            // ignore
+          }
+        }
+      } catch {
+        // ignore errors
+      }
+    };
+    globalThis.addEventListener('haitaton:languageChanging', handler);
+    return () => globalThis.removeEventListener('haitaton:languageChanging', handler);
+  }, [
+    formData.hankeTunnus,
+    activeStepIndex,
+    formErrorsByPage,
+    formSteps,
+    getValues,
+    validationContext,
+    stepPersistKey,
+  ]);
+
+  // On mount (or when persisted errors/step are available) pick up the persisted
+  // active step and a potential 'showMissing' flag set during language change.
+  // Setting `activeStepIndex` here ensures the computed `formErrorsNotification`
+  // (passed as `topElement` to `MultipageForm`) will render on initial mount
+  // when the user returns after switching language.
+  // On mount, pick up the transient 'showMissing' flag set during language change
+  // and set a local state so the top-of-form summary remains visible until the
+  // user navigates away or validation clears the errors. Also re-run
+  // validation (trigger) so validation results are available for the stepper.
+  useEffect(() => {
+    try {
+      const showMissing = sessionStorage.getItem(`${stepPersistKey}-showMissing`);
+      if (!showMissing) return;
+
+      // Ask react-hook-form to revalidate so validation errors populate.
+      // Small timeout gives hydration/restore effects a chance to finish.
+      setTimeout(async () => {
+        try {
+          await trigger();
+        } catch {
+          // ignore
+        }
+      }, 50);
+      setShowMissingLocal(true);
+
+      try {
+        // Try to read persisted error paths for the current step so we can
+        // render the same list until user navigates.
+        const rawStep = sessionStorage.getItem(`${stepPersistKey}-activeStep`);
+        const persistedStep = rawStep ? Number.parseInt(rawStep, 10) : undefined;
+        const stepIndex =
+          typeof persistedStep === 'number' && !Number.isNaN(persistedStep)
+            ? persistedStep
+            : activeStepIndex;
+        const rawErrors = sessionStorage.getItem(`${stepPersistKey}-errors-${stepIndex}`);
+        if (rawErrors) {
+          try {
+            // We read persisted error paths so the language-change notification
+            // can be shown consistently. The values are discarded here — we
+            // only needed to trigger the UI flag `showMissingLocal` above.
+            const parsed = JSON.parse(rawErrors);
+            if (!Array.isArray(parsed)) {
+              // nothing
+            }
+          } catch {
+            // ignore
+          }
+          sessionStorage.removeItem(`${stepPersistKey}-errors-${stepIndex}`);
+        }
+        sessionStorage.removeItem(`${stepPersistKey}-showMissing`);
+      } catch {
+        // ignore
+      }
+    } catch {
+      // ignore sessionStorage errors
+    }
+  }, [stepPersistKey, trigger, activeStepIndex]);
+
+  // Clear the local missing flag and persistedErrors when the user navigates to another step.
 
   const saveAndQuit = () => {
     // Check if there is missing data in alueet
@@ -353,6 +507,9 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
       return;
     }
 
+    // Ensure snapshot prior to server mutation
+    persistence.saveSnapshot?.();
+
     hankeMutation.mutate(getValues(), {
       onSuccess(data) {
         persistence.clearPersisted();
@@ -383,7 +540,7 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
         notificationLabel={t('hankePortfolio:draftState:labels:insufficientPhases')}
       />
     )) ||
-    (formErrorsByPage[activeStepIndex].length > 0 && (
+    ((showMissingLocal || formErrorsByPage[activeStepIndex].length > 0) && (
       <FormFieldsErrorSummary
         notificationLabel={
           activeStepIndex === 2 &&
@@ -393,7 +550,7 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
             : t('hankePortfolio:draftState:labels:missingFields')
         }
       >
-        {formErrorsByPage[activeStepIndex].map((error) =>
+        {(formErrorsByPage[activeStepIndex] || []).map((error) =>
           mapValidationErrorToErrorListItem(error, t, getValues),
         )}
       </FormFieldsErrorSummary>
@@ -475,9 +632,7 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
           formSteps={formSteps}
           // IMPORTANT: use a distinct key for step index persistence to avoid
           // clobbering the form draft persistence JSON (which uses
-          // `hanke-form-<id>`). A prior regression overwrote the draft object
-          // (with __geometry snapshot) with a bare number, losing area
-          // geometries on language change.
+          // `hanke-form-<id>`).
           stepPersistKey={`functional-hanke-form-step-${formData.hankeTunnus || 'new'}`}
           onStepChange={handleStepChange}
           topElement={formErrorsNotification}

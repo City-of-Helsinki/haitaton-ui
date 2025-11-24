@@ -9,13 +9,6 @@ import {
 import { KaivuilmoitusFormValues } from '../types';
 import { formatSurfaceArea, getTotalSurfaceArea } from '../../map/utils';
 import { formatToFinnishDate } from '../../../common/utils/date';
-// IMPORTANT: The previous implementation imported getAreaGeometry from johtoselvitys utils,
-// which expects a JohtoselvitysArea shape (feature + geometry). Kaivuilmoitus uses Tyoalue objects
-// with either an openlayersFeature or an ApplicationGeometry directly under geometry. When areas
-// were persisted/hydrated without an openlayersFeature (e.g. language change snapshot) the foreign
-// helper attempted to read geometry.coordinates from undefined and crashed. We provide a local
-// safe accessor that tolerates missing geometry and returns a zero-area Polygon so summary page
-// never throws.
 import Polygon from 'ol/geom/Polygon';
 import Feature from 'ol/Feature';
 import { ApplicationGeometry } from '../../application/types/application';

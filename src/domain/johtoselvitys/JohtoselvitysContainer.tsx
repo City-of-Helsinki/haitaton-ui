@@ -24,6 +24,7 @@ import { validationSchema } from './validationSchema';
 import {
   convertApplicationDataToFormState,
   convertFormStateToJohtoselvitysUpdateData,
+  buildPersistedApplicationFromForm,
 } from './utils';
 import { changeFormStep, isPageValid } from '../forms/utils';
 import { isApplicationDraft, isContactIn } from '../application/utils';
@@ -110,7 +111,11 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
   const persistence = useAreasPersistence(
     `functional-application-form-${application?.id || 'new'}-JOHTO`,
     formContext,
-    { type: 'JOHTO' },
+    {
+      persistAsApiModel: true,
+      buildApiModel: (values) =>
+        buildPersistedApplicationFromForm(values as JohtoselvitysFormValues),
+    },
   );
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (formContext as any).persistence = persistence;

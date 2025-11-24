@@ -59,6 +59,36 @@ export function convertFormStateToKaivuilmoitusUpdateData(
   return applicationData;
 }
 
+/**
+ * Build an API-shaped Application object from current form values so it can be
+ * persisted and later rehydrated via the same conversion used for server responses.
+ */
+export function buildPersistedApplicationFromForm(
+  formState: KaivuilmoitusFormValues,
+): Application<KaivuilmoitusData> {
+  // Build the canonical update-shaped applicationData (ensures tyoalueet geometries are converted)
+  const processed = convertFormStateToKaivuilmoitusUpdateData(
+    formState as KaivuilmoitusFormValues,
+  ) as KaivuilmoitusData;
+
+  // Start from a deep clone of the original form applicationData to preserve
+  // optional fields that weren't part of the processed update shape (e.g. additionalInfo,
+  // invoicingCustomer, placementContracts, etc.). Then replace areas with the processed ones.
+  const fullAppData: KaivuilmoitusData = {
+    ...(cloneDeep(formState.applicationData || {}) as KaivuilmoitusData),
+    ...processed,
+  } as KaivuilmoitusData;
+
+  const app: Application<KaivuilmoitusData> = {
+    id: formState.id ?? null,
+    alluStatus: formState.alluStatus ?? null,
+    applicationType: formState.applicationType ?? 'EXCAVATION_NOTIFICATION',
+    hankeTunnus: formState.hankeTunnus ?? undefined,
+    applicationData: fullAppData,
+  } as Application<KaivuilmoitusData>;
+  return app;
+}
+
 export function mapToKaivuilmoitusArea(area: KaivuilmoitusAlue): KaivuilmoitusAlue {
   return {
     ...area,

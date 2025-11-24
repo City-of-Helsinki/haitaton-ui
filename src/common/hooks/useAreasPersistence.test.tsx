@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, waitFor } from '../../testUtils/render';
+import { render } from '../../testUtils/render';
 import { useForm } from 'react-hook-form';
 import useAreasPersistence from './useAreasPersistence';
 
@@ -49,39 +49,4 @@ test('useAreasPersistence accepts Johto form shape', () => {
 
 test('useAreasPersistence accepts Kaivu form shape', () => {
   render(<KaivuConsumer />);
-});
-
-test('persists __geometry under reserved key on language change', async () => {
-  const defaultValues = {
-    applicationData: {
-      name: 'Initial',
-      areas: [
-        { id: 1, name: 'A1', feature: null },
-        { id: 2, name: 'A2', feature: null },
-      ],
-    },
-  };
-
-  function Consumer() {
-    const form = useForm({ defaultValues });
-    useAreasPersistence('test-areas-key', form, { type: 'JOHTO' });
-    return null;
-  }
-
-  sessionStorage.removeItem('test-areas-key');
-  render(<Consumer />);
-
-  // allow effects (listener registration) to run
-  await new Promise((r) => setTimeout(r, 0));
-
-  // Force immediate snapshot via languageChanging event
-  window.dispatchEvent(new CustomEvent('haitaton:languageChanging'));
-
-  // Wait for item to appear
-  await waitFor(() => expect(sessionStorage.getItem('test-areas-key')).toBeTruthy());
-
-  const parsed = JSON.parse(sessionStorage.getItem('test-areas-key') as string);
-  expect(parsed.applicationData).toBeTruthy();
-  expect(parsed['__geometry']).toBeTruthy();
-  expect(Array.isArray(parsed['__geometry'].areas)).toBe(true);
 });

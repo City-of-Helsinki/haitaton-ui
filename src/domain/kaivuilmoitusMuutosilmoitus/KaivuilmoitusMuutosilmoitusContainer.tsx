@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FieldPath, FormProvider, useForm } from 'react-hook-form';
+import { FieldPath, FormProvider, useForm, UseFormReturn } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
   Button,
@@ -55,7 +55,8 @@ import {
   downloadAttachment,
 } from '../application/muutosilmoitus/muutosilmoitusAttachmentsApi';
 import LoadingSpinner from '../../common/components/spinner/LoadingSpinner';
-import useFormLanguagePersistence from '../../common/hooks/useFormLanguagePersistence';
+import useAreasPersistence from '../../common/hooks/useAreasPersistence';
+import { buildPersistedApplicationFromForm } from '../kaivuilmoitus/utils';
 
 type Props = {
   muutosilmoitus: Muutosilmoitus<KaivuilmoitusData>;
@@ -84,32 +85,15 @@ export default function KaivuilmoitusMuutosilmoitusContainer({
     context: { application: muutosilmoitus },
   });
 
-  // Persist only lightweight textual fields across language change; geometry/area data intentionally excluded
-  // (temporary regression mitigation – reintroduce with versioned schema when stable)
-  const persistence = useFormLanguagePersistence(
+  const persistence = useAreasPersistence(
     `functional-muutosilmoitus-form-${muutosilmoitus.id || 'new'}-KAIVU`,
-    formContext,
+    formContext as unknown as UseFormReturn<Record<string, unknown>>, // widen for helper
     {
-      select(values) {
-        const ad = values.applicationData;
-        return {
-          applicationData: {
-            name: ad.name,
-            workDescription: ad.workDescription,
-            constructionWork: ad.constructionWork,
-            maintenanceWork: ad.maintenanceWork,
-            emergencyWork: ad.emergencyWork,
-            rockExcavation: ad.rockExcavation,
-            cableReportDone: ad.cableReportDone,
-            requiredCompetence: ad.requiredCompetence,
-            cableReports: ad.cableReports,
-            placementContracts: ad.placementContracts,
-            startTime: ad.startTime,
-            endTime: ad.endTime,
-          },
-        };
-      },
-      debounceMs: 250,
+      persistAsApiModel: true,
+      buildApiModel: (values) =>
+        buildPersistedApplicationFromForm(
+          values as unknown as import('../kaivuilmoitus/types').KaivuilmoitusFormValues,
+        ),
     },
   );
 
