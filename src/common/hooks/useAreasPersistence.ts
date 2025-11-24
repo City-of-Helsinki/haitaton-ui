@@ -53,7 +53,7 @@ export default function useAreasPersistence<T extends object = Record<string, un
                   | { id?: unknown; alluStatus?: unknown }
                   | undefined;
                 const applicationData = (
-                  values as unknown as { applicationData?: Record<string, unknown> | undefined }
+                  values as unknown as { applicationData: Record<string, unknown> | undefined }
                 ).applicationData;
                 return {
                   id: valuesObj?.id ?? null,

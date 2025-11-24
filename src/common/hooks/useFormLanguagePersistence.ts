@@ -182,18 +182,19 @@ export default function useFormLanguagePersistence<T extends object>(
     // respecting exact-path dirty semantics. If a specific index path is dirty it will not be
     // overwritten, but pristine indices (including new ones) are safely hydrated.
     if (Array.isArray(value)) {
-      if (!pathIsDirty(dirty, prefix)) {
-        // Ensure array container exists; set once then fill individual pristine indices.
-        // We avoid marking dirty to keep form pristine flags correct.
-        setValueFn(prefix.join('.'), value, { shouldDirty: false });
-      } else {
+      if (pathIsDirty(dirty, prefix)) {
         // Parent path dirty; still attempt to hydrate pristine child indices individually.
-        value.forEach((child, idx) => {
+        const arr = value as unknown[];
+        for (const [idx, child] of arr.entries()) {
           const childPath = [...prefix, String(idx)];
           if (!pathIsDirty(dirty, childPath)) {
             setValueFn(childPath.join('.'), child, { shouldDirty: false });
           }
-        });
+        }
+      } else {
+        // Ensure array container exists; set once then fill individual pristine indices.
+        // We avoid marking dirty to keep form pristine flags correct.
+        setValueFn(prefix.join('.'), value, { shouldDirty: false });
       }
       return;
     }
@@ -203,13 +204,13 @@ export default function useFormLanguagePersistence<T extends object>(
       }
       return;
     }
-    Object.entries(value as Record<string, unknown>).forEach(([k, v]) => {
+    for (const [k, v] of Object.entries(value as Record<string, unknown>)) {
       applyPersisted(setValueFn, dirty, [...prefix, k], v);
-    });
+    }
   }
 
   const useHydrationEffect =
-    hydratePhase === 'layout' && typeof window !== 'undefined' ? useLayoutEffect : useEffect;
+    hydratePhase === 'layout' && globalThis.window !== undefined ? useLayoutEffect : useEffect;
 
   useHydrationEffect(() => {
     if (!enabled || hydratedRef.current) return;
@@ -230,18 +231,18 @@ export default function useFormLanguagePersistence<T extends object>(
           ).setValue;
           const entries = Object.entries(persisted as Record<string, unknown>);
           const applyAll = () => {
-            entries.forEach(([k, v]) => {
-              if (k.startsWith('__')) return;
+            for (const [k, v] of entries) {
+              if (k.startsWith('__')) continue;
               if (k === 'hankeTunnus') {
                 const currentValue = (
                   form as unknown as { getValues: (field: string) => unknown }
                 ).getValues('hankeTunnus');
                 if (currentValue && currentValue !== v) {
-                  return;
+                  continue;
                 }
               }
               applyPersisted(setValue, dirtyFields, [k], v);
-            });
+            }
           };
           if (testMode) {
             // Batch to single render / act frame in tests to avoid multiple overlapping act warnings
@@ -295,15 +296,13 @@ export default function useFormLanguagePersistence<T extends object>(
         saveSnapshot();
         return;
       }
-      if (!debounceRef.current) {
-        debounceRef.current = debounce(
-          () => {
-            saveSnapshot();
-          },
-          debounceMs,
-          { leading: true, trailing: true, maxWait: 1500 },
-        );
-      }
+      debounceRef.current ??= debounce(
+        () => {
+          saveSnapshot();
+        },
+        debounceMs,
+        { leading: true, trailing: true, maxWait: 1500 },
+      );
       debounceRef.current();
     });
     return () => {
@@ -335,8 +334,11 @@ export default function useFormLanguagePersistence<T extends object>(
         saveSnapshot();
       });
     };
-    window.addEventListener('haitaton:languageChanging', handler);
-    return () => window.removeEventListener('haitaton:languageChanging', handler);
+    if (globalThis.window !== undefined) {
+      globalThis.window.addEventListener('haitaton:languageChanging', handler);
+      return () => globalThis.window.removeEventListener('haitaton:languageChanging', handler);
+    }
+    return () => {};
   }, [enabled, saveSnapshot]);
 
   // Optionally clear on unmount
