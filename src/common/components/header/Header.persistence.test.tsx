@@ -8,6 +8,12 @@ import Header from './Header';
 import i18next from '../../../locales/i18nForTests';
 import { FeatureFlagsProvider } from '../featureFlags/FeatureFlagsContext';
 
+declare global {
+  // Extend globalThis to include _env_ with string index signature
+  // eslint-disable-next-line no-var
+  var _env_: { [key: string]: string } | undefined;
+}
+
 // Ensure persistence keys are cleared when clicking header links (except language change)
 test('clicking header navigation clears functional persistence keys', async () => {
   // Seed sessionStorage with keys matching the functional patterns
@@ -18,9 +24,9 @@ test('clicking header navigation clears functional persistence keys', async () =
   // Provide minimal environment expected by FeatureFlagsContext and other components
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  window._env_ = window._env_ || {};
-  window._env_.REACT_APP_FEATURE_PUBLIC_HANKKEET = '1';
-  window._env_.REACT_APP_FEATURE_HANKE = '1';
+  globalThis._env_ = globalThis._env_ || {};
+  globalThis._env_.REACT_APP_FEATURE_PUBLIC_HANKKEET = '1';
+  globalThis._env_.REACT_APP_FEATURE_HANKE = '1';
 
   const queryClient = new QueryClient();
   const { user } = renderWithLoginProvider({

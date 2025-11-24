@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { FieldPath, FormProvider, useForm } from 'react-hook-form';
 import { merge } from 'lodash';
 import {
@@ -41,8 +41,8 @@ import { useGlobalNotification } from '../../common/components/globalNotificatio
 import {
   convertApplicationDataToFormState,
   convertFormStateToKaivuilmoitusUpdateData,
+  buildPersistedApplicationFromForm,
 } from './utils';
-import { buildPersistedApplicationFromForm } from './utils';
 import ApplicationSaveNotification from '../application/components/ApplicationSaveNotification';
 import useSaveApplication from '../application/hooks/useSaveApplication';
 import useAttachments from '../application/hooks/useAttachments';
@@ -135,6 +135,50 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
   // raw geometry objects present but without reconstructed OpenLayers Feature instances.
   // This effect runs once after the language persistence hydration flag is set and attaches
   // missing openlayersFeature objects derived from the stored geometry.
+
+  const repairAreaFeatures = useCallback(
+    (
+      context: import('react-hook-form').UseFormReturn<KaivuilmoitusFormValues>,
+      geoJson: GeoJSON,
+    ) => {
+      try {
+        const areas = formContext.getValues('applicationData.areas') as unknown;
+        if (!Array.isArray(areas)) return;
+        for (let i = 0; i < areas.length; i++) {
+          const area = areas[i];
+          const a = area as Record<string, unknown>;
+          const tyoalueet = a.tyoalueet as Array<Record<string, unknown>> | undefined;
+          if (!Array.isArray(tyoalueet)) continue;
+          for (let j = 0; j < tyoalueet.length; j++) {
+            const ta = tyoalueet[j];
+            const hasFeature = !!ta.openlayersFeature;
+            const geomObj = ta.geometry as { type?: string; coordinates?: unknown } | undefined;
+            if (!hasFeature && geomObj?.type && geomObj?.coordinates) {
+              try {
+                const olGeom = geoJson.readGeometry({
+                  type: geomObj.type,
+                  coordinates: geomObj.coordinates as unknown[],
+                });
+                const feature = new Feature<Geometry>();
+                feature.setGeometry(olGeom);
+                formContext.setValue(
+                  `applicationData.areas.${i}.tyoalueet.${j}.openlayersFeature` as const,
+                  feature,
+                  { shouldDirty: false },
+                );
+              } catch {
+                // ignore malformed geometry
+              }
+            }
+          }
+        }
+      } catch {
+        // ignore repair errors
+      }
+    },
+    [formContext],
+  );
+
   useEffect(() => {
     // languagePersistenceHydrated is a non-enumerable flag we set in the persistence hook
     if (
@@ -144,39 +188,8 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
       return;
     }
     const geoJson = new GeoJSON();
-    try {
-      const areas = formContext.getValues('applicationData.areas') as unknown;
-      if (!Array.isArray(areas)) return;
-      areas.forEach((area, i) => {
-        const a = area as Record<string, unknown>;
-        const tyoalueet = a.tyoalueet as Array<Record<string, unknown>> | undefined;
-        if (!Array.isArray(tyoalueet)) return;
-        tyoalueet.forEach((ta, j) => {
-          const hasFeature = !!ta.openlayersFeature;
-          const geomObj = ta.geometry as { type?: string; coordinates?: unknown } | undefined;
-          if (!hasFeature && geomObj && geomObj.type && geomObj.coordinates) {
-            try {
-              const olGeom = geoJson.readGeometry({
-                type: geomObj.type as string,
-                coordinates: geomObj.coordinates as unknown[],
-              });
-              const feature = new Feature<Geometry>();
-              feature.setGeometry(olGeom as Geometry);
-              formContext.setValue(
-                `applicationData.areas.${i}.tyoalueet.${j}.openlayersFeature` as const,
-                feature,
-                { shouldDirty: false },
-              );
-            } catch {
-              // ignore malformed geometry
-            }
-          }
-        });
-      });
-    } catch {
-      // ignore repair errors
-    }
-  }, [formContext]);
+    repairAreaFeatures(formContext, geoJson);
+  }, [formContext, repairAreaFeatures]);
   // Attach persistence helpers to the form context in a typed way for internal/test use.
   type PersistenceIface = {
     clearPersisted?: () => void;
@@ -188,7 +201,8 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
   // Test-only escape hatch to manipulate form state in persistence tests without drilling
   if (process.env.NODE_ENV === 'test') {
     // Expose the form context to tests via a typed window property
-    window.kaivuFormContext = formContext;
+    (globalThis as typeof globalThis & { kaivuFormContext?: typeof formContext }).kaivuFormContext =
+      formContext;
   }
   const {
     getValues,
@@ -208,7 +222,7 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
         const converted = convertApplicationDataToFormState(
           persisted as unknown as Application<KaivuilmoitusData>,
         );
-        if (converted && converted.applicationData) {
+        if (converted?.applicationData) {
           setValue('applicationData', converted.applicationData, { shouldDirty: false });
         }
       }
@@ -313,7 +327,26 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
 
   function saveApplication(handleSuccess?: (data: Application<KaivuilmoitusData>) => void) {
     const formData = getValues();
-    if (!formData.id) {
+    if (formData.id) {
+      // Ensure we persist current draft before updating
+      try {
+        persistence.saveSnapshot();
+      } catch {
+        // ignore
+      }
+      applicationUpdateMutation.mutate(
+        { id: formData.id, data: convertFormStateToKaivuilmoitusUpdateData(formData) },
+        {
+          onSuccess(data) {
+            handleSuccess?.(data);
+            persistence.clearPersisted();
+          },
+          onError: () => {
+            restorePersistedDraftAndNotify();
+          },
+        },
+      );
+    } else {
       // Ensure we persist current draft immediately before creating
       try {
         persistence.saveSnapshot();
@@ -337,25 +370,6 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
         },
         {
           onSuccess: handleSuccess,
-          onError: () => {
-            restorePersistedDraftAndNotify();
-          },
-        },
-      );
-    } else {
-      // Ensure we persist current draft before updating
-      try {
-        persistence.saveSnapshot();
-      } catch {
-        // ignore
-      }
-      applicationUpdateMutation.mutate(
-        { id: formData.id, data: convertFormStateToKaivuilmoitusUpdateData(formData) },
-        {
-          onSuccess(data) {
-            handleSuccess?.(data);
-            persistence.clearPersisted();
-          },
           onError: () => {
             restorePersistedDraftAndNotify();
           },
@@ -480,7 +494,7 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
 
   // Track which steps have had validation errors revealed. Replaces single showErrors flag.
   const [showErrorsPerStep, setShowErrorsPerStep] = useState<boolean[]>(() =>
-    Array(formSteps.length).fill(false),
+    new Array(formSteps.length).fill(false),
   );
 
   function markErrorsVisible(stepIndex: number) {

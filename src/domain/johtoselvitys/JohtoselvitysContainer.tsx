@@ -24,6 +24,7 @@ import { validationSchema } from './validationSchema';
 import {
   convertApplicationDataToFormState,
   convertFormStateToJohtoselvitysUpdateData,
+  buildPersistedApplicationFromForm,
 } from './utils';
 import { changeFormStep, isPageValid } from '../forms/utils';
 import { isApplicationDraft, isContactIn } from '../application/utils';
@@ -49,7 +50,6 @@ import useNavigateToApplicationView from '../application/hooks/useNavigateToAppl
 import ApplicationSendDialog from '../application/components/ApplicationSendDialog';
 import Button from '../../common/components/button/Button';
 import useAreasPersistence from '../../common/hooks/useAreasPersistence';
-import { buildPersistedApplicationFromForm } from './utils';
 
 type Props = {
   hankeData?: HankeData;

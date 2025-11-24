@@ -180,7 +180,7 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
   useEffect(() => {
     try {
       const raw = sessionStorage.getItem(`${stepPersistKey}-activeStep`);
-      const parsed = raw ? Number.parseInt(raw, 10) : NaN;
+      const parsed = raw ? Number.parseInt(raw, 10) : Number.NaN;
       if (Number.isFinite(parsed) && !Number.isNaN(parsed)) {
         setActiveStepIndex(parsed);
       }
@@ -390,11 +390,7 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
           typeof persistedStep === 'number' && !Number.isNaN(persistedStep)
             ? persistedStep
             : activeStepIndex;
-        if (
-          formErrorsByPage &&
-          formErrorsByPage[targetStep] &&
-          formErrorsByPage[targetStep].length > 0
-        ) {
+        if (formErrorsByPage?.[targetStep]?.length > 0) {
           try {
             sessionStorage.setItem(`${stepPersistKey}-showMissing`, '1');
             // Persist the error paths for this step so we can show the same
@@ -409,8 +405,8 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
         // ignore errors
       }
     };
-    window.addEventListener('haitaton:languageChanging', handler);
-    return () => window.removeEventListener('haitaton:languageChanging', handler);
+    globalThis.addEventListener('haitaton:languageChanging', handler);
+    return () => globalThis.removeEventListener('haitaton:languageChanging', handler);
   }, [
     formData.hankeTunnus,
     activeStepIndex,

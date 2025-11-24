@@ -35,7 +35,9 @@ function clearFunctionalPersistence() {
         toRemove.push(key);
       }
     }
-    toRemove.forEach((k) => sessionStorage.removeItem(k));
+    for (const k of toRemove) {
+      sessionStorage.removeItem(k);
+    }
   } catch {
     // ignore storage errors
   }
@@ -124,7 +126,7 @@ function HaitatonHeader() {
 
     // Fire event so forms can persist state immediately before unmount
     try {
-      window.dispatchEvent(
+      globalThis.dispatchEvent(
         new CustomEvent('haitaton:languageChanging', { detail: { from: i18n.language, to: lang } }),
       );
     } catch {
