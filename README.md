@@ -1,6 +1,7 @@
 # Haitaton UI
 
-Haitaton is a service owned by the city of Helsinki that supports the management and prediction of the adverse
+Haitaton is a service owned by the city of Helsinki that supports the management and prediction of
+the adverse
 effects of projects taking place within the urban area.
 
 ## Requirements
@@ -25,7 +26,9 @@ You will also see any lint errors in the console.
 ### `yarn test`
 
 Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+See the section
+about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more
+information.
 
 First, scripts generate environment variables to `public/test-env-config.js`
 with `scripts/update-runtime-env.ts`, which contains the actual used variables when running the app.
@@ -51,7 +54,8 @@ We follow these conventions for automated tests:
 
 Runs Playwright tests with the default parameters.
 
-To run the tests, copy `.env.e2e.example` to `.env.e2e` and fill in the missing variables. The
+To run the tests, copy `.env.e2e.example` to `.env.e2e` and fill in the missing variables (marked as
+`<fill in>`). The
 correct values can be found from the
 [E2E confluence page](https://helsinkisolutionoffice.atlassian.net/wiki/x/aAA9KQI).
 
@@ -66,7 +70,8 @@ It correctly bundles React in production mode and optimizes the build for the be
 The build is minified and the filenames include the hashes.<br />
 Your app is ready to be deployed!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for
+more information.
 
 ### `yarn locales:export`
 
@@ -75,7 +80,8 @@ from `src/locales/`.
 
 ### `yarn locales:import`
 
-Imports frontend localizations from `locale_export.xlsx`. Translations are merged on corresponding translation files
+Imports frontend localizations from `locale_export.xlsx`. Translations are merged on corresponding
+translation files
 in `src/locales/`.
 
 ## Environment variables
@@ -119,7 +125,8 @@ in your local environment, e.g. in `~/.huskyrc` (Husky git hooks automatically l
 export WSL=true
 ```
 
-This setting adds `--runInBand` parameter for Jest tests (see https://jestjs.io/docs/cli#--runinband).
+This setting adds `--runInBand` parameter for Jest tests (
+see https://jestjs.io/docs/cli#--runinband).
 
 ## Git hooks
 
@@ -150,7 +157,8 @@ to mock API. Definitions can be found in `src/domain/mocks`.
 
 ## Learn More
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+You can learn more in
+the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
 
@@ -158,7 +166,8 @@ To learn React, check out the [React documentation](https://reactjs.org/).
 
 - [Geometry & form session persistence](docs/geometry-persistence.md)
   - Includes rationale for separating draft vs step persistence keys (`functional-*` namespaces)
-  - Documents immediate geometry hydration fix & test (`HankeFormAlueet.immediateHydration.test.tsx`)
+  - Documents immediate geometry hydration fix & test (
+    `HankeFormAlueet.immediateHydration.test.tsx`)
 - [Geometry & intersection helpers](docs/geometry-intersection-helpers.md)
   - Explains polygon intersection validation strategy (incremental vs closed)
   - Provides extension pattern & testing guidelines for new geometry rules
@@ -167,10 +176,17 @@ To learn React, check out the [React documentation](https://reactjs.org/).
 
 Logging during Jest runs is now handled inside the test initialization code at `src/setupTests.ts`.
 
-- All console output from tests is appended immediately to a per-run timestamped log file in `/tmp`. The filename is of the form `/tmp/haitaton_<ISO-timestamp>_jest.log` and is created at test startup.
-- Additionally, if you set the `TEST_TEE_LOG` environment variable to a path (for example when you pipe output through `tee`), the test setup will append buffered per-spec output to that tee file as well so a single combined log file is available.
-- When `CI=true`, per-test buffered console output is suppressed on the terminal for passing tests; you will still see the normal Jest summary (PASS/FAIL). All console output is still persisted to the `/tmp` run log (and to `TEST_TEE_LOG` if provided).
-- When `CI` is not set or not `true`, per-test buffered console output is printed to the terminal as before.
+- All console output from tests is appended immediately to a per-run timestamped log file in `/tmp`.
+  The filename is of the form `/tmp/haitaton_<ISO-timestamp>_jest.log` and is created at test
+  startup.
+- Additionally, if you set the `TEST_TEE_LOG` environment variable to a path (for example when you
+  pipe output through `tee`), the test setup will append buffered per-spec output to that tee file
+  as well so a single combined log file is available.
+- When `CI=true`, per-test buffered console output is suppressed on the terminal for passing tests;
+  you will still see the normal Jest summary (PASS/FAIL). All console output is still persisted to
+  the `/tmp` run log (and to `TEST_TEE_LOG` if provided).
+- When `CI` is not set or not `true`, per-test buffered console output is printed to the terminal as
+  before.
 
 To run tests and collect a combined tee'd log manually, you can do this:
 
@@ -181,5 +197,9 @@ TEST_TEE_LOG=/tmp/test-run_combined.log CI=true yarn test src/domain/kaivuilmoit
 
 Notes:
 
-- If you need to force per-test logs to be shown on the console even when `CI=true`, set `TEST_RUNNER_FORCE_SHOW=true` in the environment before running tests. This is intended for debugging.
-- The run log file path is written at test startup into the run log itself; if you need to locate the run log created by a test invocation, check `/tmp` for the most recent `haitaton_*_jest.log` file.
+- If you need to force per-test logs to be shown on the console even when `CI=true`, set
+  `TEST_RUNNER_FORCE_SHOW=true` in the environment before running tests. This is intended for
+  debugging.
+- The run log file path is written at test startup into the run log itself; if you need to locate
+  the run log created by a test invocation, check `/tmp` for the most recent `haitaton_*_jest.log`
+  file.
