@@ -433,7 +433,7 @@ describe('Taydennys attachments', () => {
   }
 
   test('Should be able to upload attachments', async () => {
-    const uploadSpy = jest
+    const uploadSpy = vi
       .spyOn(taydennysAttachmentsApi, 'uploadAttachment')
       .mockImplementation(uploadAttachmentMock);
     initFileGetResponse([]);
@@ -492,9 +492,9 @@ describe('Taydennys attachments', () => {
   });
 
   test('Should show original application attachments in attachments page', async () => {
-    const fetchContentMock = jest
+    const fetchContentMock = vi
       .spyOn(applicationAttachmentsApi, 'getAttachmentFile')
-      .mockImplementation(jest.fn());
+      .mockImplementation(vi.fn());
     initFileGetResponse(applicationAttachments);
     const { user } = setup();
     await user.click(screen.getByRole('button', { name: /liitteet/i }));

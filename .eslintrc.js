@@ -16,7 +16,6 @@ module.exports = {
     sourceType: 'module', // Allows for the use of imports
   },
   plugins: ['jest', '@typescript-eslint', 'react-hooks'],
-  env: { 'jest/globals': true },
   rules: {
     'no-use-before-define': 'off',
     '@typescript-eslint/no-use-before-define': ['error'],

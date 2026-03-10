@@ -23,7 +23,7 @@ import {
 } from '../../mocks/attachments';
 import * as muutosilmoitusApi from '../muutosilmoitus/muutosilmoitusApi';
 import { HAITTA_INDEX_TYPE } from '../../common/haittaIndexes/types';
-import { PathParams } from 'msw/lib/core/utils/matching/matchRequestUrl';
+import { PathParams } from 'msw';
 
 describe('Cable report application view', () => {
   test('Correct information about application should be displayed', async () => {
@@ -33,7 +33,7 @@ describe('Cable report application view', () => {
     expect(screen.getAllByText('Mannerheimintien kairaukset').length).toBe(2);
     expect(screen.queryByText('JS2300003')).toBeInTheDocument();
     expect(screen.queryByText('Odottaa käsittelyä')).toBeInTheDocument();
-    expect(screen.queryByText('Kaikki oikeudet')).toBeInTheDocument();
+    expect(screen.queryByText('Käyttöoikeutesi hankkeelle:')).toBeInTheDocument();
   });
 
   test('Should show error notification if application is not found', async () => {
@@ -224,7 +224,7 @@ describe('Cable report application view', () => {
       }),
     );
 
-    const cancelApplication = jest.spyOn(applicationApi, 'cancelApplication');
+    const cancelApplication = vi.spyOn(applicationApi, 'cancelApplication');
     const { user } = render(<ApplicationViewContainer id={1} />);
 
     await waitForLoadingToFinish();
@@ -249,7 +249,7 @@ describe('Cable report application view', () => {
         return new HttpResponse();
       }),
     );
-    const sendApplication = jest.spyOn(applicationApi, 'sendApplication');
+    const sendApplication = vi.spyOn(applicationApi, 'sendApplication');
     const { user } = render(<ApplicationViewContainer id={1} />);
     await waitForLoadingToFinish();
 
@@ -372,7 +372,7 @@ describe('Cable report application view', () => {
 
       expect(screen.queryByRole('heading', { name: 'Täydennyspyyntö' })).not.toBeInTheDocument();
 
-      jest.resetModules();
+      vi.resetModules();
       window._env_ = OLD_ENV;
     });
   });
@@ -403,7 +403,7 @@ describe('Cable report application view', () => {
 
       expect(screen.queryByRole('button', { name: 'Täydennä' })).not.toBeInTheDocument();
 
-      jest.resetModules();
+      vi.resetModules();
       window._env_ = OLD_ENV;
     });
 
@@ -423,12 +423,12 @@ describe('Cable report application view', () => {
         screen.queryByRole('button', { name: 'Muokkaa hakemusta (täydennys)' }),
       ).not.toBeInTheDocument();
 
-      jest.resetModules();
+      vi.resetModules();
       window._env_ = OLD_ENV;
     });
 
     test('Creates taydennys and navigates to edit taydennys path if taydennys does not exist', async () => {
-      const taydennysCreateSpy = jest.spyOn(taydennysApi, 'createTaydennys');
+      const taydennysCreateSpy = vi.spyOn(taydennysApi, 'createTaydennys');
       const application = hakemukset[10] as Application<JohtoselvitysData>;
       server.use(
         http.post('/api/hakemukset/:id/taydennys', async () => {
@@ -947,8 +947,8 @@ describe('Excavation notification application view', () => {
 
     describe('Report in operational condition confirmation dialog', () => {
       afterEach(() => {
-        jest.restoreAllMocks();
-        jest.clearAllMocks();
+        vi.restoreAllMocks();
+        vi.clearAllMocks();
       });
 
       test('Shows previous operational condition reports in confirmation dialog', async () => {
@@ -1038,7 +1038,7 @@ describe('Excavation notification application view', () => {
       });
 
       test('Confirms the report', async () => {
-        const sendApplication = jest.spyOn(applicationApi, 'reportOperationalCondition');
+        const sendApplication = vi.spyOn(applicationApi, 'reportOperationalCondition');
         const user = await setup();
 
         const button = await screen.findByRole('button', {
@@ -1138,8 +1138,8 @@ describe('Excavation notification application view', () => {
 
     describe('Report work finished confirmation dialog', () => {
       afterEach(() => {
-        jest.restoreAllMocks();
-        jest.clearAllMocks();
+        vi.restoreAllMocks();
+        vi.clearAllMocks();
       });
 
       test('Shows previous work finished reports in confirmation dialog', async () => {
@@ -1229,7 +1229,7 @@ describe('Excavation notification application view', () => {
       });
 
       test('Confirms the report', async () => {
-        const sendApplication = jest.spyOn(applicationApi, 'reportWorkFinished');
+        const sendApplication = vi.spyOn(applicationApi, 'reportWorkFinished');
         const user = await setup();
 
         const button = await screen.findByRole('button', {
@@ -1341,7 +1341,7 @@ describe('Excavation notification application view', () => {
 
       expect(screen.queryByRole('button', { name: 'Täydennä' })).not.toBeInTheDocument();
 
-      jest.resetModules();
+      vi.resetModules();
       window._env_ = OLD_ENV;
     });
 
@@ -1361,12 +1361,12 @@ describe('Excavation notification application view', () => {
         screen.queryByRole('button', { name: 'Muokkaa hakemusta (täydennys)' }),
       ).not.toBeInTheDocument();
 
-      jest.resetModules();
+      vi.resetModules();
       window._env_ = OLD_ENV;
     });
 
     test('Creates taydennys and navigates to edit taydennys path if taydennys does not exist', async () => {
-      const taydennysCreateSpy = jest.spyOn(taydennysApi, 'createTaydennys');
+      const taydennysCreateSpy = vi.spyOn(taydennysApi, 'createTaydennys');
       const application = hakemukset[12] as Application<KaivuilmoitusData>;
       server.use(
         http.post('/api/hakemukset/:id/taydennys', async () => {
@@ -1794,7 +1794,7 @@ describe('Excavation notification application view', () => {
     });
 
     test('Creates muutosilmoitus and navigates to edit muutosilmoitus path if muutosilmoitus does not exist', async () => {
-      const muutosilmoitusCreateSpy = jest.spyOn(muutosilmoitusApi, 'createMuutosilmoitus');
+      const muutosilmoitusCreateSpy = vi.spyOn(muutosilmoitusApi, 'createMuutosilmoitus');
       const application = hakemukset[7] as Application<KaivuilmoitusData>;
       server.use(
         http.post('/api/hakemukset/:id/muutosilmoitus', async () => {
@@ -2367,7 +2367,7 @@ describe('Excavation notification application view', () => {
         liitteet: [],
         muutokset: ['workDescription'],
       };
-      const cancelMuutosilmoitus = jest.spyOn(muutosilmoitusApi, 'cancelMuutosilmoitus');
+      const cancelMuutosilmoitus = vi.spyOn(muutosilmoitusApi, 'cancelMuutosilmoitus');
       const { user } = await setup(application);
 
       await screen.findByRole('button', { name: 'Peru muutosilmoitus' });
@@ -2412,7 +2412,7 @@ describe('Excavation notification application view', () => {
           });
         }),
       );
-      const sendApplication = jest.spyOn(muutosilmoitusApi, 'sendMuutosilmoitus');
+      const sendApplication = vi.spyOn(muutosilmoitusApi, 'sendMuutosilmoitus');
 
       const sendButton = await screen.findByRole('button', { name: 'Lähetä muutosilmoitus' });
       await user.click(sendButton);

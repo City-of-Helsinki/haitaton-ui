@@ -503,7 +503,7 @@ function initFileGetResponse(response: ApplicationAttachmentMetadata[]) {
 }
 
 test('Should be able to upload attachments', async () => {
-  const uploadSpy = jest
+  const uploadSpy = vi
     .spyOn(applicationAttachmentsApi, 'uploadAttachment')
     .mockImplementation(uploadAttachmentMock);
   initFileGetResponse([]);
@@ -616,9 +616,9 @@ test('Should list existing attachments in the attachments page and in summary pa
 });
 
 test('Summary should show attachments and they are downloadable', async () => {
-  const fetchContentMock = jest
+  const fetchContentMock = vi
     .spyOn(applicationAttachmentsApi, 'getAttachmentFile')
-    .mockImplementation(jest.fn());
+    .mockImplementation(vi.fn());
 
   const testApplication = applications[0] as Application<JohtoselvitysData>;
   initFileGetResponse([ATTACHMENT_META]);

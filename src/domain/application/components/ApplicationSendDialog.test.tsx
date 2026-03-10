@@ -75,7 +75,7 @@ test('Shows correct information when opened for cable report when paper decision
   expect(cancelButton).toBeInTheDocument();
   expect(cancelButton).toBeEnabled();
 
-  jest.resetModules();
+  vi.resetModules();
   window._env_ = OLD_ENV;
 });
 
@@ -209,7 +209,7 @@ test('Shows error message when sending fails', async () => {
 
 test('Calls onClose when cancelled', async () => {
   const hakemus = cloneDeep(hakemukset[4]);
-  const onClose = jest.fn();
+  const onClose = vi.fn();
   const { user } = render(
     <ApplicationSendDialog application={hakemus} isOpen={true} onClose={onClose} />,
   );

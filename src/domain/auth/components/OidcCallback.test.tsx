@@ -30,7 +30,7 @@ function getWrapper({ state, returnUser, errorType, userProfile }: RenderWithLog
 
 describe('<OidcCallback />', () => {
   afterEach(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
     cleanup();
   });
 

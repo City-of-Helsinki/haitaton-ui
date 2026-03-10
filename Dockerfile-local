@@ -20,6 +20,8 @@ RUN yarn && yarn cache clean --force
 # Changes in other files won't invalidate the cached build.
 COPY ./src /builder/src
 COPY ./public /builder/public
+COPY ./index.html /builder/index.html
+COPY ./vite.config.mts /builder/vite.config.mts
 COPY ./tsconfig.json /builder/tsconfig.json
 COPY ./tsconfig.eslint.json /builder/tsconfig.eslint.json
 COPY ./.eslintrc.js /builder/.eslintrc.js

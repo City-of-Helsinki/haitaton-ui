@@ -2,18 +2,20 @@
 // allows you to do things like:
 // expect(element).toHaveTextContent(/react/i)
 // learn more: https://github.com/testing-library/jest-dom
+import 'regenerator-runtime/runtime';
 import '@testing-library/jest-dom';
+import { configure } from '@testing-library/react';
 import './jest.polyfills';
-import { GlobalWithFetchMock } from 'jest-fetch-mock';
-import 'jest-canvas-mock';
+
+// Increase async timeout for waitFor/findBy* — the default 1000ms is too tight
+// when running 73 test files in parallel and the system is under CPU load.
+configure({ asyncUtilTimeout: 5000 });
+import 'vitest-canvas-mock';
 import { server } from './domain/mocks/test-server';
 import api from './domain/api/api';
 
-const customGlobal: GlobalWithFetchMock = global as unknown as GlobalWithFetchMock;
-
-customGlobal.fetch = require('jest-fetch-mock');
-
-customGlobal.fetchMock = customGlobal.fetch;
+// Load test env config so window._env_ is available
+import '../public/test-env-config';
 
 global.ResizeObserver = require('resize-observer-polyfill');
 
@@ -24,10 +26,3 @@ api.interceptors.request.clear();
 beforeAll(() => server.listen({ onUnhandledRequest: 'error' }));
 beforeEach(() => server.resetHandlers());
 afterAll(() => server.close());
-
-jest.mock('./domain/auth/constants', () => {
-  jest.requireActual('../public/test-env-config');
-  return jest.requireActual('./domain/auth/constants');
-});
-
-jest.setTimeout(240000);

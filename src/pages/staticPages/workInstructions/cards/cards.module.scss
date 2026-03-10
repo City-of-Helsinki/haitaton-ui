@@ -1,11 +1,11 @@
 @import 'src/assets/styles/layout';
 
 .content {
+  margin-bottom: var(--spacing-xl);
+
   a {
     text-decoration: underline;
   }
-
-  margin-bottom: var(--spacing-xl);
 
   h3 {
     color: var(--greyscale-black-90);

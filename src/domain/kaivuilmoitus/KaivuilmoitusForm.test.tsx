@@ -1,4 +1,4 @@
-import { UserEvent } from '@testing-library/user-event/dist/types/setup/setup';
+import { UserEvent } from '@testing-library/user-event';
 import { http, HttpResponse } from 'msw';
 import { cleanup, fireEvent, render, screen, waitFor, within } from '../../testUtils/render';
 import KaivuilmoitusContainer from './KaivuilmoitusContainer';
@@ -948,7 +948,7 @@ test('OVT fields should be required if postal address fields are empty', async (
 });
 
 test('OVT and registryKey fields should be send as null if they are left empty', async () => {
-  const applicationUpdateSpy = jest.spyOn(applicationApi, 'updateApplication');
+  const applicationUpdateSpy = vi.spyOn(applicationApi, 'updateApplication');
   const hankeData = hankkeet[1] as HankeData;
   const application = cloneDeep(applications[5] as Application<KaivuilmoitusData>);
   const testApplication: Application<KaivuilmoitusData> = {
@@ -996,7 +996,7 @@ test('OVT and registryKey fields should be send as null if they are left empty',
 });
 
 test('OVT and registryKey fields should be send as null if they are left empty by changing customer type', async () => {
-  const applicationUpdateSpy = jest.spyOn(applicationApi, 'updateApplication');
+  const applicationUpdateSpy = vi.spyOn(applicationApi, 'updateApplication');
   const hankeData = hankkeet[1] as HankeData;
   const application = cloneDeep(applications[5] as Application<KaivuilmoitusData>);
   const testApplication: Application<KaivuilmoitusData> = {
@@ -1045,7 +1045,7 @@ test('OVT and registryKey fields should be send as null if they are left empty b
 });
 
 test('Should be able to upload attachments', async () => {
-  const uploadSpy = jest
+  const uploadSpy = vi
     .spyOn(applicationAttachmentsApi, 'uploadAttachment')
     .mockImplementation(uploadApplicationAttachmentMock);
   initApplicationAttachmentGetResponse([]);
@@ -1705,9 +1705,16 @@ describe('Registry key', () => {
         await screen.findByTestId('applicationData.contractorWithContacts.customer.registryKey'),
       ).toBeRequired();
 
+      cleanup();
+
+      const { user: secondUser } = render(
+        <KaivuilmoitusContainer hankeData={hankeData} application={testApplication} />,
+      );
+      await secondUser.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+
       // association
-      await user.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[1]);
-      await user.click(screen.getAllByText('Yhdistys')[0]);
+      fireEvent.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[1]);
+      fireEvent.click(screen.getAllByText('Yhdistys')[0]);
 
       expect(
         await screen.findByTestId('applicationData.contractorWithContacts.customer.registryKey'),
@@ -1939,7 +1946,7 @@ describe('Haittojenhallintasuunnitelma', () => {
 
   test('Nuisance control plan can be filled', async () => {
     const updatedHaittojenhallintasuunnitelma = ', johon on lisätty tekstiä.';
-    const applicationUpdateSpy = jest.spyOn(applicationApi, 'updateApplication');
+    const applicationUpdateSpy = vi.spyOn(applicationApi, 'updateApplication');
     const { user } = await setupHaittojenHallintaPage();
     await user.type(
       screen.getByTestId('applicationData.areas.0.haittojenhallintasuunnitelma.YLEINEN'),

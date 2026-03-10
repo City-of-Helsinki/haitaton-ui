@@ -33,11 +33,11 @@
 }
 
 .content {
+  margin-bottom: var(--spacing-xl);
+
   a {
     text-decoration: underline;
   }
-
-  margin-bottom: var(--spacing-xl);
 
   p,
   a {

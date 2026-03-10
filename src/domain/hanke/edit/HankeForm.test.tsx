@@ -15,7 +15,7 @@ import { cloneDeep } from 'lodash';
 import { Feature } from 'ol';
 import { Polygon } from 'ol/geom';
 import { waitForElementToBeRemoved } from '@testing-library/react';
-import { PathParams } from 'msw/lib/core/utils/matching/matchRequestUrl';
+import { PathParams } from 'msw';
 import { Haittojenhallintasuunnitelma } from '../../common/haittojenhallinta/types';
 
 afterEach(cleanup);
@@ -502,7 +502,7 @@ describe('HankeForm', () => {
   });
 
   test('Should be able to upload attachments', async () => {
-    jest.spyOn(hankeAttachmentsApi, 'uploadAttachment').mockImplementation(uploadAttachment);
+    vi.spyOn(hankeAttachmentsApi, 'uploadAttachment').mockImplementation(uploadAttachment);
     initFileGetResponse([]);
     initFileUploadResponse();
     const { user } = render(<HankeFormContainer hankeTunnus="HAI22-1" />);

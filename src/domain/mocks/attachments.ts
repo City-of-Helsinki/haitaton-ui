@@ -1,4 +1,4 @@
-import { faker } from '@faker-js/faker/.';
+import { faker } from '@faker-js/faker';
 import { TaydennysAttachmentMetadata } from '../application/taydennys/types';
 import { ApplicationAttachmentMetadata, AttachmentType } from '../application/types/application';
 import { MuutosilmoitusAttachmentMetadata } from '../application/muutosilmoitus/types';
