@@ -24,7 +24,7 @@ COPY ./index.html /builder/index.html
 COPY ./vite.config.mts /builder/vite.config.mts
 COPY ./tsconfig.json /builder/tsconfig.json
 COPY ./tsconfig.eslint.json /builder/tsconfig.eslint.json
-COPY ./.eslintrc.js /builder/.eslintrc.js
+COPY ./eslint.config.mjs /builder/eslint.config.mjs
 RUN REACT_APP_DISABLE_SENTRY=1 yarn build
 
 FROM registry.access.redhat.com/ubi9/nginx-124:latest

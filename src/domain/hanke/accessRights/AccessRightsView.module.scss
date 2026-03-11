@@ -1,4 +1,4 @@
-@import 'src/assets/styles/layout';
+@use 'src/assets/styles/layout' as *;
 
 .container {
   background-color: var(--color-white);
