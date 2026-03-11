@@ -17,7 +17,8 @@ import api from './domain/api/api';
 // Load test env config so window._env_ is available
 import '../public/test-env-config';
 
-global.ResizeObserver = require('resize-observer-polyfill');
+import ResizeObserver from 'resize-observer-polyfill';
+global.ResizeObserver = ResizeObserver;
 
 window.scrollTo = function () {};
 

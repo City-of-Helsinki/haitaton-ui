@@ -36,7 +36,7 @@ if (window._env_.REACT_APP_DISABLE_SENTRY !== '1') {
 const matomoEnabled = window._env_.REACT_APP_MATOMO_ENABLED === '1';
 
 const container = document.getElementById('root');
-// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+
 const root = createRoot(container!);
 
 async function enableMocking() {

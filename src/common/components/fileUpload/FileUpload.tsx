@@ -174,7 +174,6 @@ export default function FileUpload<T extends AttachmentMetadata>({
             file,
             abortSignal: abortController.current?.signal,
           });
-          // eslint-disable-next-line no-empty
         } catch (error) {}
       }
     }

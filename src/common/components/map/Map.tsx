@@ -61,7 +61,6 @@ const Map: React.FC<React.PropsWithChildren<Props>> = ({
     mapObject.setTarget(mapRef.current);
     setMap(mapObject);
 
-    // eslint-disable-next-line
     return () => mapObject.setTarget(undefined);
   }, [center, zoom, showAttribution]);
 
