@@ -7,8 +7,8 @@ describe('confirmationDialog', () => {
     const descriptionText = 'description text';
     const buttonText = 'button text';
     const open = true;
-    const handleClose = jest.fn();
-    const handleMainAction = jest.fn();
+    const handleClose = vi.fn();
+    const handleMainAction = vi.fn();
     const variant = 'primary';
 
     const renderedDialog = render(

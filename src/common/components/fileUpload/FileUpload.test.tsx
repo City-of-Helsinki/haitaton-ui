@@ -79,7 +79,7 @@ async function waitLoading() {
 }
 
 test('Should upload files successfully and loading indicator is displayed', async () => {
-  const uploadMock = jest.fn(uploadFunction);
+  const uploadMock = vi.fn(uploadFunction);
   const {
     renderResult: { user },
     fileUploadElement,
@@ -97,7 +97,7 @@ test('Should upload files successfully and loading indicator is displayed', asyn
 });
 
 test('Should show amount of successful files uploaded and errors correctly when files fails in validation', async () => {
-  const uploadMock = jest.fn(uploadFunction);
+  const uploadMock = vi.fn(uploadFunction);
   const fileNameA = 'test-file-a.png';
   const fileNameB = 'test-file-b.pdf';
   const fileNameC = 'test-file-c.png';
@@ -216,7 +216,7 @@ test('Should show correct error message when upload request fails for server err
 });
 
 test('Should upload files when user drops them into drag-and-drop area', async () => {
-  const uploadMock = jest.fn(uploadFunction);
+  const uploadMock = vi.fn(uploadFunction);
   const file = new File(['test-file'], 'test-file-a', { type: 'image/png' });
   const file2 = new File(['test-file'], 'test-file-b', { type: 'image/png' });
   const file3 = new File(['test-file'], 'test-file-c', { type: 'image/png' });
@@ -363,7 +363,7 @@ test('Should show server error message if deleting file fails with server error'
 });
 
 test('Should be able to cancel upload requests', async () => {
-  const abortSpy = jest.spyOn(AbortController.prototype, 'abort');
+  const abortSpy = vi.spyOn(AbortController.prototype, 'abort');
   const {
     renderResult: { user },
     fileUploadElement,
@@ -381,7 +381,7 @@ test('Should be able to cancel upload requests', async () => {
 });
 
 test('Should show error messages for files that exceed the maximum number of files', async () => {
-  const uploadMock = jest.fn(uploadFunction);
+  const uploadMock = vi.fn(uploadFunction);
   const {
     renderResult: { user },
     fileUploadElement,

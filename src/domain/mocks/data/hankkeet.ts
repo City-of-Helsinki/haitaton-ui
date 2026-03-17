@@ -43,7 +43,6 @@ export async function update(hankeTunnus: string, updates: HankeDataDraft) {
   try {
     alkuPvm = getAreasMinStartDate(updates.alueet)?.toISOString();
     loppuPvm = getAreasMaxEndDate(updates.alueet)?.toISOString();
-    // eslint-disable-next-line no-empty
   } catch (error) {}
   hanke = Object.assign(hanke, {
     ...updates,

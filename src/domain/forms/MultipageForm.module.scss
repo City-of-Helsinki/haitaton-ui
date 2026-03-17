@@ -4,11 +4,11 @@
   padding: var(--spacing-l);
 
   .stepper {
+    margin-top: var(--spacing-l);
+    margin-bottom: var(--spacing-l);
+
     * {
       box-sizing: content-box;
     }
-
-    margin-top: var(--spacing-l);
-    margin-bottom: var(--spacing-l);
   }
 }

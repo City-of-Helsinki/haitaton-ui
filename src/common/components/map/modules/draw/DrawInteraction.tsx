@@ -204,7 +204,6 @@ const DrawInteraction: React.FC<React.PropsWithChildren<Props>> = ({
       }
     });
 
-    // eslint-disable-next-line consistent-return
     return function cleanUp() {
       if (modify.current) {
         map.removeInteraction(modify.current);
@@ -241,7 +240,6 @@ const DrawInteraction: React.FC<React.PropsWithChildren<Props>> = ({
   useEffect(() => {
     if (!map) return;
 
-    // eslint-disable-next-line
     return () => removeAllInteractions();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

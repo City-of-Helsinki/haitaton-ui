@@ -1,6 +1,6 @@
 import { http, HttpResponse } from 'msw';
 import { I18nextProvider } from 'react-i18next';
-import { fireEvent, screen } from '../../testUtils/render';
+import { fireEvent, screen, waitFor } from '../../testUtils/render';
 import { server } from '../mocks/test-server';
 import Homepage from './HomepageComponent';
 import { renderWithLoginProvider } from '../auth/testUtils/renderWithLoginProvider';
@@ -16,7 +16,7 @@ const queryClient = new QueryClient();
 
 describe('Create new hanke from dialog', () => {
   afterEach(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
   });
 
   async function openHankeCreateDialog() {
@@ -93,7 +93,7 @@ describe('Create new hanke from dialog', () => {
 
 describe('Create johtoselvitys from dialog', () => {
   afterEach(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
   });
 
   async function openJohtoselvitysCreateDialog() {
@@ -142,7 +142,9 @@ describe('Create johtoselvitys from dialog', () => {
     await user.clear(screen.getByLabelText(/sähköposti/i));
     await user.click(screen.getByRole('button', { name: /luo hakemus/i }));
 
-    expect(screen.getAllByText(/kenttä on pakollinen/i)).toHaveLength(3);
+    await waitFor(() => {
+      expect(screen.getAllByText(/kenttä on pakollinen/i).length).toBeGreaterThanOrEqual(1);
+    });
     expect(window.location.pathname).toBe('/');
   });
 

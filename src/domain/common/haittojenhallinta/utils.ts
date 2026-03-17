@@ -13,7 +13,7 @@ function getHaittaIndexValue(v: number | { indeksi: number }): number {
 export function sortedLiikenneHaittojenhallintatyyppi(
   tormaystarkasteluTulos: HaittaIndexData | undefined | null,
 ): [HAITTOJENHALLINTATYYPPI, number][] {
-  const defaultOrder = Object.values(HAITTOJENHALLINTATYYPPI).filter(
+  const defaultOrder: HAITTOJENHALLINTATYYPPI[] = Object.values(HAITTOJENHALLINTATYYPPI).filter(
     (type) => type !== HAITTOJENHALLINTATYYPPI.YLEINEN && type !== HAITTOJENHALLINTATYYPPI.MUUT,
   );
   if (!tormaystarkasteluTulos) {

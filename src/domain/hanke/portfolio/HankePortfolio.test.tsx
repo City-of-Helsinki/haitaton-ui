@@ -140,7 +140,7 @@ describe('HankePortfolioComponent', () => {
       expect(screen.queryByText('luo uusi hanke')).not.toBeInTheDocument();
     });
 
-    jest.resetModules();
+    vi.resetModules();
     window._env_ = OLD_ENV;
   });
 

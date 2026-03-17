@@ -61,7 +61,7 @@ test('Should save path with query string to session storage and navigate to logi
 
 test('Should identify user after login', async () => {
   sessionStorage.setItem(REDIRECT_PATH_KEY, path);
-  const identifyUser = jest.spyOn(hankeUsersApi, 'identifyUser');
+  const identifyUser = vi.spyOn(hankeUsersApi, 'identifyUser');
 
   getWrapper(true);
 

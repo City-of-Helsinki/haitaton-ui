@@ -17,7 +17,7 @@ import KaivuilmoitusMuutosilmoitusContainer from './KaivuilmoitusMuutosilmoitusC
 import hankkeet from '../mocks/data/hankkeet-data';
 import hakemukset from '../mocks/data/hakemukset-data';
 import { HAITTA_INDEX_TYPE, HaittaIndexData } from '../common/haittaIndexes/types';
-import { UserEvent } from '@testing-library/user-event/index';
+import { UserEvent } from '@testing-library/user-event';
 import api from '../api/api';
 import * as muutosilmoitusAttachmentApi from '../application/muutosilmoitus/muutosilmoitusAttachmentsApi';
 import * as applicationAttachmentsApi from '../application/attachments';
@@ -241,7 +241,7 @@ describe('Muutosilmoitus attachments', () => {
   }
 
   test('Should be able to upload attachments', async () => {
-    const uploadSpy = jest
+    const uploadSpy = vi
       .spyOn(muutosilmoitusAttachmentApi, 'uploadAttachment')
       .mockImplementation(uploadAttachmentMock);
     initFileGetResponse([]);
@@ -311,9 +311,9 @@ describe('Muutosilmoitus attachments', () => {
   });
 
   test('Should show original application attachments in attachments page', async () => {
-    const fetchContentMock = jest
+    const fetchContentMock = vi
       .spyOn(applicationAttachmentsApi, 'getAttachmentFile')
-      .mockImplementation(jest.fn());
+      .mockImplementation(vi.fn());
     initFileGetResponse(applicationAttachments);
     const { user } = setup();
     await user.click(screen.getByRole('button', { name: /liitteet/i }));

@@ -40,7 +40,9 @@ describe('AreaOverlay', () => {
 
   test('applies background color if provided', () => {
     render(<AreaOverlay overlayProps={defaultProps} />);
-    expect(screen.getByText('Test Heading').closest('div')).toHaveStyle('background-color: blue');
+    expect(screen.getByText('Test Heading').closest('div')).toHaveStyle(
+      'background-color: rgb(0, 0, 255)',
+    );
   });
 
   test('applies default background color if background color not provided', () => {

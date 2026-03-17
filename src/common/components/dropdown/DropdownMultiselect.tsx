@@ -77,7 +77,6 @@ function DropdownMultiselect<T>({
                   // parse it to get the original object value
                   try {
                     val = JSON.parse(o.value);
-                    // eslint-disable-next-line no-empty
                   } catch (_) {}
                   return val;
                 }),

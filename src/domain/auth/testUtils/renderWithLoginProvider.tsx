@@ -50,15 +50,15 @@ export function renderWithLoginProvider({
       beacon.addListener(triggerForAllOidcClientSignals, (signal) => {
         const user = createUser(placeUserToStorage, userProfile);
         const oidcClient = signal.context as OidcClient;
-        jest.spyOn(oidcClient, 'getState').mockReturnValue(state);
-        jest.spyOn(oidcClient, 'getUser').mockReturnValue(user);
-        jest
-          .spyOn(oidcClient, 'getAmr')
-          .mockReturnValue(userProfile?.ad_groups === undefined ? ['suomi_fi'] : ['helsinkiad']);
+        vi.spyOn(oidcClient, 'getState').mockReturnValue(state);
+        vi.spyOn(oidcClient, 'getUser').mockReturnValue(user);
+        vi.spyOn(oidcClient, 'getAmr').mockReturnValue(
+          userProfile?.ad_groups === undefined ? ['suomi_fi'] : ['helsinkiad'],
+        );
         if (!returnUser) {
-          jest.spyOn(oidcClient, 'handleCallback').mockRejectedValue(handleError);
+          vi.spyOn(oidcClient, 'handleCallback').mockRejectedValue(handleError);
         } else {
-          jest.spyOn(oidcClient, 'handleCallback').mockResolvedValue(user);
+          vi.spyOn(oidcClient, 'handleCallback').mockResolvedValue(user);
         }
       });
     },

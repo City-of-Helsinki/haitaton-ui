@@ -15,7 +15,7 @@ import Text from '../../common/components/text/Text';
 
 function getInvoicingRegistryKeyLabel(
   t: TFunction<'translation', undefined>,
-  selectedContactType: string | null,
+  selectedContactType: string | null | undefined,
 ) {
   if (selectedContactType === 'PERSON') {
     return t('form:yhteystiedot:labels:henkilotunnus');

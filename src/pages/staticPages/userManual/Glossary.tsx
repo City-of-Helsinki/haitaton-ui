@@ -35,7 +35,7 @@ const Glossary: React.FC = () => {
 
   const words: Word[] = t('staticPages:manualPage:glossary:words', {
     returnObjects: true,
-  });
+  }) as Word[];
 
   const queryExpanded = 'div[role=heading] > button[aria-expanded="true"]';
   const queryClosed = 'div[role=heading] > button[aria-expanded="false"]';
