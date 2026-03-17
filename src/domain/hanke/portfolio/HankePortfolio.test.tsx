@@ -101,21 +101,15 @@ describe('HankePortfolioComponent', () => {
     );
     const numberElement = await screen.findByTestId('numberOfFilteredRows');
     expect(numberElement).toHaveTextContent('3');
-    const button = screen.getByRole('combobox', { name: /Työn tyyppi/ });
-    await user.click(button);
-    await user.click(screen.getByText('Sähkö'));
-    const hankeVaiheet = screen.getByText('Hankevaiheet');
-    await user.click(hankeVaiheet);
-    expect(numberElement).toHaveTextContent('0');
+    // Open the multiselect dropdown and keep it open for all selections
+    await user.click(screen.getByRole('combobox', { name: /Työn tyyppi/ }));
+    await user.click(await screen.findByText('Sähkö'));
+    await waitFor(() => expect(numberElement).toHaveTextContent('0'));
     expect(screen.queryByText(EMPTY_HANKE_LIST_TEXT)).toBeInTheDocument();
-    await user.click(screen.getByRole('combobox', { name: /Työn tyyppi/ }));
-    await user.click(screen.getByText('Viemäri'));
-    await user.click(hankeVaiheet);
-    expect(numberElement).toHaveTextContent('2');
-    await user.click(screen.getByRole('combobox', { name: /Työn tyyppi/ }));
-    await user.click(screen.getByText('Sadevesi'));
-    await user.click(hankeVaiheet);
-    expect(numberElement).toHaveTextContent('3');
+    await user.click(await screen.findByText('Viemäri'));
+    await waitFor(() => expect(numberElement).toHaveTextContent('2'));
+    await user.click(await screen.findByText('Sadevesi'));
+    await waitFor(() => expect(numberElement).toHaveTextContent('3'));
   });
 
   test('Having no projects renders correct text and new hanke link opens hanke create dialog', async () => {
