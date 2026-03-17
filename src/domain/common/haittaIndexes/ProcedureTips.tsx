@@ -25,7 +25,7 @@ const ProcedureTips: React.FC<Props> = memo(({ haittojenhallintaTyyppi, haittaIn
   const tips: Tip[] = useMemo(() => {
     return t(`hankeForm:haittojenHallintaForm:procedureTips:${haittojenhallintaTyyppi}`, {
       returnObjects: true,
-    });
+    }) as Tip[];
   }, [t, haittojenhallintaTyyppi]);
 
   // If tip has indexTreshold, show the tip only if haittaIndex is greater or equal to the treshold,

@@ -21,6 +21,8 @@ import ResizeObserver from 'resize-observer-polyfill';
 global.ResizeObserver = ResizeObserver;
 
 window.scrollTo = function () {};
+window.HTMLElement.prototype.scrollTo = function () {};
+window.HTMLElement.prototype.scrollIntoView = function () {};
 
 api.interceptors.request.clear();
 
