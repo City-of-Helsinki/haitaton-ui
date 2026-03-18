@@ -38,5 +38,10 @@ export default defineConfig({
         inline: ['ol'], // OpenLayers must be transformed (replaces transformIgnorePatterns)
       },
     },
+    coverage: {
+      provider: 'v8',
+      reporter: ['lcov', 'text'],
+      reportsDirectory: './coverage',
+    },
   },
 });
