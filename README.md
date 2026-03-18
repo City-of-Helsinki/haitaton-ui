@@ -5,7 +5,7 @@ effects of projects taking place within the urban area.
 
 ## Requirements
 
-- Node 20.x
+- Node 22.x
 - Yarn
 - Git
 - Docker
