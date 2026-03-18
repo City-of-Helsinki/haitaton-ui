@@ -47,6 +47,7 @@ jobs:
       env:
         CI: true
     - name: SonarQube Cloud Scan
+      if: always()
       uses: SonarSource/sonarqube-scan-action@v6
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
