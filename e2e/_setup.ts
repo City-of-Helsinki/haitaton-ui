@@ -324,8 +324,6 @@ export async function expectApplicationStatus(
   expectedStatus: string,
   timeout = 15_000,
 ) {
-  // wait for the page to load
-  await page.waitForLoadState('networkidle');
   // figure out which view we're on by looking at the path
   const path = new URL(page.url()).pathname;
 
