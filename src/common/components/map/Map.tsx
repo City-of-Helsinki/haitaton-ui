@@ -61,7 +61,7 @@ const Map: React.FC<React.PropsWithChildren<Props>> = ({
     mapObject.setTarget(mapRef.current);
     setMap(mapObject);
 
-    return () => mapObject.setTarget(undefined);
+    return () => mapObject.setTarget();
   }, [center, zoom, showAttribution]);
 
   useEffect(() => {

@@ -282,7 +282,7 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke, signedInUser, 
 
 export type Column = {
   Header: string;
-  // eslint-disable-next-line
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   accessor: any;
 };
 

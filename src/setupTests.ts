@@ -18,11 +18,11 @@ import api from './domain/api/api';
 import '../public/test-env-config';
 
 import ResizeObserver from 'resize-observer-polyfill';
-global.ResizeObserver = ResizeObserver;
+globalThis.ResizeObserver = ResizeObserver;
 
-window.scrollTo = function () {};
-window.HTMLElement.prototype.scrollTo = function () {};
-window.HTMLElement.prototype.scrollIntoView = function () {};
+globalThis.scrollTo = function () {};
+globalThis.HTMLElement.prototype.scrollTo = function () {};
+globalThis.HTMLElement.prototype.scrollIntoView = function () {};
 
 api.interceptors.request.clear();
 

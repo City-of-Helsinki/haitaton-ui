@@ -1,4 +1,4 @@
-import { http, HttpResponse, delay } from 'msw';
+import { http, HttpResponse, delay, PathParams } from 'msw';
 import { HankeDataDraft } from '../types/hanke';
 import * as hankkeetDB from './data/hankkeet';
 import * as hakemuksetDB from './data/hakemukset';
@@ -22,7 +22,6 @@ import {
   NewJohtoselvitysData,
 } from '../application/types/application';
 import { defaultJohtoselvitysData } from './data/defaultJohtoselvitysData';
-import { PathParams } from 'msw';
 import ApiError from './apiError';
 import { GridMetadata } from '../map/components/Layers/SimpleHankeLayer';
 

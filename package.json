@@ -15,6 +15,7 @@
     "update-runtime-env": "ts-node -P ./scripts/tsconfig.json --files scripts/update-runtime-env.ts",
     "test": "TEST=true yarn run update-runtime-env && vitest",
     "testCI": "TEST=true yarn run update-runtime-env && vitest run",
+    "test:coverage": "TEST=true yarn run update-runtime-env && vitest run --coverage",
     "e2e": "playwright test --retries=1 --project=chromium --workers=3",
     "type-check": "tsc --pretty --noEmit",
     "format": "prettier --write",
