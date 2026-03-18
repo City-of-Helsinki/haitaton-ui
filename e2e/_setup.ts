@@ -168,7 +168,14 @@ export async function nextAndCloseToast(
     });
   }
 
-  await expect(toast).toBeHidden({ timeout: hiddenTimeout });
+  await expect(toast)
+    .toBeHidden({ timeout: hiddenTimeout })
+    .catch((error: Error) => {
+      // Page navigated away before toast disappeared — toast is gone, treat as success
+      if (!error.message.includes('Target page, context or browser has been closed')) {
+        throw error;
+      }
+    });
 }
 
 export async function createAndFillHankeForm(
