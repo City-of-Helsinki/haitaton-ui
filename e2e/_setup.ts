@@ -150,44 +150,32 @@ export async function nextAndCloseToast(
   nextButtonName: string,
   toastText: string,
   opts?: {
-    networkIdleTimeout?: number;
     visibleTimeout?: number;
-    closeTimeout?: number;
     hiddenTimeout?: number;
   },
 ) {
-  const {
-    networkIdleTimeout = 30_000,
-    visibleTimeout = 10_000,
-    closeTimeout = 10_000,
-    hiddenTimeout = 20_000,
-  } = opts ?? {};
+  const { visibleTimeout = 10_000, hiddenTimeout = 20_000 } = opts ?? {};
 
-  // 1. click “Next” and wait for network‐idle
-  await Promise.all([
-    page.waitForLoadState('networkidle', { timeout: networkIdleTimeout }),
-    page.getByRole('button', { name: nextButtonName }).click(),
-  ]);
+  await page.getByRole('button', { name: nextButtonName }).click();
 
-  // 2. look up the toast (scoped and retrying)
   const toast = page.locator('role=alert', { hasText: toastText });
-
-  // 3. wait for it to appear
   await expect(toast).toBeVisible({ timeout: visibleTimeout });
 
-  // 4a) find the close button inside the toast
   const closeButton = toast.getByRole('button', { name: 'Close toast', exact: true });
-
-  // 4b) wait until it’s actually visible (or time out quickly if it never is)
-  try {
-    await expect(closeButton).toBeVisible({ timeout: closeTimeout });
-    await closeButton.click();
-  } catch (e) {
-    // if it never became visible, assume the toast auto-dismissed itself
+  if (await closeButton.isVisible()) {
+    await closeButton.click().catch(() => {
+      // Toast auto-dismissed between isVisible() check and click()
+    });
   }
 
-  // 5) no matter what, ensure the toast is gone before moving on
-  await expect(toast).toBeHidden({ timeout: hiddenTimeout });
+  await expect(toast)
+    .toBeHidden({ timeout: hiddenTimeout })
+    .catch((error: Error) => {
+      // Page navigated away before toast disappeared — toast is gone, treat as success
+      if (!error.message.includes('Target page, context or browser has been closed')) {
+        throw error;
+      }
+    });
 }
 
 export async function createAndFillHankeForm(
@@ -336,9 +324,7 @@ export async function expectApplicationStatus(
   expectedStatus: string,
   timeout = 15_000,
 ) {
-  // wait for the page to load
-  await page.waitForLoadState('networkidle');
-  // figure out which view we’re on by looking at the path
+  // figure out which view we're on by looking at the path
   const path = new URL(page.url()).pathname;
 
   if (path.match(/^\/fi\/hakemus\/\d+/)) {

@@ -22,7 +22,7 @@ const isI18nYupMessage = (error: any): boolean => {
 
 export const getInputErrorText = (
   t: TFunction<string>,
-  // eslint-disable-next-line
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   error: any,
 ): string | undefined => {
   if (isI18nYupMessage(error)) {

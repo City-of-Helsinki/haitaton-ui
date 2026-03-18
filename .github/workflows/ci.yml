@@ -1,0 +1,56 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, dev ]
+  pull_request:
+    branches: [ main, dev ]
+  workflow_dispatch:
+
+env:
+  node-version: 22
+
+jobs:
+  build:
+    name: Lint and build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'yarn'
+      - name: Check Yarn version and install dependencies
+        run: yarn install --immutable --inline-builds
+      - name: Typecheck application
+        run: yarn type-check
+      - name: Lint application
+        run: yarn lint
+      - name: Build application
+        run: yarn build
+
+  tests:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Use Node.js 20
+      uses: actions/setup-node@v4
+      with:
+        node-version: 22
+        cache: 'yarn'
+    - name: Check Yarn version and install dependencies
+      run: yarn install --immutable --inline-builds
+    - name: Run tests
+      run: yarn test:coverage
+      env:
+        CI: true
+    - name: SonarQube Cloud Scan
+      if: always()
+      uses: SonarSource/sonarqube-scan-action@v6
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        
+

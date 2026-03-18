@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi9/nodejs-20:latest AS staticbuilder
+FROM registry.access.redhat.com/ubi9/nodejs-22:latest AS staticbuilder
 
 USER root
 RUN npm install --ignore-scripts -g yarn
