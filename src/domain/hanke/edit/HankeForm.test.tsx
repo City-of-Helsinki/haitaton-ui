@@ -474,7 +474,9 @@ describe('HankeForm', () => {
     await user.click(screen.getByRole('button', { name: 'Tallenna ja keskeytä' }));
 
     expect(window.location.pathname).toBe('/fi/hankesalkku/HAI22-1');
-    expect(screen.getByText(`Hanke ${hankeName} (HAI22-1) tallennettu omiin hankkeisiin.`));
+    expect(
+      screen.getByText(`Hanke ${hankeName} (HAI22-1) tallennettu omiin hankkeisiin.`),
+    ).toBeInTheDocument();
   });
 
   test('Should be able to save hanke in the last page', async () => {
@@ -498,7 +500,7 @@ describe('HankeForm', () => {
       await screen.findByText(
         `Hanke ${hanke.nimi} (${hanke.hankeTunnus}) tallennettu omiin hankkeisiin.`,
       ),
-    );
+    ).toBeInTheDocument();
   });
 
   test('Should be able to upload attachments', async () => {

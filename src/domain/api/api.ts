@@ -25,7 +25,7 @@ api.interceptors.request.use(
 );
 
 api.interceptors.response.use(
-  // eslint-disable-next-line
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async (response: AxiosResponse): Promise<any> => {
     if (response.status >= 200 && response.status < 300) {
       return response;
@@ -46,7 +46,6 @@ api.interceptors.response.use(
         return Promise.reject(error);
       }
     } else if (request) {
-      // console.error('Request failed. Please try again.');
       return Promise.reject(new Error('Request failed. Please try again.'));
     }
     return Promise.reject(error);
