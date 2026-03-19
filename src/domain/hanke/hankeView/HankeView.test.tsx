@@ -20,7 +20,7 @@ function getViewPermissionForUser() {
 test('Draft state notification is rendered when hanke is in draft state', async () => {
   render(<HankeViewContainer hankeTunnus="HAI22-1" />);
   await waitForLoadingToFinish();
-  const draftStateElement = screen.getByTestId('hankeDraftStateNotification');
+  const draftStateElement = await screen.findByTestId('hankeDraftStateNotification');
   const { getByRole } = within(draftStateElement);
 
   expect(draftStateElement).toBeInTheDocument();
@@ -65,7 +65,7 @@ test('Draft state notification only shows form pages with missing information', 
 
   await waitForLoadingToFinish();
 
-  const draftStateElement = screen.getByTestId('hankeDraftStateNotification');
+  const draftStateElement = await screen.findByTestId('hankeDraftStateNotification');
   const { queryByRole, getByRole } = within(draftStateElement);
 
   expect(draftStateElement).toBeInTheDocument();

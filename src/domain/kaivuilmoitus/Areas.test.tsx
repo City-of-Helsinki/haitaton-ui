@@ -13,7 +13,7 @@ import React from 'react';
 import { Coordinate } from 'ol/coordinate';
 
 // Mock hds-react heavy components to avoid render loops in tests
-jest.mock('hds-react', () => {
+vi.mock('hds-react', () => {
   const Dialog: React.FC<React.PropsWithChildren<{ id?: string; isOpen?: boolean }>> & {
     Header: React.FC<{ id?: string; title?: string; iconStart?: React.ReactNode }>;
     Content: React.FC<React.PropsWithChildren<unknown>>;
@@ -142,8 +142,8 @@ jest.mock('hds-react', () => {
 });
 
 // Mock map utilities
-jest.mock('../../common/components/map/utils', () => ({
-  getLinesFromCoordinates: jest.fn().mockReturnValue([
+vi.mock('../../common/components/map/utils', () => ({
+  getLinesFromCoordinates: vi.fn().mockReturnValue([
     [
       [0, 0],
       [100, 0],
@@ -161,42 +161,47 @@ jest.mock('../../common/components/map/utils', () => ({
       [0, 0],
     ],
   ]),
-  getLineIntersection: jest.fn(),
-  getCoordinateNumbersFromCoordinate: jest.fn().mockImplementation((coord) => coord),
-  isSegmentWithinHankeArea: jest.fn(),
+  getLineIntersection: vi.fn(),
+  getCoordinateNumbersFromCoordinate: vi.fn().mockImplementation((coord) => coord),
+  isSegmentWithinHankeArea: vi.fn(),
 }));
 
 import * as mapUtils from '../../common/components/map/utils';
+import * as hankeMapUtils from '../map/utils';
+import * as applicationMapModule from '../application/components/ApplicationMap';
+import * as areaSelectDialogModule from './components/AreaSelectDialog';
+import * as olSourceVectorModule from 'ol/source/Vector';
+import * as useHaittaIndexesModule from '../hanke/hooks/useHaittaIndexes';
 
-const mockUtils = jest.mocked(mapUtils);
+const mockUtils = vi.mocked(mapUtils);
 
 // Mock OpenLayers components
-jest.mock('../../common/components/map/Map', () => {
+vi.mock('../../common/components/map/Map', () => {
   return function MockMap({ children }: { children: React.ReactNode }) {
     return <div data-testid="mock-map">{children}</div>;
   };
 });
 
-jest.mock('../map/components/Layers/HankeLayer', () => {
+vi.mock('../map/components/Layers/HankeLayer', () => {
   return function MockHankeLayer() {
     return <div data-testid="mock-hanke-layer" />;
   };
 });
 
-jest.mock('../../common/components/map/modules/draw/DrawModule', () => {
+vi.mock('../../common/components/map/modules/draw/DrawModule', () => {
   return function MockDrawModule() {
     return <div data-testid="mock-draw-module" />;
   };
 });
 
 // Mock turf helpers to prevent validation issues in tests
-jest.mock('@turf/helpers', () => ({
+vi.mock('@turf/helpers', () => ({
   __esModule: true,
-  polygon: jest.fn(() => ({ type: 'Feature', geometry: { type: 'Polygon', coordinates: [] } })),
+  polygon: vi.fn(() => ({ type: 'Feature', geometry: { type: 'Polygon', coordinates: [] } })),
 }));
 
 // Mock AreaSelectDialog to capture props and allow invoking onConfirm
-jest.mock('./components/AreaSelectDialog', () => {
+vi.mock('./components/AreaSelectDialog', () => {
   let lastProps: unknown;
   const Mock = (props: unknown) => {
     lastProps = props;
@@ -211,7 +216,7 @@ jest.mock('./components/AreaSelectDialog', () => {
 });
 
 // Mock ApplicationMap to capture props and allow invoking onAddArea
-jest.mock('../application/components/ApplicationMap', () => {
+vi.mock('../application/components/ApplicationMap', () => {
   let lastProps: Record<string, unknown> | undefined;
   const Mock = (props: Record<string, unknown>) => {
     lastProps = props;
@@ -221,17 +226,17 @@ jest.mock('../application/components/ApplicationMap', () => {
 });
 
 // Mock map utils used by Areas.tsx for containment check and formatting
-jest.mock('../map/utils', () => ({
+vi.mock('../map/utils', () => ({
   __esModule: true,
-  featureContains: jest.fn(() => true),
-  formatFeaturesToHankeGeoJSON: jest.fn(() => ({})),
-  getTotalSurfaceArea: jest.fn(() => 0),
+  featureContains: vi.fn(() => true),
+  formatFeaturesToHankeGeoJSON: vi.fn(() => ({})),
+  getTotalSurfaceArea: vi.fn(() => 0),
 }));
 
 // Mock haitta indexes hook to immediately invoke onSuccess with fake data
-jest.mock('../hanke/hooks/useHaittaIndexes', () => {
+vi.mock('../hanke/hooks/useHaittaIndexes', () => {
   const fakeData = { liikennehaittaindeksi: { indeksi: 5 } };
-  const mutate = jest.fn((_req: unknown, handlers: { onSuccess?: (d: unknown) => void }) => {
+  const mutate = vi.fn((_req: unknown, handlers: { onSuccess?: (d: unknown) => void }) => {
     return handlers?.onSuccess?.(fakeData);
   });
   const useHaittaIndexes = () => ({ mutate });
@@ -239,9 +244,9 @@ jest.mock('../hanke/hooks/useHaittaIndexes', () => {
 });
 
 // Mock field array hook to spy on append calls
-jest.mock('../../common/hooks/useFieldArrayWithStateUpdate', () => {
-  const append = jest.fn();
-  const remove = jest.fn();
+vi.mock('../../common/hooks/useFieldArrayWithStateUpdate', () => {
+  const append = vi.fn();
+  const remove = vi.fn();
   // Keep a stable fields array reference across renders to avoid loops in useSelectableTabs
   const fields: unknown[] = [];
   const useFieldArrayWithStateUpdate = () => ({ fields, append, remove });
@@ -253,12 +258,12 @@ jest.mock('../../common/hooks/useFieldArrayWithStateUpdate', () => {
 });
 
 // Mock VectorSource so we can inspect addFeature/removeFeature calls
-jest.mock('ol/source/Vector', () => {
+vi.mock('ol/source/Vector', () => {
   const mocks = {
-    addFeature: jest.fn(),
-    removeFeature: jest.fn(),
-    getFeatures: jest.fn(() => []),
-    clear: jest.fn(),
+    addFeature: vi.fn(),
+    removeFeature: vi.fn(),
+    getFeatures: vi.fn(() => []),
+    clear: vi.fn(),
   };
 
   class VectorSource {
@@ -292,8 +297,8 @@ jest.mock('ol/source/Vector', () => {
 });
 
 // Mock useSelectableTabs to provide setSelectedTabIndex spy
-jest.mock('../../common/hooks/useSelectableTabs', () => {
-  const setSelectedTabIndex = jest.fn();
+vi.mock('../../common/hooks/useSelectableTabs', () => {
+  const setSelectedTabIndex = vi.fn();
   const useSelectableTabs = () => ({
     tabRefs: [],
     setSelectedTabIndex,
@@ -339,7 +344,7 @@ describe('Areas segment containment guard', () => {
   const originalHakemus = undefined;
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     mockUtils.getLineIntersection.mockReturnValue(null);
   });
 
@@ -364,8 +369,8 @@ describe('Areas segment containment guard', () => {
 
     beforeEach(() => {
       mockMap = {
-        getPixelFromCoordinate: jest.fn().mockReturnValue([50, 50]),
-        getFeaturesAtPixel: jest.fn(),
+        getPixelFromCoordinate: vi.fn().mockReturnValue([50, 50]),
+        getFeaturesAtPixel: vi.fn(),
       };
     });
 
@@ -385,9 +390,7 @@ describe('Areas segment containment guard', () => {
 
       // Get the ApplicationMap props to access the drawSegmentGuard
       type AppMapMockModule = { __getLastAppMapProps: () => Record<string, unknown> | undefined };
-      const appMapMock = jest.requireMock(
-        '../application/components/ApplicationMap',
-      ) as AppMapMockModule;
+      const appMapMock = vi.mocked(applicationMapModule) as unknown as AppMapMockModule;
 
       await waitFor(() => {
         // eslint-disable-next-line no-underscore-dangle
@@ -431,9 +434,7 @@ describe('Areas segment containment guard', () => {
       );
 
       type AppMapMockModule = { __getLastAppMapProps: () => Record<string, unknown> | undefined };
-      const appMapMock = jest.requireMock(
-        '../application/components/ApplicationMap',
-      ) as AppMapMockModule;
+      const appMapMock = vi.mocked(applicationMapModule) as unknown as AppMapMockModule;
 
       await waitFor(() => {
         // eslint-disable-next-line no-underscore-dangle
@@ -477,9 +478,7 @@ describe('Areas segment containment guard', () => {
       );
 
       type AppMapMockModule = { __getLastAppMapProps: () => Record<string, unknown> | undefined };
-      const appMapMock = jest.requireMock(
-        '../application/components/ApplicationMap',
-      ) as AppMapMockModule;
+      const appMapMock = vi.mocked(applicationMapModule) as unknown as AppMapMockModule;
 
       await waitFor(() => {
         // eslint-disable-next-line no-underscore-dangle
@@ -523,9 +522,7 @@ describe('Areas segment containment guard', () => {
       );
 
       type AppMapMockModule = { __getLastAppMapProps: () => Record<string, unknown> | undefined };
-      const appMapMock = jest.requireMock(
-        '../application/components/ApplicationMap',
-      ) as AppMapMockModule;
+      const appMapMock = vi.mocked(applicationMapModule) as unknown as AppMapMockModule;
 
       await waitFor(() => {
         // eslint-disable-next-line no-underscore-dangle
@@ -569,9 +566,7 @@ describe('Areas segment containment guard', () => {
       );
 
       type AppMapMockModule = { __getLastAppMapProps: () => Record<string, unknown> | undefined };
-      const appMapMock = jest.requireMock(
-        '../application/components/ApplicationMap',
-      ) as AppMapMockModule;
+      const appMapMock = vi.mocked(applicationMapModule) as unknown as AppMapMockModule;
 
       await waitFor(() => {
         // eslint-disable-next-line no-underscore-dangle
@@ -619,9 +614,7 @@ describe('Areas segment containment guard', () => {
       );
 
       type AppMapMockModule = { __getLastAppMapProps: () => Record<string, unknown> | undefined };
-      const appMapMock = jest.requireMock(
-        '../application/components/ApplicationMap',
-      ) as AppMapMockModule;
+      const appMapMock = vi.mocked(applicationMapModule) as unknown as AppMapMockModule;
 
       await waitFor(() => {
         // eslint-disable-next-line no-underscore-dangle
@@ -643,9 +636,7 @@ describe('Areas segment containment guard', () => {
       );
 
       type AppMapMockModule = { __getLastAppMapProps: () => Record<string, unknown> | undefined };
-      const appMapMock = jest.requireMock(
-        '../application/components/ApplicationMap',
-      ) as AppMapMockModule;
+      const appMapMock = vi.mocked(applicationMapModule) as unknown as AppMapMockModule;
 
       await waitFor(() => {
         // eslint-disable-next-line no-underscore-dangle
@@ -753,9 +744,7 @@ describe('Areas segment containment guard', () => {
 
       // Verify that the ApplicationMap receives the onAddArea prop
       type AppMapMockModule = { __getLastAppMapProps: () => Record<string, unknown> | undefined };
-      const appMapMock = jest.requireMock(
-        '../application/components/ApplicationMap',
-      ) as AppMapMockModule;
+      const appMapMock = vi.mocked(applicationMapModule) as unknown as AppMapMockModule;
 
       await waitFor(() => {
         // eslint-disable-next-line no-underscore-dangle
@@ -831,7 +820,7 @@ describe('Areas segment containment guard', () => {
   describe('area handlers', () => {
     it('handleAddArea removes feature when no hanke contains it', async () => {
       // featureContains mocked to true globally; override to false for this test
-      const mapUtilsModule = jest.requireMock('../map/utils') as { featureContains: jest.Mock };
+      const mapUtilsModule = vi.mocked(hankeMapUtils);
       mapUtilsModule.featureContains.mockImplementation(() => false);
 
       render(
@@ -844,7 +833,7 @@ describe('Areas segment containment guard', () => {
         </TestWrapper>,
       );
 
-      const appMap = jest.requireMock('../application/components/ApplicationMap') as {
+      const appMap = vi.mocked(applicationMapModule) as unknown as {
         __getLastAppMapProps: () => Record<string, unknown> | undefined;
       };
       await waitFor(() => {
@@ -872,13 +861,22 @@ describe('Areas segment containment guard', () => {
       act(() => onAddArea(feat));
 
       // eslint-disable-next-line no-underscore-dangle
-      const vsMocks = jest.requireMock('ol/source/Vector').__getMocks();
+      const vsMocks = (
+        vi.mocked(olSourceVectorModule) as unknown as {
+          __getMocks: () => typeof import('ol/source/Vector') & {
+            addFeature: ReturnType<typeof vi.fn>;
+            removeFeature: ReturnType<typeof vi.fn>;
+            getFeatures: ReturnType<typeof vi.fn>;
+            clear: ReturnType<typeof vi.fn>;
+          };
+        }
+      ).__getMocks();
       expect(vsMocks.removeFeature).toHaveBeenCalledWith(feat);
     });
 
     it('handleAddArea opens dialog when multiple hanke areas contain feature', async () => {
       // Make featureContains return true and simulate multiple hanke areas
-      const mapUtilsModule = jest.requireMock('../map/utils') as { featureContains: jest.Mock };
+      const mapUtilsModule = vi.mocked(hankeMapUtils);
       mapUtilsModule.featureContains.mockImplementation(() => true);
 
       const multiHanke = {
@@ -896,7 +894,7 @@ describe('Areas segment containment guard', () => {
         </TestWrapper>,
       );
 
-      const appMap = jest.requireMock('../application/components/ApplicationMap') as {
+      const appMap = vi.mocked(applicationMapModule) as unknown as {
         __getLastAppMapProps: () => Record<string, unknown> | undefined;
       };
       await waitFor(() => {
@@ -929,7 +927,7 @@ describe('Areas segment containment guard', () => {
 
     it('handleCopyArea adds feature then delegates to handleAddArea', async () => {
       // featureContains true so handleAddArea will attempt to add
-      const mapUtilsModule = jest.requireMock('../map/utils') as { featureContains: jest.Mock };
+      const mapUtilsModule = vi.mocked(hankeMapUtils);
       mapUtilsModule.featureContains.mockImplementation(() => true);
 
       render(
@@ -942,7 +940,7 @@ describe('Areas segment containment guard', () => {
         </TestWrapper>,
       );
 
-      const appMap = jest.requireMock('../application/components/ApplicationMap') as {
+      const appMap = vi.mocked(applicationMapModule) as unknown as {
         __getLastAppMapProps: () => Record<string, unknown> | undefined;
       };
       await waitFor(() => {
@@ -968,7 +966,16 @@ describe('Areas segment containment guard', () => {
       act(() => onCopyArea(feat));
 
       // eslint-disable-next-line no-underscore-dangle
-      const vsMocks = jest.requireMock('ol/source/Vector').__getMocks();
+      const vsMocks = (
+        vi.mocked(olSourceVectorModule) as unknown as {
+          __getMocks: () => typeof import('ol/source/Vector') & {
+            addFeature: ReturnType<typeof vi.fn>;
+            removeFeature: ReturnType<typeof vi.fn>;
+            getFeatures: ReturnType<typeof vi.fn>;
+            clear: ReturnType<typeof vi.fn>;
+          };
+        }
+      ).__getMocks();
       expect(vsMocks.addFeature).toHaveBeenCalledWith(feat);
       // Since featureContains returns true and there's at least one hanke area, no removeFeature called
       expect(vsMocks.removeFeature).not.toHaveBeenCalledWith(feat);
@@ -1036,7 +1043,7 @@ describe('Areas segment containment guard', () => {
         </TestWrapper>,
       );
 
-      const appMap = jest.requireMock('../application/components/ApplicationMap') as {
+      const appMap = vi.mocked(applicationMapModule) as unknown as {
         __getLastAppMapProps: () => Record<string, unknown> | undefined;
       };
       await waitFor(() => {
@@ -1053,13 +1060,17 @@ describe('Areas segment containment guard', () => {
 
       // Ensure the haittaIndexes mutation was invoked for the changed area
       // eslint-disable-next-line no-underscore-dangle
-      const mutateMock = jest.requireMock('../hanke/hooks/useHaittaIndexes').__getMutateMock();
+      const mutateMock = (
+        vi.mocked(useHaittaIndexesModule) as unknown as {
+          __getMutateMock: () => ReturnType<typeof vi.fn>;
+        }
+      ).__getMutateMock();
       expect(mutateMock).toHaveBeenCalled();
     });
 
     it('handleAreaSelectDialogClose removes feature and clears dialog', async () => {
       // Prepare scenario where multiple hanke areas exist so dialog opens
-      const mapUtilsModule = jest.requireMock('../map/utils') as { featureContains: jest.Mock };
+      const mapUtilsModule = vi.mocked(hankeMapUtils);
       mapUtilsModule.featureContains.mockImplementation(() => true);
 
       const multiHanke = {
@@ -1077,7 +1088,7 @@ describe('Areas segment containment guard', () => {
         </TestWrapper>,
       );
 
-      const appMap = jest.requireMock('../application/components/ApplicationMap') as {
+      const appMap = vi.mocked(applicationMapModule) as unknown as {
         __getLastAppMapProps: () => Record<string, unknown> | undefined;
       };
       await waitFor(() => {
@@ -1108,7 +1119,9 @@ describe('Areas segment containment guard', () => {
       });
 
       // Invoke onClose via the mocked AreaSelectDialog props
-      const areaSelectMock = jest.requireMock('./components/AreaSelectDialog');
+      const areaSelectMock = vi.mocked(areaSelectDialogModule) as unknown as {
+        __getLastAreaSelectDialogProps: () => unknown;
+      };
       // eslint-disable-next-line no-underscore-dangle
       const lastProps = areaSelectMock.__getLastAreaSelectDialogProps();
       // call onClose()
@@ -1116,13 +1129,22 @@ describe('Areas segment containment guard', () => {
       lp.onClose && lp.onClose();
 
       // eslint-disable-next-line no-underscore-dangle
-      const vsMocks = jest.requireMock('ol/source/Vector').__getMocks();
+      const vsMocks = (
+        vi.mocked(olSourceVectorModule) as unknown as {
+          __getMocks: () => typeof import('ol/source/Vector') & {
+            addFeature: ReturnType<typeof vi.fn>;
+            removeFeature: ReturnType<typeof vi.fn>;
+            getFeatures: ReturnType<typeof vi.fn>;
+            clear: ReturnType<typeof vi.fn>;
+          };
+        }
+      ).__getMocks();
       expect(vsMocks.removeFeature).toHaveBeenCalledWith(feat);
     });
 
     it('handleAreaSelectConfirm calls addTyoAlueToHankeArea and clears dialog', async () => {
       // Make featureContains true so dialog opens
-      const mapUtilsModule = jest.requireMock('../map/utils') as { featureContains: jest.Mock };
+      const mapUtilsModule = vi.mocked(hankeMapUtils);
       mapUtilsModule.featureContains.mockImplementation(() => true);
 
       const multiHanke = {
@@ -1140,7 +1162,7 @@ describe('Areas segment containment guard', () => {
         </TestWrapper>,
       );
 
-      const appMap = jest.requireMock('../application/components/ApplicationMap') as {
+      const appMap = vi.mocked(applicationMapModule) as unknown as {
         __getLastAppMapProps: () => Record<string, unknown> | undefined;
       };
       await waitFor(() => {
@@ -1170,7 +1192,9 @@ describe('Areas segment containment guard', () => {
         expect(screen.queryByTestId('mock-area-select-dialog')).toBeInTheDocument();
       });
 
-      const areaSelectMock = jest.requireMock('./components/AreaSelectDialog');
+      const areaSelectMock = vi.mocked(areaSelectDialogModule) as unknown as {
+        __getLastAreaSelectDialogProps: () => unknown;
+      };
       // eslint-disable-next-line no-underscore-dangle
       const lastProps = areaSelectMock.__getLastAreaSelectDialogProps();
       // call onConfirm with first hankeArea
@@ -1179,7 +1203,11 @@ describe('Areas segment containment guard', () => {
 
       // mutate should have been called via addTyoAlueToHankeArea
       // eslint-disable-next-line no-underscore-dangle
-      const mutateMock2 = jest.requireMock('../hanke/hooks/useHaittaIndexes').__getMutateMock();
+      const mutateMock2 = (
+        vi.mocked(useHaittaIndexesModule) as unknown as {
+          __getMutateMock: () => ReturnType<typeof vi.fn>;
+        }
+      ).__getMutateMock();
       expect(mutateMock2).toHaveBeenCalled();
     });
   });

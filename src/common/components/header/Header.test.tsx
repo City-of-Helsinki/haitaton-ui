@@ -2,16 +2,15 @@ import { cleanup, screen } from '../../../testUtils/render';
 import Header from './Header';
 import useUser from '../../../domain/auth/useUser';
 import i18next from '../../../locales/i18nForTests';
-import { UserEvent } from '@testing-library/user-event/dist/types/setup/setup';
+import { UserEvent } from '@testing-library/user-event';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { renderWithLoginProvider } from '../../../domain/auth/testUtils/renderWithLoginProvider';
 import { BrowserRouter } from 'react-router-dom';
 import { I18nextProvider } from 'react-i18next';
 import { FeatureFlagsProvider } from '../featureFlags/FeatureFlagsContext';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const mockedUseUser = useUser as jest.Mock<any>;
-jest.mock('../../../domain/auth/useUser');
+const mockedUseUser = useUser as ReturnType<typeof vi.fn>;
+vi.mock('../../../domain/auth/useUser');
 
 type Language = 'Suomi' | 'English' | 'Svenska';
 
@@ -44,7 +43,7 @@ function getWrapper(loggedIn: boolean, route = '/') {
 
 describe('Header', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     cleanup();
   });
 

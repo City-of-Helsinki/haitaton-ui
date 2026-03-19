@@ -9,7 +9,7 @@ interface FormValues {
 }
 
 // Minimal draw context mock (component expects context provider higher up). We can mock hook.
-jest.mock('../../../common/components/map/modules/draw/useDrawContext', () => () => ({
+vi.mock('../../../common/components/map/modules/draw/useDrawContext', () => () => ({
   state: { selectedFeature: null },
   actions: { setSelectedFeature: () => undefined },
 }));

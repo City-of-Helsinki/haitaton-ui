@@ -22,7 +22,7 @@ import {
   NewJohtoselvitysData,
 } from '../application/types/application';
 import { defaultJohtoselvitysData } from './data/defaultJohtoselvitysData';
-import { PathParams } from 'msw/lib/core/utils/matching/matchRequestUrl';
+import { PathParams } from 'msw';
 import ApiError from './apiError';
 import { GridMetadata } from '../map/components/Layers/SimpleHankeLayer';
 

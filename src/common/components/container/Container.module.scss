@@ -1,4 +1,4 @@
-@import 'src/assets/styles/layout';
+@use 'src/assets/styles/layout' as *;
 
 .limitedWidthContainer {
   max-width: var(--breakpoint-xl);

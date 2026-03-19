@@ -1,18 +1,19 @@
+import type { MockedFunction } from 'vitest';
 import { http, HttpResponse } from 'msw';
 import { server } from '../mocks/test-server';
 import api, { setLogoutHandler } from './api';
 
 describe('API Session Termination', () => {
-  let mockLogoutHandler: jest.MockedFunction<() => void>;
+  let mockLogoutHandler: MockedFunction<() => void>;
 
   beforeEach(() => {
-    mockLogoutHandler = jest.fn();
+    mockLogoutHandler = vi.fn();
     setLogoutHandler(mockLogoutHandler);
   });
 
   afterEach(() => {
     setLogoutHandler(null);
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('should call logout handler for HAI0006 error code', async () => {
@@ -174,7 +175,7 @@ describe('API Session Termination', () => {
   });
 
   it('should log warning message when session termination is detected', async () => {
-    const consoleSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+    const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
 
     const errorResponse = {
       errorCode: 'HAI0006',

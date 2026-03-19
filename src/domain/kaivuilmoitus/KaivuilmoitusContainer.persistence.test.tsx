@@ -9,8 +9,9 @@ import { HankeData } from '../types/hanke';
 
 // Mock heavy child components to focus on persistence only
 // Mock BasicInfo but still integrate with react-hook-form so persistence hook sees updates
-jest.mock('./BasicInfo', () => {
-  const { useFormContext } = jest.requireActual('react-hook-form');
+vi.mock('./BasicInfo', async () => {
+  const { useFormContext } =
+    await vi.importActual<typeof import('react-hook-form')>('react-hook-form');
   return function MockBasicInfo() {
     const { register } = useFormContext();
     return (
@@ -48,8 +49,9 @@ jest.mock('./BasicInfo', () => {
     );
   };
 });
-jest.mock('./Contacts', () => {
-  const { useFormContext } = jest.requireActual('react-hook-form');
+vi.mock('./Contacts', async () => {
+  const { useFormContext } =
+    await vi.importActual<typeof import('react-hook-form')>('react-hook-form');
   return {
     __esModule: true,
     default: () => {
@@ -89,45 +91,45 @@ jest.mock('./Contacts', () => {
     },
   };
 });
-jest.mock('./Areas', () => ({ __esModule: true, default: () => null }));
-jest.mock('./HaittojenHallinta', () => ({ __esModule: true, default: () => null }));
-jest.mock('./Attachments', () => ({ __esModule: true, default: () => null }));
-jest.mock('./ReviewAndSend', () => ({ __esModule: true, default: () => null }));
+vi.mock('./Areas', () => ({ __esModule: true, default: () => null }));
+vi.mock('./HaittojenHallinta', () => ({ __esModule: true, default: () => null }));
+vi.mock('./Attachments', () => ({ __esModule: true, default: () => null }));
+vi.mock('./ReviewAndSend', () => ({ __esModule: true, default: () => null }));
 // Minimal FormActions stub
-jest.mock('../forms/components/FormActions', () => ({
+vi.mock('../forms/components/FormActions', () => ({
   __esModule: true,
   default: () => null,
 }));
-jest.mock('../application/components/ApplicationCancel', () => ({
+vi.mock('../application/components/ApplicationCancel', () => ({
   ApplicationCancel: () => null,
 }));
-jest.mock('../application/components/ApplicationSendDialog', () => () => null);
-jest.mock('../application/hooks/useAttachments', () => () => ({ data: [], isError: false }));
-jest.mock('../../common/components/globalNotification/GlobalNotificationContext', () => ({
+vi.mock('../application/components/ApplicationSendDialog', () => () => null);
+vi.mock('../application/hooks/useAttachments', () => () => ({ data: [], isError: false }));
+vi.mock('../../common/components/globalNotification/GlobalNotificationContext', () => ({
   GlobalNotificationProvider: ({ children }: { children: React.ReactNode }) => (
     <div>{children}</div>
   ),
-  useGlobalNotification: () => ({ setNotification: jest.fn() }),
+  useGlobalNotification: () => ({ setNotification: vi.fn() }),
 }));
-jest.mock('../hanke/hankeUsers/hooks/useUserRightsForHanke', () => ({
+vi.mock('../hanke/hankeUsers/hooks/useUserRightsForHanke', () => ({
   usePermissionsForHanke: () => ({ data: undefined }),
 }));
-jest.mock('../application/hooks/useApplications', () => ({
+vi.mock('../application/hooks/useApplications', () => ({
   useApplicationsForHanke: () => ({ data: { applications: [] } }),
 }));
-jest.mock('react-i18next', () => ({
-  ...jest.requireActual('react-i18next'),
+vi.mock('react-i18next', async () => ({
+  ...(await vi.importActual<object>('react-i18next')),
   useTranslation: () => ({
     t: (k: string) => k,
     i18n: {
       language: 'fi',
       exists: () => true,
-      changeLanguage: jest.fn(),
+      changeLanguage: vi.fn(),
     },
   }),
 }));
-jest.mock('../application/hooks/useNavigateToApplicationView', () => {
-  return jest.fn(() => jest.fn());
+vi.mock('../application/hooks/useNavigateToApplicationView', () => {
+  return vi.fn(() => vi.fn());
 });
 
 describe('KaivuilmoitusContainer language persistence integration', () => {

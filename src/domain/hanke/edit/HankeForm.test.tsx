@@ -16,7 +16,7 @@ import { cloneDeep } from 'lodash';
 import { Feature } from 'ol';
 import { Polygon } from 'ol/geom';
 import { waitForElementToBeRemoved } from '@testing-library/react';
-import { PathParams } from 'msw/lib/core/utils/matching/matchRequestUrl';
+import { PathParams } from 'msw';
 import { Haittojenhallintasuunnitelma } from '../../common/haittojenhallinta/types';
 
 afterEach(cleanup);
@@ -87,8 +87,8 @@ async function waitForFormValidationToStabilize() {
 beforeEach(() => {
   // Keep setup lightweight to avoid flakiness & performance issues.
   // (Rely on RTL's cleanup + our afterEach for DOM reset.)
-  jest.useRealTimers();
-  jest.clearAllTimers();
+  vi.useRealTimers();
+  vi.clearAllTimers();
   server.resetHandlers();
   window.history.replaceState({}, '', '/');
   window.localStorage.clear();
@@ -101,10 +101,10 @@ afterEach(() => {
   cleanup();
 
   // Clear any remaining timers
-  jest.clearAllTimers();
+  vi.clearAllTimers();
 
   // Reset any mocked functions
-  jest.clearAllMocks();
+  vi.clearAllMocks();
 
   // Clear DOM completely to prevent state leakage
   document.body.innerHTML = '';
@@ -664,7 +664,7 @@ describe('HankeForm', () => {
   });
 
   test('Should be able to upload attachments', async () => {
-    jest.spyOn(hankeAttachmentsApi, 'uploadAttachment').mockImplementation(uploadAttachment);
+    vi.spyOn(hankeAttachmentsApi, 'uploadAttachment').mockImplementation(uploadAttachment);
     initFileGetResponse([]);
     initFileUploadResponse();
     const { user } = render(<HankeFormContainer hankeTunnus="HAI22-1" />);

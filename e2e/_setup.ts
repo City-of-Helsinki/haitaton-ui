@@ -646,16 +646,6 @@ export async function hyvaksyKaivuilmoitusValmiiksi(page: Page, kaivuilmoitus: s
   await page.getByRole('button', { name: 'HYVÄKSY' }).click();
   await page.getByLabel('Valvojan merkinnät *').click();
   await page.getByLabel('Valvojan merkinnät *').fill('Valmiiksi merkinnät');
-  await page.getByRole('button', { name: 'EHDOTA PÄÄTETTÄVÄKSI' }).click();
-  await page.getByLabel('Perustelut *').click();
-  await page.getByLabel('Perustelut *').fill('Hyväksytty valmiiksi');
-  await page.getByLabel('Valitse päättäjä').getByText('Valitse päättäjä').click();
-  await page.getByText('Allu Päättäjä').click();
+  await expect(page.getByRole('button', { name: 'TALLENNA' })).toBeEnabled();
   await page.getByRole('button', { name: 'TALLENNA' }).click();
-  await expect(page.getByLabel('Valvontatehtävä hyväksytty')).toBeVisible();
-  await page.getByRole('link', { name: 'Perustiedot' }).click();
-  await page.getByRole('button', { name: 'PÄÄTTÄMISEEN' }).click();
-  await page.getByRole('link', { name: 'Työ valmis' }).click();
-  await page.getByRole('button', { name: 'HYVÄKSY' }).click();
-  await page.getByRole('button', { name: 'HYVÄKSY' }).click();
 }

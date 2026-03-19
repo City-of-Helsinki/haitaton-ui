@@ -1,3 +1,4 @@
+import type { Mocked, MockedFunction } from 'vitest';
 import React from 'react';
 import { render, waitFor, screen } from '../../../../testUtils/render';
 import SimpleHankeLayer from './SimpleHankeLayer';
@@ -7,8 +8,8 @@ import { Vector as VectorSource } from 'ol/source';
 import { StyleLike } from 'ol/style/Style';
 
 // Mock dependencies
-jest.mock('../../../api/api');
-jest.mock('../../../../common/components/map/hooks/useMapViewportBounds');
+vi.mock('../../../api/api');
+vi.mock('../../../../common/components/map/hooks/useMapViewportBounds');
 
 // Define proper interface for VectorLayer props
 interface MockVectorLayerProps {
@@ -18,7 +19,7 @@ interface MockVectorLayerProps {
   style?: StyleLike;
 }
 
-jest.mock('../../../../common/components/map/layers/VectorLayer', () => {
+vi.mock('../../../../common/components/map/layers/VectorLayer', () => {
   return function MockVectorLayer({
     source,
     style,
@@ -39,8 +40,8 @@ jest.mock('../../../../common/components/map/layers/VectorLayer', () => {
   };
 });
 
-const mockApi = api as jest.Mocked<typeof api>;
-const mockUseMapViewportBounds = useMapViewportBounds as jest.MockedFunction<
+const mockApi = api as Mocked<typeof api>;
+const mockUseMapViewportBounds = useMapViewportBounds as MockedFunction<
   typeof useMapViewportBounds
 >;
 
@@ -99,7 +100,7 @@ const mockHankeData = [
 
 describe('SimpleHankeLayer', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
 
     // Mock API responses
     mockApi.get.mockImplementation((url) => {
@@ -223,7 +224,7 @@ describe('SimpleHankeLayer', () => {
 
   test('handles metadata loading error gracefully', async () => {
     mockApi.get.mockRejectedValueOnce(new Error('Network error'));
-    const consoleSpy = jest.spyOn(console, 'error').mockImplementation();
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
     mockUseMapViewportBounds.mockReturnValue(null);
 
@@ -238,7 +239,7 @@ describe('SimpleHankeLayer', () => {
 
   test('handles hanke data loading error gracefully', async () => {
     mockApi.post.mockRejectedValueOnce(new Error('Network error'));
-    const consoleSpy = jest.spyOn(console, 'error').mockImplementation();
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
     const mockBounds = {
       minX: 25445000,
@@ -298,7 +299,7 @@ describe('SimpleHankeLayer', () => {
   });
 
   test('clears source when no grid cells are generated', async () => {
-    const consoleSpy = jest.spyOn(console, 'warn').mockImplementation();
+    const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
 
     // Use bounds that are outside the grid
     const mockBounds = {

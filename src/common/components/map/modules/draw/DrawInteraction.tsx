@@ -355,7 +355,6 @@ export default function DrawInteraction({
       }
     });
 
-    // eslint-disable-next-line consistent-return
     return function cleanUp() {
       if (modify.current) {
         map.removeInteraction(modify.current);
@@ -392,7 +391,6 @@ export default function DrawInteraction({
   useEffect(() => {
     if (!map) return;
 
-    // eslint-disable-next-line
     return () => removeAllInteractions();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

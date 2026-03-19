@@ -7,18 +7,18 @@ import Polygon from 'ol/geom/Polygon';
 import HankeForm from './HankeForm';
 import { HankeDataFormState } from './types';
 
-jest.mock('../../application/hooks/useApplications', () => ({
+vi.mock('../../application/hooks/useApplications', () => ({
   useApplicationsForHanke: () => ({ data: { applications: [] } }),
 }));
 
-jest.mock(
+vi.mock(
   '../../../common/components/map/modules/draw/DrawProvider',
   () =>
     ({ children }: { children: React.ReactNode }) => <>{children}</>,
 );
 
-jest.mock('react-i18next', () => ({
-  ...jest.requireActual('react-i18next'),
+vi.mock('react-i18next', async () => ({
+  ...(await vi.importActual<object>('react-i18next')),
   useTranslation: () => ({
     t: (k: string) => k,
     i18n: { language: 'fi', exists: () => true },
@@ -84,7 +84,7 @@ describe('HankeForm persistence stores API-shaped HankeData (GeoJSON)', () => {
     };
 
     const { unmount } = render(
-      <HankeForm formData={baseData} onIsDirtyChange={jest.fn()} onFormClose={jest.fn()}>
+      <HankeForm formData={baseData} onIsDirtyChange={vi.fn()} onFormClose={vi.fn()}>
         <Injector />
       </HankeForm>,
     );

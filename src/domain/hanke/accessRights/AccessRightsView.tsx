@@ -172,6 +172,7 @@ function AccessRightsView({ hankeUsers, hankeTunnus, signedInUser, readonly }: R
       columns,
       data: usersData,
       autoResetFilters: false,
+      autoResetPage: false,
       sortTypes: {
         alphanumeric: (row1, row2, columnName) => {
           const rowOneColumn: string = row1.values[columnName];

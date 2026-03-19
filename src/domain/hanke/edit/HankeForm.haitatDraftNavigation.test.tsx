@@ -7,45 +7,45 @@ import { Feature } from 'ol';
 import { Polygon } from 'ol/geom';
 
 // Keep substeps lightweight; we want real MultipageForm + step state transitions.
-jest.mock('./HankeFormPerustiedot', () => ({
+vi.mock('./HankeFormPerustiedot', () => ({
   __esModule: true,
   default: () => <div data-testid="perustiedot-step" />,
 }));
 
-jest.mock('./HankeFormAlueet', () => ({
+vi.mock('./HankeFormAlueet', () => ({
   __esModule: true,
   default: () => <div data-testid="alueet-step" />,
 }));
 
 // Real haittojen hallinta step: we just need it to have validation schema engaged, but keep light
-jest.mock('./HankeFormHaittojenHallinta', () => ({
+vi.mock('./HankeFormHaittojenHallinta', () => ({
   __esModule: true,
   default: () => <div data-testid="haittojenhallinta-step" />,
 }));
 
-jest.mock('./HankeFormYhteystiedot', () => ({
+vi.mock('./HankeFormYhteystiedot', () => ({
   __esModule: true,
   default: () => <div data-testid="yhteystiedot-step" />,
 }));
 
-jest.mock('./HankeFormLiitteet', () => ({
+vi.mock('./HankeFormLiitteet', () => ({
   __esModule: true,
   default: () => <div data-testid="liitteet-step" />,
 }));
 
-jest.mock('./HankeFormSummary', () => ({
+vi.mock('./HankeFormSummary', () => ({
   __esModule: true,
   default: () => <div data-testid="summary-step" />,
 }));
 
-jest.mock('../../application/components/ApplicationAddDialog', () => () => null);
+vi.mock('../../application/components/ApplicationAddDialog', () => () => null);
 
-jest.mock('../../application/hooks/useApplications', () => ({
+vi.mock('../../application/hooks/useApplications', () => ({
   useApplicationsForHanke: () => ({ data: { applications: [] } }),
 }));
 
-jest.mock('react-i18next', () => ({
-  ...jest.requireActual('react-i18next'),
+vi.mock('react-i18next', async () => ({
+  ...(await vi.importActual<object>('react-i18next')),
   useTranslation: () => ({ t: (k: string) => k, i18n: { language: 'fi', exists: () => true } }),
 }));
 
@@ -99,8 +99,8 @@ function buildDraftData(): HankeDataFormState {
 describe('HankeForm draft navigation from Haittojen hallinta with missing nuisance fields', () => {
   test('can navigate away from haittojen hallinta step (index 2) while draft even with required errors', async () => {
     const data = buildDraftData();
-    const onDirty = jest.fn();
-    const onClose = jest.fn();
+    const onDirty = vi.fn();
+    const onClose = vi.fn();
     const user = userEvent.setup();
 
     const { findByText } = render(

@@ -239,8 +239,8 @@ describe('isSegmentWithinHankeArea', () => {
   });
 
   test('returns false when no hanke features under cursor', () => {
-    const getPixelFromCoordinate = jest.fn(() => [0, 0]);
-    const getFeaturesAtPixel = jest.fn(() => []);
+    const getPixelFromCoordinate = vi.fn(() => [0, 0]);
+    const getFeaturesAtPixel = vi.fn(() => []);
     const map = {
       getPixelFromCoordinate,
       getFeaturesAtPixel,
@@ -263,8 +263,8 @@ describe('isSegmentWithinHankeArea', () => {
 
   test('returns false when topmost hanke feature has no geometry', () => {
     const map = {
-      getPixelFromCoordinate: jest.fn(() => [0, 0]),
-      getFeaturesAtPixel: jest.fn(() => [{ getGeometry: () => undefined }]),
+      getPixelFromCoordinate: vi.fn(() => [0, 0]),
+      getFeaturesAtPixel: vi.fn(() => [{ getGeometry: () => undefined }]),
     } as unknown as import('ol').Map;
 
     const latestLine: [[number, number], [number, number]] = [
@@ -276,8 +276,8 @@ describe('isSegmentWithinHankeArea', () => {
 
   test('returns false when segment crosses the polygon boundary (not at endpoints)', () => {
     const map = {
-      getPixelFromCoordinate: jest.fn(() => [0, 0]),
-      getFeaturesAtPixel: jest.fn(() => [mockFeatureWithGeom(squareCoords)]),
+      getPixelFromCoordinate: vi.fn(() => [0, 0]),
+      getFeaturesAtPixel: vi.fn(() => [mockFeatureWithGeom(squareCoords)]),
     } as unknown as import('ol').Map;
 
     // Start inside the square and end outside, crossing mid-edge (y = 0.5)
@@ -291,8 +291,8 @@ describe('isSegmentWithinHankeArea', () => {
 
   test('returns true when segment is entirely inside the polygon', () => {
     const map = {
-      getPixelFromCoordinate: jest.fn(() => [0, 0]),
-      getFeaturesAtPixel: jest.fn(() => [mockFeatureWithGeom(squareCoords)]),
+      getPixelFromCoordinate: vi.fn(() => [0, 0]),
+      getFeaturesAtPixel: vi.fn(() => [mockFeatureWithGeom(squareCoords)]),
     } as unknown as import('ol').Map;
 
     const latestLine: [[number, number], [number, number]] = [
@@ -305,8 +305,8 @@ describe('isSegmentWithinHankeArea', () => {
 
   test('returns true when intersection occurs exactly at an endpoint', () => {
     const map = {
-      getPixelFromCoordinate: jest.fn(() => [0, 0]),
-      getFeaturesAtPixel: jest.fn(() => [mockFeatureWithGeom(squareCoords)]),
+      getPixelFromCoordinate: vi.fn(() => [0, 0]),
+      getFeaturesAtPixel: vi.fn(() => [mockFeatureWithGeom(squareCoords)]),
     } as unknown as import('ol').Map;
 
     // From inside to a corner point (0,0) -> intersection at the endpoint should be allowed

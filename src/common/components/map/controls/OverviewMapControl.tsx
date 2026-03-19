@@ -25,7 +25,7 @@ const OverviewMapControl: React.FC<React.PropsWithChildren<Props>> = ({ classNam
   useEffect(() => {
     if (!map) return;
 
-    let overviewCtrl: OverviewMap;
+    let overviewCtrl: OverviewMap | undefined;
     let dragZoom: DragZoom;
 
     // Add possibility to move map by clicking a point

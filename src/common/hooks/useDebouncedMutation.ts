@@ -28,8 +28,6 @@ export default function useDebouncedMutation<
 
   useEffect(() => {
     // create debounced wrapper that calls the latest mutateRef.current
-    // Capture the exact mutate function type so we can forward arguments
-    type MutateFn = typeof mutationResults.mutate;
     debouncedRef.current = debounce(
       (...args: Parameters<MutateFn>) => {
         // forward args to the current mutate function (use unknown[] for safe casting)

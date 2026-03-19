@@ -2,7 +2,7 @@ import { render, screen } from '../../../../testUtils/render';
 import AddressSearch from './AddressSearch';
 
 test('Address can be selected from suggestions', async () => {
-  const handleAddressSelect = jest.fn();
+  const handleAddressSelect = vi.fn();
   const { user } = render(<AddressSearch onAddressSelect={handleAddressSelect} />);
 
   const searchInput = screen.getByPlaceholderText('Etsi osoitteella');
@@ -15,7 +15,7 @@ test('Address can be selected from suggestions', async () => {
 });
 
 test('Swedish address labels are returned when search term is in Swedish', async () => {
-  const handleAddressSelect = jest.fn();
+  const handleAddressSelect = vi.fn();
   const { user } = render(<AddressSearch onAddressSelect={handleAddressSelect} />);
 
   const searchInput = screen.getByPlaceholderText('Etsi osoitteella');
@@ -28,7 +28,7 @@ test('Swedish address labels are returned when search term is in Swedish', async
 });
 
 test('Finnish address labels are returned when search term is in Finnish', async () => {
-  const handleAddressSelect = jest.fn();
+  const handleAddressSelect = vi.fn();
   const { user } = render(<AddressSearch onAddressSelect={handleAddressSelect} />);
 
   const searchInput = screen.getByPlaceholderText('Etsi osoitteella');
@@ -41,7 +41,7 @@ test('Finnish address labels are returned when search term is in Finnish', async
 });
 
 test('Finnish address labels are returned when search term is incomplete and can be either Finnish or Swedish', async () => {
-  const handleAddressSelect = jest.fn();
+  const handleAddressSelect = vi.fn();
   const { user } = render(<AddressSearch onAddressSelect={handleAddressSelect} />);
 
   const searchInput = screen.getByPlaceholderText('Etsi osoitteella');
@@ -54,7 +54,7 @@ test('Finnish address labels are returned when search term is incomplete and can
 });
 
 test('Finnish address labels are returned when search term is in Finnish and has trailing white space', async () => {
-  const handleAddressSelect = jest.fn();
+  const handleAddressSelect = vi.fn();
   const { user } = render(<AddressSearch onAddressSelect={handleAddressSelect} />);
 
   const searchInput = screen.getByPlaceholderText('Etsi osoitteella');
@@ -67,7 +67,7 @@ test('Finnish address labels are returned when search term is in Finnish and has
 });
 
 test('Finnish address label is returned when search term is in Finnish and has street number after street name', async () => {
-  const handleAddressSelect = jest.fn();
+  const handleAddressSelect = vi.fn();
   const { user } = render(<AddressSearch onAddressSelect={handleAddressSelect} />);
 
   const searchInput = screen.getByPlaceholderText('Etsi osoitteella');

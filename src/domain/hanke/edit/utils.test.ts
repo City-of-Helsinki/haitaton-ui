@@ -89,7 +89,7 @@ test('Should get area data without feature', () => {
 describe('mapValidationErrorToErrorListItem', () => {
   test('Should show error for simple error path, for example hanke kuvaus', () => {
     const error = new ValidationError('Test error', undefined, 'kuvaus');
-    const getValues: UseFormGetValues<HankeDataFormState> = jest.fn().mockReturnValue({});
+    const getValues: UseFormGetValues<HankeDataFormState> = vi.fn().mockReturnValue({});
     render(mapValidationErrorToErrorListItem(error, t, getValues));
 
     expect(screen.getByText('Hankkeen kuvaus')).toBeInTheDocument();
@@ -98,7 +98,7 @@ describe('mapValidationErrorToErrorListItem', () => {
 
   test('Should show error for hanke area', () => {
     const error = new ValidationError('Test error', undefined, 'alueet[0].meluHaitta');
-    const getValues: UseFormGetValues<HankeDataFormState> = jest.fn().mockReturnValue('Test Area');
+    const getValues: UseFormGetValues<HankeDataFormState> = vi.fn().mockReturnValue('Test Area');
     render(mapValidationErrorToErrorListItem(error, t, getValues));
 
     expect(screen.getByText('Test Area: Meluhaitta')).toBeInTheDocument();
@@ -107,7 +107,7 @@ describe('mapValidationErrorToErrorListItem', () => {
 
   test('Should show error when there are no areas', () => {
     const error = new ValidationError('Test error', undefined, 'alueet');
-    const getValues: UseFormGetValues<HankeDataFormState> = jest.fn().mockReturnValue({});
+    const getValues: UseFormGetValues<HankeDataFormState> = vi.fn().mockReturnValue({});
     render(mapValidationErrorToErrorListItem(error, t, getValues));
 
     expect(screen.getByText('Hankealueet: Hankealueen piirtäminen')).toBeInTheDocument();
@@ -120,7 +120,7 @@ describe('mapValidationErrorToErrorListItem', () => {
       undefined,
       'alueet[0].haittojenhallintasuunnitelma.YLEINEN',
     );
-    const getValues: UseFormGetValues<HankeDataFormState> = jest.fn().mockReturnValue('Test Area');
+    const getValues: UseFormGetValues<HankeDataFormState> = vi.fn().mockReturnValue('Test Area');
     render(mapValidationErrorToErrorListItem(error, t, getValues));
 
     expect(
@@ -134,7 +134,7 @@ describe('mapValidationErrorToErrorListItem', () => {
 
   test('Should show error for contact', () => {
     const error = new ValidationError('Test error', undefined, 'omistajat[0].nimi');
-    const getValues: UseFormGetValues<HankeDataFormState> = jest.fn().mockReturnValue({});
+    const getValues: UseFormGetValues<HankeDataFormState> = vi.fn().mockReturnValue({});
     render(mapValidationErrorToErrorListItem(error, t, getValues));
 
     expect(screen.getByText('Hankkeen omistaja: Nimi')).toBeInTheDocument();

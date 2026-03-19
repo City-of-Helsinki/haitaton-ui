@@ -9,9 +9,10 @@ import { Application, KaivuilmoitusData } from '../application/types/application
 import { HankeData } from '../types/hanke';
 
 // Mock heavy child components
-jest.mock('../kaivuilmoitus/BasicInfo', () => {
-  const { useFormContext } = jest.requireActual('react-hook-form');
-  const ReactLocal = jest.requireActual('react');
+vi.mock('../kaivuilmoitus/BasicInfo', async () => {
+  const { useFormContext } =
+    await vi.importActual<typeof import('react-hook-form')>('react-hook-form');
+  const ReactLocal = await vi.importActual<typeof import('react')>('react');
   return function MockBasicInfo() {
     const { register } = useFormContext();
     return ReactLocal.createElement(
@@ -29,45 +30,45 @@ jest.mock('../kaivuilmoitus/BasicInfo', () => {
     );
   };
 });
-jest.mock('../kaivuilmoitus/Areas', () => ({ __esModule: true, default: () => null }));
-jest.mock('../kaivuilmoitus/HaittojenHallinta', () => ({
+vi.mock('../kaivuilmoitus/Areas', () => ({ __esModule: true, default: () => null }));
+vi.mock('../kaivuilmoitus/HaittojenHallinta', () => ({
   __esModule: true,
   default: () => null,
 }));
-jest.mock('../kaivuilmoitus/Contacts', () => ({ __esModule: true, default: () => null }));
-jest.mock('../application/taydennysAndMuutosilmoitusCommon/components/Attachments', () => ({
+vi.mock('../kaivuilmoitus/Contacts', () => ({ __esModule: true, default: () => null }));
+vi.mock('../application/taydennysAndMuutosilmoitusCommon/components/Attachments', () => ({
   __esModule: true,
   default: () => null,
 }));
-jest.mock('./ReviewAndSend', () => ({ __esModule: true, default: () => null }));
-jest.mock('../application/components/ApplicationSendDialog', () => () => null);
-jest.mock('../application/muutosilmoitus/components/MuutosilmoitusCancel', () => () => null);
-jest.mock('../application/hooks/useAttachments', () => () => ({ data: [], isError: false }));
-jest.mock('../../common/components/globalNotification/GlobalNotificationContext', () => ({
+vi.mock('./ReviewAndSend', () => ({ __esModule: true, default: () => null }));
+vi.mock('../application/components/ApplicationSendDialog', () => () => null);
+vi.mock('../application/muutosilmoitus/components/MuutosilmoitusCancel', () => () => null);
+vi.mock('../application/hooks/useAttachments', () => () => ({ data: [], isError: false }));
+vi.mock('../../common/components/globalNotification/GlobalNotificationContext', () => ({
   GlobalNotificationProvider: ({ children }: { children: React.ReactNode }) => (
     <div>{children}</div>
   ),
-  useGlobalNotification: () => ({ setNotification: jest.fn() }),
+  useGlobalNotification: () => ({ setNotification: vi.fn() }),
 }));
-jest.mock('../hanke/hankeUsers/hooks/useUserRightsForHanke', () => ({
+vi.mock('../hanke/hankeUsers/hooks/useUserRightsForHanke', () => ({
   usePermissionsForHanke: () => ({ data: undefined }),
 }));
-jest.mock('../application/hooks/useApplications', () => ({
+vi.mock('../application/hooks/useApplications', () => ({
   useApplicationsForHanke: () => ({ data: { applications: [] } }),
 }));
-jest.mock('react-i18next', () => ({
-  ...jest.requireActual('react-i18next'),
+vi.mock('react-i18next', async () => ({
+  ...(await vi.importActual<object>('react-i18next')),
   useTranslation: () => ({
     t: (k: string) => k,
     i18n: {
       language: 'fi',
       exists: () => true,
-      changeLanguage: jest.fn(),
+      changeLanguage: vi.fn(),
     },
   }),
 }));
-jest.mock('../application/hooks/useNavigateToApplicationView', () => {
-  return jest.fn(() => jest.fn());
+vi.mock('../application/hooks/useNavigateToApplicationView', () => {
+  return vi.fn(() => vi.fn());
 });
 
 describe('KaivuilmoitusMuutosilmoitusContainer language persistence integration', () => {

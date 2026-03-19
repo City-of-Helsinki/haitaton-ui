@@ -25,8 +25,9 @@ import { SignedInUser } from '../hanke/hankeUsers/hankeUser';
 import { cloneDeep } from 'lodash';
 import { waitForElementToBeRemoved } from '@testing-library/react';
 // Safe mock for geometry util to avoid failures if areas are unexpectedly undefined in tests jumping to summary
-jest.mock('../johtoselvitys/utils', () => {
-  const original = jest.requireActual('../johtoselvitys/utils');
+vi.mock('../johtoselvitys/utils', async () => {
+  const original =
+    await vi.importActual<typeof import('../johtoselvitys/utils')>('../johtoselvitys/utils');
   return {
     ...original,
     getAreaGeometries: (areas: unknown) => {
@@ -41,13 +42,7 @@ jest.mock('../johtoselvitys/utils', () => {
 });
 
 // Stub AreaSummary: Provide lightweight stub to prevent crashes if implementation expects complex props.
-try {
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  require('./components/AreaSummary');
-} catch {
-  // ignore if not found; stub will still be used
-}
-jest.mock('./components/AreaSummary', () => ({
+vi.mock('./components/AreaSummary', () => ({
   __esModule: true,
   default: (props: { areas?: Array<{ id: string }>; title?: string }) => (
     <div data-testid="stub-area-summary">
@@ -848,7 +843,7 @@ function initFileGetResponse(response: ApplicationAttachmentMetadata[]) {
 }
 
 test('Should be able to upload attachments', async () => {
-  const uploadSpy = jest
+  const uploadSpy = vi
     .spyOn(applicationAttachmentsApi, 'uploadAttachment')
     .mockImplementation(uploadAttachmentMock);
   initFileGetResponse([]);
@@ -975,9 +970,9 @@ test('Should list existing attachments in the attachments page and in summary pa
 });
 
 test('Summary should show attachments and they are downloadable', async () => {
-  const fetchContentMock = jest
+  const fetchContentMock = vi
     .spyOn(applicationAttachmentsApi, 'getAttachmentFile')
-    .mockImplementation(jest.fn());
+    .mockImplementation(vi.fn());
 
   const testApplication = prepareCompleteApplication(
     applications[0] as Application<JohtoselvitysData>,

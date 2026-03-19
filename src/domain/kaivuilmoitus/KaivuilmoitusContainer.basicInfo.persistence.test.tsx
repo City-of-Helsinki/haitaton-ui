@@ -9,39 +9,39 @@ import { MemoryRouter } from 'react-router';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
 // Mock other pages except BasicInfo
-jest.mock('./Contacts', () => () => <div>Contacts</div>);
-jest.mock('./Attachments', () => () => <div>Attachments</div>);
-jest.mock('./ReviewAndSend', () => () => <div>ReviewAndSend</div>);
-jest.mock('./Areas', () => () => <div>Areas</div>);
-jest.mock('./HaittojenHallinta', () => () => <div>Haitat</div>);
-jest.mock('./components/FormErrorsNotification', () => () => null);
-jest.mock('../application/components/ApplicationSendDialog', () => () => <div />);
+vi.mock('./Contacts', () => () => <div>Contacts</div>);
+vi.mock('./Attachments', () => () => <div>Attachments</div>);
+vi.mock('./ReviewAndSend', () => () => <div>ReviewAndSend</div>);
+vi.mock('./Areas', () => () => <div>Areas</div>);
+vi.mock('./HaittojenHallinta', () => () => <div>Haitat</div>);
+vi.mock('./components/FormErrorsNotification', () => () => null);
+vi.mock('../application/components/ApplicationSendDialog', () => () => <div />);
 
-jest.mock('../../common/components/featureFlags/FeatureFlagsContext', () => ({
+vi.mock('../../common/components/featureFlags/FeatureFlagsContext', () => ({
   useFeatureFlags: () => ({ flags: {}, isEnabled: () => false }),
   FeatureFlagsProvider: ({ children }: { children: React.ReactNode }) => <>{children}</>,
 }));
 
 // Silence hooks
-jest.mock('../application/hooks/useApplications', () => ({
+vi.mock('../application/hooks/useApplications', () => ({
   useApplicationsForHanke: () => ({ data: { applications: [] } }),
 }));
-jest.mock('../hanke/hankeUsers/hooks/useUserRightsForHanke', () => ({
+vi.mock('../hanke/hankeUsers/hooks/useUserRightsForHanke', () => ({
   usePermissionsForHanke: () => ({ data: null }),
 }));
-jest.mock('../application/hooks/useAttachments', () => () => ({ data: [], isError: false }));
-jest.mock('../application/hooks/useSaveApplication', () => () => ({
-  applicationCreateMutation: { mutate: jest.fn() },
-  applicationUpdateMutation: { mutate: jest.fn() },
+vi.mock('../application/hooks/useAttachments', () => () => ({ data: [], isError: false }));
+vi.mock('../application/hooks/useSaveApplication', () => () => ({
+  applicationCreateMutation: { mutate: vi.fn() },
+  applicationUpdateMutation: { mutate: vi.fn() },
   showSaveNotification: false,
-  setShowSaveNotification: jest.fn(),
+  setShowSaveNotification: vi.fn(),
 }));
-jest.mock('../application/hooks/useNavigateToApplicationView', () => () => jest.fn());
+vi.mock('../application/hooks/useNavigateToApplicationView', () => () => vi.fn());
 
-jest.mock('react-i18next', () => ({
+vi.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (k: string) => k,
-    i18n: { language: 'fi', changeLanguage: jest.fn(), exists: () => true },
+    i18n: { language: 'fi', changeLanguage: vi.fn(), exists: () => true },
   }),
   Trans: ({ children }: { children: React.ReactNode }) => <>{children}</>,
 }));

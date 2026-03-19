@@ -42,7 +42,7 @@ function getEmptyCustomerWithContacts(): CustomerWithContacts {
 
 function isRegistryKeyInputEnabled(
   customerType: CustomerType,
-  selectedContactType: keyof typeof ContactType | null,
+  selectedContactType: keyof typeof ContactType | null | undefined,
   applicationType: ApplicationType,
 ) {
   return (
@@ -56,7 +56,7 @@ function isRegistryKeyInputEnabled(
 function getRegistryKeyLabel(
   t: TFunction<'translation', undefined>,
   customerType: CustomerType,
-  selectedContactType: keyof typeof ContactType | null,
+  selectedContactType: keyof typeof ContactType | null | undefined,
   applicationType: ApplicationType,
 ) {
   if (applicationType === 'EXCAVATION_NOTIFICATION' && customerType === 'customerWithContacts') {

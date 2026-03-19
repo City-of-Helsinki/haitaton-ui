@@ -16,7 +16,7 @@ import { normalizeStringEmptyToNull } from '../../common/utils/normalize';
 
 function getInvoicingRegistryKeyLabel(
   t: TFunction<'translation', undefined>,
-  selectedContactType: string | null,
+  selectedContactType: string | null | undefined,
 ) {
   if (selectedContactType === 'PERSON') {
     return t('form:yhteystiedot:labels:henkilotunnus');

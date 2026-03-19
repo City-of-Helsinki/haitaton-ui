@@ -222,7 +222,6 @@ function EditUserView({
           updatedUser.kayttooikeustaso = data.kayttooikeustaso;
         }
         handleSuccess(updatedUser);
-        // eslint-disable-next-line no-empty
       } catch (e) {}
     }
   }

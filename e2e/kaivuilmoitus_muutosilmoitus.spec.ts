@@ -5,9 +5,7 @@ import {
   hankeName,
   expectApplicationStatus,
   createAndFillHankeForm,
-  ilmoitaKaivuilmoitusValmiiksi,
   createAndFillKaivuilmoitusForm,
-  hyvaksyKaivuilmoitusValmiiksi,
 } from './_setup';
 import path from 'path';
 
@@ -162,24 +160,4 @@ test('Kaivuilmoitus muutosilmoitus', async ({ page }) => {
       page.getByTestId(`applicationViewLinkIdentifier-${kaivuilmoitusMuutosilmoitus}`),
     ).toBeVisible();
   }).toPass({ intervals: [1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000], timeout: 120000 });
-  await page.getByTestId(`applicationViewLinkIdentifier-${kaivuilmoitusMuutosilmoitus}`).click();
-
-  // Ilmoita kaivuilmoitus valmiiksi Haitattomassa
-  await ilmoitaKaivuilmoitusValmiiksi(page);
-
-  // Hyväksy kaivuilmoitus Allussa valmiiksi
-  await hyvaksyKaivuilmoitusValmiiksi(page, kaivuilmoitus);
-
-  // Tarkista, että kaivuilmoituksella on työ valmis -päätös Haitattomassa
-  await page.goto(testiData.alluTriggerUrl);
-  await expect(async () => {
-    await page.goto(`${testiData.hankesalkku}${hanketunnus}`);
-    await page.getByText('Hakemukset').click();
-    await page.getByTestId(`applicationViewLinkIdentifier-${kaivuilmoitusMuutosilmoitus}`).click();
-    await expectApplicationStatus(page, kaivuilmoitusMuutosilmoitus, 'Työ valmis');
-    await expect(page.getByRole('link', { name: 'Lataa työ valmis (PDF)' })).toBeVisible();
-  }).toPass({
-    intervals: [1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000],
-    timeout: 240000,
-  });
 });

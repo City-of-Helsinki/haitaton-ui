@@ -1,5 +1,6 @@
-import { UserEvent } from '@testing-library/user-event/dist/types/setup/setup';
+import { UserEvent } from '@testing-library/user-event';
 import { http, HttpResponse } from 'msw';
+import { fireEvent } from '@testing-library/react';
 import { cleanup, render, screen, waitFor, within } from '../../testUtils/render';
 import KaivuilmoitusContainer from './KaivuilmoitusContainer';
 import { HankeData } from '../types/hanke';
@@ -699,7 +700,7 @@ test('OVT fields should be required if postal address fields are empty', async (
 });
 
 test('OVT and registryKey fields should be send as null if they are left empty', async () => {
-  const applicationUpdateSpy = jest.spyOn(applicationApi, 'updateApplication');
+  const applicationUpdateSpy = vi.spyOn(applicationApi, 'updateApplication');
   const hankeData = hankkeet[1] as HankeData;
   const application = cloneDeep(applications[5] as Application<KaivuilmoitusData>);
   const testApplication: Application<KaivuilmoitusData> = {
@@ -747,7 +748,7 @@ test('OVT and registryKey fields should be send as null if they are left empty',
 });
 
 test('OVT and registryKey fields should be send as null if they are left empty by changing customer type', async () => {
-  const applicationUpdateSpy = jest.spyOn(applicationApi, 'updateApplication');
+  const applicationUpdateSpy = vi.spyOn(applicationApi, 'updateApplication');
   const hankeData = hankkeet[1] as HankeData;
   const application = cloneDeep(applications[5] as Application<KaivuilmoitusData>);
   const testApplication: Application<KaivuilmoitusData> = {
@@ -800,7 +801,7 @@ test('Should be able to upload attachments', async () => {
   const attachmentsResponse: ApplicationAttachmentMetadata[] = [];
   initApplicationAttachmentGetResponse(attachmentsResponse);
   let idCounter = 0;
-  const uploadSpy = jest
+  const uploadSpy = vi
     .spyOn(applicationAttachmentsApi, 'uploadAttachment')
     .mockImplementation(async (args) => {
       const { applicationId, attachmentType, file } = args;
@@ -1540,6 +1541,79 @@ describe('Registry key', () => {
         }
       }
     });
+
+    test('Should show y-tunnus label when type is other', async () => {
+      const { user } = render(
+        <KaivuilmoitusContainer hankeData={hankeData} application={testApplication} />,
+      );
+      await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+
+      fireEvent.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[1]);
+      fireEvent.click(screen.getAllByText('Muu')[0]);
+
+      expect(await screen.findAllByText('Y-tunnus')).toHaveLength(3);
+      expect(
+        screen.queryByText('Y-tunnus, henkilötunnus tai muu yksilöivä tunnus'),
+      ).not.toBeInTheDocument();
+    });
+
+    test('Registry key is required for company and association customer types', async () => {
+      const { user } = render(
+        <KaivuilmoitusContainer hankeData={hankeData} application={testApplication} />,
+      );
+      await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+
+      // company
+      await user.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[1]);
+      await user.click(screen.getAllByText('Yritys')[1]);
+
+      expect(
+        await screen.findByTestId('applicationData.contractorWithContacts.customer.registryKey'),
+      ).toBeRequired();
+
+      cleanup();
+
+      const { user: secondUser } = render(
+        <KaivuilmoitusContainer hankeData={hankeData} application={testApplication} />,
+      );
+      await secondUser.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+
+      // association
+      fireEvent.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[1]);
+      fireEvent.click(screen.getAllByText('Yhdistys')[0]);
+
+      expect(
+        await screen.findByTestId('applicationData.contractorWithContacts.customer.registryKey'),
+      ).toBeRequired();
+    });
+
+    test('Registry key is disabled for private customer type', async () => {
+      const { user } = render(
+        <KaivuilmoitusContainer hankeData={hankeData} application={testApplication} />,
+      );
+      await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+
+      fireEvent.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[1]);
+      fireEvent.click(screen.getAllByText('Yksityishenkilö')[0]);
+
+      expect(
+        await screen.findByTestId('applicationData.contractorWithContacts.customer.registryKey'),
+      ).toBeDisabled();
+    });
+
+    test('Registry key is disabled for other customer type', async () => {
+      const { user } = render(
+        <KaivuilmoitusContainer hankeData={hankeData} application={testApplication} />,
+      );
+      await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+
+      fireEvent.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[1]);
+      fireEvent.click(screen.getAllByText('Muu')[0]);
+
+      expect(
+        await screen.findByTestId('applicationData.contractorWithContacts.customer.registryKey'),
+      ).toBeDisabled();
+    });
   });
 
   describe('Invoicing customer', () => {
@@ -1666,7 +1740,7 @@ describe('Haittojenhallintasuunnitelma', () => {
 
   test('Haittojenhallintasuunnitelma can be filled', async () => {
     const updatedHaittojenhallintasuunnitelma = ', johon on lisätty tekstiä.';
-    const applicationUpdateSpy = jest.spyOn(applicationApi, 'updateApplication');
+    const applicationUpdateSpy = vi.spyOn(applicationApi, 'updateApplication');
     const { user } = await setupHaittojenHallintaPage();
     const textAreas = screen.queryAllByRole('textbox');
     if (textAreas.length) {
