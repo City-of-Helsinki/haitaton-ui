@@ -19,8 +19,8 @@ interface MockVectorLayerProps {
   style?: StyleLike;
 }
 
-vi.mock('../../../../common/components/map/layers/VectorLayer', () => {
-  return function MockVectorLayer({
+vi.mock('../../../../common/components/map/layers/VectorLayer', () => ({
+  default: function MockVectorLayer({
     source,
     style,
     className,
@@ -37,8 +37,8 @@ vi.mock('../../../../common/components/map/layers/VectorLayer', () => {
         {...props}
       />
     );
-  };
-});
+  },
+}));
 
 const mockApi = api as Mocked<typeof api>;
 const mockUseMapViewportBounds = useMapViewportBounds as MockedFunction<

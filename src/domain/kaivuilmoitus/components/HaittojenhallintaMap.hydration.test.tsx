@@ -26,52 +26,57 @@ vi.mock('../../application/hooks/useApplications', () => ({
 vi.mock('../../hanke/hankeUsers/hooks/useUserRightsForHanke', () => ({
   usePermissionsForHanke: () => ({ data: null }),
 }));
-vi.mock('../../application/hooks/useAttachments', () => () => ({ data: [], isError: false }));
-vi.mock('../../application/hooks/useSaveApplication', () => () => ({
-  applicationCreateMutation: { mutate: vi.fn() },
-  applicationUpdateMutation: { mutate: vi.fn() },
-  showSaveNotification: false,
-  setShowSaveNotification: vi.fn(),
+vi.mock('../../application/hooks/useAttachments', () => ({
+  default: () => ({ data: [], isError: false }),
 }));
-vi.mock('../../application/hooks/useNavigateToApplicationView', () => () => vi.fn());
+vi.mock('../../application/hooks/useSaveApplication', () => ({
+  default: () => ({
+    applicationCreateMutation: { mutate: vi.fn() },
+    applicationUpdateMutation: { mutate: vi.fn() },
+    showSaveNotification: false,
+    setShowSaveNotification: vi.fn(),
+  }),
+}));
+vi.mock('../../application/hooks/useNavigateToApplicationView', () => ({ default: () => vi.fn() }));
 vi.mock('../../../common/components/featureFlags/FeatureFlagsContext', () => ({
   useFeatureFlags: () => ({ flags: {}, isEnabled: () => false }),
 }));
 
 // Mock heavy sub pages from container so mounting faster
-vi.mock('../BasicInfo', () => () => <div>BasicInfo</div>);
-vi.mock('../Contacts', () => () => <div>Contacts</div>);
-vi.mock('../Attachments', () => () => <div>Attachments</div>);
-vi.mock('../ReviewAndSend', () => () => <div>ReviewAndSend</div>);
-vi.mock('../components/FormErrorsNotification', () => () => null);
-vi.mock('../components/TyoalueTable', () => () => <div>TyoalueTable</div>);
-vi.mock('../components/AreaSelectDialog', () => () => null);
-vi.mock('../../common/haittaIndexes/HaittaIndexes', () => () => <div>HaittaIndexes</div>);
+vi.mock('../BasicInfo', () => ({ default: () => <div>BasicInfo</div> }));
+vi.mock('../Contacts', () => ({ default: () => <div>Contacts</div> }));
+vi.mock('../Attachments', () => ({ default: () => <div>Attachments</div> }));
+vi.mock('../ReviewAndSend', () => ({ default: () => <div>ReviewAndSend</div> }));
+vi.mock('../components/FormErrorsNotification', () => ({ default: () => null }));
+vi.mock('../components/TyoalueTable', () => ({ default: () => <div>TyoalueTable</div> }));
+vi.mock('../components/AreaSelectDialog', () => ({ default: () => null }));
+vi.mock('../../common/haittaIndexes/HaittaIndexes', () => ({
+  default: () => <div>HaittaIndexes</div>,
+}));
 vi.mock('../components/HaittojenhallintaSuunnitelma.module.scss', () => ({}));
 vi.mock('../Kaivuilmoitus.module.scss', () => ({}));
 
 // Reduce map complexity: mock map & layers (we only test feature cloning logic, not OL rendering)
-vi.mock(
-  '../../application/components/ApplicationMap',
-  () =>
-    ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
-);
-vi.mock('../../map/components/Layers/Kantakartta', () => () => <div />);
-vi.mock('../../map/components/Layers/HankeLayer', () => () => <div />);
-vi.mock('../../map/components/Layers/HakemusLayer', () => () => <div />);
-vi.mock('../../map/components/AddressSearch/AddressSearchContainer', () => () => <div />);
-vi.mock('../../../common/components/map/controls/OverviewMapControl', () => () => <div />);
-vi.mock(
-  '../../../common/components/map/layers/VectorLayer',
-  () => (props: { children?: React.ReactNode }) => <div>{props.children}</div>,
-);
-vi.mock(
-  '../../../common/components/map/Map',
-  () =>
-    ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
-);
-vi.mock('../../map/components/interations/FitSource', () => () => null);
-vi.mock('../../common/haittojenhallinta/CommonProcedureTips', () => () => null);
+vi.mock('../../application/components/ApplicationMap', () => ({
+  default: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+}));
+vi.mock('../../map/components/Layers/Kantakartta', () => ({ default: () => <div /> }));
+vi.mock('../../map/components/Layers/HankeLayer', () => ({ default: () => <div /> }));
+vi.mock('../../map/components/Layers/HakemusLayer', () => ({ default: () => <div /> }));
+vi.mock('../../map/components/AddressSearch/AddressSearchContainer', () => ({
+  default: () => <div />,
+}));
+vi.mock('../../../common/components/map/controls/OverviewMapControl', () => ({
+  default: () => <div />,
+}));
+vi.mock('../../../common/components/map/layers/VectorLayer', () => ({
+  default: (props: { children?: React.ReactNode }) => <div>{props.children}</div>,
+}));
+vi.mock('../../../common/components/map/Map', () => ({
+  default: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+}));
+vi.mock('../../map/components/interations/FitSource', () => ({ default: () => null }));
+vi.mock('../../common/haittojenhallinta/CommonProcedureTips', () => ({ default: () => null }));
 
 function createFeature(): Feature<Polygon> {
   const poly = new Polygon([

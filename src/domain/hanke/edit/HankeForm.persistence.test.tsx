@@ -7,7 +7,7 @@ import HankeForm from './HankeForm';
 import { HankeDataFormState } from './types';
 
 // Mock heavy sub components rendered inside steps to keep test light & fast.
-vi.mock('./HankeFormAlueet', () => () => <div data-testid="mock-alueet" />);
+vi.mock('./HankeFormAlueet', () => ({ default: () => <div data-testid="mock-alueet" /> }));
 vi.mock('./HankeFormPerustiedot', async () => {
   const { useFormContext } =
     await vi.importActual<typeof import('react-hook-form')>('react-hook-form');
@@ -24,11 +24,15 @@ vi.mock('./HankeFormPerustiedot', async () => {
     },
   };
 });
-vi.mock('./HankeFormYhteystiedot', () => () => <div data-testid="mock-yhteystiedot" />);
-vi.mock('./HankeFormHaittojenHallinta', () => () => <div data-testid="mock-haitat" />);
-vi.mock('./HankeFormLiitteet', () => () => <div data-testid="mock-liitteet" />);
-vi.mock('./HankeFormSummary', () => () => <div data-testid="mock-summary" />);
-vi.mock('../../application/components/ApplicationAddDialog', () => () => null);
+vi.mock('./HankeFormYhteystiedot', () => ({
+  default: () => <div data-testid="mock-yhteystiedot" />,
+}));
+vi.mock('./HankeFormHaittojenHallinta', () => ({
+  default: () => <div data-testid="mock-haitat" />,
+}));
+vi.mock('./HankeFormLiitteet', () => ({ default: () => <div data-testid="mock-liitteet" /> }));
+vi.mock('./HankeFormSummary', () => ({ default: () => <div data-testid="mock-summary" /> }));
+vi.mock('../../application/components/ApplicationAddDialog', () => ({ default: () => null }));
 
 // Simplify useApplicationsForHanke hook so form renders immediately
 vi.mock('../../application/hooks/useApplications', () => ({
@@ -36,11 +40,9 @@ vi.mock('../../application/hooks/useApplications', () => ({
 }));
 
 // No-op for map draw provider heavy stuff
-vi.mock(
-  '../../../common/components/map/modules/draw/DrawProvider',
-  () =>
-    ({ children }: { children: React.ReactNode }) => <>{children}</>,
-);
+vi.mock('../../../common/components/map/modules/draw/DrawProvider', () => ({
+  default: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+}));
 
 // Provide deterministic translation (return key)
 vi.mock('react-i18next', async () => ({

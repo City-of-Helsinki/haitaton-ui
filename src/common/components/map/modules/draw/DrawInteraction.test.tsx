@@ -17,6 +17,8 @@ vi.mock('hds-react', async () => {
 });
 // Use plain Testing Library render for all tests to avoid heavy app providers
 import DrawProvider from './DrawProvider';
+import * as _olInteraction from 'ol/interaction';
+import * as _olInteractionSelect from 'ol/interaction/Select';
 import { Vector as VectorSource } from 'ol/source';
 import { Polygon } from 'ol/geom';
 import Feature from 'ol/Feature';
@@ -126,17 +128,18 @@ vi.mock('ol/interaction', () => {
 // Import the component under test AFTER mocks
 import DrawInteraction from './DrawInteraction';
 
-// Helper to access mocked interaction instances
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const { __getLastDrawInstance, __getLastModifyInstance } = require('ol/interaction');
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const { __getLastSelectInstance } = require('ol/interaction/Select');
+// Helper to access mocked interaction instances via ESM-safe imports
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const __getLastDrawInstance: () => any = (_olInteraction as any).__getLastDrawInstance;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const __getLastModifyInstance: () => any = (_olInteraction as any).__getLastModifyInstance;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const __getLastSelectInstance: () => any = (_olInteractionSelect as any).__getLastSelectInstance;
 
 describe('DrawInteraction startDraw events', () => {
   const OLD_ENV = process.env;
 
   beforeEach(() => {
-    vi.resetModules();
     process.env = { ...OLD_ENV, NODE_ENV: 'development' } as NodeJS.ProcessEnv; // allow interactions in tests
   });
 
@@ -284,7 +287,7 @@ describe('DrawInteraction startDraw events', () => {
   test('finishCondition allows completion; drawend invokes callback for self-intersecting polygon', async () => {
     // Arrange: mock self-intersecting polygon via utils.isPolygonSelfIntersecting (used only in drawend handler)
     const onSelfIntersectingPolygon = vi.fn();
-    const spyIsSelfIntersecting = jest
+    const spyIsSelfIntersecting = vi
       .spyOn(utils, 'isPolygonSelfIntersecting')
       .mockReturnValue(true);
     renderWithProviders({ onSelfIntersectingPolygon });
@@ -324,7 +327,7 @@ describe('DrawInteraction startDraw events', () => {
 
   test('allows finishing when closing segment is valid (non-self-intersecting)', async () => {
     const onSelfIntersectingPolygon = vi.fn();
-    const spyIsSelfIntersecting = jest
+    const spyIsSelfIntersecting = vi
       .spyOn(utils, 'isPolygonSelfIntersecting')
       .mockReturnValue(false);
     const { actions } = renderWithProviders({ onSelfIntersectingPolygon });
@@ -366,7 +369,7 @@ describe('DrawInteraction startDraw events', () => {
 
   test('finishCondition blocks completion when closing segment introduces intersection', async () => {
     // Arrange: first incremental validation returns false (no intersection); closing validation returns true
-    const spyAreLines = jest
+    const spyAreLines = vi
       .spyOn(utils, 'areLinesInPolygonIntersecting')
       .mockImplementationOnce(() => false)
       .mockImplementationOnce(() => true);
@@ -406,7 +409,7 @@ describe('DrawInteraction startDraw events', () => {
 
   test('finishCondition blocks completion when geometry is already closed and self-intersecting (no cursor point)', async () => {
     // First call (incremental) -> false, second call (closed ring) -> true
-    const spyAreLines = jest
+    const spyAreLines = vi
       .spyOn(utils, 'areLinesInPolygonIntersecting')
       .mockImplementationOnce(() => false)
       .mockImplementationOnce(() => true);

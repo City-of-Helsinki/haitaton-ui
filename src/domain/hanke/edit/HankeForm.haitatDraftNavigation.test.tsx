@@ -38,7 +38,7 @@ vi.mock('./HankeFormSummary', () => ({
   default: () => <div data-testid="summary-step" />,
 }));
 
-vi.mock('../../application/components/ApplicationAddDialog', () => () => null);
+vi.mock('../../application/components/ApplicationAddDialog', () => ({ default: () => null }));
 
 vi.mock('../../application/hooks/useApplications', () => ({
   useApplicationsForHanke: () => ({ data: { applications: [] } }),

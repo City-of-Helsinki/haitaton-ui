@@ -74,7 +74,9 @@ vi.mock('./Geometries', () => ({ __esModule: true, Geometries: () => null }));
 vi.mock('./ReviewAndSend', () => ({ __esModule: true, ReviewAndSend: () => null }));
 vi.mock('../forms/components/FormActions', () => ({ __esModule: true, default: () => null }));
 vi.mock('../application/components/ApplicationCancel', () => ({ ApplicationCancel: () => null }));
-vi.mock('../application/hooks/useAttachments', () => () => ({ data: [], isError: false }));
+vi.mock('../application/hooks/useAttachments', () => ({
+  default: () => ({ data: [], isError: false }),
+}));
 vi.mock('../../common/components/globalNotification/GlobalNotificationContext', () => ({
   GlobalNotificationProvider: ({ children }: { children: React.ReactNode }) => (
     <div>{children}</div>
@@ -87,7 +89,7 @@ vi.mock('../hanke/hankeUsers/hooks/useUserRightsForHanke', () => ({
 vi.mock('../application/hooks/useApplications', () => ({
   useApplicationsForHanke: () => ({ data: { applications: [] } }),
 }));
-vi.mock('../application/components/ApplicationSendDialog', () => () => null);
+vi.mock('../application/components/ApplicationSendDialog', () => ({ default: () => null }));
 vi.mock('react-i18next', async () => ({
   ...(await vi.importActual<object>('react-i18next')),
   useTranslation: () => ({
@@ -95,7 +97,9 @@ vi.mock('react-i18next', async () => ({
     i18n: { language: 'fi', exists: () => true, changeLanguage: vi.fn() },
   }),
 }));
-vi.mock('../application/hooks/useNavigateToApplicationView', () => vi.fn(() => vi.fn()));
+vi.mock('../application/hooks/useNavigateToApplicationView', () => ({
+  default: vi.fn(() => vi.fn()),
+}));
 
 describe('JohtoselvitysContainer language persistence integration', () => {
   const hanke: HankeData = { hankeTunnus: 'HJOHTO1', nimi: 'Hanke Johto' } as HankeData;

@@ -176,23 +176,23 @@ import * as useHaittaIndexesModule from '../hanke/hooks/useHaittaIndexes';
 const mockUtils = vi.mocked(mapUtils);
 
 // Mock OpenLayers components
-vi.mock('../../common/components/map/Map', () => {
-  return function MockMap({ children }: { children: React.ReactNode }) {
+vi.mock('../../common/components/map/Map', () => ({
+  default: function MockMap({ children }: { children: React.ReactNode }) {
     return <div data-testid="mock-map">{children}</div>;
-  };
-});
+  },
+}));
 
-vi.mock('../map/components/Layers/HankeLayer', () => {
-  return function MockHankeLayer() {
+vi.mock('../map/components/Layers/HankeLayer', () => ({
+  default: function MockHankeLayer() {
     return <div data-testid="mock-hanke-layer" />;
-  };
-});
+  },
+}));
 
-vi.mock('../../common/components/map/modules/draw/DrawModule', () => {
-  return function MockDrawModule() {
+vi.mock('../../common/components/map/modules/draw/DrawModule', () => ({
+  default: function MockDrawModule() {
     return <div data-testid="mock-draw-module" />;
-  };
-});
+  },
+}));
 
 // Mock turf helpers to prevent validation issues in tests
 vi.mock('@turf/helpers', () => ({

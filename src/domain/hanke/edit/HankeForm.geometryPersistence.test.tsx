@@ -11,11 +11,9 @@ vi.mock('../../application/hooks/useApplications', () => ({
   useApplicationsForHanke: () => ({ data: { applications: [] } }),
 }));
 
-vi.mock(
-  '../../../common/components/map/modules/draw/DrawProvider',
-  () =>
-    ({ children }: { children: React.ReactNode }) => <>{children}</>,
-);
+vi.mock('../../../common/components/map/modules/draw/DrawProvider', () => ({
+  default: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+}));
 
 vi.mock('react-i18next', async () => ({
   ...(await vi.importActual<object>('react-i18next')),

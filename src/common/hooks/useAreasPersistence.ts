@@ -192,9 +192,14 @@ export default function useAreasPersistence<T extends object = Record<string, un
                       return mapToKaivuilmoitusArea(a as unknown as KaivuilmoitusAlue);
                     })
                   : undefined;
-                const reconstructed: Record<string, unknown> = { ...(appData ?? {}) };
-                if (updatedAreas) reconstructed.areas = updatedAreas;
-                setValue('applicationData', reconstructed, { shouldDirty: false });
+                // Write areas directly to applicationData.areas rather than the full
+                // applicationData parent object. Parent-object setValue does not reliably
+                // trigger watch('applicationData.areas') subscriptions in RHF v7 / React 18;
+                // applyPersisted already restored all other applicationData fields before
+                // afterHydrate runs.
+                if (updatedAreas) {
+                  setValue('applicationData.areas', updatedAreas, { shouldDirty: false });
+                }
                 const root = persistedApp;
                 if (root.id !== undefined) setValue('id', root.id, { shouldDirty: false });
                 if (root.alluStatus !== undefined)

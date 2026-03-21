@@ -4,6 +4,12 @@ import { render, waitFor } from '../../testUtils/render';
 import userEvent from '@testing-library/user-event';
 import useAreasPersistence from '../../common/hooks/useAreasPersistence';
 
+// mapToKaivuilmoitusArea throws in tests (no tyoalueet on test areas) — passthrough is sufficient
+vi.mock('../../domain/kaivuilmoitus/utils', () => ({
+  mapToKaivuilmoitusArea: (area: unknown) => area,
+  mapToJohtoselvitysArea: (area: unknown) => area,
+}));
+
 interface FormValues {
   applicationData: {
     areas: Array<{ id?: number; name?: string }>;
@@ -13,22 +19,35 @@ interface FormValues {
 
 const STORAGE_KEY = 'kaivu-areas-visibility-regression';
 
+/**
+ * TestWrapper owns the form and reads areas via methods.watch() in the render body.
+ * A useEffect forces a re-render after useLayoutEffect hydration has applied persisted values,
+ * ensuring the count reflects the hydrated state. setValue calls from useLayoutEffect do not
+ * trigger watch() subscriptions reliably in React 18 / JSDOM (only useEffect-triggered
+ * setValues do), so the forceUpdate ensures the count is read after hydration.
+ */
 function TestWrapper() {
   const methods = useForm<FormValues>({
     defaultValues: { applicationData: { name: 'Test', areas: [] } },
   });
-  // simulate container persistence
   useAreasPersistence<FormValues>(STORAGE_KEY, methods, { type: 'KAIVU', extraSelect: (v) => v });
+  // Force a re-render after useLayoutEffect hydration so watch() picks up persisted values
+  const [, forceUpdate] = React.useReducer((x) => x + 1, 0);
+  React.useEffect(() => {
+    forceUpdate();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  const areas = methods.watch('applicationData.areas') || [];
   const add = () => {
-    const areas = methods.getValues('applicationData.areas') || [];
+    const currentAreas = methods.getValues('applicationData.areas') || [];
     methods.setValue('applicationData.areas', [
-      ...areas,
-      { id: areas.length + 1, name: `Area ${areas.length + 1}` },
+      ...currentAreas,
+      { id: currentAreas.length + 1, name: `Area ${currentAreas.length + 1}` },
     ]);
   };
   return (
     <FormProvider {...methods}>
-      <div data-testid="areas-count">{methods.watch('applicationData.areas').length}</div>
+      <div data-testid="areas-count">{areas.length}</div>
       <button onClick={add} type="button" data-testid="add-area">
         Add area
       </button>

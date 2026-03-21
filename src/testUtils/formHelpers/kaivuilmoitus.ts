@@ -256,31 +256,31 @@ export async function fillContactsInformation(
     await user.click(invoicingTypeOption);
   }
   const invNameInput = screen.getByTestId('applicationData.invoicingCustomer.name');
-  await user.clear(invNameInput);
-  await user.type(invNameInput, invoicingCustomer.name);
+  fireEvent.change(invNameInput, { target: { value: invoicingCustomer.name } });
   (invNameInput as HTMLInputElement).blur();
+  // Use fireEvent.change for registryKey to avoid Effect 3 in Contacts.tsx normalizing the
+  // intermediate empty string to null (user.clear → '' → Effect 3 setValue(null) → user.type
+  // cannot reliably recover in JSDOM + Vitest environment).
   const invRegKey = screen.getByTestId('applicationData.invoicingCustomer.registryKey');
-  await user.clear(invRegKey);
-  await user.type(invRegKey, invoicingCustomer.registryKey);
+  fireEvent.change(invRegKey, { target: { value: invoicingCustomer.registryKey } });
   (invRegKey as HTMLInputElement).blur();
 
   // If invoicing customer has OVT details
   if (invoicingCustomer.ovt) {
     const ovtInput = screen.getByTestId('applicationData.invoicingCustomer.ovt');
-    await user.clear(ovtInput);
-    await user.type(ovtInput, invoicingCustomer.ovt);
+    // fireEvent.change avoids the intermediate '' → null normalization via Effect 3.
+    fireEvent.change(ovtInput, { target: { value: invoicingCustomer.ovt } });
     (ovtInput as HTMLInputElement).blur();
   }
   if (invoicingCustomer.invoicingOperator) {
     const opInput = screen.getByTestId('applicationData.invoicingCustomer.invoicingOperator');
-    await user.clear(opInput);
-    await user.type(opInput, invoicingCustomer.invoicingOperator);
+    // Same fireEvent.change approach as registryKey (see comment above).
+    fireEvent.change(opInput, { target: { value: invoicingCustomer.invoicingOperator } });
     (opInput as HTMLInputElement).blur();
   }
   if (invoicingCustomer.customerReference) {
     const refInput = screen.getByTestId('applicationData.invoicingCustomer.customerReference');
-    await user.clear(refInput);
-    await user.type(refInput, invoicingCustomer.customerReference);
+    fireEvent.change(refInput, { target: { value: invoicingCustomer.customerReference } });
     (refInput as HTMLInputElement).blur();
   }
 
@@ -297,32 +297,28 @@ export async function fillContactsInformation(
       (invoicingCustomer.postalAddress as any).streetAddress?.streetName ||
       invoicingCustomer.postalAddress.streetName;
     if (streetValue) {
-      await user.clear(street);
-      await user.type(street, streetValue);
+      // fireEvent.change avoids user.type losing the value due to React re-renders in JSDOM.
+      fireEvent.change(street, { target: { value: streetValue } });
       (street as HTMLInputElement).blur();
     }
 
     const pc = screen.getByTestId('applicationData.invoicingCustomer.postalAddress.postalCode');
-    await user.clear(pc);
-    await user.type(pc, invoicingCustomer.postalAddress.postalCode);
+    fireEvent.change(pc, { target: { value: invoicingCustomer.postalAddress.postalCode } });
     (pc as HTMLInputElement).blur();
 
     const city = screen.getByTestId('applicationData.invoicingCustomer.postalAddress.city');
-    await user.clear(city);
-    await user.type(city, invoicingCustomer.postalAddress.city);
+    fireEvent.change(city, { target: { value: invoicingCustomer.postalAddress.city } });
     (city as HTMLInputElement).blur();
   }
 
   if (invoicingCustomer.email) {
     const email = screen.getByTestId('applicationData.invoicingCustomer.email');
-    await user.clear(email);
-    await user.type(email, invoicingCustomer.email);
+    fireEvent.change(email, { target: { value: invoicingCustomer.email } });
     (email as HTMLInputElement).blur();
   }
   if (invoicingCustomer.phone) {
     const phone = screen.getByTestId('applicationData.invoicingCustomer.phone');
-    await user.clear(phone);
-    await user.type(phone, invoicingCustomer.phone);
+    fireEvent.change(phone, { target: { value: invoicingCustomer.phone } });
     (phone as HTMLInputElement).blur();
   }
 }

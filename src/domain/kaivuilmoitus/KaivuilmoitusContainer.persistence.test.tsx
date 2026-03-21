@@ -12,41 +12,43 @@ import { HankeData } from '../types/hanke';
 vi.mock('./BasicInfo', async () => {
   const { useFormContext } =
     await vi.importActual<typeof import('react-hook-form')>('react-hook-form');
-  return function MockBasicInfo() {
-    const { register } = useFormContext();
-    return (
-      <div>
-        <input data-testid="applicationData.name" {...register('applicationData.name')} />
-        <textarea
-          data-testid="applicationData.workDescription"
-          {...register('applicationData.workDescription')}
-        />
-        <input
-          type="checkbox"
-          data-testid="applicationData.constructionWork"
-          {...register('applicationData.constructionWork')}
-        />
-        <input
-          type="checkbox"
-          data-testid="applicationData.maintenanceWork"
-          {...register('applicationData.maintenanceWork')}
-        />
-        <input
-          type="checkbox"
-          data-testid="applicationData.emergencyWork"
-          {...register('applicationData.emergencyWork')}
-        />
-        <input
-          type="checkbox"
-          data-testid="applicationData.requiredCompetence"
-          {...register('applicationData.requiredCompetence')}
-        />
-        <input
-          data-testid="applicationData.cableReports.0"
-          {...register('applicationData.cableReports.0')}
-        />
-      </div>
-    );
+  return {
+    default: function MockBasicInfo() {
+      const { register } = useFormContext();
+      return (
+        <div>
+          <input data-testid="applicationData.name" {...register('applicationData.name')} />
+          <textarea
+            data-testid="applicationData.workDescription"
+            {...register('applicationData.workDescription')}
+          />
+          <input
+            type="checkbox"
+            data-testid="applicationData.constructionWork"
+            {...register('applicationData.constructionWork')}
+          />
+          <input
+            type="checkbox"
+            data-testid="applicationData.maintenanceWork"
+            {...register('applicationData.maintenanceWork')}
+          />
+          <input
+            type="checkbox"
+            data-testid="applicationData.emergencyWork"
+            {...register('applicationData.emergencyWork')}
+          />
+          <input
+            type="checkbox"
+            data-testid="applicationData.requiredCompetence"
+            {...register('applicationData.requiredCompetence')}
+          />
+          <input
+            data-testid="applicationData.cableReports.0"
+            {...register('applicationData.cableReports.0')}
+          />
+        </div>
+      );
+    },
   };
 });
 vi.mock('./Contacts', async () => {
@@ -103,8 +105,10 @@ vi.mock('../forms/components/FormActions', () => ({
 vi.mock('../application/components/ApplicationCancel', () => ({
   ApplicationCancel: () => null,
 }));
-vi.mock('../application/components/ApplicationSendDialog', () => () => null);
-vi.mock('../application/hooks/useAttachments', () => () => ({ data: [], isError: false }));
+vi.mock('../application/components/ApplicationSendDialog', () => ({ default: () => null }));
+vi.mock('../application/hooks/useAttachments', () => ({
+  default: () => ({ data: [], isError: false }),
+}));
 vi.mock('../../common/components/globalNotification/GlobalNotificationContext', () => ({
   GlobalNotificationProvider: ({ children }: { children: React.ReactNode }) => (
     <div>{children}</div>
@@ -128,9 +132,9 @@ vi.mock('react-i18next', async () => ({
     },
   }),
 }));
-vi.mock('../application/hooks/useNavigateToApplicationView', () => {
-  return vi.fn(() => vi.fn());
-});
+vi.mock('../application/hooks/useNavigateToApplicationView', () => ({
+  default: vi.fn(() => vi.fn()),
+}));
 
 describe('KaivuilmoitusContainer language persistence integration', () => {
   const hanke: HankeData = { hankeTunnus: 'HKAIVU1', nimi: 'Hanke Kaivu' } as HankeData;

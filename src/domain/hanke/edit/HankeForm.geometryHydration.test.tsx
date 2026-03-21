@@ -13,11 +13,9 @@ vi.mock('../../application/hooks/useApplications', () => ({
 }));
 
 // No-op for map draw provider heavy stuff
-vi.mock(
-  '../../../common/components/map/modules/draw/DrawProvider',
-  () =>
-    ({ children }: { children: React.ReactNode }) => <>{children}</>,
-);
+vi.mock('../../../common/components/map/modules/draw/DrawProvider', () => ({
+  default: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+}));
 
 // Provide deterministic translation (return key)
 vi.mock('react-i18next', async () => ({

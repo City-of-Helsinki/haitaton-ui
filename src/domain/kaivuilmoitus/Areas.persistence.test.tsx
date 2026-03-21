@@ -16,13 +16,13 @@ import { MemoryRouter } from 'react-router';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
 // Mock non-area pages
-vi.mock('./BasicInfo', () => () => <div>BasicInfo</div>);
-vi.mock('./Contacts', () => () => <div>Contacts</div>);
-vi.mock('./Attachments', () => () => <div>Attachments</div>);
-vi.mock('./ReviewAndSend', () => () => <div>ReviewAndSend</div>);
-vi.mock('./HaittojenHallinta', () => () => <div>Haitat</div>);
-vi.mock('./components/FormErrorsNotification', () => () => null);
-vi.mock('../application/components/ApplicationSendDialog', () => () => <div />);
+vi.mock('./BasicInfo', () => ({ default: () => <div>BasicInfo</div> }));
+vi.mock('./Contacts', () => ({ default: () => <div>Contacts</div> }));
+vi.mock('./Attachments', () => ({ default: () => <div>Attachments</div> }));
+vi.mock('./ReviewAndSend', () => ({ default: () => <div>ReviewAndSend</div> }));
+vi.mock('./HaittojenHallinta', () => ({ default: () => <div>Haitat</div> }));
+vi.mock('./components/FormErrorsNotification', () => ({ default: () => null }));
+vi.mock('../application/components/ApplicationSendDialog', () => ({ default: () => <div /> }));
 
 vi.mock('../../common/components/featureFlags/FeatureFlagsContext', () => ({
   useFeatureFlags: () => ({ flags: {}, isEnabled: () => false }),
@@ -43,14 +43,18 @@ vi.mock('../application/hooks/useApplications', () => ({
 vi.mock('../hanke/hankeUsers/hooks/useUserRightsForHanke', () => ({
   usePermissionsForHanke: () => ({ data: null }),
 }));
-vi.mock('../application/hooks/useAttachments', () => () => ({ data: [], isError: false }));
-vi.mock('../application/hooks/useSaveApplication', () => () => ({
-  applicationCreateMutation: { mutate: vi.fn() },
-  applicationUpdateMutation: { mutate: vi.fn() },
-  showSaveNotification: false,
-  setShowSaveNotification: vi.fn(),
+vi.mock('../application/hooks/useAttachments', () => ({
+  default: () => ({ data: [], isError: false }),
 }));
-vi.mock('../application/hooks/useNavigateToApplicationView', () => () => vi.fn());
+vi.mock('../application/hooks/useSaveApplication', () => ({
+  default: () => ({
+    applicationCreateMutation: { mutate: vi.fn() },
+    applicationUpdateMutation: { mutate: vi.fn() },
+    showSaveNotification: false,
+    setShowSaveNotification: vi.fn(),
+  }),
+}));
+vi.mock('../application/hooks/useNavigateToApplicationView', () => ({ default: () => vi.fn() }));
 
 // Helper
 function createFeature(): Feature<Polygon> {

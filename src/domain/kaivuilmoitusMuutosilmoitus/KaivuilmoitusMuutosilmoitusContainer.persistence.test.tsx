@@ -13,21 +13,23 @@ vi.mock('../kaivuilmoitus/BasicInfo', async () => {
   const { useFormContext } =
     await vi.importActual<typeof import('react-hook-form')>('react-hook-form');
   const ReactLocal = await vi.importActual<typeof import('react')>('react');
-  return function MockBasicInfo() {
-    const { register } = useFormContext();
-    return ReactLocal.createElement(
-      'div',
-      null,
-      ReactLocal.createElement('input', {
-        'data-testid': 'applicationData.name',
-        ...register('applicationData.name'),
-      }),
-      ReactLocal.createElement('input', {
-        type: 'checkbox',
-        'data-testid': 'applicationData.constructionWork',
-        ...register('applicationData.constructionWork'),
-      }),
-    );
+  return {
+    default: function MockBasicInfo() {
+      const { register } = useFormContext();
+      return ReactLocal.createElement(
+        'div',
+        null,
+        ReactLocal.createElement('input', {
+          'data-testid': 'applicationData.name',
+          ...register('applicationData.name'),
+        }),
+        ReactLocal.createElement('input', {
+          type: 'checkbox',
+          'data-testid': 'applicationData.constructionWork',
+          ...register('applicationData.constructionWork'),
+        }),
+      );
+    },
   };
 });
 vi.mock('../kaivuilmoitus/Areas', () => ({ __esModule: true, default: () => null }));
@@ -41,9 +43,13 @@ vi.mock('../application/taydennysAndMuutosilmoitusCommon/components/Attachments'
   default: () => null,
 }));
 vi.mock('./ReviewAndSend', () => ({ __esModule: true, default: () => null }));
-vi.mock('../application/components/ApplicationSendDialog', () => () => null);
-vi.mock('../application/muutosilmoitus/components/MuutosilmoitusCancel', () => () => null);
-vi.mock('../application/hooks/useAttachments', () => () => ({ data: [], isError: false }));
+vi.mock('../application/components/ApplicationSendDialog', () => ({ default: () => null }));
+vi.mock('../application/muutosilmoitus/components/MuutosilmoitusCancel', () => ({
+  default: () => null,
+}));
+vi.mock('../application/hooks/useAttachments', () => ({
+  default: () => ({ data: [], isError: false }),
+}));
 vi.mock('../../common/components/globalNotification/GlobalNotificationContext', () => ({
   GlobalNotificationProvider: ({ children }: { children: React.ReactNode }) => (
     <div>{children}</div>
@@ -67,9 +73,9 @@ vi.mock('react-i18next', async () => ({
     },
   }),
 }));
-vi.mock('../application/hooks/useNavigateToApplicationView', () => {
-  return vi.fn(() => vi.fn());
-});
+vi.mock('../application/hooks/useNavigateToApplicationView', () => ({
+  default: vi.fn(() => vi.fn()),
+}));
 
 describe('KaivuilmoitusMuutosilmoitusContainer language persistence integration', () => {
   const hanke: HankeData = { hankeTunnus: 'HMUUTOS1', nimi: 'Hanke Muutos' } as HankeData;

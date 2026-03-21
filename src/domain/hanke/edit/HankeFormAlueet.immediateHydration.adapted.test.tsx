@@ -5,12 +5,18 @@ import HankeForm from './HankeForm';
 import { HankeDataFormState } from './types';
 
 // Keep peripheral components light
-vi.mock('./HankeFormPerustiedot', () => () => <div data-testid="mock-perustiedot" />);
-vi.mock('./HankeFormYhteystiedot', () => () => <div data-testid="mock-yhteystiedot" />);
-vi.mock('./HankeFormHaittojenHallinta', () => () => <div data-testid="mock-haitat" />);
-vi.mock('./HankeFormLiitteet', () => () => <div data-testid="mock-liitteet" />);
-vi.mock('./HankeFormSummary', () => () => <div data-testid="mock-summary" />);
-vi.mock('../../application/components/ApplicationAddDialog', () => () => null);
+vi.mock('./HankeFormPerustiedot', () => ({
+  default: () => <div data-testid="mock-perustiedot" />,
+}));
+vi.mock('./HankeFormYhteystiedot', () => ({
+  default: () => <div data-testid="mock-yhteystiedot" />,
+}));
+vi.mock('./HankeFormHaittojenHallinta', () => ({
+  default: () => <div data-testid="mock-haitat" />,
+}));
+vi.mock('./HankeFormLiitteet', () => ({ default: () => <div data-testid="mock-liitteet" /> }));
+vi.mock('./HankeFormSummary', () => ({ default: () => <div data-testid="mock-summary" /> }));
+vi.mock('../../application/components/ApplicationAddDialog', () => ({ default: () => null }));
 vi.mock('../../application/hooks/useApplications', () => ({
   useApplicationsForHanke: () => ({ data: { applications: [] } }),
 }));

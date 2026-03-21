@@ -8,14 +8,16 @@ vi.mock('../../common/haittojenhallinta/haittojenhallintaSchema', async () => {
       '../../../common/utils/yup',
     )) as { default: typeof import('../../../common/utils/yup').default }
   ).default;
-  return yup.object({
-    YLEINEN: yup.string().required(),
-    MUUT: yup.string().required(),
-    PYORALIIKENNE: yup.string().nullable(),
-    AUTOLIIKENNE: yup.string().nullable(),
-    RAITIOLIIKENNE: yup.string().nullable(),
-    LINJAAUTOLIIKENNE: yup.string().nullable(),
-  });
+  return {
+    default: yup.object({
+      YLEINEN: yup.string().required(),
+      MUUT: yup.string().required(),
+      PYORALIIKENNE: yup.string().nullable(),
+      AUTOLIIKENNE: yup.string().nullable(),
+      RAITIOLIIKENNE: yup.string().nullable(),
+      LINJAAUTOLIIKENNE: yup.string().nullable(),
+    }),
+  };
 });
 import HankeForm from './HankeForm';
 import { HankeDataFormState } from './types';
@@ -29,26 +31,30 @@ import {
 } from '../../types/hanke';
 
 // Mock other heavy step components to keep test fast, but keep HaittojenHallinta real.
-vi.mock('./HankeFormPerustiedot', () => () => <div data-testid="mock-perustiedot" />);
-vi.mock('./HankeFormAlueet', () => () => <div data-testid="mock-alueet" />);
-vi.mock('./HankeFormYhteystiedot', () => () => <div data-testid="mock-yhteystiedot" />);
-vi.mock('./HankeFormLiitteet', () => () => <div data-testid="mock-liitteet" />);
-vi.mock('./HankeFormSummary', () => () => <div data-testid="mock-summary" />);
-vi.mock('../../application/components/ApplicationAddDialog', () => () => null);
+vi.mock('./HankeFormPerustiedot', () => ({
+  default: () => <div data-testid="mock-perustiedot" />,
+}));
+vi.mock('./HankeFormAlueet', () => ({ default: () => <div data-testid="mock-alueet" /> }));
+vi.mock('./HankeFormYhteystiedot', () => ({
+  default: () => <div data-testid="mock-yhteystiedot" />,
+}));
+vi.mock('./HankeFormLiitteet', () => ({ default: () => <div data-testid="mock-liitteet" /> }));
+vi.mock('./HankeFormSummary', () => ({ default: () => <div data-testid="mock-summary" /> }));
+vi.mock('../../application/components/ApplicationAddDialog', () => ({ default: () => null }));
 vi.mock('../../application/hooks/useApplications', () => ({
   useApplicationsForHanke: () => ({ data: { applications: [] } }),
 }));
 // Map components mocked to avoid OpenLayers weight
-vi.mock('../../map/components/HankkeenHaittojenhallintasuunnitelma/HankealueMap', () => () => (
-  <div data-testid="mock-hankealue-map" />
-));
-vi.mock('../../map/components/HankkeenHaittojenhallintasuunnitelma/HankeMap', () => () => (
-  <div data-testid="mock-hanke-map" />
-));
+vi.mock('../../map/components/HankkeenHaittojenhallintasuunnitelma/HankealueMap', () => ({
+  default: () => <div data-testid="mock-hankealue-map" />,
+}));
+vi.mock('../../map/components/HankkeenHaittojenhallintasuunnitelma/HankeMap', () => ({
+  default: () => <div data-testid="mock-hanke-map" />,
+}));
 // Mock ProcedureTips to a simple passthrough to avoid relying on internal tip computation
-vi.mock('../../common/haittaIndexes/ProcedureTips', () => () => (
-  <div data-testid="mock-procedure-tips" />
-));
+vi.mock('../../common/haittaIndexes/ProcedureTips', () => ({
+  default: () => <div data-testid="mock-procedure-tips" />,
+}));
 vi.mock('react-i18next', async () => ({
   ...(await vi.importActual<object>('react-i18next')),
   useTranslation: () => ({

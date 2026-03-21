@@ -9,13 +9,13 @@ import { MemoryRouter } from 'react-router';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
 // Mock other pages except Contacts to keep test lightweight
-vi.mock('./BasicInfo', () => () => <div>BasicInfo</div>);
-vi.mock('./Attachments', () => () => <div>Attachments</div>);
-vi.mock('./ReviewAndSend', () => () => <div>ReviewAndSend</div>);
-vi.mock('./Areas', () => () => <div>Areas</div>);
-vi.mock('./HaittojenHallinta', () => () => <div>Haitat</div>);
-vi.mock('./components/FormErrorsNotification', () => () => null);
-vi.mock('../application/components/ApplicationSendDialog', () => () => <div />);
+vi.mock('./BasicInfo', () => ({ default: () => <div>BasicInfo</div> }));
+vi.mock('./Attachments', () => ({ default: () => <div>Attachments</div> }));
+vi.mock('./ReviewAndSend', () => ({ default: () => <div>ReviewAndSend</div> }));
+vi.mock('./Areas', () => ({ default: () => <div>Areas</div> }));
+vi.mock('./HaittojenHallinta', () => ({ default: () => <div>Haitat</div> }));
+vi.mock('./components/FormErrorsNotification', () => ({ default: () => null }));
+vi.mock('../application/components/ApplicationSendDialog', () => ({ default: () => <div /> }));
 
 vi.mock('../../common/components/featureFlags/FeatureFlagsContext', () => ({
   useFeatureFlags: () => ({ flags: {}, isEnabled: () => false }),
@@ -29,14 +29,18 @@ vi.mock('../application/hooks/useApplications', () => ({
 vi.mock('../hanke/hankeUsers/hooks/useUserRightsForHanke', () => ({
   usePermissionsForHanke: () => ({ data: null }),
 }));
-vi.mock('../application/hooks/useAttachments', () => () => ({ data: [], isError: false }));
-vi.mock('../application/hooks/useSaveApplication', () => () => ({
-  applicationCreateMutation: { mutate: vi.fn() },
-  applicationUpdateMutation: { mutate: vi.fn() },
-  showSaveNotification: false,
-  setShowSaveNotification: vi.fn(),
+vi.mock('../application/hooks/useAttachments', () => ({
+  default: () => ({ data: [], isError: false }),
 }));
-vi.mock('../application/hooks/useNavigateToApplicationView', () => () => vi.fn());
+vi.mock('../application/hooks/useSaveApplication', () => ({
+  default: () => ({
+    applicationCreateMutation: { mutate: vi.fn() },
+    applicationUpdateMutation: { mutate: vi.fn() },
+    showSaveNotification: false,
+    setShowSaveNotification: vi.fn(),
+  }),
+}));
+vi.mock('../application/hooks/useNavigateToApplicationView', () => ({ default: () => vi.fn() }));
 
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
@@ -276,6 +280,10 @@ it('persists all contact person groups & invoicing customer across language chan
 });
 
 describe('invoicing customer registryKey language change persistence', () => {
+  beforeEach(() => {
+    sessionStorage.clear();
+  });
+
   function mountEmpty() {
     const qc = new QueryClient();
     return render(
@@ -420,10 +428,14 @@ describe('invoicing customer registryKey language change persistence', () => {
     act(() => {
       formCtx.setValue('applicationData.invoicingCustomer.registryKey', '2222222-2');
     });
-    act(() => {
+    await act(async () => {
       window.dispatchEvent(new CustomEvent('haitaton:languageChanging'));
     });
     utils.unmount();
+    // Clear step persistence so remount starts at BasicInfo (step 0), not Contacts (step 3).
+    // Without this, Contacts renders during hydration and its normalization effect converts
+    // the initially-undefined registryKey to null, overriding the hydrated '2222222-2' value.
+    sessionStorage.removeItem('functional-application-form-step-999-KAIVU-activeStep');
     mountEmpty();
     const newCtx = (
       window as unknown as {

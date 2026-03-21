@@ -193,14 +193,14 @@ test('Should fill kaivuilmoitus form and show summary', async () => {
   );
   // Prevent real FormData/axios upload flow by mocking uploadAttachment used by FileUpload
   const accumulatedUploads: ApplicationAttachmentMetadata[] = [];
-  const uploadSpy = jest
+  const uploadSpy = vi
     .spyOn(applicationAttachmentsApi, 'uploadAttachment')
     .mockImplementation(async (args) => {
       const meta = await uploadApplicationAttachmentMock(args);
       accumulatedUploads.push(meta);
-      jest
-        .spyOn(applicationAttachmentsApi, 'getAttachments')
-        .mockResolvedValue(accumulatedUploads.slice());
+      vi.spyOn(applicationAttachmentsApi, 'getAttachments').mockResolvedValue(
+        accumulatedUploads.slice(),
+      );
       return meta;
     });
   await fillBasicInformation(user, {
