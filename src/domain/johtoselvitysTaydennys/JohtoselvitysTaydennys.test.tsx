@@ -136,7 +136,9 @@ describe('Taydennyspyynto notification', () => {
   test('Should show taydennyspyynto notification', async () => {
     setup();
 
-    expect(screen.getByRole('heading', { name: 'Täydennyspyyntö' })).toBeInTheDocument();
+    await waitFor(() =>
+      expect(screen.getByRole('heading', { name: 'Täydennyspyyntö' })).toBeInTheDocument(),
+    );
     expect(screen.getByText('Muokkaa hakemusta korjataksesi seuraavat asiat:')).toBeInTheDocument();
   });
 });

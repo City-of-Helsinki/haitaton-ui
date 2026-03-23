@@ -18,7 +18,9 @@ const ReferencesPage: React.FC<React.PropsWithChildren<unknown>> = () => {
       <HdsContainer style={{ padding: '2rem', backgroundColor: 'white' }}>
         <p>{t('staticPages:references:content')}</p>
         {referenceKeys.map((referenceKey) => (
-          <p>{t(`staticPages:references:referenceData:${referenceKey}.title`)}</p>
+          <p key={referenceKey}>
+            {t(`staticPages:references:referenceData:${referenceKey}.title`)}
+          </p>
         ))}
       </HdsContainer>
     </Container>

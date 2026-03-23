@@ -1,6 +1,6 @@
 import React from 'react'; // top-level import okay outside mock factories
 // Adjusted path after moving test up one directory from __tests__
-import { render, waitFor, cleanup, fireEvent } from '../../testUtils/render';
+import { render, waitFor, cleanup, fireEvent, act } from '../../testUtils/render';
 import userEvent from '@testing-library/user-event';
 // Adjusted relative imports after moving file out of __tests__
 import KaivuilmoitusContainer from './KaivuilmoitusContainer';
@@ -209,7 +209,9 @@ describe('KaivuilmoitusContainer language persistence integration', () => {
     // Navigate to Contacts step so contact inputs are rendered
     const contactsStepButton = document.querySelectorAll('button')[3];
     if (contactsStepButton)
-      contactsStepButton.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+      act(() => {
+        contactsStepButton.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+      });
     await waitFor(() =>
       expect(getByTestId('applicationData.customerWithContacts.customer.name')).toBeTruthy(),
     );
@@ -218,17 +220,23 @@ describe('KaivuilmoitusContainer language persistence integration', () => {
     const custName = getByTestId(
       'applicationData.customerWithContacts.customer.name',
     ) as HTMLInputElement;
-    fireEvent.change(custName, { target: { value: 'Persisted Company' } });
+    act(() => {
+      fireEvent.change(custName, { target: { value: 'Persisted Company' } });
+    });
 
     const firstName = getByTestId(
       'applicationData.customerWithContacts.contacts.0.firstName',
     ) as HTMLInputElement;
-    fireEvent.change(firstName, { target: { value: 'Matti' } });
+    act(() => {
+      fireEvent.change(firstName, { target: { value: 'Matti' } });
+    });
 
     const lastName = getByTestId(
       'applicationData.customerWithContacts.contacts.0.lastName',
     ) as HTMLInputElement;
-    fireEvent.change(lastName, { target: { value: 'Meikäläinen' } });
+    act(() => {
+      fireEvent.change(lastName, { target: { value: 'Meikäläinen' } });
+    });
 
     // Ensure the DOM inputs reflect the full typed values before snapshotting
     await waitFor(() =>
@@ -285,7 +293,9 @@ describe('KaivuilmoitusContainer language persistence integration', () => {
     // Navigate to Contacts step after remount to ensure inputs are rendered
     const contactsStepButton2 = document.querySelectorAll('button')[3];
     if (contactsStepButton2)
-      contactsStepButton2.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+      act(() => {
+        contactsStepButton2.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+      });
     await waitFor(() =>
       expect(get2('applicationData.customerWithContacts.customer.name')).toBeTruthy(),
     );

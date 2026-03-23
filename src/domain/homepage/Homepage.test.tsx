@@ -27,7 +27,7 @@ describe('Create new hanke from dialog', () => {
       children: (
         <I18nextProvider i18n={i18n}>
           <QueryClientProvider client={queryClient}>
-            <BrowserRouter>
+            <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
               <FeatureFlagsProvider>
                 <Homepage />
               </FeatureFlagsProvider>
@@ -104,7 +104,7 @@ describe('Create johtoselvitys from dialog', () => {
       children: (
         <I18nextProvider i18n={i18n}>
           <QueryClientProvider client={queryClient}>
-            <BrowserRouter>
+            <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
               <FeatureFlagsProvider>
                 <Homepage />
               </FeatureFlagsProvider>
@@ -186,7 +186,7 @@ describe('Work instructions link', () => {
       children: (
         <I18nextProvider i18n={i18n}>
           <QueryClientProvider client={queryClient}>
-            <BrowserRouter>
+            <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
               <FeatureFlagsProvider>
                 <Homepage />
               </FeatureFlagsProvider>

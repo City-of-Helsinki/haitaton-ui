@@ -118,13 +118,13 @@ describe('SimpleHankeLayer', () => {
     });
   });
 
-  test('renders vector layer with correct props', () => {
+  test('renders vector layer with correct props', async () => {
     mockUseMapViewportBounds.mockReturnValue(null);
 
     render(<SimpleHankeLayer startDate="2023-01-01" endDate="2023-12-31" />);
 
+    await waitFor(() => expect(screen.getByTestId('vector-layer')).toBeInTheDocument());
     const vectorLayer = screen.getByTestId('vector-layer');
-    expect(vectorLayer).toBeInTheDocument();
     expect(vectorLayer).toHaveAttribute('data-classname', 'hankeGeometryLayer');
     expect(vectorLayer).toHaveAttribute('data-zindex', '1');
     expect(vectorLayer).toHaveAttribute('data-style', 'function');

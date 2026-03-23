@@ -1,6 +1,6 @@
 import { UserEvent } from '@testing-library/user-event';
 import { http, HttpResponse } from 'msw';
-import { fireEvent } from '@testing-library/react';
+import { act } from '@testing-library/react';
 import { cleanup, render, screen, waitFor, within } from '../../testUtils/render';
 import KaivuilmoitusContainer from './KaivuilmoitusContainer';
 import { HankeData } from '../types/hanke';
@@ -630,25 +630,33 @@ test('Postal address fields should be required if OVT fields are empty', async (
 
   await user.clear(screen.getByTestId('applicationData.invoicingCustomer.ovt'));
   await user.type(screen.getByTestId('applicationData.invoicingCustomer.ovt'), '123456789012');
-  (screen.getByTestId('applicationData.invoicingCustomer.ovt') as HTMLInputElement).blur();
+  act(() => {
+    (screen.getByTestId('applicationData.invoicingCustomer.ovt') as HTMLInputElement).blur();
+  });
   await user.clear(screen.getByTestId('applicationData.invoicingCustomer.invoicingOperator'));
   await user.type(
     screen.getByTestId('applicationData.invoicingCustomer.invoicingOperator'),
     '12345',
   );
-  (
-    screen.getByTestId('applicationData.invoicingCustomer.invoicingOperator') as HTMLInputElement
-  ).blur();
+  act(() => {
+    (
+      screen.getByTestId('applicationData.invoicingCustomer.invoicingOperator') as HTMLInputElement
+    ).blur();
+  });
 
-  expect(
-    screen.getByTestId('applicationData.invoicingCustomer.postalAddress.streetAddress.streetName'),
-  ).not.toBeRequired();
-  expect(
-    screen.getByTestId('applicationData.invoicingCustomer.postalAddress.postalCode'),
-  ).not.toBeRequired();
-  expect(
-    screen.getByTestId('applicationData.invoicingCustomer.postalAddress.city'),
-  ).not.toBeRequired();
+  await waitFor(() => {
+    expect(
+      screen.getByTestId(
+        'applicationData.invoicingCustomer.postalAddress.streetAddress.streetName',
+      ),
+    ).not.toBeRequired();
+    expect(
+      screen.getByTestId('applicationData.invoicingCustomer.postalAddress.postalCode'),
+    ).not.toBeRequired();
+    expect(
+      screen.getByTestId('applicationData.invoicingCustomer.postalAddress.city'),
+    ).not.toBeRequired();
+  });
 });
 
 test('OVT fields should be required if postal address fields are empty', async () => {
@@ -667,11 +675,13 @@ test('OVT fields should be required if postal address fields are empty', async (
     screen.getByTestId('applicationData.invoicingCustomer.postalAddress.streetAddress.streetName'),
     'Katu 1',
   );
-  (
-    screen.getByTestId(
-      'applicationData.invoicingCustomer.postalAddress.streetAddress.streetName',
-    ) as HTMLInputElement
-  ).blur();
+  act(() => {
+    (
+      screen.getByTestId(
+        'applicationData.invoicingCustomer.postalAddress.streetAddress.streetName',
+      ) as HTMLInputElement
+    ).blur();
+  });
   await user.clear(
     screen.getByTestId('applicationData.invoicingCustomer.postalAddress.postalCode'),
   );
@@ -679,24 +689,30 @@ test('OVT fields should be required if postal address fields are empty', async (
     screen.getByTestId('applicationData.invoicingCustomer.postalAddress.postalCode'),
     '00100',
   );
-  (
-    screen.getByTestId(
-      'applicationData.invoicingCustomer.postalAddress.postalCode',
-    ) as HTMLInputElement
-  ).blur();
+  act(() => {
+    (
+      screen.getByTestId(
+        'applicationData.invoicingCustomer.postalAddress.postalCode',
+      ) as HTMLInputElement
+    ).blur();
+  });
   await user.clear(screen.getByTestId('applicationData.invoicingCustomer.postalAddress.city'));
   await user.type(
     screen.getByTestId('applicationData.invoicingCustomer.postalAddress.city'),
     'Helsinki',
   );
-  (
-    screen.getByTestId('applicationData.invoicingCustomer.postalAddress.city') as HTMLInputElement
-  ).blur();
+  act(() => {
+    (
+      screen.getByTestId('applicationData.invoicingCustomer.postalAddress.city') as HTMLInputElement
+    ).blur();
+  });
 
-  expect(screen.getByTestId('applicationData.invoicingCustomer.ovt')).not.toBeRequired();
-  expect(
-    screen.getByTestId('applicationData.invoicingCustomer.invoicingOperator'),
-  ).not.toBeRequired();
+  await waitFor(() => {
+    expect(screen.getByTestId('applicationData.invoicingCustomer.ovt')).not.toBeRequired();
+    expect(
+      screen.getByTestId('applicationData.invoicingCustomer.invoicingOperator'),
+    ).not.toBeRequired();
+  });
 });
 
 test('OVT and registryKey fields should be send as null if they are left empty', async () => {
@@ -1360,6 +1376,8 @@ describe('Registry key', () => {
       const registryKeyTestId = 'applicationData.customerWithContacts.customer.registryKey';
 
       for (const s of scenarios) {
+        // Click body first to clear focus from previous iteration, then open select
+        await user.click(document.body);
         await user.click(getTypeSelect());
         const optionCandidates = screen.queryAllByText(s.optionText);
         if (!optionCandidates.length) {
@@ -1491,7 +1509,8 @@ describe('Registry key', () => {
       const registryKeyTestId = 'applicationData.contractorWithContacts.customer.registryKey';
 
       for (const s of scenarios) {
-        // Open the select (clicking twice to ensure menu opens in case it retains focus state between iterations)
+        // Click body first to clear focus from previous iteration, then open select
+        await user.click(document.body);
         await user.click(getTypeSelect());
         const optionCandidates = screen.queryAllByText(s.optionText);
         if (!optionCandidates.length) {
@@ -1548,8 +1567,8 @@ describe('Registry key', () => {
       );
       await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
 
-      fireEvent.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[1]);
-      fireEvent.click(screen.getAllByText('Muu')[0]);
+      await user.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[1]);
+      await user.click(screen.getAllByText('Muu')[0]);
 
       expect(await screen.findAllByText('Y-tunnus')).toHaveLength(3);
       expect(
@@ -1579,8 +1598,8 @@ describe('Registry key', () => {
       await secondUser.click(screen.getByRole('button', { name: /yhteystiedot/i }));
 
       // association
-      fireEvent.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[1]);
-      fireEvent.click(screen.getAllByText('Yhdistys')[0]);
+      await secondUser.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[1]);
+      await secondUser.click(screen.getAllByText('Yhdistys')[0]);
 
       expect(
         await screen.findByTestId('applicationData.contractorWithContacts.customer.registryKey'),
@@ -1593,8 +1612,8 @@ describe('Registry key', () => {
       );
       await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
 
-      fireEvent.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[1]);
-      fireEvent.click(screen.getAllByText('Yksityishenkilö')[0]);
+      await user.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[1]);
+      await user.click(screen.getAllByText('Yksityishenkilö')[0]);
 
       expect(
         await screen.findByTestId('applicationData.contractorWithContacts.customer.registryKey'),
@@ -1607,8 +1626,8 @@ describe('Registry key', () => {
       );
       await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
 
-      fireEvent.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[1]);
-      fireEvent.click(screen.getAllByText('Muu')[0]);
+      await user.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[1]);
+      await user.click(screen.getAllByText('Muu')[0]);
 
       expect(
         await screen.findByTestId('applicationData.contractorWithContacts.customer.registryKey'),
@@ -1856,31 +1875,43 @@ describe('Haittojenhallintasuunnitelma', () => {
 
     // Fill minimal perustiedot to avoid baseline step 1 attention conflicting with test intent
     await user.type(screen.getByLabelText(/työn nimi/i), 'Testi');
-    screen.getByLabelText(/työn nimi/i).blur();
+    act(() => {
+      screen.getByLabelText(/työn nimi/i).blur();
+    });
     await user.type(screen.getByLabelText(/työn kuvaus/i), 'Kuvaus');
-    screen.getByLabelText(/työn kuvaus/i).blur();
+    act(() => {
+      screen.getByLabelText(/työn kuvaus/i).blur();
+    });
     await user.click(screen.getByRole('checkbox', { name: /työstä vastaavana/i }));
 
     await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
 
     const nameInput = screen.getAllByRole('combobox', { name: /nimi/i })[0] as HTMLInputElement;
     await user.clear(nameInput);
-    nameInput.blur();
+    act(() => {
+      nameInput.blur();
+    });
     const regKeyInput = screen.getByTestId(
       'applicationData.customerWithContacts.customer.registryKey',
     ) as HTMLInputElement;
     await user.clear(regKeyInput);
-    regKeyInput.blur();
+    act(() => {
+      regKeyInput.blur();
+    });
     const emailInput = screen.getByTestId(
       'applicationData.customerWithContacts.customer.email',
     ) as HTMLInputElement;
     await user.clear(emailInput);
-    emailInput.blur();
+    act(() => {
+      emailInput.blur();
+    });
     const phoneInput = screen.getByTestId(
       'applicationData.customerWithContacts.customer.phone',
     ) as HTMLInputElement;
     await user.clear(phoneInput);
-    phoneInput.blur();
+    act(() => {
+      phoneInput.blur();
+    });
 
     await user.click(screen.getByRole('button', { name: /seuraava/i }));
 

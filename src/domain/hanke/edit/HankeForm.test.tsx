@@ -3,7 +3,7 @@ import { FORMFIELD, HankeDataFormState } from './types';
 import HankeForm from './HankeForm';
 import HankeFormContainer from './HankeFormContainer';
 import { HANKE_VAIHE, HANKE_TYOMAATYYPPI, HankeData } from '../../types/hanke';
-import { render, cleanup, waitFor, screen, within } from '../../../testUtils/render';
+import { act, render, cleanup, waitFor, screen, within } from '../../../testUtils/render';
 import type { UserEvent } from '@testing-library/user-event';
 import hankkeet from '../../mocks/data/hankkeet-data';
 import { server } from '../../mocks/test-server';
@@ -1336,6 +1336,8 @@ test('Should not save if public hanke has missing haittojen hallinta fields', as
   await user.click(screen.getByRole('button', { name: /tallenna ja keskeytä/i }));
   const errorMessage = await screen.findByText(/kenttä on pakollinen/i);
   expect(errorMessage).toBeInTheDocument();
-  await new Promise((resolve) => setTimeout(resolve, 150));
+  await act(async () => {
+    await new Promise((resolve) => setTimeout(resolve, 150));
+  });
   expect(document.activeElement).toBe(suunnitelmaInput);
 });

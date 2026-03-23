@@ -12,7 +12,7 @@ import hakemukset from '../mocks/data/hakemukset-data';
 import { server } from '../mocks/test-server';
 import { HttpResponse, http } from 'msw';
 import { Taydennys, TaydennysAttachmentMetadata } from '../application/taydennys/types';
-import { fireEvent, render, screen, waitFor, within } from '../../testUtils/render';
+import { act, fireEvent, render, screen, waitFor, within } from '../../testUtils/render';
 import KaivuilmoitusTaydennysContainer from './KaivuilmoitusTaydennysContainer';
 import { createApplicationAttachments, createTaydennysAttachments } from '../mocks/attachments';
 import api from '../api/api';
@@ -121,21 +121,26 @@ async function fillAttachments(
   if (trafficArrangementPlanFiles) {
     const fileUpload = fileUploads[0];
     await user.upload(fileUpload, trafficArrangementPlanFiles);
+    await act(async () => {});
   }
 
   if (mandateFiles) {
     const fileUpload = fileUploads[1];
     await user.upload(fileUpload, mandateFiles);
+    await act(async () => {});
   }
 
   if (otherFiles) {
     const fileUpload = fileUploads[2];
     await user.upload(fileUpload, otherFiles);
+    await act(async () => {});
   }
 
   if (additionalInfo) {
-    fireEvent.change(screen.getByLabelText(/lisätietoja hakemuksesta/i), {
-      target: { value: additionalInfo },
+    await act(async () => {
+      fireEvent.change(screen.getByLabelText(/lisätietoja hakemuksesta/i), {
+        target: { value: additionalInfo },
+      });
     });
   }
 }
@@ -182,7 +187,9 @@ describe('Taydennyspyynto notification', () => {
   test('Should show taydennyspyynto notification', async () => {
     setup();
 
-    expect(screen.getByRole('heading', { name: 'Täydennyspyyntö' })).toBeInTheDocument();
+    await waitFor(() =>
+      expect(screen.getByRole('heading', { name: 'Täydennyspyyntö' })).toBeInTheDocument(),
+    );
     expect(screen.getByText('Muokkaa hakemusta korjataksesi seuraavat asiat:')).toBeInTheDocument();
   });
 });
@@ -251,12 +258,14 @@ describe('Sending taydennys', () => {
     });
 
     // Change work description to invalid value
-    fireEvent.change(screen.getByLabelText(/työn kuvaus/i), {
-      target: { value: '' },
+    act(() => {
+      fireEvent.change(screen.getByLabelText(/työn kuvaus/i), { target: { value: '' } });
     });
     await user.click(screen.getByRole('button', { name: /yhteenveto/i }));
 
-    expect(screen.queryByRole('button', { name: /lähetä täydennys/i })).not.toBeInTheDocument();
+    await waitFor(() =>
+      expect(screen.queryByRole('button', { name: /lähetä täydennys/i })).not.toBeInTheDocument(),
+    );
   });
 
   test('Should show and disable send button and show notification when user is not a contact person', async () => {
@@ -366,6 +375,8 @@ describe('Taydennys attachments', () => {
       { timeout: 5000 },
     );
     expect(uploadSpy).toHaveBeenCalledTimes(3);
+    // Flush any remaining async form state updates (e.g. FormErrorsNotification re-renders)
+    await act(async () => {});
   });
 
   test('Should be able to delete attachments', async () => {

@@ -105,7 +105,7 @@ const DatePicker: React.FC<React.PropsWithChildren<PropTypes>> = ({
                     messageKey: string,
                     labelKey: string,
                     textKey: string,
-                    date: Date
+                    date: Date,
                   ) => {
                     setError(name, { type: 'manual', message: t(messageKey) });
                     setValue(name, '');
@@ -137,7 +137,7 @@ const DatePicker: React.FC<React.PropsWithChildren<PropTypes>> = ({
                         'dateBeforeProjectDate',
                         'hakemus:notifications:dateBeforeProjectDateLabel',
                         'hakemus:notifications:dateBeforeProjectDateText',
-                        hankeStartDate
+                        hankeStartDate,
                       );
                       return;
                     }
@@ -152,7 +152,7 @@ const DatePicker: React.FC<React.PropsWithChildren<PropTypes>> = ({
                         'dateFutureProjectDate',
                         'hakemus:notifications:dateFutureProjectDateLabel',
                         'hakemus:notifications:dateFutureProjectDateText',
-                        hankeEndDate
+                        hankeEndDate,
                       );
                       return;
                     }
@@ -166,8 +166,6 @@ const DatePicker: React.FC<React.PropsWithChildren<PropTypes>> = ({
                   onValueChange && onValueChange(date);
                 }}
                 crossOrigin=""
-                onPointerEnterCapture={() => {}}
-                onPointerLeaveCapture={() => {}}
               />
             </div>
           </div>

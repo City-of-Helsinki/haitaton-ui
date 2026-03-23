@@ -32,7 +32,10 @@ function getWrapper(loggedIn: boolean, routerInitialEntries?: InitialEntry[]) {
     returnUser: true,
     placeUserToStorage: loggedIn,
     children: (
-      <MemoryRouter initialEntries={routerInitialEntries}>
+      <MemoryRouter
+        initialEntries={routerInitialEntries}
+        future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
+      >
         <Provider store={store}>
           <QueryClientProvider client={queryClient}>
             <I18nextProvider i18n={i18n}>

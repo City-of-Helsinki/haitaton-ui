@@ -64,6 +64,7 @@ describe('Kaivuilmoitus taydennys AreaSummary', () => {
             },
             {
               ...mockData.areas[0], // a "new" area
+              hankealueId: 999, // unique id — avoids key collision with areas[0]
               name: 'Hankealue 2',
               tyoalueet: [
                 {

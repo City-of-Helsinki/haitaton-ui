@@ -125,5 +125,7 @@ describe('KaivuilmoitusContainer geometry persistence', () => {
     expect(Array.isArray(geom.coordinates)).toBe(true);
     expect(geom.crs).toBeTruthy();
     expect(geom.crs.type).toBe('name');
+    // Flush any pending async updates to avoid act() warnings from ApplicationSendDialog
+    await act(async () => {});
   });
 });

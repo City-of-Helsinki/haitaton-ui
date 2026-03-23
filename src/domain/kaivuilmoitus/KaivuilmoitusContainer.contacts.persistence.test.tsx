@@ -94,7 +94,7 @@ const application: Application<KaivuilmoitusData> = {
 function mount() {
   const qc = new QueryClient();
   return render(
-    <MemoryRouter>
+    <MemoryRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
       <GlobalNotificationProvider>
         <QueryClientProvider client={qc}>
           <KaivuilmoitusContainer hankeData={hankeData} application={application} />
@@ -287,7 +287,7 @@ describe('invoicing customer registryKey language change persistence', () => {
   function mountEmpty() {
     const qc = new QueryClient();
     return render(
-      <MemoryRouter>
+      <MemoryRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
         <GlobalNotificationProvider>
           <QueryClientProvider client={qc}>
             <KaivuilmoitusContainer hankeData={hankeData} application={application} />

@@ -57,8 +57,6 @@ const TextArea: React.FC<Props> = ({
             errorText={getInputErrorText(t, error)}
             ref={ref}
             maxLength={maxLength}
-            onPointerEnterCapture={() => {}}
-            onPointerLeaveCapture={() => {}}
           />
         );
       }}

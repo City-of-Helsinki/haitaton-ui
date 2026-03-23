@@ -59,18 +59,24 @@ vi.mock('hds-react', () => {
     onBlur?: () => void;
     onChange?: (value: string) => void;
   };
-  const DateInput = ({ id, label, value, disabled, onBlur, onChange }: MockDateInputProps) => (
-    <div data-testid="mock-date-input">
-      {label ? <label htmlFor={id}>{label}</label> : null}
-      <input
-        id={id}
-        type="text"
-        value={value || ''}
-        onChange={(e) => onChange && onChange(e.target.value)}
-        onBlur={onBlur}
-        disabled={disabled}
-      />
-    </div>
+  // forwardRef must be obtained via require() — vi.mock factories are hoisted before imports are
+  // initialized, so referencing the top-level `React` import would cause a ReferenceError.
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { forwardRef } = require('react') as typeof import('react');
+  const DateInput = forwardRef<HTMLInputElement, MockDateInputProps>(
+    ({ id, label, value, disabled, onBlur, onChange }, _ref) => (
+      <div data-testid="mock-date-input">
+        {label ? <label htmlFor={id}>{label}</label> : null}
+        <input
+          id={id}
+          type="text"
+          value={value || ''}
+          onChange={(e) => onChange && onChange(e.target.value)}
+          onBlur={onBlur}
+          disabled={disabled}
+        />
+      </div>
+    ),
   );
 
   const RadioButton: React.FC<{
@@ -1126,7 +1132,9 @@ describe('Areas segment containment guard', () => {
       const lastProps = areaSelectMock.__getLastAreaSelectDialogProps();
       // call onClose()
       const lp = lastProps as unknown as { onClose?: () => void };
-      lp.onClose && lp.onClose();
+      act(() => {
+        lp.onClose && lp.onClose();
+      });
 
       // eslint-disable-next-line no-underscore-dangle
       const vsMocks = (
@@ -1199,7 +1207,9 @@ describe('Areas segment containment guard', () => {
       const lastProps = areaSelectMock.__getLastAreaSelectDialogProps();
       // call onConfirm with first hankeArea
       const lp2 = lastProps as unknown as { onConfirm?: (area: unknown) => void };
-      lp2.onConfirm && lp2.onConfirm(multiHanke.alueet[0]);
+      act(() => {
+        lp2.onConfirm && lp2.onConfirm(multiHanke.alueet[0]);
+      });
 
       // mutate should have been called via addTyoAlueToHankeArea
       // eslint-disable-next-line no-underscore-dangle

@@ -32,6 +32,8 @@ export default defineConfig({
     },
     onConsoleLog(log) {
       if (log.includes('Could not parse CSS stylesheet')) return false;
+      // hds-react internal minified components still use defaultProps (unfixable without upgrading hds-react)
+      if (log.includes('Support for defaultProps will be removed')) return false;
     },
     server: {
       deps: {

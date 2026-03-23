@@ -11,8 +11,6 @@ function Page1() {
         id="testInput"
         label="Test input"
         errorText="Please enter a value for input"
-        onPointerEnterCapture={() => {}}
-        onPointerLeaveCapture={() => {}}
         crossOrigin=""
       />
     </div>
