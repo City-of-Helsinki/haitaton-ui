@@ -43,6 +43,11 @@ export default function useAreasPersistence<T extends object = Record<string, un
   }
 
   return useFormLanguagePersistence(key, formContext, {
+    // Use 'effect' phase so that hydration fires after useFieldArray's _subjects.array
+    // subscription (registered via useEffect in children) is active. With 'layout' the
+    // setValue('applicationData.areas', ...) call inside afterHydrate fires before
+    // useFieldArray's subscription is set up, so the fields array never updates.
+    hydratePhase: 'effect',
     select(values: T) {
       if (persistAsApiModel) {
         try {
