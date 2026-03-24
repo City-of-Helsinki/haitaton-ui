@@ -60,7 +60,6 @@ const HankeDrawer: React.FC<React.PropsWithChildren<Props>> = ({
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const maybePersistence = (useFormContext() as any)?.persistence;
   const handleGeometryFinalized = useCallback(() => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     maybePersistence?.saveSnapshot?.();
   }, [maybePersistence]);
   const ortoLayerOpacity = mapTileLayers.kantakartta.visible ? 0.5 : 1;

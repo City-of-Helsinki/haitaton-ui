@@ -417,7 +417,6 @@ describe('Error notification', () => {
       }
     }
     if (!notificationFound) {
-      // eslint-disable-next-line no-console
       console.warn(
         'Taydennys summary notification text not found using expected phrases – proceeding with flexible list assertions',
       );

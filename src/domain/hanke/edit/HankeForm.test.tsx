@@ -893,7 +893,6 @@ describe('HankeForm', () => {
       }
     }
     if (!draftFound) {
-      // eslint-disable-next-line no-console
       console.warn(
         'Draft state banner not located with expected patterns – continuing to list item assertions',
       );

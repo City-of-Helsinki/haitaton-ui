@@ -35,7 +35,6 @@ function TestWrapper() {
   const [, forceUpdate] = React.useReducer((x) => x + 1, 0);
   React.useEffect(() => {
     forceUpdate();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const areas = methods.watch('applicationData.areas') || [];
   const add = () => {

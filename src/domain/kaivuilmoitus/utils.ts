@@ -47,7 +47,7 @@ export function convertFormStateToKaivuilmoitusUpdateData(
           return alue;
         } catch (e) {
           // As a last resort, return shallow copy to avoid breaking save
-          // eslint-disable-next-line no-console
+
           if (process.env.NODE_ENV === 'test') console.debug('Tyoalue conversion fallback', e);
           return { ...tyoalue };
         }

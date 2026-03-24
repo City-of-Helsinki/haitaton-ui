@@ -27,7 +27,6 @@ test('Draft state notification is rendered when hanke is in draft state', async 
   // Perustiedot item may be omitted if already satisfied in fixture – treat as optional
   const perustiedotItem = screen.queryByText(/Perustiedot/i);
   if (!perustiedotItem) {
-    // eslint-disable-next-line no-console
     console.warn('Perustiedot draft list item not present – continuing');
   }
   expect(getByRole('listitem', { name: /alueiden/i })).toBeInTheDocument();

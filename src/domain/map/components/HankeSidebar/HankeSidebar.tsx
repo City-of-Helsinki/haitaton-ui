@@ -114,7 +114,6 @@ const HankeSidebar: React.FC<React.PropsWithChildren<Props>> = ({
                     <Link
                       to={hankeViewPath}
                       aria-label={
-                        // eslint-disable-next-line
                         t(`routes:${ROUTES.HANKE}.meta.title`) +
                         ` ${hanke.nimi} - ${hanke.hankeTunnus} `
                       }

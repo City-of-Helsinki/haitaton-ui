@@ -284,7 +284,6 @@ export default function useFormLanguagePersistence<T extends object>(
         // ignore
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [enabled, storageKey, hydratePhase]);
 
   // Persist on change (debounced unless testMode)

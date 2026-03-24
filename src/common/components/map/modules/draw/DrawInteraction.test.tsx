@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-argument, no-underscore-dangle, @typescript-eslint/no-this-alias */
+/* eslint-disable @typescript-eslint/no-explicit-any, no-underscore-dangle, @typescript-eslint/no-this-alias */
 import type { Mock, Mocked } from 'vitest';
 import React from 'react';
 import { render as rtlRender, waitFor } from '@testing-library/react';
@@ -40,10 +40,10 @@ vi.mock('ol/interaction/Select', () => {
       private handlers: HandlerMap = {};
       public active = true;
       public features: unknown[] = [];
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
       constructor(_opts?: unknown) {
         // Capture last instance for assertions
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+
         lastSelectInstance = this;
       }
       setActive = vi.fn((active: boolean) => {
@@ -54,7 +54,7 @@ vi.mock('ol/interaction/Select', () => {
           clear: vi.fn(() => {
             this.features = [];
           }),
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
           push: vi.fn((f: any) => {
             this.features.push(f);
           }),
@@ -103,10 +103,9 @@ vi.mock('ol/interaction', () => {
     }
   }
   class Modify extends Emitter {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     constructor(_opts?: unknown) {
       super();
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+
       lastModifyInstance = this;
     }
   }
@@ -129,11 +128,11 @@ vi.mock('ol/interaction', () => {
 import DrawInteraction from './DrawInteraction';
 
 // Helper to access mocked interaction instances via ESM-safe imports
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+
 const __getLastDrawInstance: () => any = (_olInteraction as any).__getLastDrawInstance;
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+
 const __getLastModifyInstance: () => any = (_olInteraction as any).__getLastModifyInstance;
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+
 const __getLastSelectInstance: () => any = (_olInteractionSelect as any).__getLastSelectInstance;
 
 describe('DrawInteraction startDraw events', () => {
@@ -149,9 +148,8 @@ describe('DrawInteraction startDraw events', () => {
   });
 
   function renderWithProviders(options?: {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onSelfIntersectingPolygon?: (f: any) => void;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
     handleModifyEnd?: (e: any, original: any, modified: any) => void;
   }) {
     const actions = {
@@ -179,9 +177,9 @@ describe('DrawInteraction startDraw events', () => {
     const ui = (
       <GlobalNotificationProvider>
         {/* Cast types for test-only mocks */}
-        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+        {}
         <MapContext.Provider value={{ map: map as any, layers: {} as any } as any}>
-          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+          {}
           <DrawContext.Provider value={{ state, actions, source } as any}>
             <DrawInteraction
               onSelfIntersectingPolygon={options?.onSelfIntersectingPolygon}
@@ -202,9 +200,8 @@ describe('DrawInteraction startDraw events', () => {
     // Wait until Select interaction is created by effect
     await waitFor(() => expect(__getLastSelectInstance()).toBeDefined());
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const select = __getLastSelectInstance() as any;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
     const draw = __getLastDrawInstance() as any;
 
     // Simulate drawstart event from Draw interaction
@@ -223,12 +220,10 @@ describe('DrawInteraction startDraw events', () => {
 
     await waitFor(() => expect(__getLastSelectInstance()).toBeDefined());
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const select = __getLastSelectInstance() as any;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
     const draw = __getLastDrawInstance() as any;
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const feature = { getGeometry: vi.fn(() => ({}) as any) };
 
     // Fire drawend
@@ -251,7 +246,6 @@ describe('DrawInteraction startDraw events', () => {
     // Wait until Modify interaction exists
     await waitFor(() => expect(__getLastModifyInstance()).toBeDefined());
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const modify = __getLastModifyInstance() as any;
 
     // Mock feature for modifystart
@@ -447,7 +441,6 @@ describe('DrawInteraction startDraw events', () => {
 
     await waitFor(() => expect(__getLastModifyInstance()).toBeDefined());
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const modify = __getLastModifyInstance() as any;
 
     // Ensure handlers are attached before emitting
@@ -537,9 +530,9 @@ describe('DrawInteraction startDraw events', () => {
 
       const ui = (
         <GlobalNotificationProvider>
-          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+          {}
           <MapContext.Provider value={{ map: map as any, layers: {} as any } as any}>
-            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+            {}
             <DrawContext.Provider value={{ state, actions, source } as any}>
               <DrawInteraction drawSegmentGuard={mockDrawSegmentGuardInside} />
             </DrawContext.Provider>
@@ -562,7 +555,6 @@ describe('DrawInteraction startDraw events', () => {
     // Wait until Draw interaction is created
     await waitFor(() => expect(__getLastDrawInstance()).toBeDefined());
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const draw = __getLastDrawInstance() as any;
 
     // Create mock feature with polygon geometry - starting with first 2 points in OL structure
@@ -650,9 +642,9 @@ describe('DrawInteraction startDraw events', () => {
 
       const ui = (
         <GlobalNotificationProvider>
-          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+          {}
           <MapContext.Provider value={{ map: map as any, layers: {} as any } as any}>
-            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+            {}
             <DrawContext.Provider value={{ state, actions, source } as any}>
               <DrawInteraction drawSegmentGuard={mockDrawSegmentGuardOutside} />
             </DrawContext.Provider>
@@ -675,7 +667,6 @@ describe('DrawInteraction startDraw events', () => {
     // Wait until Draw interaction is created
     await waitFor(() => expect(__getLastDrawInstance()).toBeDefined());
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const draw = __getLastDrawInstance() as any;
 
     // Create mock feature with polygon geometry - starting with first 2 points in OL structure
@@ -762,9 +753,9 @@ describe('DrawInteraction startDraw events', () => {
 
       const ui = (
         <GlobalNotificationProvider>
-          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+          {}
           <MapContext.Provider value={{ map: map as any, layers: {} as any } as any}>
-            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+            {}
             <DrawContext.Provider value={{ state, actions, source } as any}>
               <DrawInteraction drawSegmentGuard={mockDrawSegmentGuardSkip} />
             </DrawContext.Provider>
@@ -787,7 +778,6 @@ describe('DrawInteraction startDraw events', () => {
     // Wait until Draw interaction is created
     await waitFor(() => expect(__getLastDrawInstance()).toBeDefined());
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const draw = __getLastDrawInstance() as any;
 
     // Create mock feature with only one point
@@ -1088,7 +1078,7 @@ describe('DrawInteraction', () => {
     rtlRender(ui);
 
     await waitFor(() => expect(__getLastDrawInstance()).toBeDefined());
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
     const draw = __getLastDrawInstance() as any;
 
     const ring = [

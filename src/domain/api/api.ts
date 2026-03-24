@@ -69,7 +69,6 @@ api.interceptors.response.use(
       if (response.status === 401 && response.data?.errorCode) {
         const errorCode = response.data.errorCode;
         if (SESSION_TERMINATION_ERROR_CODES.has(errorCode)) {
-          // eslint-disable-next-line
           console.warn(`Session terminated with error code: ${errorCode}. Logging out...`);
           handleSessionTermination();
           return Promise.reject(error);

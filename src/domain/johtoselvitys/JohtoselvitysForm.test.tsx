@@ -68,7 +68,6 @@ interface DateOptions {
 
 const DUMMY_AREAS = applications[0].applicationData.areas;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function prepareCompleteApplication(
   base: Application<JohtoselvitysData>,
 ): Application<JohtoselvitysData> {
@@ -369,7 +368,6 @@ async function goToContactsStep(user: UserEvent) {
       } catch {
         const step2Btn = screen.queryByRole('button', { name: /Alueiden piirto\. Vaihe 2\/5/i });
         if (!step2Btn) {
-          // eslint-disable-next-line no-console
           console.warn('Step 2 heading and aria-label not found after retries');
         }
       }
@@ -421,7 +419,6 @@ async function goToContactsStep(user: UserEvent) {
       try {
         await waitFor(() => expect(isContactsActive()).toBe(true), { timeout: 12000 });
       } catch (e) {
-        // eslint-disable-next-line no-console
         console.warn(
           'goToContactsStep: contacts step not activated after retries – continuing tests, combobox assertions may be skipped',
         );
@@ -438,11 +435,10 @@ async function goToContactsStep(user: UserEvent) {
     const start = Date.now();
     while (Date.now() - start < 15000) {
       if (screen.queryAllByRole('combobox', { name: /tyyppi/i }).length > 0) break;
-      // eslint-disable-next-line no-await-in-loop
+
       await new Promise((r) => setTimeout(r, 250));
     }
     if (screen.queryAllByRole('combobox', { name: /tyyppi/i }).length === 0) {
-      // eslint-disable-next-line no-console
       console.warn('Contacts step: tyyppi combobox not found within extended timeout – continuing');
     }
   }
@@ -961,7 +957,6 @@ test('Should list existing attachments in the attachments page and in summary pa
   } catch {
     const summaryStepBtn = screen.queryByRole('button', { name: /Yhteenveto\. Vaihe 5\/5/i });
     if (!summaryStepBtn) {
-      // eslint-disable-next-line no-console
       console.warn('Summary heading not found via text or aria-label in attachments->summary test');
     }
   }
@@ -978,7 +973,7 @@ test('Summary should show attachments and they are downloadable', async () => {
     applications[0] as Application<JohtoselvitysData>,
   );
   // Defensive: guarantee areas exists (some fixtures may remove them)
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   const summaryData = testApplication.applicationData as JohtoselvitysData;
   if (!summaryData.areas || summaryData.areas.length === 0) {
     summaryData.areas = (DUMMY_AREAS as ApplicationArea[]) ?? [];
@@ -1635,7 +1630,6 @@ describe('Show correct registry key label', () => {
       );
       // Some environments may not disable the field due to feature flag differences – log instead of failing
       if (!field.hasAttribute('disabled')) {
-        // eslint-disable-next-line no-console
         console.warn('Registry key field not disabled for private person – tolerating');
       } else {
         expect(field).toBeDisabled();

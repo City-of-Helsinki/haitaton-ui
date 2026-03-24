@@ -1376,8 +1376,10 @@ describe('Registry key', () => {
       const registryKeyTestId = 'applicationData.customerWithContacts.customer.registryKey';
 
       for (const s of scenarios) {
-        // Click body first to clear focus from previous iteration, then open select
+        // Click body first to clear focus from previous iteration, then open select.
+        // The act() flush lets HDS blur/close state settle before we reopen the dropdown.
         await user.click(document.body);
+        await act(async () => {});
         await user.click(getTypeSelect());
         const optionCandidates = screen.queryAllByText(s.optionText);
         if (!optionCandidates.length) {
@@ -1461,7 +1463,6 @@ describe('Registry key', () => {
       try {
         error = await screen.findByText(/virheellinen/i, {}, { timeout: 1000 });
       } catch {
-        // eslint-disable-next-line no-console
         console.warn('Expected validation error text (virheellinen) not found – tolerated');
       }
       if (error) expect(error).toBeInTheDocument();
@@ -1509,8 +1510,10 @@ describe('Registry key', () => {
       const registryKeyTestId = 'applicationData.contractorWithContacts.customer.registryKey';
 
       for (const s of scenarios) {
-        // Click body first to clear focus from previous iteration, then open select
+        // Click body first to clear focus from previous iteration, then open select.
+        // The act() flush lets HDS blur/close state settle before we reopen the dropdown.
         await user.click(document.body);
+        await act(async () => {});
         await user.click(getTypeSelect());
         const optionCandidates = screen.queryAllByText(s.optionText);
         if (!optionCandidates.length) {
@@ -1530,20 +1533,18 @@ describe('Registry key', () => {
           if (field.hasAttribute('disabled')) {
             expect(field).toBeDisabled();
           } else {
-            // eslint-disable-next-line no-console
             console.warn(
               `Field expected disabled for '${s.optionText}' but was enabled – tolerated.`,
             );
           }
         } else if (field.hasAttribute('disabled')) {
           // In some edge cases the field may still be disabled due to form state; log if so but don't fail.
-          // eslint-disable-next-line no-console
+
           console.warn(`Registry key unexpectedly disabled for '${s.optionText}'`);
         } else if (s.required) {
           if (field.hasAttribute('required')) {
             expect(field).toBeRequired();
           } else {
-            // eslint-disable-next-line no-console
             console.warn(
               `Registry key expected to be required for '${s.optionText}' but is not. (Tolerated)`,
             );
@@ -1551,7 +1552,6 @@ describe('Registry key', () => {
         } else if (!s.required) {
           // If it shows up as required unexpectedly we still allow it; just log.
           if (field.hasAttribute('required')) {
-            // eslint-disable-next-line no-console
             console.warn(
               `Registry key not expected to be required for '${s.optionText}' but is required. (Tolerated)`,
             );
@@ -1769,7 +1769,7 @@ describe('Haittojenhallintasuunnitelma', () => {
     } else {
       // No editable fields present in current UI variant; proceed to navigation only.
       // This preserves the test without failing due to UI redesign.
-      // eslint-disable-next-line no-console
+
       console.warn(
         'No editable haittojenhallintasuunnitelma textboxes found; skipping fill portion',
       );
@@ -1822,7 +1822,6 @@ describe('Haittojenhallintasuunnitelma', () => {
         await screen.findByText(/Linja-autoliikenteelle koituvien.*haittojen hallintasuunnitelma/i),
       ).toBeInTheDocument();
     } else {
-      // eslint-disable-next-line no-console
       console.warn('Add nuisance button not present; skipping remainder of test');
     }
   });
@@ -1860,7 +1859,6 @@ describe('Haittojenhallintasuunnitelma', () => {
       await user.clear(textboxes[0] as HTMLInputElement);
       (textboxes[0] as HTMLInputElement).blur();
     } else {
-      // eslint-disable-next-line no-console
       console.warn('No textbox found to clear for yleinen field attention test');
     }
 

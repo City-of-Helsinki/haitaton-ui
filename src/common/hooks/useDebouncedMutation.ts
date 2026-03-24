@@ -46,7 +46,6 @@ export default function useDebouncedMutation<
     // mutationResults is intentionally not included in deps because we forward
     // to the latest mutate via mutateRef; adding it would recreate debounced
     // wrapper too often and break stability.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debounceTime]);
 
   // Expose the debounced mutate function while preserving other mutation results

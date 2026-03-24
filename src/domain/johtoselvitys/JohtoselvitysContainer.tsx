@@ -132,7 +132,7 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
   // Watch key fields so that this container re-renders when page validation fields change
   // This ensures formSteps 'state' reflects current form validity (areas, dates, selfIntersectingPolygon)
   // and prevents the stepper from remaining disabled after fields are filled in tests.
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   const watched = formContext.watch([
     'applicationData.startTime',
     'applicationData.endTime',

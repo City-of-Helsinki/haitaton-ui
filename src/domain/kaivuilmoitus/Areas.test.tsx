@@ -61,7 +61,7 @@ vi.mock('hds-react', () => {
   };
   // forwardRef must be obtained via require() — vi.mock factories are hoisted before imports are
   // initialized, so referencing the top-level `React` import would cause a ReferenceError.
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
+
   const { forwardRef } = require('react') as typeof import('react');
   const DateInput = forwardRef<HTMLInputElement, MockDateInputProps>(
     ({ id, label, value, disabled, onBlur, onChange }, _ref) => (

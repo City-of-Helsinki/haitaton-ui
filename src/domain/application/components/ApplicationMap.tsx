@@ -83,7 +83,6 @@ export default function ApplicationMap({
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const maybePersistence = (useFormContext() as any)?.persistence;
   const handleGeometryFinalized = useCallback(() => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     maybePersistence?.saveSnapshot?.();
   }, [maybePersistence]);
 

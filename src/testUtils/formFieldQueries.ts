@@ -84,7 +84,6 @@ export function findTypeSelect(opts: TypeSelectQueryOptions = {}) {
       return labelMatches[occurrence];
     }
     if (debugOnFail) {
-      // eslint-disable-next-line no-console
       console.log('findTypeSelect debug: DOM snapshot', queryRoot.innerHTML.slice(0, 3000));
     }
     throw new Error(
@@ -93,7 +92,7 @@ export function findTypeSelect(opts: TypeSelectQueryOptions = {}) {
   }
 
   // Ambiguous case with multiple matches and no explicit occurrence: return first but warn.
-  // eslint-disable-next-line no-console
+
   console.warn(
     `findTypeSelect: multiple (${all.length}) matches for ${typeLabel}; returning first. Provide occurrence to disambiguate.`,
   );
@@ -110,7 +109,7 @@ export async function findTypeSelectAsync(opts: TypeSelectQueryOptions = {}, wai
     } catch (e) {
       lastErr = e;
       // small delay
-      // eslint-disable-next-line no-await-in-loop
+
       await new Promise((r) => setTimeout(r, 50));
     }
   }

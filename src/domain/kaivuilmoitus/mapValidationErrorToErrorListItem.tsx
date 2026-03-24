@@ -84,7 +84,7 @@ export function mapValidationErrorToErrorListItem(
   }
 
   // Temporary debug: log mapping decisions during tests to diagnose missing notification labels
-  // eslint-disable-next-line no-console
+
   if (process.env.NODE_ENV === 'test')
     console.debug('mapValidationError', { errorPath, resolvedLangKey, pathParts });
 
