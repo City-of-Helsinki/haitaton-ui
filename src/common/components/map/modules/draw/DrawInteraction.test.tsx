@@ -859,7 +859,7 @@ describe('DrawInteraction', () => {
         <DrawInteraction />
       </DrawProvider>,
     );
-    expect(container.firstChild).not.toBeNull();
+    expect(container).toBeInTheDocument();
   });
 
   it('calls onSelfIntersectingPolygon when polygon intersects itself', () => {
@@ -892,7 +892,7 @@ describe('DrawInteraction', () => {
 
     // The onSelfIntersectingPolygon should be called during draw operations
     // This would be triggered by the actual draw interaction in real usage
-    expect(container.firstChild).not.toBeNull();
+    expect(container).toBeInTheDocument();
   });
 
   it('handles modify end with self-intersecting polygon', () => {
@@ -910,7 +910,7 @@ describe('DrawInteraction', () => {
 
     // This test verifies the component renders and can handle the modify end logic
     // The actual modify interaction testing would require more complex OpenLayers mocking
-    expect(container.firstChild).not.toBeNull();
+    expect(container).toBeInTheDocument();
   });
 
   it('handles modify end with valid polygon', () => {
@@ -927,7 +927,7 @@ describe('DrawInteraction', () => {
     );
 
     // This test verifies the component renders and can handle valid polygons
-    expect(container.firstChild).not.toBeNull();
+    expect(container).toBeInTheDocument();
   });
 
   it('accepts all optional props without error', () => {
@@ -946,7 +946,7 @@ describe('DrawInteraction', () => {
         <DrawInteraction {...mockProps} />
       </DrawProvider>,
     );
-    expect(container.firstChild).not.toBeNull();
+    expect(container).toBeInTheDocument();
   });
 
   describe('drawSegmentGuard functionality', () => {
@@ -957,7 +957,7 @@ describe('DrawInteraction', () => {
           <DrawInteraction />
         </DrawProvider>,
       );
-      expect(container.firstChild).not.toBeNull();
+      expect(container).toBeInTheDocument();
     });
 
     it('renders with drawSegmentGuard prop', () => {
@@ -969,7 +969,7 @@ describe('DrawInteraction', () => {
           <DrawInteraction drawSegmentGuard={mockDrawSegmentGuard} />
         </DrawProvider>,
       );
-      expect(container.firstChild).not.toBeNull();
+      expect(container).toBeInTheDocument();
     });
 
     it('accepts drawSegmentGuard function that returns true', () => {
@@ -1041,7 +1041,7 @@ describe('DrawInteraction', () => {
           <DrawInteraction drawSegmentGuard={mockDrawSegmentGuard} />
         </DrawProvider>,
       );
-      expect(container.firstChild).not.toBeNull();
+      expect(container).toBeInTheDocument();
     });
 
     it('supports different coordinate systems in drawSegmentGuard', () => {

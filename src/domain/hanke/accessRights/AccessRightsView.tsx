@@ -196,7 +196,11 @@ function AccessRightsView({ hankeUsers, hankeTunnus, signedInUser, readonly }: R
     // compared only id and name, causing permission (kayttooikeustaso) changes to be ignored
     // and thus not rendered until a full page refresh. This fixes the regression by doing a
     // lightweight shallow comparison of key fields; if any differ, we replace the array.
-    const newUsers = hankeUsers.map(addWholeName);
+    // Pre-sort roolit by userRoleSorter so the table's array sortType comparator
+    // sees a consistent ordering without relying on mutation side effects.
+    const newUsers = hankeUsers.map((u) =>
+      addWholeName({ ...u, roolit: [...u.roolit].sort(userRoleSorter) }),
+    );
     setUsersData((prev) => {
       if (
         prev.length === newUsers.length &&
