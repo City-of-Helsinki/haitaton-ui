@@ -141,7 +141,7 @@ function AccessRightsView({ hankeUsers, hankeTunnus, signedInUser, readonly }: R
   const getEditUserPath = useLinkPath(ROUTES.EDIT_USER);
   const { setNotification } = useGlobalNotification();
   const [usersData, setUsersData] = useState<HankeUserWithWholeName[]>(() =>
-    hankeUsers.map(addWholeName),
+    hankeUsers.map((u) => addWholeName({ ...u, roolit: [...u.roolit].sort(userRoleSorter) })),
   );
 
   const { deleteInfoQueryResult, userToDelete, setDeletedUser, resetUserToDelete } =

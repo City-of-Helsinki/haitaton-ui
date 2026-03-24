@@ -1377,12 +1377,12 @@ describe('Registry key', () => {
 
       for (const s of scenarios) {
         // Click body first to clear focus from previous iteration, then open select.
-        // The act() flush lets HDS blur/close state settle before we reopen the dropdown.
         await user.click(document.body);
-        await act(async () => {});
         await user.click(getTypeSelect());
-        const optionCandidates = screen.queryAllByText(s.optionText);
-        if (!optionCandidates.length) {
+        let optionCandidates: HTMLElement[] = [];
+        try {
+          optionCandidates = await screen.findAllByText(s.optionText, {}, { timeout: 2000 });
+        } catch {
           if (s.optional) continue;
           throw new Error(`Expected customer option '${s.optionText}' not found`);
         }
@@ -1511,12 +1511,12 @@ describe('Registry key', () => {
 
       for (const s of scenarios) {
         // Click body first to clear focus from previous iteration, then open select.
-        // The act() flush lets HDS blur/close state settle before we reopen the dropdown.
         await user.click(document.body);
-        await act(async () => {});
         await user.click(getTypeSelect());
-        const optionCandidates = screen.queryAllByText(s.optionText);
-        if (!optionCandidates.length) {
+        let optionCandidates: HTMLElement[] = [];
+        try {
+          optionCandidates = await screen.findAllByText(s.optionText, {}, { timeout: 2000 });
+        } catch {
           if (s.optional) {
             continue; // option not present in this environment, skip gracefully
           }
