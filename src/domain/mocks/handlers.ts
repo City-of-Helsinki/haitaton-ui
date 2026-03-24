@@ -100,10 +100,10 @@ export const handlers = [
     async () => {
       const metadata = {
         cellSizeMeters: 1000,
-        originX: 25486422.0,
-        originY: 6643836.0,
-        maxX: 25515423.0,
-        maxY: 6687837.0,
+        originX: 25486422,
+        originY: 6643836,
+        maxX: 25515423,
+        maxY: 6687837,
       };
       return HttpResponse.json(metadata);
     },

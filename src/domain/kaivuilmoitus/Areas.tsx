@@ -189,7 +189,7 @@ export default function Areas({ hankeData, hankkeenHakemukset, originalHakemus }
     const rebuilt = watchApplicationAreas.flatMap((area) => {
       return (Array.isArray(area?.tyoalueet) ? area.tyoalueet : []).flatMap((tyoalue, idx) => {
         const feature = tyoalue.openlayersFeature;
-        if (!feature || !feature.getGeometry()) return [];
+        if (!feature?.getGeometry()) return [];
         const areaName = getAreaDefaultName(t, idx, (area.tyoalueet || []).length);
         feature.setProperties(
           {
@@ -225,7 +225,7 @@ export default function Areas({ hankeData, hankkeenHakemukset, originalHakemus }
         );
       }
     });
-    const newSignature = signatureParts.sort((a, b) => a.localeCompare(b)).join('|');
+    const newSignature = signatureParts.toSorted((a, b) => a.localeCompare(b)).join('|');
     const prevSignature = previousGeometrySignatureRef.current;
     const signatureChanged = newSignature !== prevSignature;
 
@@ -286,8 +286,8 @@ export default function Areas({ hankeData, hankkeenHakemukset, originalHakemus }
           if (
             !startDate ||
             !endDate ||
-            isNaN(new Date(startDate).getTime()) ||
-            isNaN(new Date(endDate).getTime())
+            Number.isNaN(new Date(startDate).getTime()) ||
+            Number.isNaN(new Date(endDate).getTime())
           ) {
             return;
           }

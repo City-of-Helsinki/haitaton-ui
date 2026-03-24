@@ -144,7 +144,7 @@ export default function useAreasPersistence<T extends object = Record<string, un
         },
       };
 
-      let extra: unknown | undefined;
+      let extra: unknown;
       // type guard: check if options contains extraSelect
       if (options && 'extraSelect' in options) {
         const opt = options as { extraSelect?: (values: T) => unknown };

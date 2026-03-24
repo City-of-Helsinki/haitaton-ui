@@ -3,8 +3,7 @@
 // Strategy: Prefer scoping by participant section heading (e.g. 'Asiakas', 'Urakoitsija', 'Edustaja', 'Rakennuttaja').
 // Falls back to role/name search, then data-testid matching.
 
-import { screen, within } from '@testing-library/react';
-import { waitFor } from '@testing-library/react';
+import { screen, within, waitFor } from '@testing-library/react';
 
 export interface TypeSelectQueryOptions {
   sectionLabel?: RegExp | string; // e.g. /Asiakas/i
@@ -86,8 +85,9 @@ export function findTypeSelect(opts: TypeSelectQueryOptions = {}) {
     if (debugOnFail) {
       console.log('findTypeSelect debug: DOM snapshot', queryRoot.innerHTML.slice(0, 3000));
     }
+    const locationHint = sectionLabel ? ` within section ${String(sectionLabel)}` : '';
     throw new Error(
-      `findTypeSelect: Unable to locate combobox with name matching ${typeLabel}$${sectionLabel ? ` within section ${sectionLabel}` : ''}`,
+      `findTypeSelect: Unable to locate combobox with name matching ${typeLabel}${locationHint}`,
     );
   }
 

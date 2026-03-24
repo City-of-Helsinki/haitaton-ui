@@ -168,9 +168,7 @@ export async function fillContactsInformation(
     },
   } = options;
   // Ensure we are on the Yhteystiedot step; if not, click stepper button and wait for form to render
-  const contactsStepButton = screen
-    .queryAllByRole('button', { name: /yhteystiedot/i })
-    .slice(-1)[0];
+  const contactsStepButton = screen.queryAllByRole('button', { name: /yhteystiedot/i }).at(-1);
   async function ensureContactsStep() {
     const targetTestId = 'applicationData.invoicingCustomer.name';
     if (screen.queryByTestId(targetTestId)) return; // already there

@@ -854,11 +854,12 @@ describe('DrawInteraction', () => {
 
   it('renders without crashing', () => {
     const source = new VectorSource();
-    rtlRender(
+    const { container } = rtlRender(
       <DrawProvider source={source}>
         <DrawInteraction />
       </DrawProvider>,
     );
+    expect(container.firstChild).not.toBeNull();
   });
 
   it('calls onSelfIntersectingPolygon when polygon intersects itself', () => {
@@ -868,7 +869,7 @@ describe('DrawInteraction', () => {
     // Mock self-intersecting polygon
     isPolygonSelfIntersecting.mockReturnValue(true);
 
-    rtlRender(
+    const { container } = rtlRender(
       <DrawProvider source={source}>
         <DrawInteraction onSelfIntersectingPolygon={onSelfIntersectingPolygon} />
       </DrawProvider>,
@@ -891,6 +892,7 @@ describe('DrawInteraction', () => {
 
     // The onSelfIntersectingPolygon should be called during draw operations
     // This would be triggered by the actual draw interaction in real usage
+    expect(container.firstChild).not.toBeNull();
   });
 
   it('handles modify end with self-intersecting polygon', () => {
@@ -900,7 +902,7 @@ describe('DrawInteraction', () => {
     // Mock self-intersecting polygon
     isPolygonSelfIntersecting.mockReturnValue(true);
 
-    rtlRender(
+    const { container } = rtlRender(
       <DrawProvider source={source}>
         <DrawInteraction handleModifyEnd={handleModifyEnd} />
       </DrawProvider>,
@@ -908,6 +910,7 @@ describe('DrawInteraction', () => {
 
     // This test verifies the component renders and can handle the modify end logic
     // The actual modify interaction testing would require more complex OpenLayers mocking
+    expect(container.firstChild).not.toBeNull();
   });
 
   it('handles modify end with valid polygon', () => {
@@ -917,13 +920,14 @@ describe('DrawInteraction', () => {
     // Mock valid (non-intersecting) polygon
     isPolygonSelfIntersecting.mockReturnValue(false);
 
-    rtlRender(
+    const { container } = rtlRender(
       <DrawProvider source={source}>
         <DrawInteraction handleModifyEnd={handleModifyEnd} />
       </DrawProvider>,
     );
 
     // This test verifies the component renders and can handle valid polygons
+    expect(container.firstChild).not.toBeNull();
   });
 
   it('accepts all optional props without error', () => {
@@ -937,32 +941,35 @@ describe('DrawInteraction', () => {
       handleModifyEnd: vi.fn(),
     };
 
-    rtlRender(
+    const { container } = rtlRender(
       <DrawProvider source={source}>
         <DrawInteraction {...mockProps} />
       </DrawProvider>,
     );
+    expect(container.firstChild).not.toBeNull();
   });
 
   describe('drawSegmentGuard functionality', () => {
     it('renders without drawSegmentGuard prop', () => {
       const source = new VectorSource();
-      rtlRender(
+      const { container } = rtlRender(
         <DrawProvider source={source}>
           <DrawInteraction />
         </DrawProvider>,
       );
+      expect(container.firstChild).not.toBeNull();
     });
 
     it('renders with drawSegmentGuard prop', () => {
       const source = new VectorSource();
       const mockDrawSegmentGuard = vi.fn(() => true);
 
-      rtlRender(
+      const { container } = rtlRender(
         <DrawProvider source={source}>
           <DrawInteraction drawSegmentGuard={mockDrawSegmentGuard} />
         </DrawProvider>,
       );
+      expect(container.firstChild).not.toBeNull();
     });
 
     it('accepts drawSegmentGuard function that returns true', () => {
@@ -1029,11 +1036,12 @@ describe('DrawInteraction', () => {
         return withinBounds(start) && withinBounds(end);
       });
 
-      rtlRender(
+      const { container } = rtlRender(
         <DrawProvider source={source}>
           <DrawInteraction drawSegmentGuard={mockDrawSegmentGuard} />
         </DrawProvider>,
       );
+      expect(container.firstChild).not.toBeNull();
     });
 
     it('supports different coordinate systems in drawSegmentGuard', () => {

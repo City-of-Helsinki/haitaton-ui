@@ -53,7 +53,7 @@ const DatePicker: React.FC<React.PropsWithChildren<PropTypes>> = ({
           required: required ? t('form:errors:required') : false,
           validate: (value) => {
             const date = new Date(value);
-            if (isNaN(date.getTime())) return t('form:validations:invalidDate');
+            if (Number.isNaN(date.getTime())) return t('form:validations:invalidDate');
             if (minDate && date < minDate) return t('form:errors:dateTooEarly');
             if (maxDate && date > maxDate) return t('form:errors:dateTooLate');
             if (hankeStartDate && date < hankeStartDate)
@@ -123,7 +123,7 @@ const DatePicker: React.FC<React.PropsWithChildren<PropTypes>> = ({
                       ),
                     });
                   };
-                  if (isNaN(parsedDate.getTime())) {
+                  if (Number.isNaN(parsedDate.getTime())) {
                     setError(name, { type: 'manual', message: t('form:validations:invalidDate') });
                     return;
                   }

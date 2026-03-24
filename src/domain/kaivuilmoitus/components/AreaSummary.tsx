@@ -11,9 +11,8 @@ import { formatSurfaceArea, getTotalSurfaceArea } from '../../map/utils';
 import { formatToFinnishDate } from '../../../common/utils/date';
 import Polygon from 'ol/geom/Polygon';
 import Feature from 'ol/Feature';
-import { ApplicationGeometry } from '../../application/types/application';
+import { ApplicationGeometry, KaivuilmoitusAlue } from '../../application/types/application';
 import { getAreaDefaultName } from '../../application/utils';
-import { KaivuilmoitusAlue } from '../../application/types/application';
 
 function getTyoalueGeometry(tyoalue: {
   geometry?: ApplicationGeometry;

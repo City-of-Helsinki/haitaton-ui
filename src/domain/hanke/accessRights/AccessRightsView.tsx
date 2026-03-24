@@ -210,9 +210,9 @@ function AccessRightsView({ hankeUsers, hankeTunnus, signedInUser, readonly }: R
             u.puhelinnumero === nu.puhelinnumero &&
             // Compare roles ignoring order to avoid unnecessary re-renders
             u.roolit?.length === nu.roolit?.length &&
-            [...u.roolit]
-              .sort((a, b) => a.localeCompare(b))
-              .every((r, idx) => r === [...nu.roolit].sort((a, b) => a.localeCompare(b))[idx])
+            u.roolit
+              .toSorted((a, b) => a.localeCompare(b))
+              .every((r, idx) => r === nu.roolit.toSorted((a, b) => a.localeCompare(b))[idx])
           );
         })
       ) {
@@ -310,7 +310,7 @@ function AccessRightsView({ hankeUsers, hankeTunnus, signedInUser, readonly }: R
   const getUserRolesLabel = useCallback(
     (args: HankeUser) =>
       args.roolit
-        .sort(userRoleSorter)
+        .toSorted(userRoleSorter)
         .map((role) => t(`hankeUsers:roleLabels:${role}`))
         .join(', '),
     [t],

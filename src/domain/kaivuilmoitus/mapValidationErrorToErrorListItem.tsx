@@ -74,7 +74,7 @@ export function mapValidationErrorToErrorListItem(
   // or registryKey_muu in the locales; map those here instead of relying on i18next context.
   if (
     (pathParts[0] === 'customerWithContacts' || pathParts[0] === 'invoicingCustomer') &&
-    pathParts[pathParts.length - 1] === 'registryKey'
+    pathParts.at(-1) === 'registryKey'
   ) {
     if (context === 'person') {
       resolvedLangKey = `${resolvedLangKey}_person`;

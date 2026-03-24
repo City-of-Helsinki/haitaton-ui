@@ -68,7 +68,7 @@ Object.defineProperties(globalThis, {
 });
 
 // Add scrollTo polyfill for DOM elements (needed for Chakra UI Menu)
-if (typeof window !== 'undefined' && !Element.prototype.scrollTo) {
+if (typeof globalThis.window !== 'undefined' && !Element.prototype.scrollTo) {
   Element.prototype.scrollTo = function (options) {
     if (typeof options === 'object' && options !== null) {
       this.scrollLeft = options.left || 0;
