@@ -35,10 +35,7 @@ export function sortedLiikenneHaittojenhallintatyyppi(
     .sort((a, b): number => {
       const diff = b.value - a.value;
       if (diff === 0) {
-        return (
-          defaultOrder.indexOf(a.type as (typeof defaultOrder)[number]) -
-          defaultOrder.indexOf(b.type as (typeof defaultOrder)[number])
-        );
+        return defaultOrder.indexOf(a.type) - defaultOrder.indexOf(b.type);
       }
       return diff;
     });

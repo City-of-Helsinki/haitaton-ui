@@ -15,6 +15,54 @@ function getTranslationContextForContactType(
   }
 }
 
+function resolveContext(
+  pathParts: string[],
+  formData: KaivuilmoitusFormValues | KaivuilmoitusTaydennysFormValues,
+): string | undefined {
+  if (pathParts[0] === 'customerWithContacts') {
+    return getTranslationContextForContactType(
+      formData.applicationData.customerWithContacts?.customer.type,
+    );
+  }
+  if (pathParts[0] === 'invoicingCustomer') {
+    return getTranslationContextForContactType(formData.applicationData.invoicingCustomer?.type);
+  }
+  if (pathParts[0] === 'startTime' || pathParts[0] === 'endTime') {
+    return 'kaivuilmoitus';
+  }
+  return undefined;
+}
+
+function buildLangKey(pathParts: string[]): string {
+  return pathParts.reduce((acc, part, index) => {
+    if (pathParts[0] === 'areas' && index === 1) {
+      return acc;
+    }
+    return `${acc}:${part}`;
+  }, 'hakemus:missingFields');
+}
+
+function applyLangKeyOverrides(
+  langKey: string,
+  pathParts: string[],
+  context: string | undefined,
+): string {
+  if (pathParts[0] === 'startTime' && context === 'kaivuilmoitus') {
+    return 'hakemus:missingFields:startTime_kaivuilmoitus';
+  }
+  if (pathParts[0] === 'endTime' && context === 'kaivuilmoitus') {
+    return 'hakemus:missingFields:endTime_kaivuilmoitus';
+  }
+  if (
+    (pathParts[0] === 'customerWithContacts' || pathParts[0] === 'invoicingCustomer') &&
+    pathParts.at(-1) === 'registryKey'
+  ) {
+    if (context === 'person') return `${langKey}_person`;
+    if (context === 'muu') return `${langKey}_muu`;
+  }
+  return langKey;
+}
+
 export function mapValidationErrorToErrorListItem(
   error: ValidationError,
   t: TFunction,
@@ -27,30 +75,8 @@ export function mapValidationErrorToErrorListItem(
     pathParts[0] = 'areas.empty';
   }
 
-  let context;
-  if (pathParts[0] === 'customerWithContacts') {
-    context = getTranslationContextForContactType(
-      formData.applicationData.customerWithContacts?.customer.type,
-    );
-  }
-  if (pathParts[0] === 'invoicingCustomer') {
-    context = getTranslationContextForContactType(formData.applicationData.invoicingCustomer?.type);
-  }
-  if (pathParts[0] === 'startTime') {
-    context = 'kaivuilmoitus';
-  }
-  if (pathParts[0] === 'endTime') {
-    context = 'kaivuilmoitus';
-  }
-  // Build a robust lang key. For areas we exclude the numeric index from the key
-  // but we still want a usable areaName fallback if the area has no name set.
-  const langKey = pathParts.reduce((acc, part, index) => {
-    if (pathParts[0] === 'areas' && index === 1) {
-      // Exclude the index from the lang key for areas
-      return acc;
-    }
-    return `${acc}:${part}`;
-  }, 'hakemus:missingFields');
+  const context = resolveContext(pathParts, formData);
+  const langKey = buildLangKey(pathParts);
 
   // Compute a safe areaName fallback when needed
   const areaIndex = pathParts[0] === 'areas' && pathParts[1] ? Number(pathParts[1]) : undefined;
@@ -61,27 +87,7 @@ export function mapValidationErrorToErrorListItem(
   const areaName =
     rawAreaName || (typeof areaIndex === 'number' ? `Hankealue ${areaIndex + 1}` : undefined);
 
-  // Handle special translation key variants used in fi.json for kaivuilmoitus start/end time
-  let resolvedLangKey = langKey;
-  if (pathParts[0] === 'startTime' && context === 'kaivuilmoitus') {
-    resolvedLangKey = 'hakemus:missingFields:startTime_kaivuilmoitus';
-  }
-  if (pathParts[0] === 'endTime' && context === 'kaivuilmoitus') {
-    resolvedLangKey = 'hakemus:missingFields:endTime_kaivuilmoitus';
-  }
-
-  // For registryKey translations we have context-specific translation keys like registryKey_person
-  // or registryKey_muu in the locales; map those here instead of relying on i18next context.
-  if (
-    (pathParts[0] === 'customerWithContacts' || pathParts[0] === 'invoicingCustomer') &&
-    pathParts.at(-1) === 'registryKey'
-  ) {
-    if (context === 'person') {
-      resolvedLangKey = `${resolvedLangKey}_person`;
-    } else if (context === 'muu') {
-      resolvedLangKey = `${resolvedLangKey}_muu`;
-    }
-  }
+  const resolvedLangKey = applyLangKeyOverrides(langKey, pathParts, context);
 
   // Temporary debug: log mapping decisions during tests to diagnose missing notification labels
 

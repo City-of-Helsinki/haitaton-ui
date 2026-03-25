@@ -32,6 +32,15 @@ import {
   createUnionFromAreas,
 } from '../../map/utils';
 
+function multipolygonContainsArea(
+  multipolygon: ReturnType<typeof createMultiPolygonFromAreas>,
+  alueGeometry: ApplicationGeometry,
+): boolean {
+  return multipolygon.geometry.coordinates.some((coordinates) =>
+    applicationGeometryContains(new ApplicationGeometry(coordinates), alueGeometry),
+  );
+}
+
 type Props = {
   alueIndex: number;
   drawSource: VectorSource;
@@ -165,9 +174,9 @@ export default function TyoalueTable({
             applicationAreaUnion.geometry,
             alueGeometry,
           );
-          const multipolygonContains = johtoselvitysAreasMultipolygon.geometry.coordinates.some(
-            (coordinates) =>
-              applicationGeometryContains(new ApplicationGeometry(coordinates), alueGeometry),
+          const multipolygonContains = multipolygonContainsArea(
+            johtoselvitysAreasMultipolygon,
+            alueGeometry,
           );
           return (
             areaIntersects &&

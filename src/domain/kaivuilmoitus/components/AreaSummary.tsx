@@ -16,7 +16,7 @@ import { getAreaDefaultName } from '../../application/utils';
 
 function getTyoalueGeometry(tyoalue: {
   geometry?: ApplicationGeometry;
-  openlayersFeature?: Feature | unknown;
+  openlayersFeature?: unknown;
 }): Geometry {
   try {
     // Prefer hydrated OpenLayers feature geometry if present
@@ -25,7 +25,7 @@ function getTyoalueGeometry(tyoalue: {
       const g = feature.getGeometry();
       if (g) return g;
     }
-    const appGeom = tyoalue.geometry as ApplicationGeometry | undefined;
+    const appGeom = tyoalue.geometry;
     if (appGeom?.coordinates) {
       return new Polygon(appGeom.coordinates);
     }

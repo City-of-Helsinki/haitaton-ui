@@ -31,7 +31,7 @@ export default function useDebouncedMutation<
     debouncedRef.current = debounce(
       (...args: Parameters<MutateFn>) => {
         // forward args to the current mutate function (use unknown[] for safe casting)
-        const currentMutate = mutateRef.current as MutateFn;
+        const currentMutate = mutateRef.current;
         return currentMutate(...(args as unknown as Parameters<MutateFn>));
       },
       debounceTime,

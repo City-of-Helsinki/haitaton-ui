@@ -28,7 +28,7 @@ export function convertFormStateToKaivuilmoitusUpdateData(
   ) as KaivuilmoitusUpdateData;
 
   const sourceAreas = Array.isArray(formState.applicationData?.areas)
-    ? formState.applicationData!.areas
+    ? formState.applicationData?.areas ?? []
     : [];
 
   const updatedAreas = sourceAreas.map((area) => {
@@ -67,9 +67,7 @@ export function buildPersistedApplicationFromForm(
   formState: KaivuilmoitusFormValues,
 ): Application<KaivuilmoitusData> {
   // Build the canonical update-shaped applicationData (ensures tyoalueet geometries are converted)
-  const processed = convertFormStateToKaivuilmoitusUpdateData(
-    formState as KaivuilmoitusFormValues,
-  ) as KaivuilmoitusData;
+  const processed = convertFormStateToKaivuilmoitusUpdateData(formState) as KaivuilmoitusData;
 
   // Start from a deep clone of the original form applicationData to preserve
   // optional fields that weren't part of the processed update shape (e.g. additionalInfo,

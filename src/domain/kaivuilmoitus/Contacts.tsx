@@ -112,11 +112,11 @@ export default function Contacts({ hankeTunnus }: Readonly<{ hankeTunnus: string
     if (regNorm !== registryKey) {
       setValue('applicationData.invoicingCustomer.registryKey', regNorm, { shouldValidate: true });
     }
-    const ovtNorm = normalizeStringEmptyToNull(ovt as string | null | undefined);
+    const ovtNorm = normalizeStringEmptyToNull(ovt);
     if (ovtNorm !== ovt) {
       setValue('applicationData.invoicingCustomer.ovt', ovtNorm, { shouldValidate: true });
     }
-    const opNorm = normalizeStringEmptyToNull(invoicingOperator as string | null | undefined);
+    const opNorm = normalizeStringEmptyToNull(invoicingOperator);
     if (opNorm !== invoicingOperator) {
       setValue('applicationData.invoicingCustomer.invoicingOperator', opNorm, {
         shouldValidate: true,

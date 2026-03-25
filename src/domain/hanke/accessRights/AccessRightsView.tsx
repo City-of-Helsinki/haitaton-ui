@@ -101,6 +101,13 @@ function UserIcon({
   }
 }
 
+function rolesAreEqual(r1: string[], r2: string[]): boolean {
+  if (r1.length !== r2.length) return false;
+  const s1 = [...r1].sort((a, b) => a.localeCompare(b));
+  const s2 = [...r2].sort((a, b) => a.localeCompare(b));
+  return s1.every((r, i) => r === s2[i]);
+}
+
 function sort(rowOneColumn: string, rowTwoColumn: string) {
   if (rowOneColumn === rowTwoColumn) {
     return 0;
@@ -213,10 +220,7 @@ function AccessRightsView({ hankeUsers, hankeTunnus, signedInUser, readonly }: R
             u.sahkoposti === nu.sahkoposti &&
             u.puhelinnumero === nu.puhelinnumero &&
             // Compare roles ignoring order to avoid unnecessary re-renders
-            u.roolit?.length === nu.roolit?.length &&
-            u.roolit
-              .toSorted((a, b) => a.localeCompare(b))
-              .every((r, idx) => r === nu.roolit.toSorted((a, b) => a.localeCompare(b))[idx])
+            rolesAreEqual(u.roolit ?? [], nu.roolit ?? [])
           );
         })
       ) {

@@ -102,9 +102,7 @@ export function buildPersistedApplicationFromForm(
   formState: JohtoselvitysFormValues,
 ): Application<JohtoselvitysData> {
   // Build the canonical update-shaped applicationData (ensures areas geometries are converted)
-  const processed = convertFormStateToJohtoselvitysUpdateData(
-    formState as JohtoselvitysFormValues,
-  ) as JohtoselvitysData;
+  const processed = convertFormStateToJohtoselvitysUpdateData(formState) as JohtoselvitysData;
 
   // Start from a deep clone of the original form applicationData to preserve
   // rich contact and optional fields that the update-shaped processed object

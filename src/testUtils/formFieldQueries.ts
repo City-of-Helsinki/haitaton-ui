@@ -12,48 +12,38 @@ export interface TypeSelectQueryOptions {
   debugOnFail?: boolean; // include DOM dump on failure
 }
 
-// Attempts to locate a single combobox representing a participant 'type' selector.
-export function findTypeSelect(opts: TypeSelectQueryOptions = {}) {
-  const { sectionLabel, typeLabel = /tyyppi/i, occurrence, debugOnFail = false } = opts;
+function getScopedQueryRoot(sectionLabel: RegExp | string | undefined): HTMLElement {
+  if (!sectionLabel) return document.body;
 
-  // 1. If sectionLabel provided, narrow search region to a landmark / heading container including that text.
-  let scoped: HTMLElement | undefined;
-  if (sectionLabel) {
-    // Try heading first
-    const sectionPattern =
-      typeof sectionLabel === 'string' ? new RegExp(sectionLabel, 'i') : sectionLabel;
-    const heading = screen
-      .queryAllByRole('heading')
-      .find((h) => sectionPattern.test(h.textContent || ''));
-    if (heading) {
-      // Use nearest section/fieldset/div wrapper heuristics
-      scoped =
-        heading.closest('section') ||
-        heading.closest('fieldset') ||
-        heading.parentElement ||
-        undefined;
-    }
-  }
+  const sectionPattern =
+    typeof sectionLabel === 'string' ? new RegExp(sectionLabel, 'i') : sectionLabel;
+  const heading = screen
+    .queryAllByRole('heading')
+    .find((h) => sectionPattern.test(h.textContent || ''));
 
-  const queryRoot = scoped || document.body;
+  if (!heading) return document.body;
+  return (
+    heading.closest('section') ||
+    heading.closest('fieldset') ||
+    heading.parentElement ||
+    document.body
+  );
+}
 
-  // 2. Collect all comboboxes with accessible name matching typeLabel within scoped root
+function findComboboxesIn(
+  queryRoot: HTMLElement,
+  typeLabel: RegExp,
+  sectionLabel: RegExp | string | undefined,
+  occurrence: number | undefined,
+): HTMLElement {
   let all = within(queryRoot).queryAllByRole('combobox', { name: typeLabel });
-
-  // If scoping was requested but produced no matches, fallback to document-wide search
   if (all.length === 0 && sectionLabel) {
     all = screen.queryAllByRole('combobox', { name: typeLabel });
   }
-
-  if (all.length === 1 && occurrence === undefined) {
-    return all[0];
-  }
-
+  if (all.length === 1 && occurrence === undefined) return all[0];
   if (all.length > 1) {
     if (occurrence !== undefined) {
-      if (occurrence >= 0 && occurrence < all.length) {
-        return all[occurrence];
-      }
+      if (occurrence >= 0 && occurrence < all.length) return all[occurrence];
       throw new Error(
         `findTypeSelect: occurrence ${occurrence} out of bounds (found ${all.length}). Names: ${all
           .map(
@@ -66,22 +56,49 @@ export function findTypeSelect(opts: TypeSelectQueryOptions = {}) {
           .join(' | ')}`,
       );
     }
-    // Try to further filter by presence of data-testid attribute patterns (future extension)
+    console.warn(
+      `findTypeSelect: multiple (${all.length}) matches for ${typeLabel}; returning first. Provide occurrence to disambiguate.`,
+    );
+    return all[0];
+  }
+  throw new Error(`findTypeSelect: no combobox found for ${typeLabel}`);
+}
+
+function findByLabelFallback(
+  queryRoot: HTMLElement,
+  typeLabel: RegExp,
+  occurrence: number | undefined,
+): HTMLElement {
+  const labelMatches = Array.from(queryRoot.querySelectorAll('label'))
+    .filter((l) => typeLabel.test(l.textContent || ''))
+    .map((l) => {
+      const forId = l.getAttribute('for');
+      return forId ? document.getElementById(forId) : l.querySelector('select,input');
+    })
+    .filter(Boolean) as HTMLElement[];
+
+  if (labelMatches.length === 1) return labelMatches[0];
+  if (labelMatches.length > 1 && occurrence !== undefined && occurrence < labelMatches.length) {
+    return labelMatches[occurrence];
+  }
+  throw new Error(`findTypeSelect: Unable to locate element via label fallback for ${typeLabel}`);
+}
+
+// Attempts to locate a single combobox representing a participant 'type' selector.
+export function findTypeSelect(opts: TypeSelectQueryOptions = {}) {
+  const { sectionLabel, typeLabel = /tyyppi/i, occurrence, debugOnFail = false } = opts;
+
+  const queryRoot = getScopedQueryRoot(sectionLabel);
+
+  try {
+    return findComboboxesIn(queryRoot, typeLabel, sectionLabel, occurrence);
+  } catch {
+    // combobox search failed — try label fallback
   }
 
-  if (all.length === 0) {
-    // 3. Fallback: search for input/select elements with label text including typeLabel inside the section.
-    const labelMatches = Array.from(queryRoot.querySelectorAll('label'))
-      .filter((l) => typeLabel.test(l.textContent || ''))
-      .map((l) => {
-        const forId = l.getAttribute('for');
-        return forId ? document.getElementById(forId) : l.querySelector('select,input');
-      })
-      .filter(Boolean) as HTMLElement[];
-    if (labelMatches.length === 1) return labelMatches[0];
-    if (labelMatches.length > 1 && occurrence !== undefined && occurrence < labelMatches.length) {
-      return labelMatches[occurrence];
-    }
+  try {
+    return findByLabelFallback(queryRoot, typeLabel, occurrence);
+  } catch {
     if (debugOnFail) {
       console.log('findTypeSelect debug: DOM snapshot', queryRoot.innerHTML.slice(0, 3000));
     }
@@ -90,13 +107,6 @@ export function findTypeSelect(opts: TypeSelectQueryOptions = {}) {
       `findTypeSelect: Unable to locate combobox with name matching ${typeLabel}${locationHint}`,
     );
   }
-
-  // Ambiguous case with multiple matches and no explicit occurrence: return first but warn.
-
-  console.warn(
-    `findTypeSelect: multiple (${all.length}) matches for ${typeLabel}; returning first. Provide occurrence to disambiguate.`,
-  );
-  return all[0];
 }
 
 // Async variant that waits for the combobox(es) to appear before delegating to the sync helper.

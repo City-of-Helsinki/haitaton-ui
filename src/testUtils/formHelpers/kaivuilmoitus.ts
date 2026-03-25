@@ -18,9 +18,46 @@ function FileListBuilder(files: File[]): FileList {
       item: (i: number) => files[i] ?? null,
     } as unknown as FileListLike;
     files.forEach((f, i) => {
-      (fileList as FileListLike)[i] = f;
+      fileList[i] = f;
     });
     return fileList;
+  }
+}
+
+async function configureCableReport(
+  user: UserEvent,
+  cableReportDone: boolean,
+  existingCableReport: string,
+): Promise<void> {
+  if (cableReportDone) {
+    const existingRadio = document.getElementById('createCableReportNo');
+    if (existingRadio) await user.click(existingRadio);
+    const dropdownButton = document.getElementById('applicationData.cableReports-main-button');
+    if (dropdownButton) await user.click(dropdownButton);
+    const tagInput = document.getElementById('applicationData.cableReports-input-element');
+    if (tagInput) {
+      await user.type(tagInput, existingCableReport);
+      fireEvent.keyDown(tagInput, { key: 'Enter', code: 'Enter' });
+    }
+  } else {
+    const createNewRadio = document.getElementById('createCableReportYes');
+    if (createNewRadio && !(createNewRadio as HTMLInputElement).checked) {
+      await user.click(createNewRadio);
+    }
+    const rockYes = screen.queryByLabelText(/kyllä/i) || screen.queryByLabelText(/yes/i);
+    if (rockYes) await user.click(rockYes);
+  }
+}
+
+async function addPlacementContracts(user: UserEvent, contracts: string[]): Promise<void> {
+  const placementInput =
+    screen.queryByLabelText(/sijoitussopimukset/i) || screen.queryByLabelText(/sijoitussopimus/i);
+  if (!placementInput) return;
+  for (const contract of contracts) {
+    if (!screen.queryByText(contract)) {
+      await user.type(placementInput, contract);
+      fireEvent.keyDown(placementInput, { key: 'Enter', code: 'Enter' });
+    }
   }
 }
 
@@ -69,39 +106,10 @@ export async function fillBasicInformation(
   }
 
   // Choose cable report mode (refined: use IDs to avoid ambiguous /johtoselvitys/ query collisions)
-  if (cableReportDone === true) {
-    const existingRadio = document.getElementById('createCableReportNo');
-    if (existingRadio) await user.click(existingRadio);
-    // Open multiselect button explicitly before typing
-    const dropdownButton = document.getElementById('applicationData.cableReports-main-button');
-    if (dropdownButton) {
-      await user.click(dropdownButton);
-    }
-    const tagInput = document.getElementById('applicationData.cableReports-input-element');
-    if (tagInput) {
-      await user.type(tagInput, existingCableReport);
-      fireEvent.keyDown(tagInput, { key: 'Enter', code: 'Enter' });
-    }
-  } else {
-    const createNewRadio = document.getElementById('createCableReportYes');
-    if (createNewRadio && !(createNewRadio as HTMLInputElement).checked) {
-      await user.click(createNewRadio);
-    }
-    const rockYes = screen.queryByLabelText(/kyllä/i) || screen.queryByLabelText(/yes/i);
-    if (rockYes) await user.click(rockYes);
-  }
+  await configureCableReport(user, cableReportDone, existingCableReport);
 
   // Placement contracts (TagInput) - add each value if not present already
-  const placementInput =
-    screen.queryByLabelText(/sijoitussopimukset/i) || screen.queryByLabelText(/sijoitussopimus/i);
-  if (placementInput) {
-    for (const contract of placementContracts) {
-      if (!screen.queryByText(contract)) {
-        await user.type(placementInput, contract);
-        fireEvent.keyDown(placementInput, { key: 'Enter', code: 'Enter' });
-      }
-    }
-  }
+  await addPlacementContracts(user, placementContracts);
 }
 
 export async function fillAreasInformation(
@@ -194,7 +202,7 @@ export async function fillContactsInformation(
   // Helper to get nth occurrence of input by its label text (case-insensitive)
   const byLabel = (labelRegex: RegExp, index = 0) => {
     const all = screen.queryAllByLabelText(labelRegex, { selector: 'input,textarea' });
-    return (all && all[index]) as HTMLInputElement | undefined;
+    return all?.[index] as HTMLInputElement | undefined;
   };
 
   // Customer (first block)
@@ -203,7 +211,7 @@ export async function fillContactsInformation(
   await user.clear(customerNameInput);
   await user.type(customerNameInput, customer.name);
   act(() => {
-    customerNameInput!.blur();
+    customerNameInput.blur();
   });
 
   // Registry key/email/phone fields appear later with same labels; rely on testIds that DO exist for these
@@ -240,7 +248,7 @@ export async function fillContactsInformation(
   await user.clear(contractorNameInput);
   await user.type(contractorNameInput, contractor.name);
   act(() => {
-    contractorNameInput!.blur();
+    contractorNameInput.blur();
   });
   const contractorRegKey = screen.getByTestId(
     'applicationData.contractorWithContacts.customer.registryKey',

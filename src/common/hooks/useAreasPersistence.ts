@@ -6,6 +6,41 @@ import { normalizeStringEmptyToNull } from '../utils/normalize';
 import { UseFormReturn } from 'react-hook-form';
 import merge from 'lodash/merge';
 
+type SetValueFn = (path: string, value: unknown, opts?: { shouldDirty?: boolean }) => void;
+
+function reconstructArea(a: Record<string, unknown>, appType: string | undefined) {
+  if (appType === 'CABLE_REPORT') {
+    try {
+      return mapToJohtoselvitysArea(a as ApplicationArea);
+    } catch {
+      // fall back to kaivu mapper
+    }
+  }
+  return mapToKaivuilmoitusArea(a as KaivuilmoitusAlue);
+}
+
+function hydrateFormAreas(
+  setValue: SetValueFn,
+  appData: Record<string, unknown>,
+  persistedApp: Record<string, unknown>,
+) {
+  const areasRaw = Array.isArray(appData.areas)
+    ? (appData.areas as Array<Record<string, unknown>>)
+    : undefined;
+  const appType =
+    (persistedApp.applicationType as string | undefined) ??
+    (appData.applicationType as string | undefined);
+  if (areasRaw) {
+    const updatedAreas = areasRaw.map((a) => reconstructArea(a, appType));
+    setValue('applicationData.areas', updatedAreas, { shouldDirty: false });
+  }
+  if (persistedApp.id !== undefined) setValue('id', persistedApp.id, { shouldDirty: false });
+  if (persistedApp.alluStatus !== undefined)
+    setValue('alluStatus', persistedApp.alluStatus, { shouldDirty: false });
+  if (persistedApp.applicationType !== undefined)
+    setValue('applicationType', persistedApp.applicationType, { shouldDirty: false });
+}
+
 /**
  * Helper to create a persistence instance for forms that store areas geometry.
  * The hook abstracts the select/afterHydrate behavior used in Johto and Kaivu
@@ -54,9 +89,7 @@ export default function useAreasPersistence<T extends object = Record<string, un
           const built = buildApiModel
             ? buildApiModel(values)
             : (() => {
-                const valuesObj = values as unknown as
-                  | { id?: unknown; alluStatus?: unknown }
-                  | undefined;
+                const valuesObj = values as { id?: unknown; alluStatus?: unknown } | undefined;
                 const applicationData = (
                   values as unknown as { applicationData: Record<string, unknown> | undefined }
                 ).applicationData;
@@ -77,7 +110,7 @@ export default function useAreasPersistence<T extends object = Record<string, un
         // fallback: persist a lightweight but richer applicationData subset to ensure tests and UI work
         try {
           type WithAppData = { applicationData?: Record<string, unknown> } | undefined;
-          const valuesObj = values as unknown as WithAppData;
+          const valuesObj = values as WithAppData;
           const ad = (valuesObj?.applicationData ?? {}) as Record<string, unknown>;
           const fallback = {
             id: (values as unknown as { id?: unknown })?.id ?? null,
@@ -99,9 +132,7 @@ export default function useAreasPersistence<T extends object = Record<string, un
         }
       }
 
-      const valuesObj = values as unknown as
-        | { applicationData?: Record<string, unknown> }
-        | undefined;
+      const valuesObj = values as { applicationData?: Record<string, unknown> } | undefined;
       const ad = (valuesObj?.applicationData ?? {}) as Record<string, unknown>;
 
       const base: Record<string, unknown> = {
@@ -161,65 +192,13 @@ export default function useAreasPersistence<T extends object = Record<string, un
     debounceMs: 250,
     afterHydrate(raw: unknown) {
       try {
-        if (raw && typeof raw === 'object' && (raw as Record<string, unknown>).applicationData) {
-          // Attempt to convert persisted API-shaped application into form defaults
-          const persistedApp = raw as Record<string, unknown>;
-          try {
-            const appData = persistedApp.applicationData as Record<string, unknown> | undefined;
-            if (appData) {
-              const setValue = (
-                formContext as unknown as {
-                  setValue: (
-                    path: string,
-                    value: unknown,
-                    opts?: { shouldDirty?: boolean },
-                  ) => void;
-                }
-              ).setValue;
-              // Reconstruct areas with OL features using mapToKaivuilmoitusArea
-              try {
-                const areasRaw = Array.isArray(appData.areas)
-                  ? (appData.areas as Array<Record<string, unknown>>)
-                  : undefined;
-                const appType =
-                  (persistedApp.applicationType as string | undefined) ??
-                  (appData.applicationType as string | undefined);
-                const updatedAreas = areasRaw
-                  ? areasRaw.map((a: Record<string, unknown>) => {
-                      // Choose mapping based on application type: Johtoselvitys (CABLE_REPORT) uses mapToJohtoselvitysArea
-                      try {
-                        if (appType === 'CABLE_REPORT') {
-                          return mapToJohtoselvitysArea(a as unknown as ApplicationArea);
-                        }
-                      } catch {
-                        // fall back to kaivu mapper below
-                      }
-                      return mapToKaivuilmoitusArea(a as unknown as KaivuilmoitusAlue);
-                    })
-                  : undefined;
-                // Write areas directly to applicationData.areas rather than the full
-                // applicationData parent object. Parent-object setValue does not reliably
-                // trigger watch('applicationData.areas') subscriptions in RHF v7 / React 18;
-                // applyPersisted already restored all other applicationData fields before
-                // afterHydrate runs.
-                if (updatedAreas) {
-                  setValue('applicationData.areas', updatedAreas, { shouldDirty: false });
-                }
-                const root = persistedApp;
-                if (root.id !== undefined) setValue('id', root.id, { shouldDirty: false });
-                if (root.alluStatus !== undefined)
-                  setValue('alluStatus', root.alluStatus, { shouldDirty: false });
-                if (root.applicationType !== undefined)
-                  setValue('applicationType', root.applicationType, { shouldDirty: false });
-                return;
-              } catch {
-                // ignore
-              }
-            }
-          } catch {
-            // ignore
-          }
-        }
+        if (!raw || typeof raw !== 'object') return;
+        const persistedApp = raw as Record<string, unknown>;
+        if (!persistedApp.applicationData) return;
+        const appData = persistedApp.applicationData as Record<string, unknown>;
+        // setValue is typed on the generic form context; cast once to access it
+        const setValue = (formContext as unknown as { setValue: SetValueFn }).setValue;
+        hydrateFormAreas(setValue, appData, persistedApp);
       } catch {
         // ignore
       }

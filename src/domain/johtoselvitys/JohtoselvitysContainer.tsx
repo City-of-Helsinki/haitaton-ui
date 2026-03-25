@@ -113,8 +113,7 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
     formContext,
     {
       persistAsApiModel: true,
-      buildApiModel: (values) =>
-        buildPersistedApplicationFromForm(values as JohtoselvitysFormValues),
+      buildApiModel: (values) => buildPersistedApplicationFromForm(values),
     },
   );
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

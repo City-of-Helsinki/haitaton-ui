@@ -99,7 +99,7 @@ const MultipageForm: React.FC<Props> = ({
   //  3. default 0
   let persistedStep: number | undefined;
   try {
-    if (stepPersistKey && typeof globalThis.window !== 'undefined') {
+    if (stepPersistKey && globalThis.window !== undefined) {
       const raw = sessionStorage.getItem(`${stepPersistKey}-activeStep`);
       if (raw !== null) {
         const parsed = Number.parseInt(raw, 10);
