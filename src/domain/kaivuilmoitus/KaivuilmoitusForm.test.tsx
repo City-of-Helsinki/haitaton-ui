@@ -1510,13 +1510,9 @@ describe('Registry key', () => {
       const registryKeyTestId = 'applicationData.contractorWithContacts.customer.registryKey';
 
       for (const s of scenarios) {
-        // Click body first to clear focus from previous iteration, then open select.
-        await user.click(document.body);
         await user.click(getTypeSelect());
-        let optionCandidates: HTMLElement[] = [];
-        try {
-          optionCandidates = await screen.findAllByText(s.optionText, {}, { timeout: 2000 });
-        } catch {
+        const optionCandidates = screen.queryAllByText(s.optionText);
+        if (!optionCandidates.length) {
           if (s.optional) {
             continue; // option not present in this environment, skip gracefully
           }
