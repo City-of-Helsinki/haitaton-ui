@@ -10,7 +10,7 @@ export default tseslint.config(
       'eslint.config.mjs',
       'build/**',
       'public/**',
-      'src/jest.polyfills.js',
+      'src/vitest.polyfills.js',
       'src/react-app-env.d.ts',
       'src/serviceWorker.ts',
       'scripts/update-runtime-env.ts',

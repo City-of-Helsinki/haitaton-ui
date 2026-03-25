@@ -5,7 +5,7 @@
 import 'regenerator-runtime/runtime';
 import '@testing-library/jest-dom';
 import { configure } from '@testing-library/react';
-import './jest.polyfills';
+import './vitest.polyfills';
 
 // Increase async timeout for waitFor/findBy* — the default 1000ms is too tight
 // when running 73 test files in parallel and the system is under CPU load.

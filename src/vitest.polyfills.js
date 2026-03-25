@@ -1,5 +1,5 @@
 /**
- * This is compiled from a few sources to get MWS 2 to work with jest and create-react-app.
+ * This is compiled from a few sources to get MSW 2 to work with Vitest and JSDOM.
  *
  * https://mswjs.io/docs/migrations/1.x-to-2.x/
  * https://github.com/mswjs/msw/issues/1796
@@ -7,7 +7,7 @@
 
 /**
  * @note The block below contains polyfills for Node.js globals
- * required for Jest to function when running JSDOM tests.
+ * required for Vitest to function when running JSDOM tests.
  * These HAVE to be require's and HAVE to be in this exact
  * order, since "undici" depends on the "TextEncoder" global API.
  *
@@ -68,7 +68,7 @@ Object.defineProperties(globalThis, {
 });
 
 // Add scrollTo polyfill for DOM elements (needed for Chakra UI Menu)
-if (globalThis.window !== undefined && !Element.prototype.scrollTo) {
+if (!Element.prototype.scrollTo) {
   Element.prototype.scrollTo = function (options) {
     if (typeof options === 'object' && options !== null) {
       this.scrollLeft = options.left || 0;
