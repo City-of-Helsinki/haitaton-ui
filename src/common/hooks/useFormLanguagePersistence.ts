@@ -138,7 +138,7 @@ export default function useFormLanguagePersistence<T extends object>(
     if (!enabled) return;
     try {
       const allValues = getValues();
-      const persistable = select ? select(allValues as T) : allValues;
+      const persistable = select ? select(allValues) : allValues;
       const json = safeStringify(persistable);
       if (json) {
         sessionStorage.setItem(storageKey, json);
