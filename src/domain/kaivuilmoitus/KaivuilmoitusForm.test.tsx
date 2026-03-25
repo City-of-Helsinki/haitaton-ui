@@ -1,5 +1,6 @@
-import { UserEvent } from '@testing-library/user-event/dist/types/setup/setup';
+import { UserEvent } from '@testing-library/user-event';
 import { http, HttpResponse } from 'msw';
+import { act } from '@testing-library/react';
 import { cleanup, render, screen, waitFor, within } from '../../testUtils/render';
 import KaivuilmoitusContainer from './KaivuilmoitusContainer';
 import { HankeData } from '../types/hanke';
@@ -192,14 +193,14 @@ test('Should fill kaivuilmoitus form and show summary', async () => {
   );
   // Prevent real FormData/axios upload flow by mocking uploadAttachment used by FileUpload
   const accumulatedUploads: ApplicationAttachmentMetadata[] = [];
-  const uploadSpy = jest
+  const uploadSpy = vi
     .spyOn(applicationAttachmentsApi, 'uploadAttachment')
     .mockImplementation(async (args) => {
       const meta = await uploadApplicationAttachmentMock(args);
       accumulatedUploads.push(meta);
-      jest
-        .spyOn(applicationAttachmentsApi, 'getAttachments')
-        .mockResolvedValue(accumulatedUploads.slice());
+      vi.spyOn(applicationAttachmentsApi, 'getAttachments').mockResolvedValue(
+        accumulatedUploads.slice(),
+      );
       return meta;
     });
   await fillBasicInformation(user, {
@@ -629,25 +630,33 @@ test('Postal address fields should be required if OVT fields are empty', async (
 
   await user.clear(screen.getByTestId('applicationData.invoicingCustomer.ovt'));
   await user.type(screen.getByTestId('applicationData.invoicingCustomer.ovt'), '123456789012');
-  (screen.getByTestId('applicationData.invoicingCustomer.ovt') as HTMLInputElement).blur();
+  act(() => {
+    (screen.getByTestId('applicationData.invoicingCustomer.ovt') as HTMLInputElement).blur();
+  });
   await user.clear(screen.getByTestId('applicationData.invoicingCustomer.invoicingOperator'));
   await user.type(
     screen.getByTestId('applicationData.invoicingCustomer.invoicingOperator'),
     '12345',
   );
-  (
-    screen.getByTestId('applicationData.invoicingCustomer.invoicingOperator') as HTMLInputElement
-  ).blur();
+  act(() => {
+    (
+      screen.getByTestId('applicationData.invoicingCustomer.invoicingOperator') as HTMLInputElement
+    ).blur();
+  });
 
-  expect(
-    screen.getByTestId('applicationData.invoicingCustomer.postalAddress.streetAddress.streetName'),
-  ).not.toBeRequired();
-  expect(
-    screen.getByTestId('applicationData.invoicingCustomer.postalAddress.postalCode'),
-  ).not.toBeRequired();
-  expect(
-    screen.getByTestId('applicationData.invoicingCustomer.postalAddress.city'),
-  ).not.toBeRequired();
+  await waitFor(() => {
+    expect(
+      screen.getByTestId(
+        'applicationData.invoicingCustomer.postalAddress.streetAddress.streetName',
+      ),
+    ).not.toBeRequired();
+    expect(
+      screen.getByTestId('applicationData.invoicingCustomer.postalAddress.postalCode'),
+    ).not.toBeRequired();
+    expect(
+      screen.getByTestId('applicationData.invoicingCustomer.postalAddress.city'),
+    ).not.toBeRequired();
+  });
 });
 
 test('OVT fields should be required if postal address fields are empty', async () => {
@@ -666,11 +675,13 @@ test('OVT fields should be required if postal address fields are empty', async (
     screen.getByTestId('applicationData.invoicingCustomer.postalAddress.streetAddress.streetName'),
     'Katu 1',
   );
-  (
-    screen.getByTestId(
-      'applicationData.invoicingCustomer.postalAddress.streetAddress.streetName',
-    ) as HTMLInputElement
-  ).blur();
+  act(() => {
+    (
+      screen.getByTestId(
+        'applicationData.invoicingCustomer.postalAddress.streetAddress.streetName',
+      ) as HTMLInputElement
+    ).blur();
+  });
   await user.clear(
     screen.getByTestId('applicationData.invoicingCustomer.postalAddress.postalCode'),
   );
@@ -678,28 +689,34 @@ test('OVT fields should be required if postal address fields are empty', async (
     screen.getByTestId('applicationData.invoicingCustomer.postalAddress.postalCode'),
     '00100',
   );
-  (
-    screen.getByTestId(
-      'applicationData.invoicingCustomer.postalAddress.postalCode',
-    ) as HTMLInputElement
-  ).blur();
+  act(() => {
+    (
+      screen.getByTestId(
+        'applicationData.invoicingCustomer.postalAddress.postalCode',
+      ) as HTMLInputElement
+    ).blur();
+  });
   await user.clear(screen.getByTestId('applicationData.invoicingCustomer.postalAddress.city'));
   await user.type(
     screen.getByTestId('applicationData.invoicingCustomer.postalAddress.city'),
     'Helsinki',
   );
-  (
-    screen.getByTestId('applicationData.invoicingCustomer.postalAddress.city') as HTMLInputElement
-  ).blur();
+  act(() => {
+    (
+      screen.getByTestId('applicationData.invoicingCustomer.postalAddress.city') as HTMLInputElement
+    ).blur();
+  });
 
-  expect(screen.getByTestId('applicationData.invoicingCustomer.ovt')).not.toBeRequired();
-  expect(
-    screen.getByTestId('applicationData.invoicingCustomer.invoicingOperator'),
-  ).not.toBeRequired();
+  await waitFor(() => {
+    expect(screen.getByTestId('applicationData.invoicingCustomer.ovt')).not.toBeRequired();
+    expect(
+      screen.getByTestId('applicationData.invoicingCustomer.invoicingOperator'),
+    ).not.toBeRequired();
+  });
 });
 
 test('OVT and registryKey fields should be send as null if they are left empty', async () => {
-  const applicationUpdateSpy = jest.spyOn(applicationApi, 'updateApplication');
+  const applicationUpdateSpy = vi.spyOn(applicationApi, 'updateApplication');
   const hankeData = hankkeet[1] as HankeData;
   const application = cloneDeep(applications[5] as Application<KaivuilmoitusData>);
   const testApplication: Application<KaivuilmoitusData> = {
@@ -747,7 +764,7 @@ test('OVT and registryKey fields should be send as null if they are left empty',
 });
 
 test('OVT and registryKey fields should be send as null if they are left empty by changing customer type', async () => {
-  const applicationUpdateSpy = jest.spyOn(applicationApi, 'updateApplication');
+  const applicationUpdateSpy = vi.spyOn(applicationApi, 'updateApplication');
   const hankeData = hankkeet[1] as HankeData;
   const application = cloneDeep(applications[5] as Application<KaivuilmoitusData>);
   const testApplication: Application<KaivuilmoitusData> = {
@@ -800,7 +817,7 @@ test('Should be able to upload attachments', async () => {
   const attachmentsResponse: ApplicationAttachmentMetadata[] = [];
   initApplicationAttachmentGetResponse(attachmentsResponse);
   let idCounter = 0;
-  const uploadSpy = jest
+  const uploadSpy = vi
     .spyOn(applicationAttachmentsApi, 'uploadAttachment')
     .mockImplementation(async (args) => {
       const { applicationId, attachmentType, file } = args;
@@ -1359,9 +1376,13 @@ describe('Registry key', () => {
       const registryKeyTestId = 'applicationData.customerWithContacts.customer.registryKey';
 
       for (const s of scenarios) {
+        // Click body first to clear focus from previous iteration, then open select.
+        await user.click(document.body);
         await user.click(getTypeSelect());
-        const optionCandidates = screen.queryAllByText(s.optionText);
-        if (!optionCandidates.length) {
+        let optionCandidates: HTMLElement[] = [];
+        try {
+          optionCandidates = await screen.findAllByText(s.optionText, {}, { timeout: 2000 });
+        } catch {
           if (s.optional) continue;
           throw new Error(`Expected customer option '${s.optionText}' not found`);
         }
@@ -1442,7 +1463,6 @@ describe('Registry key', () => {
       try {
         error = await screen.findByText(/virheellinen/i, {}, { timeout: 1000 });
       } catch {
-        // eslint-disable-next-line no-console
         console.warn('Expected validation error text (virheellinen) not found – tolerated');
       }
       if (error) expect(error).toBeInTheDocument();
@@ -1490,7 +1510,6 @@ describe('Registry key', () => {
       const registryKeyTestId = 'applicationData.contractorWithContacts.customer.registryKey';
 
       for (const s of scenarios) {
-        // Open the select (clicking twice to ensure menu opens in case it retains focus state between iterations)
         await user.click(getTypeSelect());
         const optionCandidates = screen.queryAllByText(s.optionText);
         if (!optionCandidates.length) {
@@ -1510,20 +1529,18 @@ describe('Registry key', () => {
           if (field.hasAttribute('disabled')) {
             expect(field).toBeDisabled();
           } else {
-            // eslint-disable-next-line no-console
             console.warn(
               `Field expected disabled for '${s.optionText}' but was enabled – tolerated.`,
             );
           }
         } else if (field.hasAttribute('disabled')) {
           // In some edge cases the field may still be disabled due to form state; log if so but don't fail.
-          // eslint-disable-next-line no-console
+
           console.warn(`Registry key unexpectedly disabled for '${s.optionText}'`);
         } else if (s.required) {
           if (field.hasAttribute('required')) {
             expect(field).toBeRequired();
           } else {
-            // eslint-disable-next-line no-console
             console.warn(
               `Registry key expected to be required for '${s.optionText}' but is not. (Tolerated)`,
             );
@@ -1531,7 +1548,6 @@ describe('Registry key', () => {
         } else if (!s.required) {
           // If it shows up as required unexpectedly we still allow it; just log.
           if (field.hasAttribute('required')) {
-            // eslint-disable-next-line no-console
             console.warn(
               `Registry key not expected to be required for '${s.optionText}' but is required. (Tolerated)`,
             );
@@ -1539,6 +1555,79 @@ describe('Registry key', () => {
           // Soft assertion: prefer NOT required, but don't fail if required.
         }
       }
+    });
+
+    test('Should show y-tunnus label when type is other', async () => {
+      const { user } = render(
+        <KaivuilmoitusContainer hankeData={hankeData} application={testApplication} />,
+      );
+      await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+
+      await user.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[1]);
+      await user.click(screen.getAllByText('Muu')[0]);
+
+      expect(await screen.findAllByText('Y-tunnus')).toHaveLength(3);
+      expect(
+        screen.queryByText('Y-tunnus, henkilötunnus tai muu yksilöivä tunnus'),
+      ).not.toBeInTheDocument();
+    });
+
+    test('Registry key is required for company and association customer types', async () => {
+      const { user } = render(
+        <KaivuilmoitusContainer hankeData={hankeData} application={testApplication} />,
+      );
+      await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+
+      // company
+      await user.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[1]);
+      await user.click(screen.getAllByText('Yritys')[1]);
+
+      expect(
+        await screen.findByTestId('applicationData.contractorWithContacts.customer.registryKey'),
+      ).toBeRequired();
+
+      cleanup();
+
+      const { user: secondUser } = render(
+        <KaivuilmoitusContainer hankeData={hankeData} application={testApplication} />,
+      );
+      await secondUser.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+
+      // association
+      await secondUser.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[1]);
+      await secondUser.click(screen.getAllByText('Yhdistys')[0]);
+
+      expect(
+        await screen.findByTestId('applicationData.contractorWithContacts.customer.registryKey'),
+      ).toBeRequired();
+    });
+
+    test('Registry key is disabled for private customer type', async () => {
+      const { user } = render(
+        <KaivuilmoitusContainer hankeData={hankeData} application={testApplication} />,
+      );
+      await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+
+      await user.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[1]);
+      await user.click(screen.getAllByText('Yksityishenkilö')[0]);
+
+      expect(
+        await screen.findByTestId('applicationData.contractorWithContacts.customer.registryKey'),
+      ).toBeDisabled();
+    });
+
+    test('Registry key is disabled for other customer type', async () => {
+      const { user } = render(
+        <KaivuilmoitusContainer hankeData={hankeData} application={testApplication} />,
+      );
+      await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+
+      await user.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[1]);
+      await user.click(screen.getAllByText('Muu')[0]);
+
+      expect(
+        await screen.findByTestId('applicationData.contractorWithContacts.customer.registryKey'),
+      ).toBeDisabled();
     });
   });
 
@@ -1666,7 +1755,7 @@ describe('Haittojenhallintasuunnitelma', () => {
 
   test('Haittojenhallintasuunnitelma can be filled', async () => {
     const updatedHaittojenhallintasuunnitelma = ', johon on lisätty tekstiä.';
-    const applicationUpdateSpy = jest.spyOn(applicationApi, 'updateApplication');
+    const applicationUpdateSpy = vi.spyOn(applicationApi, 'updateApplication');
     const { user } = await setupHaittojenHallintaPage();
     const textAreas = screen.queryAllByRole('textbox');
     if (textAreas.length) {
@@ -1676,7 +1765,7 @@ describe('Haittojenhallintasuunnitelma', () => {
     } else {
       // No editable fields present in current UI variant; proceed to navigation only.
       // This preserves the test without failing due to UI redesign.
-      // eslint-disable-next-line no-console
+
       console.warn(
         'No editable haittojenhallintasuunnitelma textboxes found; skipping fill portion',
       );
@@ -1729,7 +1818,6 @@ describe('Haittojenhallintasuunnitelma', () => {
         await screen.findByText(/Linja-autoliikenteelle koituvien.*haittojen hallintasuunnitelma/i),
       ).toBeInTheDocument();
     } else {
-      // eslint-disable-next-line no-console
       console.warn('Add nuisance button not present; skipping remainder of test');
     }
   });
@@ -1767,7 +1855,6 @@ describe('Haittojenhallintasuunnitelma', () => {
       await user.clear(textboxes[0] as HTMLInputElement);
       (textboxes[0] as HTMLInputElement).blur();
     } else {
-      // eslint-disable-next-line no-console
       console.warn('No textbox found to clear for yleinen field attention test');
     }
 
@@ -1782,31 +1869,43 @@ describe('Haittojenhallintasuunnitelma', () => {
 
     // Fill minimal perustiedot to avoid baseline step 1 attention conflicting with test intent
     await user.type(screen.getByLabelText(/työn nimi/i), 'Testi');
-    screen.getByLabelText(/työn nimi/i).blur();
+    act(() => {
+      screen.getByLabelText(/työn nimi/i).blur();
+    });
     await user.type(screen.getByLabelText(/työn kuvaus/i), 'Kuvaus');
-    screen.getByLabelText(/työn kuvaus/i).blur();
+    act(() => {
+      screen.getByLabelText(/työn kuvaus/i).blur();
+    });
     await user.click(screen.getByRole('checkbox', { name: /työstä vastaavana/i }));
 
     await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
 
     const nameInput = screen.getAllByRole('combobox', { name: /nimi/i })[0] as HTMLInputElement;
     await user.clear(nameInput);
-    nameInput.blur();
+    act(() => {
+      nameInput.blur();
+    });
     const regKeyInput = screen.getByTestId(
       'applicationData.customerWithContacts.customer.registryKey',
     ) as HTMLInputElement;
     await user.clear(regKeyInput);
-    regKeyInput.blur();
+    act(() => {
+      regKeyInput.blur();
+    });
     const emailInput = screen.getByTestId(
       'applicationData.customerWithContacts.customer.email',
     ) as HTMLInputElement;
     await user.clear(emailInput);
-    emailInput.blur();
+    act(() => {
+      emailInput.blur();
+    });
     const phoneInput = screen.getByTestId(
       'applicationData.customerWithContacts.customer.phone',
     ) as HTMLInputElement;
     await user.clear(phoneInput);
-    phoneInput.blur();
+    act(() => {
+      phoneInput.blur();
+    });
 
     await user.click(screen.getByRole('button', { name: /seuraava/i }));
 

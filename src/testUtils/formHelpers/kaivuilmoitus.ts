@@ -1,4 +1,4 @@
-import { screen, fireEvent, waitFor, within } from '@testing-library/react';
+import { act, screen, fireEvent, waitFor, within } from '@testing-library/react';
 import { UserEvent } from '@testing-library/user-event';
 
 // Utility to build a FileList object programmatically (define before usage to satisfy linters)
@@ -18,9 +18,45 @@ function FileListBuilder(files: File[]): FileList {
       item: (i: number) => files[i] ?? null,
     } as unknown as FileListLike;
     files.forEach((f, i) => {
-      (fileList as FileListLike)[i] = f;
+      fileList[i] = f;
     });
     return fileList;
+  }
+}
+
+async function configureExistingCableReport(
+  user: UserEvent,
+  existingCableReport: string,
+): Promise<void> {
+  const existingRadio = document.getElementById('createCableReportNo');
+  if (existingRadio) await user.click(existingRadio);
+  const dropdownButton = document.getElementById('applicationData.cableReports-main-button');
+  if (dropdownButton) await user.click(dropdownButton);
+  const tagInput = document.getElementById('applicationData.cableReports-input-element');
+  if (tagInput) {
+    await user.type(tagInput, existingCableReport);
+    fireEvent.keyDown(tagInput, { key: 'Enter', code: 'Enter' });
+  }
+}
+
+async function configureNewCableReport(user: UserEvent): Promise<void> {
+  const createNewRadio = document.getElementById('createCableReportYes');
+  if (createNewRadio && !(createNewRadio as HTMLInputElement).checked) {
+    await user.click(createNewRadio);
+  }
+  const rockYes = screen.queryByLabelText(/kyllä/i) || screen.queryByLabelText(/yes/i);
+  if (rockYes) await user.click(rockYes);
+}
+
+async function addPlacementContracts(user: UserEvent, contracts: string[]): Promise<void> {
+  const placementInput =
+    screen.queryByLabelText(/sijoitussopimukset/i) || screen.queryByLabelText(/sijoitussopimus/i);
+  if (!placementInput) return;
+  for (const contract of contracts) {
+    if (!screen.queryByText(contract)) {
+      await user.type(placementInput, contract);
+      fireEvent.keyDown(placementInput, { key: 'Enter', code: 'Enter' });
+    }
   }
 }
 
@@ -50,13 +86,17 @@ export async function fillBasicInformation(
   const nameInput = screen.getByLabelText(/työn nimi/i);
   await user.clear(nameInput);
   await user.type(nameInput, name);
-  (nameInput as HTMLInputElement).blur();
+  act(() => {
+    (nameInput as HTMLInputElement).blur();
+  });
 
   // Description
   const descriptionInput = screen.getByLabelText(/työn kuvaus/i);
   await user.clear(descriptionInput);
   await user.type(descriptionInput, description);
-  (descriptionInput as HTMLInputElement).blur();
+  act(() => {
+    (descriptionInput as HTMLInputElement).blur();
+  });
 
   // Work type: tick construction work to satisfy validation (any one is enough)
   const constructionCheckbox = screen.getByLabelText(/uuden rakenteen tai johdon rakentamisesta/i);
@@ -65,39 +105,14 @@ export async function fillBasicInformation(
   }
 
   // Choose cable report mode (refined: use IDs to avoid ambiguous /johtoselvitys/ query collisions)
-  if (cableReportDone === true) {
-    const existingRadio = document.getElementById('createCableReportNo');
-    if (existingRadio) await user.click(existingRadio);
-    // Open multiselect button explicitly before typing
-    const dropdownButton = document.getElementById('applicationData.cableReports-main-button');
-    if (dropdownButton) {
-      await user.click(dropdownButton);
-    }
-    const tagInput = document.getElementById('applicationData.cableReports-input-element');
-    if (tagInput) {
-      await user.type(tagInput, existingCableReport);
-      fireEvent.keyDown(tagInput, { key: 'Enter', code: 'Enter' });
-    }
+  if (cableReportDone) {
+    await configureExistingCableReport(user, existingCableReport);
   } else {
-    const createNewRadio = document.getElementById('createCableReportYes');
-    if (createNewRadio && !(createNewRadio as HTMLInputElement).checked) {
-      await user.click(createNewRadio);
-    }
-    const rockYes = screen.queryByLabelText(/kyllä/i) || screen.queryByLabelText(/yes/i);
-    if (rockYes) await user.click(rockYes);
+    await configureNewCableReport(user);
   }
 
   // Placement contracts (TagInput) - add each value if not present already
-  const placementInput =
-    screen.queryByLabelText(/sijoitussopimukset/i) || screen.queryByLabelText(/sijoitussopimus/i);
-  if (placementInput) {
-    for (const contract of placementContracts) {
-      if (!screen.queryByText(contract)) {
-        await user.type(placementInput, contract);
-        fireEvent.keyDown(placementInput, { key: 'Enter', code: 'Enter' });
-      }
-    }
-  }
+  await addPlacementContracts(user, placementContracts);
 }
 
 export async function fillAreasInformation(
@@ -110,12 +125,12 @@ export async function fillAreasInformation(
   const startInput = screen.getByLabelText(/alkupäivä/i);
   await user.clear(startInput);
   await user.type(startInput, start);
-  (startInput as HTMLInputElement).blur();
+  await user.tab();
 
   const endInput = screen.getByLabelText(/loppupäivä/i);
   await user.clear(endInput);
   await user.type(endInput, end);
-  (endInput as HTMLInputElement).blur();
+  await user.tab();
 }
 
 export async function fillContactsInformation(
@@ -164,9 +179,7 @@ export async function fillContactsInformation(
     },
   } = options;
   // Ensure we are on the Yhteystiedot step; if not, click stepper button and wait for form to render
-  const contactsStepButton = screen
-    .queryAllByRole('button', { name: /yhteystiedot/i })
-    .slice(-1)[0];
+  const contactsStepButton = screen.queryAllByRole('button', { name: /yhteystiedot/i }).at(-1);
   async function ensureContactsStep() {
     const targetTestId = 'applicationData.invoicingCustomer.name';
     if (screen.queryByTestId(targetTestId)) return; // already there
@@ -192,7 +205,7 @@ export async function fillContactsInformation(
   // Helper to get nth occurrence of input by its label text (case-insensitive)
   const byLabel = (labelRegex: RegExp, index = 0) => {
     const all = screen.queryAllByLabelText(labelRegex, { selector: 'input,textarea' });
-    return (all && all[index]) as HTMLInputElement | undefined;
+    return all?.[index] as HTMLInputElement | undefined;
   };
 
   // Customer (first block)
@@ -200,7 +213,9 @@ export async function fillContactsInformation(
   if (!customerNameInput) throw new Error('Customer name input not found via label');
   await user.clear(customerNameInput);
   await user.type(customerNameInput, customer.name);
-  customerNameInput.blur();
+  act(() => {
+    customerNameInput.blur();
+  });
 
   // Registry key/email/phone fields appear later with same labels; rely on testIds that DO exist for these
   const customerRegKey = screen.getByTestId(
@@ -208,15 +223,21 @@ export async function fillContactsInformation(
   );
   await user.clear(customerRegKey);
   await user.type(customerRegKey, customer.registryKey);
-  (customerRegKey as HTMLInputElement).blur();
+  act(() => {
+    (customerRegKey as HTMLInputElement).blur();
+  });
   const customerEmail = screen.getByTestId('applicationData.customerWithContacts.customer.email');
   await user.clear(customerEmail);
   await user.type(customerEmail, customer.email);
-  (customerEmail as HTMLInputElement).blur();
+  act(() => {
+    (customerEmail as HTMLInputElement).blur();
+  });
   const customerPhone = screen.getByTestId('applicationData.customerWithContacts.customer.phone');
   await user.clear(customerPhone);
   await user.type(customerPhone, customer.phone);
-  (customerPhone as HTMLInputElement).blur();
+  act(() => {
+    (customerPhone as HTMLInputElement).blur();
+  });
 
   // Contractor (second block): select type combobox (index 1) then fill name etc.
   const typeComboboxes = screen.getAllByRole('combobox', { name: /tyyppi/i });
@@ -229,25 +250,33 @@ export async function fillContactsInformation(
   if (!contractorNameInput) throw new Error('Contractor name input not found via label');
   await user.clear(contractorNameInput);
   await user.type(contractorNameInput, contractor.name);
-  contractorNameInput.blur();
+  act(() => {
+    contractorNameInput.blur();
+  });
   const contractorRegKey = screen.getByTestId(
     'applicationData.contractorWithContacts.customer.registryKey',
   );
   await user.clear(contractorRegKey);
   await user.type(contractorRegKey, contractor.registryKey);
-  (contractorRegKey as HTMLInputElement).blur();
+  act(() => {
+    (contractorRegKey as HTMLInputElement).blur();
+  });
   const contractorEmail = screen.getByTestId(
     'applicationData.contractorWithContacts.customer.email',
   );
   await user.clear(contractorEmail);
   await user.type(contractorEmail, contractor.email);
-  (contractorEmail as HTMLInputElement).blur();
+  act(() => {
+    (contractorEmail as HTMLInputElement).blur();
+  });
   const contractorPhone = screen.getByTestId(
     'applicationData.contractorWithContacts.customer.phone',
   );
   await user.clear(contractorPhone);
   await user.type(contractorPhone, contractor.phone);
-  (contractorPhone as HTMLInputElement).blur();
+  act(() => {
+    (contractorPhone as HTMLInputElement).blur();
+  });
 
   // Invoicing customer (third block)
   if (typeComboboxes[2]) {
@@ -256,32 +285,52 @@ export async function fillContactsInformation(
     await user.click(invoicingTypeOption);
   }
   const invNameInput = screen.getByTestId('applicationData.invoicingCustomer.name');
-  await user.clear(invNameInput);
-  await user.type(invNameInput, invoicingCustomer.name);
-  (invNameInput as HTMLInputElement).blur();
+  act(() => {
+    fireEvent.change(invNameInput, { target: { value: invoicingCustomer.name } });
+  });
+  act(() => {
+    (invNameInput as HTMLInputElement).blur();
+  });
+  // Use fireEvent.change for registryKey to avoid Effect 3 in Contacts.tsx normalizing the
+  // intermediate empty string to null (user.clear → '' → Effect 3 setValue(null) → user.type
+  // cannot reliably recover in JSDOM + Vitest environment).
   const invRegKey = screen.getByTestId('applicationData.invoicingCustomer.registryKey');
-  await user.clear(invRegKey);
-  await user.type(invRegKey, invoicingCustomer.registryKey);
-  (invRegKey as HTMLInputElement).blur();
+  act(() => {
+    fireEvent.change(invRegKey, { target: { value: invoicingCustomer.registryKey } });
+  });
+  act(() => {
+    (invRegKey as HTMLInputElement).blur();
+  });
 
   // If invoicing customer has OVT details
   if (invoicingCustomer.ovt) {
     const ovtInput = screen.getByTestId('applicationData.invoicingCustomer.ovt');
-    await user.clear(ovtInput);
-    await user.type(ovtInput, invoicingCustomer.ovt);
-    (ovtInput as HTMLInputElement).blur();
+    // fireEvent.change avoids the intermediate '' → null normalization via Effect 3.
+    act(() => {
+      fireEvent.change(ovtInput, { target: { value: invoicingCustomer.ovt } });
+    });
+    act(() => {
+      (ovtInput as HTMLInputElement).blur();
+    });
   }
   if (invoicingCustomer.invoicingOperator) {
     const opInput = screen.getByTestId('applicationData.invoicingCustomer.invoicingOperator');
-    await user.clear(opInput);
-    await user.type(opInput, invoicingCustomer.invoicingOperator);
-    (opInput as HTMLInputElement).blur();
+    // Same fireEvent.change approach as registryKey (see comment above).
+    act(() => {
+      fireEvent.change(opInput, { target: { value: invoicingCustomer.invoicingOperator } });
+    });
+    act(() => {
+      (opInput as HTMLInputElement).blur();
+    });
   }
   if (invoicingCustomer.customerReference) {
     const refInput = screen.getByTestId('applicationData.invoicingCustomer.customerReference');
-    await user.clear(refInput);
-    await user.type(refInput, invoicingCustomer.customerReference);
-    (refInput as HTMLInputElement).blur();
+    act(() => {
+      fireEvent.change(refInput, { target: { value: invoicingCustomer.customerReference } });
+    });
+    act(() => {
+      (refInput as HTMLInputElement).blur();
+    });
   }
 
   if (invoicingCustomer.postalAddress) {
@@ -289,41 +338,57 @@ export async function fillContactsInformation(
     // { postalAddress: { streetAddress: { streetName }, postalCode, city } }
     // Some earlier test data objects may still provide postalAddress.streetName directly.
     // Support both to avoid undefined access errors by falling back gracefully.
+    const postalAddress = invoicingCustomer.postalAddress;
     const street = screen.getByTestId(
       'applicationData.invoicingCustomer.postalAddress.streetAddress.streetName',
     );
     const streetValue =
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (invoicingCustomer.postalAddress as any).streetAddress?.streetName ||
-      invoicingCustomer.postalAddress.streetName;
+      (postalAddress as any).streetAddress?.streetName || postalAddress.streetName;
     if (streetValue) {
-      await user.clear(street);
-      await user.type(street, streetValue);
-      (street as HTMLInputElement).blur();
+      // fireEvent.change avoids user.type losing the value due to React re-renders in JSDOM.
+      act(() => {
+        fireEvent.change(street, { target: { value: streetValue } });
+      });
+      act(() => {
+        (street as HTMLInputElement).blur();
+      });
     }
 
     const pc = screen.getByTestId('applicationData.invoicingCustomer.postalAddress.postalCode');
-    await user.clear(pc);
-    await user.type(pc, invoicingCustomer.postalAddress.postalCode);
-    (pc as HTMLInputElement).blur();
+    act(() => {
+      fireEvent.change(pc, { target: { value: postalAddress.postalCode } });
+    });
+    act(() => {
+      (pc as HTMLInputElement).blur();
+    });
 
     const city = screen.getByTestId('applicationData.invoicingCustomer.postalAddress.city');
-    await user.clear(city);
-    await user.type(city, invoicingCustomer.postalAddress.city);
-    (city as HTMLInputElement).blur();
+    act(() => {
+      fireEvent.change(city, { target: { value: postalAddress.city } });
+    });
+    act(() => {
+      (city as HTMLInputElement).blur();
+    });
   }
 
   if (invoicingCustomer.email) {
     const email = screen.getByTestId('applicationData.invoicingCustomer.email');
-    await user.clear(email);
-    await user.type(email, invoicingCustomer.email);
-    (email as HTMLInputElement).blur();
+    act(() => {
+      fireEvent.change(email, { target: { value: invoicingCustomer.email } });
+    });
+    act(() => {
+      (email as HTMLInputElement).blur();
+    });
   }
   if (invoicingCustomer.phone) {
     const phone = screen.getByTestId('applicationData.invoicingCustomer.phone');
-    await user.clear(phone);
-    await user.type(phone, invoicingCustomer.phone);
-    (phone as HTMLInputElement).blur();
+    act(() => {
+      fireEvent.change(phone, { target: { value: invoicingCustomer.phone } });
+    });
+    act(() => {
+      (phone as HTMLInputElement).blur();
+    });
   }
 }
 
@@ -393,7 +458,9 @@ export async function fillAttachments(
   if (additionalInfoInput) {
     await user.clear(additionalInfoInput);
     await user.type(additionalInfoInput, additionalInfo);
-    (additionalInfoInput as HTMLInputElement).blur();
+    act(() => {
+      (additionalInfoInput as HTMLInputElement).blur();
+    });
   }
 
   // Wait individually for each category's files to appear if provided

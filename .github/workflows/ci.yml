@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 env:
-  node-version: 20
+  node-version: 22
 
 jobs:
   build:
@@ -19,7 +19,7 @@ jobs:
       - name: Use Node.js 20
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: 'yarn'
       - name: Check Yarn version and install dependencies
         run: yarn install --immutable --inline-builds
@@ -38,7 +38,7 @@ jobs:
     - name: Use Node.js 20
       uses: actions/setup-node@v4
       with:
-        node-version: 20
+        node-version: 22
         cache: 'yarn'
     - name: Check Yarn version and install dependencies
       run: yarn install --immutable --inline-builds
@@ -47,6 +47,7 @@ jobs:
       env:
         CI: true
     - name: SonarQube Cloud Scan
+      if: always()
       uses: SonarSource/sonarqube-scan-action@v6
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

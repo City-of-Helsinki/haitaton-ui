@@ -32,7 +32,7 @@ export function extractPersistedArray(raw: unknown, snapshotKey: string) {
 // Helper: read and validate current array from form context at pathPrefix
 // exported for testing.
 export function getCurrentArray(formContext: FormContextLike, pathPrefix: string) {
-  const current = formContext.getValues(pathPrefix) as unknown;
+  const current = formContext.getValues(pathPrefix);
   if (!Array.isArray(current)) return undefined;
   return current as Array<Record<string, unknown>>;
 }
@@ -42,9 +42,7 @@ export function areasInclude(
   area: Record<string, unknown>,
 ) {
   if (!areas) return false;
-  const target = area as Record<string, unknown>;
   return areas.some((a) => {
-    const aa = a as Record<string, unknown>;
-    return aa.hankealueId === target.hankealueId;
+    return a.hankealueId === area.hankealueId;
   });
 }

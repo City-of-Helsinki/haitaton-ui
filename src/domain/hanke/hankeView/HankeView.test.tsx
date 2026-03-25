@@ -20,14 +20,13 @@ function getViewPermissionForUser() {
 test('Draft state notification is rendered when hanke is in draft state', async () => {
   render(<HankeViewContainer hankeTunnus="HAI22-1" />);
   await waitForLoadingToFinish();
-  const draftStateElement = screen.getByTestId('hankeDraftStateNotification');
+  const draftStateElement = await screen.findByTestId('hankeDraftStateNotification');
   const { getByRole } = within(draftStateElement);
 
   expect(draftStateElement).toBeInTheDocument();
   // Perustiedot item may be omitted if already satisfied in fixture – treat as optional
   const perustiedotItem = screen.queryByText(/Perustiedot/i);
   if (!perustiedotItem) {
-    // eslint-disable-next-line no-console
     console.warn('Perustiedot draft list item not present – continuing');
   }
   expect(getByRole('listitem', { name: /alueiden/i })).toBeInTheDocument();
@@ -65,7 +64,7 @@ test('Draft state notification only shows form pages with missing information', 
 
   await waitForLoadingToFinish();
 
-  const draftStateElement = screen.getByTestId('hankeDraftStateNotification');
+  const draftStateElement = await screen.findByTestId('hankeDraftStateNotification');
   const { queryByRole, getByRole } = within(draftStateElement);
 
   expect(draftStateElement).toBeInTheDocument();

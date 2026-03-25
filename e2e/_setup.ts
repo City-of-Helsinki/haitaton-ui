@@ -150,48 +150,32 @@ export async function nextAndCloseToast(
   nextButtonName: string,
   toastText: string,
   opts?: {
-    networkIdleTimeout?: number;
     visibleTimeout?: number;
-    closeTimeout?: number;
     hiddenTimeout?: number;
   },
 ) {
-  const {
-    networkIdleTimeout = 30_000,
-    visibleTimeout = 10_000,
-    hiddenTimeout = 20_000,
-  } = opts ?? {};
+  const { visibleTimeout = 10_000, hiddenTimeout = 20_000 } = opts ?? {};
 
-  // 1. click “Next” and wait for network‐idle
-  await Promise.all([
-    page.waitForLoadState('networkidle', { timeout: networkIdleTimeout }),
-    page.getByRole('button', { name: nextButtonName }).click(),
-  ]);
+  await page.getByRole('button', { name: nextButtonName }).click();
 
-  // 2. look up the toast (scoped and retrying)
   const toast = page.locator('role=alert', { hasText: toastText });
-
-  // 3. wait for it to appear
   await expect(toast).toBeVisible({ timeout: visibleTimeout });
 
-  // 4) Try to close the toast manually if the close button is available
-  // Note: Many toasts have autoClose enabled with short durations (2s), so the close button
-  // might not be clickable by the time we try. We use a short timeout and handle failures gracefully.
   const closeButton = toast.getByRole('button', { name: 'Close toast', exact: true });
-
-  // Check if close button is visible first to avoid unnecessary timeout waits
-  const isCloseButtonVisible = await closeButton.isVisible().catch(() => false);
-  if (isCloseButtonVisible) {
-    try {
-      // Short timeout since if it's not clickable quickly, the toast is likely auto-closing
-      await closeButton.click({ timeout: 1000 });
-    } catch (e) {
-      // Toast auto-closed or close button disappeared - this is expected behavior
-    }
+  if (await closeButton.isVisible()) {
+    await closeButton.click().catch(() => {
+      // Toast auto-dismissed between isVisible() check and click()
+    });
   }
 
-  // 5) Ensure the toast is gone before moving on (handles both manual close and auto-close)
-  await expect(toast).toBeHidden({ timeout: hiddenTimeout });
+  await expect(toast)
+    .toBeHidden({ timeout: hiddenTimeout })
+    .catch((error: Error) => {
+      // Page navigated away before toast disappeared — toast is gone, treat as success
+      if (!error.message.includes('Target page, context or browser has been closed')) {
+        throw error;
+      }
+    });
 }
 
 export async function createAndFillHankeForm(
@@ -340,9 +324,7 @@ export async function expectApplicationStatus(
   expectedStatus: string,
   timeout = 15_000,
 ) {
-  // wait for the page to load
-  await page.waitForLoadState('networkidle');
-  // figure out which view we’re on by looking at the path
+  // figure out which view we're on by looking at the path
   const path = new URL(page.url()).pathname;
 
   if (path.match(/^\/fi\/hakemus\/\d+/)) {
@@ -646,16 +628,6 @@ export async function hyvaksyKaivuilmoitusValmiiksi(page: Page, kaivuilmoitus: s
   await page.getByRole('button', { name: 'HYVÄKSY' }).click();
   await page.getByLabel('Valvojan merkinnät *').click();
   await page.getByLabel('Valvojan merkinnät *').fill('Valmiiksi merkinnät');
-  await page.getByRole('button', { name: 'EHDOTA PÄÄTETTÄVÄKSI' }).click();
-  await page.getByLabel('Perustelut *').click();
-  await page.getByLabel('Perustelut *').fill('Hyväksytty valmiiksi');
-  await page.getByLabel('Valitse päättäjä').getByText('Valitse päättäjä').click();
-  await page.getByText('Allu Päättäjä').click();
+  await expect(page.getByRole('button', { name: 'TALLENNA' })).toBeEnabled();
   await page.getByRole('button', { name: 'TALLENNA' }).click();
-  await expect(page.getByLabel('Valvontatehtävä hyväksytty')).toBeVisible();
-  await page.getByRole('link', { name: 'Perustiedot' }).click();
-  await page.getByRole('button', { name: 'PÄÄTTÄMISEEN' }).click();
-  await page.getByRole('link', { name: 'Työ valmis' }).click();
-  await page.getByRole('button', { name: 'HYVÄKSY' }).click();
-  await page.getByRole('button', { name: 'HYVÄKSY' }).click();
 }

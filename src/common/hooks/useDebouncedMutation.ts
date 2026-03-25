@@ -28,12 +28,10 @@ export default function useDebouncedMutation<
 
   useEffect(() => {
     // create debounced wrapper that calls the latest mutateRef.current
-    // Capture the exact mutate function type so we can forward arguments
-    type MutateFn = typeof mutationResults.mutate;
     debouncedRef.current = debounce(
       (...args: Parameters<MutateFn>) => {
         // forward args to the current mutate function (use unknown[] for safe casting)
-        const currentMutate = mutateRef.current as MutateFn;
+        const currentMutate = mutateRef.current;
         return currentMutate(...(args as unknown as Parameters<MutateFn>));
       },
       debounceTime,
@@ -48,7 +46,6 @@ export default function useDebouncedMutation<
     // mutationResults is intentionally not included in deps because we forward
     // to the latest mutate via mutateRef; adding it would recreate debounced
     // wrapper too often and break stability.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debounceTime]);
 
   // Expose the debounced mutate function while preserving other mutation results

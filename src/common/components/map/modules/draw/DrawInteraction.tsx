@@ -123,14 +123,14 @@ export default function DrawInteraction({
             // We need to distinguish these two shapes to build the committed user ring reliably.
             const ring = currentCoordinates[0];
             const first = ring[0];
-            const last = ring[ring.length - 1];
+            const last = ring.at(-1)!;
             const isAlreadyClosed = first[0] === last[0] && first[1] === last[1];
             // If structure has cursor, length >= 4 and second to last is cursor; otherwise it's already closed.
             // Heuristic: if closed and there are at least 4 points, treat (ring.length - 1) as committed count.
             // Else subtract 2 (cursor + closing p0).
             const committedCount = isAlreadyClosed ? ring.length - 1 : ring.length - 2;
             if (committedCount < 3) return false; // insufficient points for polygon
-            const userDrawnRing = [...ring.slice(0, committedCount)];
+            const userDrawnRing = ring.slice(0, committedCount);
             // Intersection check on the committed edges only (implicit closing segment evaluated separately on drawend or by turf if needed)
             if (areLinesInPolygonIntersecting([userDrawnRing])) {
               // Remove the last inserted point so user can continue adjusting
@@ -219,7 +219,7 @@ export default function DrawInteraction({
           // OpenLayers structure: [p0, p1, ..., pn, cursor, p0] during drawing.
           // We want [p0, p1, ..., pn] for incremental self-intersection checks.
           const committedCount = currentCoordinates[0].length - 2; // exclude cursor + closing p0
-          const userDrawnRing = [...currentCoordinates[0].slice(0, committedCount)];
+          const userDrawnRing = currentCoordinates[0].slice(0, committedCount);
           const intersecting: boolean = areLinesInPolygonIntersecting([userDrawnRing]);
           if (intersecting) {
             drawInstance.removeLastPoint();
@@ -355,7 +355,6 @@ export default function DrawInteraction({
       }
     });
 
-    // eslint-disable-next-line consistent-return
     return function cleanUp() {
       if (modify.current) {
         map.removeInteraction(modify.current);
@@ -392,7 +391,6 @@ export default function DrawInteraction({
   useEffect(() => {
     if (!map) return;
 
-    // eslint-disable-next-line
     return () => removeAllInteractions();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

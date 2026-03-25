@@ -11,8 +11,6 @@ function Page1() {
         id="testInput"
         label="Test input"
         errorText="Please enter a value for input"
-        onPointerEnterCapture={() => {}}
-        onPointerLeaveCapture={() => {}}
         crossOrigin=""
       />
     </div>
@@ -41,7 +39,7 @@ test('renders form heading and labels for form steps', () => {
     },
   ];
 
-  const handleSave = jest.fn();
+  const handleSave = vi.fn();
 
   render(<MultipageForm heading="Test form" formSteps={formSteps} onStepChange={handleSave} />);
 
@@ -65,7 +63,7 @@ test('renders additional content to top of form if given', () => {
     },
   ];
 
-  const handleSave = jest.fn();
+  const handleSave = vi.fn();
 
   render(
     <MultipageForm
@@ -93,7 +91,7 @@ test('form pages can be navigated', async () => {
     },
   ];
 
-  const handleSave = jest.fn();
+  const handleSave = vi.fn();
 
   const { user } = render(
     <MultipageForm heading="Test form" formSteps={formSteps} onStepChange={handleSave}>

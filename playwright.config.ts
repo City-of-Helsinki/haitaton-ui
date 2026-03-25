@@ -7,7 +7,7 @@ import path from 'path';
  * https://github.com/motdotla/dotenv
  */
 if (!process.env.CI) {
-  dotenv.config({ path: path.resolve(__dirname, '.env.e2e') });
+  dotenv.config({ path: path.resolve(__dirname, '.env.e2e'), quiet: true });
 }
 
 /**

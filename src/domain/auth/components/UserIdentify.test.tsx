@@ -35,7 +35,10 @@ function getWrapper(loggedIn: boolean, routerInitialEntries?: InitialEntry[]) {
     returnUser: true,
     placeUserToStorage: loggedIn,
     children: (
-      <MemoryRouter initialEntries={routerInitialEntries}>
+      <MemoryRouter
+        initialEntries={routerInitialEntries}
+        future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
+      >
         <Provider store={store}>
           <I18nextProvider i18n={i18n}>
             <QueryClientProvider client={queryClient}>
@@ -61,7 +64,7 @@ test('Should save path with query string to session storage and navigate to logi
 
 test('Should identify user after login', async () => {
   sessionStorage.setItem(REDIRECT_PATH_KEY, path);
-  const identifyUser = jest.spyOn(hankeUsersApi, 'identifyUser');
+  const identifyUser = vi.spyOn(hankeUsersApi, 'identifyUser');
 
   getWrapper(true);
 

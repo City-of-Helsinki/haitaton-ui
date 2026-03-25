@@ -1,4 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-var-requires, no-underscore-dangle, @typescript-eslint/no-this-alias */
+/* eslint-disable @typescript-eslint/no-explicit-any, no-underscore-dangle, @typescript-eslint/no-this-alias */
+import type { Mock, Mocked } from 'vitest';
 import React from 'react';
 import { render as rtlRender, waitFor } from '@testing-library/react';
 import MapContext from '../../MapContext';
@@ -6,9 +7,8 @@ import { DrawContext } from './DrawContext';
 import { DRAWTOOLTYPE } from './types';
 import { GlobalNotificationProvider } from '../../../globalNotification/GlobalNotificationContext';
 // mock for hds-react LoginProvider used by test utils render wrapper
-jest.mock('hds-react', () => {
-  // Use require inside factory to avoid out-of-scope issues
-  const ReactLib = require('react');
+vi.mock('hds-react', async () => {
+  const ReactLib = await vi.importActual<typeof import('react')>('react');
   const MockLoginProvider = ({ children }: { children: React.ReactNode }) =>
     ReactLib.createElement(ReactLib.Fragment, null, children);
   const Notification = ({ children }: { children?: React.ReactNode }) =>
@@ -17,20 +17,22 @@ jest.mock('hds-react', () => {
 });
 // Use plain Testing Library render for all tests to avoid heavy app providers
 import DrawProvider from './DrawProvider';
+import * as _olInteraction from 'ol/interaction';
+import * as _olInteractionSelect from 'ol/interaction/Select';
 import { Vector as VectorSource } from 'ol/source';
 import { Polygon } from 'ol/geom';
 import Feature from 'ol/Feature';
 import * as utils from '../../utils';
 
 // Mock i18n translation hook to avoid needing a full i18n setup
-jest.mock('react-i18next', () => ({
+vi.mock('react-i18next', () => ({
   useTranslation: () => ({ t: (key: string) => key }),
 }));
 
 // Inline mock for OpenLayers Select interaction
 type Handler = (payload?: unknown) => void;
 type HandlerMap = Record<string, Handler[]>;
-jest.mock('ol/interaction/Select', () => {
+vi.mock('ol/interaction/Select', () => {
   let lastSelectInstance: unknown;
   return {
     __esModule: true,
@@ -38,22 +40,22 @@ jest.mock('ol/interaction/Select', () => {
       private handlers: HandlerMap = {};
       public active = true;
       public features: unknown[] = [];
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
       constructor(_opts?: unknown) {
         // Capture last instance for assertions
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+
         lastSelectInstance = this;
       }
-      setActive = jest.fn((active: boolean) => {
+      setActive = vi.fn((active: boolean) => {
         this.active = active;
       });
       getFeatures() {
         return {
-          clear: jest.fn(() => {
+          clear: vi.fn(() => {
             this.features = [];
           }),
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          push: jest.fn((f: any) => {
+
+          push: vi.fn((f: any) => {
             this.features.push(f);
           }),
         };
@@ -71,7 +73,7 @@ jest.mock('ol/interaction/Select', () => {
 });
 
 // Inline mock for OpenLayers Draw/Modify/Snap interactions
-jest.mock('ol/interaction', () => {
+vi.mock('ol/interaction', () => {
   let lastDrawInstance: unknown;
   let lastModifyInstance: unknown;
   let lastDrawOptions: any;
@@ -85,11 +87,11 @@ jest.mock('ol/interaction', () => {
       (this.handlers[event] || []).forEach((h) => h(payload));
     }
     // Some interactions are toggled active/inactive
-    setActive = jest.fn();
+    setActive = vi.fn();
   }
 
   class Draw extends Emitter {
-    removeLastPoint = jest.fn();
+    removeLastPoint = vi.fn();
     constructor(opts?: unknown) {
       super();
       lastDrawInstance = this;
@@ -101,10 +103,9 @@ jest.mock('ol/interaction', () => {
     }
   }
   class Modify extends Emitter {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     constructor(_opts?: unknown) {
       super();
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+
       lastModifyInstance = this;
     }
   }
@@ -126,41 +127,41 @@ jest.mock('ol/interaction', () => {
 // Import the component under test AFTER mocks
 import DrawInteraction from './DrawInteraction';
 
-// Helper to access mocked interaction instances
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const { __getLastDrawInstance, __getLastModifyInstance } = require('ol/interaction');
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const { __getLastSelectInstance } = require('ol/interaction/Select');
+// Helper to access mocked interaction instances via ESM-safe imports
+
+const __getLastDrawInstance: () => any = (_olInteraction as any).__getLastDrawInstance;
+
+const __getLastModifyInstance: () => any = (_olInteraction as any).__getLastModifyInstance;
+
+const __getLastSelectInstance: () => any = (_olInteractionSelect as any).__getLastSelectInstance;
 
 describe('DrawInteraction startDraw events', () => {
   const OLD_ENV = process.env;
 
   beforeEach(() => {
-    jest.resetModules();
     process.env = { ...OLD_ENV, NODE_ENV: 'development' } as NodeJS.ProcessEnv; // allow interactions in tests
   });
 
   afterEach(() => {
     process.env = OLD_ENV;
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   function renderWithProviders(options?: {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onSelfIntersectingPolygon?: (f: any) => void;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
     handleModifyEnd?: (e: any, original: any, modified: any) => void;
   }) {
     const actions = {
-      setSelectedFeature: jest.fn(),
-      setSelectedDrawToolType: jest.fn(),
+      setSelectedFeature: vi.fn(),
+      setSelectedDrawToolType: vi.fn(),
     };
 
     const map = {
-      addInteraction: jest.fn(),
-      removeInteraction: jest.fn(),
-      getPixelFromCoordinate: jest.fn(),
-      getFeaturesAtPixel: jest.fn().mockReturnValue([]),
+      addInteraction: vi.fn(),
+      removeInteraction: vi.fn(),
+      getPixelFromCoordinate: vi.fn(),
+      getFeaturesAtPixel: vi.fn().mockReturnValue([]),
     } as unknown as Record<string, unknown>;
 
     const state = {
@@ -169,16 +170,16 @@ describe('DrawInteraction startDraw events', () => {
     };
 
     const source = {
-      on: jest.fn(),
-      getFeatures: jest.fn(() => []),
+      on: vi.fn(),
+      getFeatures: vi.fn(() => []),
     } as unknown as Record<string, unknown>;
 
     const ui = (
       <GlobalNotificationProvider>
         {/* Cast types for test-only mocks */}
-        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+        {}
         <MapContext.Provider value={{ map: map as any, layers: {} as any } as any}>
-          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+          {}
           <DrawContext.Provider value={{ state, actions, source } as any}>
             <DrawInteraction
               onSelfIntersectingPolygon={options?.onSelfIntersectingPolygon}
@@ -199,13 +200,12 @@ describe('DrawInteraction startDraw events', () => {
     // Wait until Select interaction is created by effect
     await waitFor(() => expect(__getLastSelectInstance()).toBeDefined());
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const select = __getLastSelectInstance() as any;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
     const draw = __getLastDrawInstance() as any;
 
     // Simulate drawstart event from Draw interaction
-    const feature = { on: jest.fn(), getGeometry: jest.fn() };
+    const feature = { on: vi.fn(), getGeometry: vi.fn() };
     draw.emit('drawstart', { feature });
 
     // Assert selection was deactivated
@@ -215,18 +215,16 @@ describe('DrawInteraction startDraw events', () => {
   });
 
   test("activates selection and clears on 'drawend'", async () => {
-    const onSelfIntersectingPolygon = jest.fn();
+    const onSelfIntersectingPolygon = vi.fn();
     const { actions } = renderWithProviders({ onSelfIntersectingPolygon });
 
     await waitFor(() => expect(__getLastSelectInstance()).toBeDefined());
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const select = __getLastSelectInstance() as any;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
     const draw = __getLastDrawInstance() as any;
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const feature = { getGeometry: jest.fn(() => ({}) as any) };
+    const feature = { getGeometry: vi.fn(() => ({}) as any) };
 
     // Fire drawend
     draw.emit('drawend', { feature });
@@ -242,36 +240,35 @@ describe('DrawInteraction startDraw events', () => {
 
   test('modifystart + modifyend (valid) calls handleModifyEnd with original clone', async () => {
     // Arrange
-    const handleModifyEnd = jest.fn();
+    const handleModifyEnd = vi.fn();
     renderWithProviders({ handleModifyEnd });
 
     // Wait until Modify interaction exists
     await waitFor(() => expect(__getLastModifyInstance()).toBeDefined());
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const modify = __getLastModifyInstance() as any;
 
     // Mock feature for modifystart
     const originalFeatureClone = { id: 'original-clone' };
     const startFeature = {
-      getGeometry: jest.fn(() => ({
-        clone: jest.fn(() => ({
+      getGeometry: vi.fn(() => ({
+        clone: vi.fn(() => ({
           /* not used here */
         })),
       })),
-      clone: jest.fn(() => originalFeatureClone),
+      clone: vi.fn(() => originalFeatureClone),
     };
-    const startEvent = { features: { item: jest.fn(() => startFeature) } };
+    const startEvent = { features: { item: vi.fn(() => startFeature) } };
 
     // Fire modifystart to capture original feature/geometry
     modify.emit('modifystart', startEvent);
 
     // Prepare modifyend with non-self-intersecting polygon
-    (utils.isPolygonSelfIntersecting as jest.Mock).mockReturnValue(false);
+    (utils.isPolygonSelfIntersecting as Mock).mockReturnValue(false);
 
     const endGeometry = {};
-    const endFeature = { getGeometry: jest.fn(() => endGeometry) };
-    const endEvent = { features: { item: jest.fn(() => endFeature) } };
+    const endFeature = { getGeometry: vi.fn(() => endGeometry) };
+    const endEvent = { features: { item: vi.fn(() => endFeature) } };
 
     // Act
     modify.emit('modifyend', endEvent);
@@ -283,8 +280,8 @@ describe('DrawInteraction startDraw events', () => {
 
   test('finishCondition allows completion; drawend invokes callback for self-intersecting polygon', async () => {
     // Arrange: mock self-intersecting polygon via utils.isPolygonSelfIntersecting (used only in drawend handler)
-    const onSelfIntersectingPolygon = jest.fn();
-    const spyIsSelfIntersecting = jest
+    const onSelfIntersectingPolygon = vi.fn();
+    const spyIsSelfIntersecting = vi
       .spyOn(utils, 'isPolygonSelfIntersecting')
       .mockReturnValue(true);
     renderWithProviders({ onSelfIntersectingPolygon });
@@ -304,8 +301,8 @@ describe('DrawInteraction startDraw events', () => {
       ],
     ]);
     const feature = new Feature(fakePolygon);
-    feature.on = jest.fn();
-    feature.getGeometry = jest.fn(() => fakePolygon);
+    feature.on = vi.fn();
+    feature.getGeometry = vi.fn(() => fakePolygon);
     draw.emit('drawstart', { feature });
     const changeHandler = (feature as any).on.mock.calls.find((c: any[]) => c[0] === 'change')[1];
     changeHandler({ target: feature });
@@ -323,8 +320,8 @@ describe('DrawInteraction startDraw events', () => {
   });
 
   test('allows finishing when closing segment is valid (non-self-intersecting)', async () => {
-    const onSelfIntersectingPolygon = jest.fn();
-    const spyIsSelfIntersecting = jest
+    const onSelfIntersectingPolygon = vi.fn();
+    const spyIsSelfIntersecting = vi
       .spyOn(utils, 'isPolygonSelfIntersecting')
       .mockReturnValue(false);
     const { actions } = renderWithProviders({ onSelfIntersectingPolygon });
@@ -345,8 +342,8 @@ describe('DrawInteraction startDraw events', () => {
       ],
     ]);
     const feature = new Feature(fakePolygon);
-    feature.on = jest.fn();
-    feature.getGeometry = jest.fn(() => fakePolygon);
+    feature.on = vi.fn();
+    feature.getGeometry = vi.fn(() => fakePolygon);
     draw.emit('drawstart', { feature });
     const changeHandler = (feature as any).on.mock.calls.find((c: any[]) => c[0] === 'change')[1];
     changeHandler({ target: feature });
@@ -366,7 +363,7 @@ describe('DrawInteraction startDraw events', () => {
 
   test('finishCondition blocks completion when closing segment introduces intersection', async () => {
     // Arrange: first incremental validation returns false (no intersection); closing validation returns true
-    const spyAreLines = jest
+    const spyAreLines = vi
       .spyOn(utils, 'areLinesInPolygonIntersecting')
       .mockImplementationOnce(() => false)
       .mockImplementationOnce(() => true);
@@ -389,8 +386,8 @@ describe('DrawInteraction startDraw events', () => {
       ],
     ]);
     const feature = new Feature(fakePolygon);
-    feature.on = jest.fn();
-    feature.getGeometry = jest.fn(() => fakePolygon);
+    feature.on = vi.fn();
+    feature.getGeometry = vi.fn(() => fakePolygon);
     draw.emit('drawstart', { feature });
     const changeHandler = (feature as any).on.mock.calls.find((c: any[]) => c[0] === 'change')[1];
     changeHandler({ target: feature });
@@ -406,7 +403,7 @@ describe('DrawInteraction startDraw events', () => {
 
   test('finishCondition blocks completion when geometry is already closed and self-intersecting (no cursor point)', async () => {
     // First call (incremental) -> false, second call (closed ring) -> true
-    const spyAreLines = jest
+    const spyAreLines = vi
       .spyOn(utils, 'areLinesInPolygonIntersecting')
       .mockImplementationOnce(() => false)
       .mockImplementationOnce(() => true);
@@ -427,8 +424,8 @@ describe('DrawInteraction startDraw events', () => {
       ],
     ]);
     const feature = new Feature(fakePolygon);
-    feature.on = jest.fn();
-    feature.getGeometry = jest.fn(() => fakePolygon);
+    feature.on = vi.fn();
+    feature.getGeometry = vi.fn(() => fakePolygon);
     draw.emit('drawstart', { feature });
     const changeHandler = (feature as any).on.mock.calls.find((c: any[]) => c[0] === 'change')[1];
     changeHandler({ target: feature });
@@ -444,7 +441,6 @@ describe('DrawInteraction startDraw events', () => {
 
     await waitFor(() => expect(__getLastModifyInstance()).toBeDefined());
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const modify = __getLastModifyInstance() as any;
 
     // Ensure handlers are attached before emitting
@@ -456,22 +452,22 @@ describe('DrawInteraction startDraw events', () => {
 
     // Set up original geometry captured during modifystart
     const originalCoords = [[0, 0]];
-    const originalGeometryClone = { getCoordinates: jest.fn(() => originalCoords) };
+    const originalGeometryClone = { getCoordinates: vi.fn(() => originalCoords) };
     const startFeature = {
-      getGeometry: jest.fn(() => ({ clone: jest.fn(() => originalGeometryClone) })),
-      clone: jest.fn(() => ({
+      getGeometry: vi.fn(() => ({ clone: vi.fn(() => originalGeometryClone) })),
+      clone: vi.fn(() => ({
         /* original feature clone not used in this test */
       })),
     };
-    const startEvent = { features: { item: jest.fn(() => startFeature) } };
+    const startEvent = { features: { item: vi.fn(() => startFeature) } };
     modify.emit('modifystart', startEvent);
 
     // Prepare modifyend with self-intersecting polygon
-    (utils.isPolygonSelfIntersecting as jest.Mock).mockReturnValue(true);
+    (utils.isPolygonSelfIntersecting as Mock).mockReturnValue(true);
 
-    const modifiedPolygon = { setCoordinates: jest.fn() };
-    const endFeature = { getGeometry: jest.fn(() => modifiedPolygon) };
-    const endEvent = { features: { item: jest.fn(() => endFeature) } };
+    const modifiedPolygon = { setCoordinates: vi.fn() };
+    const endFeature = { getGeometry: vi.fn(() => modifiedPolygon) };
+    const endEvent = { features: { item: vi.fn(() => endFeature) } };
 
     // Act
     modify.emit('modifyend', endEvent);
@@ -483,7 +479,7 @@ describe('DrawInteraction startDraw events', () => {
   });
 
   test('removefeature clears selection and calls onSelfIntersectingPolygon(null) when none remain', async () => {
-    const onSelfIntersectingPolygon = jest.fn();
+    const onSelfIntersectingPolygon = vi.fn();
     const { actions, source } = renderWithProviders({ onSelfIntersectingPolygon });
 
     // Ensure effect wired up
@@ -491,13 +487,11 @@ describe('DrawInteraction startDraw events', () => {
       expect((source as any).on).toHaveBeenCalled();
     });
 
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const utilsMod = require('../../utils') as typeof import('../../utils');
-    (utilsMod.isPolygonSelfIntersecting as jest.Mock).mockReturnValue(false);
+    (utils.isPolygonSelfIntersecting as Mock).mockReturnValue(false);
 
     // Find the registered removefeature handler and invoke it
     type OnHandler = (...args: unknown[]) => void;
-    const onCalls = ((source as any).on as jest.Mock).mock.calls as Array<[string, OnHandler]>;
+    const onCalls = ((source as any).on as Mock).mock.calls as Array<[string, OnHandler]>;
     const removeHandler = onCalls.find(([evt]) => evt === 'removefeature')?.[1];
     expect(removeHandler).toBeDefined();
 
@@ -509,19 +503,19 @@ describe('DrawInteraction startDraw events', () => {
 
   test('drawstart on.change handler allows drawing inside hanke area', async () => {
     // Arrange
-    const mockDrawSegmentGuardInside = jest.fn(() => true); // Allow segment (inside hanke area)
+    const mockDrawSegmentGuardInside = vi.fn(() => true); // Allow segment (inside hanke area)
 
     function renderWithDrawSegmentGuard() {
       const actions = {
-        setSelectedFeature: jest.fn(),
-        setSelectedDrawToolType: jest.fn(),
+        setSelectedFeature: vi.fn(),
+        setSelectedDrawToolType: vi.fn(),
       };
 
       const map = {
-        addInteraction: jest.fn(),
-        removeInteraction: jest.fn(),
-        getPixelFromCoordinate: jest.fn(),
-        getFeaturesAtPixel: jest.fn().mockReturnValue([]),
+        addInteraction: vi.fn(),
+        removeInteraction: vi.fn(),
+        getPixelFromCoordinate: vi.fn(),
+        getFeaturesAtPixel: vi.fn().mockReturnValue([]),
       } as unknown as Record<string, unknown>;
 
       const state = {
@@ -530,15 +524,15 @@ describe('DrawInteraction startDraw events', () => {
       };
 
       const source = {
-        on: jest.fn(),
-        getFeatures: jest.fn(() => []),
+        on: vi.fn(),
+        getFeatures: vi.fn(() => []),
       } as unknown as Record<string, unknown>;
 
       const ui = (
         <GlobalNotificationProvider>
-          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+          {}
           <MapContext.Provider value={{ map: map as any, layers: {} as any } as any}>
-            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+            {}
             <DrawContext.Provider value={{ state, actions, source } as any}>
               <DrawInteraction drawSegmentGuard={mockDrawSegmentGuardInside} />
             </DrawContext.Provider>
@@ -561,12 +555,11 @@ describe('DrawInteraction startDraw events', () => {
     // Wait until Draw interaction is created
     await waitFor(() => expect(__getLastDrawInstance()).toBeDefined());
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const draw = __getLastDrawInstance() as any;
 
     // Create mock feature with polygon geometry - starting with first 2 points in OL structure
     const mockGeometry = {
-      getCoordinates: jest.fn(() => [
+      getCoordinates: vi.fn(() => [
         [
           [10, 10], // Point 1 (index 0)
           [20, 20], // Point 2 (index 1)
@@ -577,8 +570,8 @@ describe('DrawInteraction startDraw events', () => {
     };
 
     const mockFeature = {
-      on: jest.fn(),
-      getGeometry: jest.fn(() => mockGeometry),
+      on: vi.fn(),
+      getGeometry: vi.fn(() => mockGeometry),
     };
 
     // Simulate drawstart event
@@ -622,19 +615,19 @@ describe('DrawInteraction startDraw events', () => {
 
   test('drawstart on.change handler prevents drawing outside hanke area', async () => {
     // Arrange
-    const mockDrawSegmentGuardOutside = jest.fn(() => false); // Reject segment (outside hanke area)
+    const mockDrawSegmentGuardOutside = vi.fn(() => false); // Reject segment (outside hanke area)
 
     function renderWithDrawSegmentGuard() {
       const actions = {
-        setSelectedFeature: jest.fn(),
-        setSelectedDrawToolType: jest.fn(),
+        setSelectedFeature: vi.fn(),
+        setSelectedDrawToolType: vi.fn(),
       };
 
       const map = {
-        addInteraction: jest.fn(),
-        removeInteraction: jest.fn(),
-        getPixelFromCoordinate: jest.fn(),
-        getFeaturesAtPixel: jest.fn().mockReturnValue([]),
+        addInteraction: vi.fn(),
+        removeInteraction: vi.fn(),
+        getPixelFromCoordinate: vi.fn(),
+        getFeaturesAtPixel: vi.fn().mockReturnValue([]),
       } as unknown as Record<string, unknown>;
 
       const state = {
@@ -643,15 +636,15 @@ describe('DrawInteraction startDraw events', () => {
       };
 
       const source = {
-        on: jest.fn(),
-        getFeatures: jest.fn(() => []),
+        on: vi.fn(),
+        getFeatures: vi.fn(() => []),
       } as unknown as Record<string, unknown>;
 
       const ui = (
         <GlobalNotificationProvider>
-          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+          {}
           <MapContext.Provider value={{ map: map as any, layers: {} as any } as any}>
-            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+            {}
             <DrawContext.Provider value={{ state, actions, source } as any}>
               <DrawInteraction drawSegmentGuard={mockDrawSegmentGuardOutside} />
             </DrawContext.Provider>
@@ -674,12 +667,11 @@ describe('DrawInteraction startDraw events', () => {
     // Wait until Draw interaction is created
     await waitFor(() => expect(__getLastDrawInstance()).toBeDefined());
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const draw = __getLastDrawInstance() as any;
 
     // Create mock feature with polygon geometry - starting with first 2 points in OL structure
     const mockGeometry = {
-      getCoordinates: jest.fn(() => [
+      getCoordinates: vi.fn(() => [
         [
           [10, 10], // Point 1 (index 0)
           [20, 20], // Point 2 (index 1)
@@ -690,8 +682,8 @@ describe('DrawInteraction startDraw events', () => {
     };
 
     const mockFeature = {
-      on: jest.fn(),
-      getGeometry: jest.fn(() => mockGeometry),
+      on: vi.fn(),
+      getGeometry: vi.fn(() => mockGeometry),
     };
 
     // Simulate drawstart event
@@ -734,19 +726,19 @@ describe('DrawInteraction startDraw events', () => {
 
   test('drawstart on.change handler skips guard check when less than 2 points', async () => {
     // Arrange
-    const mockDrawSegmentGuardSkip = jest.fn(() => true);
+    const mockDrawSegmentGuardSkip = vi.fn(() => true);
 
     function renderWithDrawSegmentGuard() {
       const actions = {
-        setSelectedFeature: jest.fn(),
-        setSelectedDrawToolType: jest.fn(),
+        setSelectedFeature: vi.fn(),
+        setSelectedDrawToolType: vi.fn(),
       };
 
       const map = {
-        addInteraction: jest.fn(),
-        removeInteraction: jest.fn(),
-        getPixelFromCoordinate: jest.fn(),
-        getFeaturesAtPixel: jest.fn().mockReturnValue([]),
+        addInteraction: vi.fn(),
+        removeInteraction: vi.fn(),
+        getPixelFromCoordinate: vi.fn(),
+        getFeaturesAtPixel: vi.fn().mockReturnValue([]),
       } as unknown as Record<string, unknown>;
 
       const state = {
@@ -755,15 +747,15 @@ describe('DrawInteraction startDraw events', () => {
       };
 
       const source = {
-        on: jest.fn(),
-        getFeatures: jest.fn(() => []),
+        on: vi.fn(),
+        getFeatures: vi.fn(() => []),
       } as unknown as Record<string, unknown>;
 
       const ui = (
         <GlobalNotificationProvider>
-          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+          {}
           <MapContext.Provider value={{ map: map as any, layers: {} as any } as any}>
-            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+            {}
             <DrawContext.Provider value={{ state, actions, source } as any}>
               <DrawInteraction drawSegmentGuard={mockDrawSegmentGuardSkip} />
             </DrawContext.Provider>
@@ -786,12 +778,11 @@ describe('DrawInteraction startDraw events', () => {
     // Wait until Draw interaction is created
     await waitFor(() => expect(__getLastDrawInstance()).toBeDefined());
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const draw = __getLastDrawInstance() as any;
 
     // Create mock feature with only one point
     const mockGeometry = {
-      getCoordinates: jest.fn(() => [
+      getCoordinates: vi.fn(() => [
         [
           [10, 10], // First point
           [10, 10], // Cursor position (same as first point)
@@ -800,8 +791,8 @@ describe('DrawInteraction startDraw events', () => {
     };
 
     const mockFeature = {
-      on: jest.fn(),
-      getGeometry: jest.fn(() => mockGeometry),
+      on: vi.fn(),
+      getGeometry: vi.fn(() => mockGeometry),
     };
 
     // Simulate drawstart event
@@ -822,15 +813,14 @@ describe('DrawInteraction startDraw events', () => {
   });
 });
 // Create mock MapContext as a React context
-jest.mock('../../MapContext', () => {
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const ReactLib = require('react');
+vi.mock('../../MapContext', async () => {
+  const ReactLib = await vi.importActual<typeof import('react')>('react');
   return {
     __esModule: true,
     default: ReactLib.createContext({
       map: {
-        addInteraction: jest.fn(),
-        removeInteraction: jest.fn(),
+        addInteraction: vi.fn(),
+        removeInteraction: vi.fn(),
       },
       layers: {},
     }),
@@ -838,45 +828,48 @@ jest.mock('../../MapContext', () => {
 });
 
 // Mock only the hook, preserve the provider
-jest.mock('../../../globalNotification/GlobalNotificationContext', () => {
-  const actual = jest.requireActual('../../../globalNotification/GlobalNotificationContext');
+vi.mock('../../../globalNotification/GlobalNotificationContext', async () => {
+  const actual = await vi.importActual<
+    typeof import('../../../globalNotification/GlobalNotificationContext')
+  >('../../../globalNotification/GlobalNotificationContext');
   return {
     ...actual,
-    useGlobalNotification: () => ({ setNotification: jest.fn() }),
+    useGlobalNotification: () => ({ setNotification: vi.fn() }),
   };
 });
 
 // Mock the polygon intersection utility
-jest.mock('../../utils', () => ({
-  isPolygonSelfIntersecting: jest.fn(),
-  areLinesInPolygonIntersecting: jest.fn(),
-  getSurfaceArea: jest.fn(() => 100), // Return valid surface area
+vi.mock('../../utils', () => ({
+  isPolygonSelfIntersecting: vi.fn(),
+  areLinesInPolygonIntersecting: vi.fn(),
+  getSurfaceArea: vi.fn(() => 100), // Return valid surface area
 }));
 
-const { isPolygonSelfIntersecting } = utils as jest.Mocked<typeof utils>;
+const { isPolygonSelfIntersecting } = utils as Mocked<typeof utils>;
 
 describe('DrawInteraction', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('renders without crashing', () => {
     const source = new VectorSource();
-    rtlRender(
+    const { container } = rtlRender(
       <DrawProvider source={source}>
         <DrawInteraction />
       </DrawProvider>,
     );
+    expect(container).toBeInTheDocument();
   });
 
   it('calls onSelfIntersectingPolygon when polygon intersects itself', () => {
-    const onSelfIntersectingPolygon = jest.fn();
+    const onSelfIntersectingPolygon = vi.fn();
     const source = new VectorSource();
 
     // Mock self-intersecting polygon
     isPolygonSelfIntersecting.mockReturnValue(true);
 
-    rtlRender(
+    const { container } = rtlRender(
       <DrawProvider source={source}>
         <DrawInteraction onSelfIntersectingPolygon={onSelfIntersectingPolygon} />
       </DrawProvider>,
@@ -899,16 +892,17 @@ describe('DrawInteraction', () => {
 
     // The onSelfIntersectingPolygon should be called during draw operations
     // This would be triggered by the actual draw interaction in real usage
+    expect(container).toBeInTheDocument();
   });
 
   it('handles modify end with self-intersecting polygon', () => {
     const source = new VectorSource();
-    const handleModifyEnd = jest.fn();
+    const handleModifyEnd = vi.fn();
 
     // Mock self-intersecting polygon
     isPolygonSelfIntersecting.mockReturnValue(true);
 
-    rtlRender(
+    const { container } = rtlRender(
       <DrawProvider source={source}>
         <DrawInteraction handleModifyEnd={handleModifyEnd} />
       </DrawProvider>,
@@ -916,66 +910,71 @@ describe('DrawInteraction', () => {
 
     // This test verifies the component renders and can handle the modify end logic
     // The actual modify interaction testing would require more complex OpenLayers mocking
+    expect(container).toBeInTheDocument();
   });
 
   it('handles modify end with valid polygon', () => {
     const source = new VectorSource();
-    const handleModifyEnd = jest.fn();
+    const handleModifyEnd = vi.fn();
 
     // Mock valid (non-intersecting) polygon
     isPolygonSelfIntersecting.mockReturnValue(false);
 
-    rtlRender(
+    const { container } = rtlRender(
       <DrawProvider source={source}>
         <DrawInteraction handleModifyEnd={handleModifyEnd} />
       </DrawProvider>,
     );
 
     // This test verifies the component renders and can handle valid polygons
+    expect(container).toBeInTheDocument();
   });
 
   it('accepts all optional props without error', () => {
     const source = new VectorSource();
     const mockProps = {
-      onSelfIntersectingPolygon: jest.fn(),
-      drawCondition: jest.fn(() => true),
-      drawFinishCondition: jest.fn(() => true),
-      drawStyleFunction: jest.fn(),
-      drawSegmentGuard: jest.fn(() => true),
-      handleModifyEnd: jest.fn(),
+      onSelfIntersectingPolygon: vi.fn(),
+      drawCondition: vi.fn(() => true),
+      drawFinishCondition: vi.fn(() => true),
+      drawStyleFunction: vi.fn(),
+      drawSegmentGuard: vi.fn(() => true),
+      handleModifyEnd: vi.fn(),
     };
 
-    rtlRender(
+    const { container } = rtlRender(
       <DrawProvider source={source}>
         <DrawInteraction {...mockProps} />
       </DrawProvider>,
     );
+    expect(container).toBeInTheDocument();
   });
 
   describe('drawSegmentGuard functionality', () => {
     it('renders without drawSegmentGuard prop', () => {
       const source = new VectorSource();
-      rtlRender(
+      const { container } = rtlRender(
         <DrawProvider source={source}>
           <DrawInteraction />
         </DrawProvider>,
       );
+      expect(container).toBeInTheDocument();
     });
 
     it('renders with drawSegmentGuard prop', () => {
       const source = new VectorSource();
-      const mockDrawSegmentGuard = jest.fn(() => true);
+      const mockDrawSegmentGuard = vi.fn(() => true);
 
-      rtlRender(
+      const { container } = rtlRender(
         <DrawProvider source={source}>
           <DrawInteraction drawSegmentGuard={mockDrawSegmentGuard} />
         </DrawProvider>,
       );
+      expect(container).toBeInTheDocument();
     });
 
     it('accepts drawSegmentGuard function that returns true', () => {
       const source = new VectorSource();
-      const mockDrawSegmentGuard = jest.fn((map, segment) => {
+      const mockDrawSegmentGuard = vi.fn((map, segment) => {
         expect(map).toBeDefined();
         expect(segment).toHaveLength(2);
         expect(segment[0]).toHaveLength(2); // [x, y] coordinate
@@ -992,7 +991,7 @@ describe('DrawInteraction', () => {
 
     it('accepts drawSegmentGuard function that returns false', () => {
       const source = new VectorSource();
-      const mockDrawSegmentGuard = jest.fn((map, segment) => {
+      const mockDrawSegmentGuard = vi.fn((map, segment) => {
         expect(map).toBeDefined();
         expect(segment).toHaveLength(2);
         return false; // Reject the segment
@@ -1007,7 +1006,7 @@ describe('DrawInteraction', () => {
 
     it('validates segment coordinates when drawSegmentGuard is provided', () => {
       const source = new VectorSource();
-      const mockDrawSegmentGuard = jest.fn((map, segment) => {
+      const mockDrawSegmentGuard = vi.fn((map, segment) => {
         // Validate that coordinates are numbers
         const [start, end] = segment;
         expect(typeof start[0]).toBe('number'); // x coordinate
@@ -1032,21 +1031,22 @@ describe('DrawInteraction', () => {
         return coord[0] >= 0 && coord[0] <= 100 && coord[1] >= 0 && coord[1] <= 100;
       };
 
-      const mockDrawSegmentGuard = jest.fn((map, segment) => {
+      const mockDrawSegmentGuard = vi.fn((map, segment) => {
         const [start, end] = segment;
         return withinBounds(start) && withinBounds(end);
       });
 
-      rtlRender(
+      const { container } = rtlRender(
         <DrawProvider source={source}>
           <DrawInteraction drawSegmentGuard={mockDrawSegmentGuard} />
         </DrawProvider>,
       );
+      expect(container).toBeInTheDocument();
     });
 
     it('supports different coordinate systems in drawSegmentGuard', () => {
       const source = new VectorSource();
-      const mockDrawSegmentGuard = jest.fn((map, segment) => {
+      const mockDrawSegmentGuard = vi.fn((map, segment) => {
         const [start, end] = segment;
 
         // Validate coordinate format for different projection systems
@@ -1070,8 +1070,8 @@ describe('DrawInteraction', () => {
     // Arrange
     const source = new VectorSource();
     const actions = {
-      setSelectedDrawToolType: jest.fn(),
-      setSelectedFeature: jest.fn(),
+      setSelectedDrawToolType: vi.fn(),
+      setSelectedFeature: vi.fn(),
     };
     // Force a selected draw tool so startDraw is invoked
     const state = { selectedDrawtoolType: DRAWTOOLTYPE.POLYGON, selectedFeature: null };
@@ -1086,7 +1086,7 @@ describe('DrawInteraction', () => {
     rtlRender(ui);
 
     await waitFor(() => expect(__getLastDrawInstance()).toBeDefined());
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
     const draw = __getLastDrawInstance() as any;
 
     const ring = [
@@ -1097,8 +1097,8 @@ describe('DrawInteraction', () => {
       [0, 0], // cursor position (auto)
     ];
     const originalLength = ring.length;
-    const mockGeometry = { getCoordinates: jest.fn(() => [ring]) };
-    const mockFeature = { on: jest.fn(), getGeometry: jest.fn(() => mockGeometry) };
+    const mockGeometry = { getCoordinates: vi.fn(() => [ring]) };
+    const mockFeature = { on: vi.fn(), getGeometry: vi.fn(() => mockGeometry) };
 
     draw.emit('drawstart', { feature: mockFeature });
     const changeHandler = mockFeature.on.mock.calls[0][1];

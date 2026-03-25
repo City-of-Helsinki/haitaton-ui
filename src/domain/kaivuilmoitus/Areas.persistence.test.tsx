@@ -16,41 +16,45 @@ import { MemoryRouter } from 'react-router';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
 // Mock non-area pages
-jest.mock('./BasicInfo', () => () => <div>BasicInfo</div>);
-jest.mock('./Contacts', () => () => <div>Contacts</div>);
-jest.mock('./Attachments', () => () => <div>Attachments</div>);
-jest.mock('./ReviewAndSend', () => () => <div>ReviewAndSend</div>);
-jest.mock('./HaittojenHallinta', () => () => <div>Haitat</div>);
-jest.mock('./components/FormErrorsNotification', () => () => null);
-jest.mock('../application/components/ApplicationSendDialog', () => () => <div />);
+vi.mock('./BasicInfo', () => ({ default: () => <div>BasicInfo</div> }));
+vi.mock('./Contacts', () => ({ default: () => <div>Contacts</div> }));
+vi.mock('./Attachments', () => ({ default: () => <div>Attachments</div> }));
+vi.mock('./ReviewAndSend', () => ({ default: () => <div>ReviewAndSend</div> }));
+vi.mock('./HaittojenHallinta', () => ({ default: () => <div>Haitat</div> }));
+vi.mock('./components/FormErrorsNotification', () => ({ default: () => null }));
+vi.mock('../application/components/ApplicationSendDialog', () => ({ default: () => <div /> }));
 
-jest.mock('../../common/components/featureFlags/FeatureFlagsContext', () => ({
+vi.mock('../../common/components/featureFlags/FeatureFlagsContext', () => ({
   useFeatureFlags: () => ({ flags: {}, isEnabled: () => false }),
   FeatureFlagsProvider: ({ children }: { children: React.ReactNode }) => <>{children}</>,
 }));
 
-jest.mock('react-i18next', () => ({
+vi.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (k: string) => k,
-    i18n: { language: 'fi', changeLanguage: jest.fn(), exists: () => true },
+    i18n: { language: 'fi', changeLanguage: vi.fn(), exists: () => true },
   }),
   Trans: ({ children }: { children: React.ReactNode }) => <>{children}</>,
 }));
 
-jest.mock('../application/hooks/useApplications', () => ({
+vi.mock('../application/hooks/useApplications', () => ({
   useApplicationsForHanke: () => ({ data: { applications: [] } }),
 }));
-jest.mock('../hanke/hankeUsers/hooks/useUserRightsForHanke', () => ({
+vi.mock('../hanke/hankeUsers/hooks/useUserRightsForHanke', () => ({
   usePermissionsForHanke: () => ({ data: null }),
 }));
-jest.mock('../application/hooks/useAttachments', () => () => ({ data: [], isError: false }));
-jest.mock('../application/hooks/useSaveApplication', () => () => ({
-  applicationCreateMutation: { mutate: jest.fn() },
-  applicationUpdateMutation: { mutate: jest.fn() },
-  showSaveNotification: false,
-  setShowSaveNotification: jest.fn(),
+vi.mock('../application/hooks/useAttachments', () => ({
+  default: () => ({ data: [], isError: false }),
 }));
-jest.mock('../application/hooks/useNavigateToApplicationView', () => () => jest.fn());
+vi.mock('../application/hooks/useSaveApplication', () => ({
+  default: () => ({
+    applicationCreateMutation: { mutate: vi.fn() },
+    applicationUpdateMutation: { mutate: vi.fn() },
+    showSaveNotification: false,
+    setShowSaveNotification: vi.fn(),
+  }),
+}));
+vi.mock('../application/hooks/useNavigateToApplicationView', () => ({ default: () => vi.fn() }));
 
 // Helper
 function createFeature(): Feature<Polygon> {
@@ -120,7 +124,7 @@ const application: Application<KaivuilmoitusData> = {
 function mount() {
   const qc = new QueryClient();
   return render(
-    <MemoryRouter>
+    <MemoryRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
       <GlobalNotificationProvider>
         <QueryClientProvider client={qc}>
           <KaivuilmoitusContainer hankeData={hankeData} application={application} />

@@ -79,7 +79,7 @@ test('Toiminnallisia testejä', async ({ page }) => {
     page.getByText('Kiinteistöjen ja liikkeenharjoittajien tarpeetVaadittava perustasoKadun'),
   ).toBeVisible();
   await page.getByRole('button', { name: '10. Melu-, pöly- ja tärinä' }).click();
-  await expect(page.locator('.StaticContent_main__CMrTP')).toBeVisible();
+  await expect(page.getByTestId('static-content-main')).toBeVisible();
   await page.getByLabel('Haittojenhallinnan lisä').click();
   await expect(
     page.getByText(

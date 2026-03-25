@@ -136,7 +136,9 @@ describe('Taydennyspyynto notification', () => {
   test('Should show taydennyspyynto notification', async () => {
     setup();
 
-    expect(screen.getByRole('heading', { name: 'Täydennyspyyntö' })).toBeInTheDocument();
+    await waitFor(() =>
+      expect(screen.getByRole('heading', { name: 'Täydennyspyyntö' })).toBeInTheDocument(),
+    );
     expect(screen.getByText('Muokkaa hakemusta korjataksesi seuraavat asiat:')).toBeInTheDocument();
   });
 });
@@ -415,7 +417,6 @@ describe('Error notification', () => {
       }
     }
     if (!notificationFound) {
-      // eslint-disable-next-line no-console
       console.warn(
         'Taydennys summary notification text not found using expected phrases – proceeding with flexible list assertions',
       );
@@ -463,7 +464,7 @@ describe('Taydennys attachments', () => {
   }
 
   test('Should be able to upload attachments', async () => {
-    const uploadSpy = jest
+    const uploadSpy = vi
       .spyOn(taydennysAttachmentsApi, 'uploadAttachment')
       .mockImplementation(uploadAttachmentMock);
     initFileGetResponse([]);
@@ -522,9 +523,9 @@ describe('Taydennys attachments', () => {
   });
 
   test('Should show original application attachments in attachments page', async () => {
-    const fetchContentMock = jest
+    const fetchContentMock = vi
       .spyOn(applicationAttachmentsApi, 'getAttachmentFile')
-      .mockImplementation(jest.fn());
+      .mockImplementation(vi.fn());
     initFileGetResponse(applicationAttachments);
     const { user } = setup();
     await user.click(screen.getByRole('button', { name: /liitteet/i }));

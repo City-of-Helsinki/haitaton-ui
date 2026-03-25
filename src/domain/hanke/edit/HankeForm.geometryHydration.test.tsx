@@ -8,20 +8,18 @@ import HankeForm from './HankeForm';
 import { HankeDataFormState } from './types';
 
 // Simplify useApplicationsForHanke hook so form renders immediately
-jest.mock('../../application/hooks/useApplications', () => ({
+vi.mock('../../application/hooks/useApplications', () => ({
   useApplicationsForHanke: () => ({ data: { applications: [] } }),
 }));
 
 // No-op for map draw provider heavy stuff
-jest.mock(
-  '../../../common/components/map/modules/draw/DrawProvider',
-  () =>
-    ({ children }: { children: React.ReactNode }) => <>{children}</>,
-);
+vi.mock('../../../common/components/map/modules/draw/DrawProvider', () => ({
+  default: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+}));
 
 // Provide deterministic translation (return key)
-jest.mock('react-i18next', () => ({
-  ...jest.requireActual('react-i18next'),
+vi.mock('react-i18next', async () => ({
+  ...(await vi.importActual<object>('react-i18next')),
   useTranslation: () => ({
     t: (k: string) => k,
     i18n: { language: 'fi', exists: () => true },
@@ -90,7 +88,7 @@ describe('Hanke persistence - API-shaped payload and feature hydration', () => {
       };
 
       const formRender = render(
-        <HankeForm formData={baseData} onIsDirtyChange={jest.fn()} onFormClose={jest.fn()}>
+        <HankeForm formData={baseData} onIsDirtyChange={vi.fn()} onFormClose={vi.fn()}>
           <Injector />
         </HankeForm>,
       );
@@ -164,7 +162,7 @@ describe('Hanke persistence - API-shaped payload and feature hydration', () => {
     };
 
     const { getByTestId: getByTestId2 } = render(
-      <HankeForm formData={serverOverride} onIsDirtyChange={jest.fn()} onFormClose={jest.fn()}>
+      <HankeForm formData={serverOverride} onIsDirtyChange={vi.fn()} onFormClose={vi.fn()}>
         <Reader />
       </HankeForm>,
     );

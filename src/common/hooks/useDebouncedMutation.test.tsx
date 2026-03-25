@@ -1,7 +1,7 @@
 import { render, screen } from '../../testUtils/render';
 import useDebouncedMutation from './useDebouncedMutation';
 
-const mutationFn = jest.fn(() => {
+const mutationFn = vi.fn(() => {
   return Promise.resolve();
 });
 

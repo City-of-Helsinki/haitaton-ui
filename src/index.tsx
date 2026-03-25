@@ -1,3 +1,4 @@
+import 'regenerator-runtime/runtime';
 import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { createRoot } from 'react-dom/client';
@@ -35,7 +36,7 @@ if (window._env_.REACT_APP_DISABLE_SENTRY !== '1') {
 const matomoEnabled = window._env_.REACT_APP_MATOMO_ENABLED === '1';
 
 const container = document.getElementById('root');
-// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+
 const root = createRoot(container!);
 
 async function enableMocking() {
@@ -66,8 +67,3 @@ declare global {
     _paq: [string, ...any[]][];
   }
 }
-
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-// serviceWorker.unregister();

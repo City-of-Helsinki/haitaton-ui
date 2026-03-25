@@ -68,9 +68,6 @@ const TextInput: React.FC<React.PropsWithChildren<PropTypes>> = ({
           onChange={(event) => onChange(defaultValue !== null ? event : event.target.value || null)}
           ref={ref}
           autoComplete={autoComplete}
-          onPointerEnterCapture={() => {}}
-          onPointerLeaveCapture={() => {}}
-          crossOrigin=""
           {...tooltip}
         />
       )}

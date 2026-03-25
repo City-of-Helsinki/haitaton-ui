@@ -28,7 +28,7 @@ export function convertFormStateToKaivuilmoitusUpdateData(
   ) as KaivuilmoitusUpdateData;
 
   const sourceAreas = Array.isArray(formState.applicationData?.areas)
-    ? formState.applicationData!.areas
+    ? formState.applicationData?.areas ?? []
     : [];
 
   const updatedAreas = sourceAreas.map((area) => {
@@ -47,7 +47,7 @@ export function convertFormStateToKaivuilmoitusUpdateData(
           return alue;
         } catch (e) {
           // As a last resort, return shallow copy to avoid breaking save
-          // eslint-disable-next-line no-console
+
           if (process.env.NODE_ENV === 'test') console.debug('Tyoalue conversion fallback', e);
           return { ...tyoalue };
         }
@@ -67,9 +67,7 @@ export function buildPersistedApplicationFromForm(
   formState: KaivuilmoitusFormValues,
 ): Application<KaivuilmoitusData> {
   // Build the canonical update-shaped applicationData (ensures tyoalueet geometries are converted)
-  const processed = convertFormStateToKaivuilmoitusUpdateData(
-    formState as KaivuilmoitusFormValues,
-  ) as KaivuilmoitusData;
+  const processed = convertFormStateToKaivuilmoitusUpdateData(formState) as KaivuilmoitusData;
 
   // Start from a deep clone of the original form applicationData to preserve
   // optional fields that weren't part of the processed update shape (e.g. additionalInfo,

@@ -1,3 +1,4 @@
+import type { Mocked, MockedFunction } from 'vitest';
 import { render, screen, waitFor } from '../../testUtils/render';
 import { changeFilterDate } from '../../testUtils/helperFunctions';
 import HankeMap from './HankeMap';
@@ -7,11 +8,11 @@ import { store } from '../../common/redux/store';
 import { actions } from './reducer';
 
 // Mock dependencies
-jest.mock('../api/api');
-jest.mock('../../common/components/map/hooks/useMapViewportBounds');
+vi.mock('../api/api');
+vi.mock('../../common/components/map/hooks/useMapViewportBounds');
 
-const mockApi = api as jest.Mocked<typeof api>;
-const mockUseMapViewportBounds = useMapViewportBounds as jest.MockedFunction<
+const mockApi = api as Mocked<typeof api>;
+const mockUseMapViewportBounds = useMapViewportBounds as MockedFunction<
   typeof useMapViewportBounds
 >;
 
@@ -72,7 +73,7 @@ const createMockHankeData = (count: number) =>
 
 describe('HankeMap', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
 
     // Reset Redux store to initial state to prevent test contamination
     const currentYear = new Date().getFullYear();
@@ -236,7 +237,7 @@ describe('HankeMap', () => {
   });
 
   test('handles API errors gracefully', async () => {
-    const consoleSpy = jest.spyOn(console, 'error').mockImplementation();
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
     mockApi.get.mockRejectedValueOnce(new Error('Network error'));
 

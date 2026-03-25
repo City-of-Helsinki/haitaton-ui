@@ -12,7 +12,7 @@ test('Should show existing tags', async () => {
 
 test('Should be able to add new tags with add button', async () => {
   const newTag = 'Tag1';
-  const handleTagsChange = jest.fn();
+  const handleTagsChange = vi.fn();
   const { user } = render(
     <TagInput id="test-input" label="Tag Input" tags={[]} onChange={handleTagsChange} />,
   );
@@ -24,7 +24,7 @@ test('Should be able to add new tags with add button', async () => {
 
 test('Should be able to add new tags by pressing Enter', async () => {
   const newTag = 'Tag2';
-  const handleTagsChange = jest.fn();
+  const handleTagsChange = vi.fn();
   const { user } = render(
     <TagInput id="test-input" label="Tag Input" tags={[]} onChange={handleTagsChange} />,
   );
@@ -35,7 +35,7 @@ test('Should be able to add new tags by pressing Enter', async () => {
 });
 
 test('Should be able to remove tags', async () => {
-  const handleTagsChange = jest.fn();
+  const handleTagsChange = vi.fn();
   const { user } = render(
     <TagInput
       id="test-input"
@@ -54,7 +54,7 @@ test('Should be able to remove tags', async () => {
 test('Should show validation error if new tag does not match the provided pattern', async () => {
   const newTag = 'tag3';
   const errorText = 'Invalid tag';
-  const handleTagsChange = jest.fn();
+  const handleTagsChange = vi.fn();
   const { user } = render(
     <TagInput
       id="test-input"

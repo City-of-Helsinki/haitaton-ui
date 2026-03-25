@@ -1,4 +1,4 @@
-@import 'src/assets/styles/layout';
+@use 'src/assets/styles/layout' as *;
 
 .orderedList {
   padding-left: 2rem;
@@ -33,11 +33,11 @@
 }
 
 .content {
+  margin-bottom: var(--spacing-xl);
+
   a {
     text-decoration: underline;
   }
-
-  margin-bottom: var(--spacing-xl);
 
   p,
   a {

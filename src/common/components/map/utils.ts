@@ -28,7 +28,7 @@ export function getSurfaceArea(geometry: Geometry) {
 /**
  * Calculate if two lines intersect and return true if they do
  */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+
 export function linesIntersect(
   line1start: [number, number],
   line1end: [number, number],
@@ -128,13 +128,11 @@ export function getCandidateSegmentForValidation(
   lines: Array<[Coordinate, Coordinate]>,
 ): { segment: [[number, number], [number, number]]; isClosed: boolean; latestIndex: number } {
   const first = getCoordinateNumbersFromCoordinate(coordinates[0][0]);
-  const last = getCoordinateNumbersFromCoordinate(coordinates[0][coordinates[0].length - 1]);
+  const last = getCoordinateNumbersFromCoordinate(coordinates[0].at(-1)!);
   const isClosed = first[0] === last[0] && first[1] === last[1];
   const latestIndex = lines.length - 1;
   if (isClosed) {
-    const penultimate = getCoordinateNumbersFromCoordinate(
-      coordinates[0][coordinates[0].length - 2],
-    );
+    const penultimate = getCoordinateNumbersFromCoordinate(coordinates[0].at(-2)!);
     return { segment: [penultimate, first], isClosed, latestIndex };
   }
   const latest = lines[latestIndex];
@@ -205,7 +203,7 @@ export function isPolygonSelfIntersectingByCoordinates(coordinates: Coordinate[]
     return selfIntersectionPoints.features.length > 0;
   } catch (error) {
     // Log and treat invalid geometry as non self-intersecting to keep draw flow resilient
-    // eslint-disable-next-line no-console
+
     console.warn('turf kinks error (treated as non-intersecting):', error);
     return false;
   }

@@ -2,17 +2,22 @@ import React from 'react';
 import { render, waitFor, cleanup } from '../../../testUtils/render';
 import userEvent from '@testing-library/user-event';
 // Mock complex haittojenhallinta schema to avoid invoking heavy detectedTrafficNuisance custom tests
-jest.mock('../../common/haittojenhallinta/haittojenhallintaSchema', () => {
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const yup = require('../../../common/utils/yup').default;
-  return yup.object({
-    YLEINEN: yup.string().required(),
-    MUUT: yup.string().required(),
-    PYORALIIKENNE: yup.string().nullable(),
-    AUTOLIIKENNE: yup.string().nullable(),
-    RAITIOLIIKENNE: yup.string().nullable(),
-    LINJAAUTOLIIKENNE: yup.string().nullable(),
-  });
+vi.mock('../../common/haittojenhallinta/haittojenhallintaSchema', async () => {
+  const yup = (
+    (await vi.importActual<typeof import('../../../common/utils/yup')>(
+      '../../../common/utils/yup',
+    )) as { default: typeof import('../../../common/utils/yup').default }
+  ).default;
+  return {
+    default: yup.object({
+      YLEINEN: yup.string().required(),
+      MUUT: yup.string().required(),
+      PYORALIIKENNE: yup.string().nullable(),
+      AUTOLIIKENNE: yup.string().nullable(),
+      RAITIOLIIKENNE: yup.string().nullable(),
+      LINJAAUTOLIIKENNE: yup.string().nullable(),
+    }),
+  };
 });
 import HankeForm from './HankeForm';
 import { HankeDataFormState } from './types';
@@ -26,28 +31,32 @@ import {
 } from '../../types/hanke';
 
 // Mock other heavy step components to keep test fast, but keep HaittojenHallinta real.
-jest.mock('./HankeFormPerustiedot', () => () => <div data-testid="mock-perustiedot" />);
-jest.mock('./HankeFormAlueet', () => () => <div data-testid="mock-alueet" />);
-jest.mock('./HankeFormYhteystiedot', () => () => <div data-testid="mock-yhteystiedot" />);
-jest.mock('./HankeFormLiitteet', () => () => <div data-testid="mock-liitteet" />);
-jest.mock('./HankeFormSummary', () => () => <div data-testid="mock-summary" />);
-jest.mock('../../application/components/ApplicationAddDialog', () => () => null);
-jest.mock('../../application/hooks/useApplications', () => ({
+vi.mock('./HankeFormPerustiedot', () => ({
+  default: () => <div data-testid="mock-perustiedot" />,
+}));
+vi.mock('./HankeFormAlueet', () => ({ default: () => <div data-testid="mock-alueet" /> }));
+vi.mock('./HankeFormYhteystiedot', () => ({
+  default: () => <div data-testid="mock-yhteystiedot" />,
+}));
+vi.mock('./HankeFormLiitteet', () => ({ default: () => <div data-testid="mock-liitteet" /> }));
+vi.mock('./HankeFormSummary', () => ({ default: () => <div data-testid="mock-summary" /> }));
+vi.mock('../../application/components/ApplicationAddDialog', () => ({ default: () => null }));
+vi.mock('../../application/hooks/useApplications', () => ({
   useApplicationsForHanke: () => ({ data: { applications: [] } }),
 }));
 // Map components mocked to avoid OpenLayers weight
-jest.mock('../../map/components/HankkeenHaittojenhallintasuunnitelma/HankealueMap', () => () => (
-  <div data-testid="mock-hankealue-map" />
-));
-jest.mock('../../map/components/HankkeenHaittojenhallintasuunnitelma/HankeMap', () => () => (
-  <div data-testid="mock-hanke-map" />
-));
+vi.mock('../../map/components/HankkeenHaittojenhallintasuunnitelma/HankealueMap', () => ({
+  default: () => <div data-testid="mock-hankealue-map" />,
+}));
+vi.mock('../../map/components/HankkeenHaittojenhallintasuunnitelma/HankeMap', () => ({
+  default: () => <div data-testid="mock-hanke-map" />,
+}));
 // Mock ProcedureTips to a simple passthrough to avoid relying on internal tip computation
-jest.mock('../../common/haittaIndexes/ProcedureTips', () => () => (
-  <div data-testid="mock-procedure-tips" />
-));
-jest.mock('react-i18next', () => ({
-  ...jest.requireActual('react-i18next'),
+vi.mock('../../common/haittaIndexes/ProcedureTips', () => ({
+  default: () => <div data-testid="mock-procedure-tips" />,
+}));
+vi.mock('react-i18next', async () => ({
+  ...(await vi.importActual<object>('react-i18next')),
   useTranslation: () => ({
     t: (k: string) => k,
     i18n: { language: 'fi', exists: () => true },
@@ -92,8 +101,8 @@ describe('Haittojen hallinta free-text field language persistence', () => {
 
   function mount(overrides: Partial<HankeDataFormState> = {}) {
     const formData = { ...baseData, ...overrides } as HankeDataFormState;
-    const onDirty = jest.fn();
-    const onClose = jest.fn();
+    const onDirty = vi.fn();
+    const onClose = vi.fn();
     return render(
       <HankeForm formData={formData} onIsDirtyChange={onDirty} onFormClose={onClose}>
         <div />

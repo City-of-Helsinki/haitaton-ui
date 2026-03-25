@@ -11,13 +11,12 @@ import { formatSurfaceArea, getTotalSurfaceArea } from '../../map/utils';
 import { formatToFinnishDate } from '../../../common/utils/date';
 import Polygon from 'ol/geom/Polygon';
 import Feature from 'ol/Feature';
-import { ApplicationGeometry } from '../../application/types/application';
+import { ApplicationGeometry, KaivuilmoitusAlue } from '../../application/types/application';
 import { getAreaDefaultName } from '../../application/utils';
-import { KaivuilmoitusAlue } from '../../application/types/application';
 
 function getTyoalueGeometry(tyoalue: {
   geometry?: ApplicationGeometry;
-  openlayersFeature?: Feature | unknown;
+  openlayersFeature?: unknown;
 }): Geometry {
   try {
     // Prefer hydrated OpenLayers feature geometry if present
@@ -26,7 +25,7 @@ function getTyoalueGeometry(tyoalue: {
       const g = feature.getGeometry();
       if (g) return g;
     }
-    const appGeom = tyoalue.geometry as ApplicationGeometry | undefined;
+    const appGeom = tyoalue.geometry;
     if (appGeom?.coordinates) {
       return new Polygon(appGeom.coordinates);
     }

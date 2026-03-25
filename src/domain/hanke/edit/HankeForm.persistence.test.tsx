@@ -7,41 +7,46 @@ import HankeForm from './HankeForm';
 import { HankeDataFormState } from './types';
 
 // Mock heavy sub components rendered inside steps to keep test light & fast.
-jest.mock('./HankeFormAlueet', () => () => <div data-testid="mock-alueet" />);
-jest.mock('./HankeFormPerustiedot', () => ({
-  __esModule: true,
-  default: function MockHankeFormPerustiedot() {
-    const { useFormContext } = jest.requireActual('react-hook-form');
-    const { register } = useFormContext();
-    return (
-      <div>
-        <input {...register('nimi')} data-testid="nimi" />
-        <textarea {...register('kuvaus')} data-testid="kuvaus" />
-      </div>
-    );
-  },
+vi.mock('./HankeFormAlueet', () => ({ default: () => <div data-testid="mock-alueet" /> }));
+vi.mock('./HankeFormPerustiedot', async () => {
+  const { useFormContext } =
+    await vi.importActual<typeof import('react-hook-form')>('react-hook-form');
+  return {
+    __esModule: true,
+    default: function MockHankeFormPerustiedot() {
+      const { register } = useFormContext();
+      return (
+        <div>
+          <input {...register('nimi')} data-testid="nimi" />
+          <textarea {...register('kuvaus')} data-testid="kuvaus" />
+        </div>
+      );
+    },
+  };
+});
+vi.mock('./HankeFormYhteystiedot', () => ({
+  default: () => <div data-testid="mock-yhteystiedot" />,
 }));
-jest.mock('./HankeFormYhteystiedot', () => () => <div data-testid="mock-yhteystiedot" />);
-jest.mock('./HankeFormHaittojenHallinta', () => () => <div data-testid="mock-haitat" />);
-jest.mock('./HankeFormLiitteet', () => () => <div data-testid="mock-liitteet" />);
-jest.mock('./HankeFormSummary', () => () => <div data-testid="mock-summary" />);
-jest.mock('../../application/components/ApplicationAddDialog', () => () => null);
+vi.mock('./HankeFormHaittojenHallinta', () => ({
+  default: () => <div data-testid="mock-haitat" />,
+}));
+vi.mock('./HankeFormLiitteet', () => ({ default: () => <div data-testid="mock-liitteet" /> }));
+vi.mock('./HankeFormSummary', () => ({ default: () => <div data-testid="mock-summary" /> }));
+vi.mock('../../application/components/ApplicationAddDialog', () => ({ default: () => null }));
 
 // Simplify useApplicationsForHanke hook so form renders immediately
-jest.mock('../../application/hooks/useApplications', () => ({
+vi.mock('../../application/hooks/useApplications', () => ({
   useApplicationsForHanke: () => ({ data: { applications: [] } }),
 }));
 
 // No-op for map draw provider heavy stuff
-jest.mock(
-  '../../../common/components/map/modules/draw/DrawProvider',
-  () =>
-    ({ children }: { children: React.ReactNode }) => <>{children}</>,
-);
+vi.mock('../../../common/components/map/modules/draw/DrawProvider', () => ({
+  default: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+}));
 
 // Provide deterministic translation (return key)
-jest.mock('react-i18next', () => ({
-  ...jest.requireActual('react-i18next'),
+vi.mock('react-i18next', async () => ({
+  ...(await vi.importActual<object>('react-i18next')),
   useTranslation: () => ({
     t: (k: string) => k,
     i18n: {
@@ -73,8 +78,8 @@ describe('HankeForm language persistence integration', () => {
 
   function mountOnce(overrides: Partial<HankeDataFormState> = {}) {
     const formData = { ...baseData, ...overrides } as HankeDataFormState;
-    const onDirty = jest.fn();
-    const onClose = jest.fn();
+    const onDirty = vi.fn();
+    const onClose = vi.fn();
     return render(
       <HankeForm formData={formData} onIsDirtyChange={onDirty} onFormClose={onClose}>
         <div />

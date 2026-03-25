@@ -3,35 +3,35 @@ import SessionTerminationHandler from './SessionTerminationHandler';
 import { setLogoutHandler } from '../../api/api';
 
 // Mock the dependencies
-jest.mock('hds-react', () => ({
-  useOidcClient: jest.fn(),
+vi.mock('hds-react', () => ({
+  useOidcClient: vi.fn(),
 }));
 
-jest.mock('react-i18next', () => ({
+vi.mock('react-i18next', () => ({
   useTranslation: () => ({ t: (key: string) => key }),
 }));
 
-jest.mock('../../../common/components/globalNotification/GlobalNotificationContext', () => ({
-  useGlobalNotification: jest.fn(),
+vi.mock('../../../common/components/globalNotification/GlobalNotificationContext', () => ({
+  useGlobalNotification: vi.fn(),
 }));
 
-jest.mock('../../api/api', () => ({
-  setLogoutHandler: jest.fn(),
+vi.mock('../../api/api', () => ({
+  setLogoutHandler: vi.fn(),
 }));
 
 import { useOidcClient } from 'hds-react';
 import { useGlobalNotification } from '../../../common/components/globalNotification/GlobalNotificationContext';
 
-const mockUseOidcClient = jest.mocked(useOidcClient);
-const mockUseGlobalNotification = jest.mocked(useGlobalNotification);
-const mockSetLogoutHandler = jest.mocked(setLogoutHandler);
+const mockUseOidcClient = vi.mocked(useOidcClient);
+const mockUseGlobalNotification = vi.mocked(useGlobalNotification);
+const mockSetLogoutHandler = vi.mocked(setLogoutHandler);
 
 describe('SessionTerminationHandler', () => {
-  const mockLogout = jest.fn();
-  const mockSetNotification = jest.fn();
+  const mockLogout = vi.fn();
+  const mockSetNotification = vi.fn();
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
 
     mockUseOidcClient.mockReturnValue({
       logout: mockLogout,
@@ -43,11 +43,11 @@ describe('SessionTerminationHandler', () => {
       options: undefined,
     });
 
-    jest.useFakeTimers();
+    vi.useFakeTimers();
   });
 
   afterEach(() => {
-    jest.useRealTimers();
+    vi.useRealTimers();
   });
 
   it('should set up logout handler on mount', () => {
@@ -89,7 +89,7 @@ describe('SessionTerminationHandler', () => {
     expect(mockLogout).not.toHaveBeenCalled();
 
     // Fast-forward time by 4 seconds
-    jest.advanceTimersByTime(4000);
+    vi.advanceTimersByTime(4000);
 
     // Now logout should be called
     expect(mockLogout).toHaveBeenCalledTimes(1);

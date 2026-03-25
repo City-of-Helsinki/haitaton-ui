@@ -28,7 +28,7 @@ const AllTheProviders = ({ children }: Readonly<Props>) => {
 
   return (
     <LoginProvider {...loginProviderProps}>
-      <BrowserRouter>
+      <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
         <ReduxProvider store={store}>
           <QueryClientProvider client={queryClient}>
             <I18nextProvider i18n={i18n}>

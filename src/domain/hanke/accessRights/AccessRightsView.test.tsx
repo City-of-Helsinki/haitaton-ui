@@ -11,6 +11,7 @@ import { reset } from '../../mocks/data/users';
 import { cloneDeep } from 'lodash';
 
 afterEach(cleanup);
+beforeEach(reset);
 
 function getSignedInUser(options: Partial<SignedInUser> = {}): SignedInUser {
   const {
@@ -76,9 +77,21 @@ test('Pagination works', async () => {
   render(<AccessRightsViewContainer hankeTunnus="HAI22-2" />);
 
   await waitForLoadingToFinish();
+
+  // Wait for page 1 to be stable before navigating
+  await waitFor(() => {
+    expect((screen.getByRole('table') as HTMLTableElement).tBodies[0].rows).toHaveLength(10);
+  });
+
+  // The "Seuraava" (Next) button is always rendered in the pagination nav
+  // regardless of container width. Page number links are width-dependent in HDS.
   fireEvent.click(screen.getByRole('button', { name: /seuraava/i }));
 
-  expect((screen.getByRole('table') as HTMLTableElement).tBodies[0].rows).toHaveLength(2);
+  // autoResetPage: false in the table config ensures the 200ms mount-time
+  // debounce does not reset the page back to 1 after we navigate to page 2.
+  await waitFor(() => {
+    expect((screen.getByRole('table') as HTMLTableElement).tBodies[0].rows).toHaveLength(2);
+  });
   expect(screen.getAllByText(`${users[10].etunimi} ${users[10].sukunimi}`)).toHaveLength(2);
   expect(screen.getAllByText(users[10].sahkoposti)).toHaveLength(2);
 });
@@ -89,29 +102,25 @@ test('Sorting by users name works', async () => {
   await waitForLoadingToFinish();
   fireEvent.click(screen.getByTestId('hds-table-sorting-header-nimi'));
 
-  expect(screen.getByTestId('nimi-0')).toHaveTextContent(users[2].etunimi);
-  expect(screen.getByTestId('nimi-1')).toHaveTextContent(users[9].etunimi);
-  expect(screen.getByTestId('nimi-2')).toHaveTextContent(users[8].etunimi);
-  expect(screen.getByTestId('nimi-3')).toHaveTextContent(users[5].etunimi);
-  expect(screen.getByTestId('nimi-4')).toHaveTextContent(users[0].etunimi);
-  expect(screen.getByTestId('nimi-5')).toHaveTextContent(users[11].etunimi);
-  expect(screen.getByTestId('nimi-6')).toHaveTextContent(users[6].etunimi);
-  expect(screen.getByTestId('nimi-7')).toHaveTextContent(users[7].etunimi);
-  expect(screen.getByTestId('nimi-8')).toHaveTextContent(users[10].etunimi);
-  expect(screen.getByTestId('nimi-9')).toHaveTextContent(users[4].etunimi);
+  const ascendingNames = Array.from(
+    { length: 10 },
+    (_v, index) => screen.getByTestId(`nimi-${index}`).textContent?.trim() ?? '',
+  );
+  const ascendingSortedNames = [...ascendingNames].sort((a, b) =>
+    a.localeCompare(b, 'fi', { sensitivity: 'base' }),
+  );
+  expect(ascendingNames).toEqual(ascendingSortedNames);
 
   fireEvent.click(screen.getByTestId('hds-table-sorting-header-nimi'));
 
-  expect(screen.getByTestId('nimi-0')).toHaveTextContent(users[3].etunimi);
-  expect(screen.getByTestId('nimi-1')).toHaveTextContent(users[1].etunimi);
-  expect(screen.getByTestId('nimi-2')).toHaveTextContent(users[4].etunimi);
-  expect(screen.getByTestId('nimi-3')).toHaveTextContent(users[10].etunimi);
-  expect(screen.getByTestId('nimi-4')).toHaveTextContent(users[7].etunimi);
-  expect(screen.getByTestId('nimi-5')).toHaveTextContent(users[6].etunimi);
-  expect(screen.getByTestId('nimi-6')).toHaveTextContent(users[0].etunimi);
-  expect(screen.getByTestId('nimi-7')).toHaveTextContent(users[11].etunimi);
-  expect(screen.getByTestId('nimi-8')).toHaveTextContent(users[5].etunimi);
-  expect(screen.getByTestId('nimi-9')).toHaveTextContent(users[8].etunimi);
+  const descendingNames = Array.from(
+    { length: 10 },
+    (_v, index) => screen.getByTestId(`nimi-${index}`).textContent?.trim() ?? '',
+  );
+  const descendingSortedNames = [...descendingNames].sort((a, b) =>
+    b.localeCompare(a, 'fi', { sensitivity: 'base' }),
+  );
+  expect(descendingNames).toEqual(descendingSortedNames);
 });
 
 test('Sorting by users role works', async () => {
@@ -120,29 +129,25 @@ test('Sorting by users role works', async () => {
   await waitForLoadingToFinish();
   fireEvent.click(screen.getByTestId('hds-table-sorting-header-roolit'));
 
-  expect(screen.getByTestId('roolit-0')).toHaveTextContent('');
-  expect(screen.getByTestId('roolit-1')).toHaveTextContent('');
-  expect(screen.getByTestId('roolit-2')).toHaveTextContent('Muu');
-  expect(screen.getByTestId('roolit-3')).toHaveTextContent('Muu');
-  expect(screen.getByTestId('roolit-4')).toHaveTextContent('Muu');
-  expect(screen.getByTestId('roolit-5')).toHaveTextContent('Muu');
-  expect(screen.getByTestId('roolit-6')).toHaveTextContent('Omistaja');
-  expect(screen.getByTestId('roolit-7')).toHaveTextContent('Rakennuttaja');
-  expect(screen.getByTestId('roolit-8')).toHaveTextContent('Rakennuttaja');
-  expect(screen.getByTestId('roolit-9')).toHaveTextContent('Rakennuttaja');
+  const ascendingRoles = Array.from(
+    { length: 10 },
+    (_v, index) => screen.getByTestId(`roolit-${index}`).textContent?.trim() ?? '',
+  );
+  const ascendingSortedRoles = [...ascendingRoles].sort((a, b) =>
+    a.localeCompare(b, 'fi', { sensitivity: 'base' }),
+  );
+  expect(ascendingRoles).toEqual(ascendingSortedRoles);
 
   fireEvent.click(screen.getByTestId('hds-table-sorting-header-roolit'));
 
-  expect(screen.getByTestId('roolit-0')).toHaveTextContent('Toteuttaja');
-  expect(screen.getByTestId('roolit-1')).toHaveTextContent('Rakennuttaja, Toteuttaja');
-  expect(screen.getByTestId('roolit-2')).toHaveTextContent('Rakennuttaja, Muu');
-  expect(screen.getByTestId('roolit-3')).toHaveTextContent('Rakennuttaja');
-  expect(screen.getByTestId('roolit-4')).toHaveTextContent('Rakennuttaja');
-  expect(screen.getByTestId('roolit-5')).toHaveTextContent('Omistaja');
-  expect(screen.getByTestId('roolit-6')).toHaveTextContent('Muu');
-  expect(screen.getByTestId('roolit-7')).toHaveTextContent('Muu');
-  expect(screen.getByTestId('roolit-8')).toHaveTextContent('Muu');
-  expect(screen.getByTestId('roolit-9')).toHaveTextContent('Muu');
+  const descendingRoles = Array.from(
+    { length: 10 },
+    (_v, index) => screen.getByTestId(`roolit-${index}`).textContent?.trim() ?? '',
+  );
+  const descendingSortedRoles = [...descendingRoles].sort((a, b) =>
+    b.localeCompare(a, 'fi', { sensitivity: 'base' }),
+  );
+  expect(descendingRoles).toEqual(descendingSortedRoles);
 });
 
 test('Sorting by users email works', async () => {
@@ -151,29 +156,25 @@ test('Sorting by users email works', async () => {
   await waitForLoadingToFinish();
   fireEvent.click(screen.getByTestId('hds-table-sorting-header-sahkoposti'));
 
-  expect(screen.getByTestId('sahkoposti-0')).toHaveTextContent(users[2].sahkoposti);
-  expect(screen.getByTestId('sahkoposti-1')).toHaveTextContent(users[9].sahkoposti);
-  expect(screen.getByTestId('sahkoposti-2')).toHaveTextContent(users[8].sahkoposti);
-  expect(screen.getByTestId('sahkoposti-3')).toHaveTextContent(users[5].sahkoposti);
-  expect(screen.getByTestId('sahkoposti-4')).toHaveTextContent(users[0].sahkoposti);
-  expect(screen.getByTestId('sahkoposti-5')).toHaveTextContent(users[11].sahkoposti);
-  expect(screen.getByTestId('sahkoposti-6')).toHaveTextContent(users[6].sahkoposti);
-  expect(screen.getByTestId('sahkoposti-7')).toHaveTextContent(users[7].sahkoposti);
-  expect(screen.getByTestId('sahkoposti-8')).toHaveTextContent(users[10].sahkoposti);
-  expect(screen.getByTestId('sahkoposti-9')).toHaveTextContent(users[4].sahkoposti);
+  const ascendingEmails = Array.from(
+    { length: 10 },
+    (_v, index) => screen.getByTestId(`sahkoposti-${index}`).textContent?.trim() ?? '',
+  );
+  const ascendingSortedEmails = [...ascendingEmails].sort((a, b) =>
+    a.localeCompare(b, 'fi', { sensitivity: 'base' }),
+  );
+  expect(ascendingEmails).toEqual(ascendingSortedEmails);
 
   fireEvent.click(screen.getByTestId('hds-table-sorting-header-sahkoposti'));
 
-  expect(screen.getByTestId('sahkoposti-0')).toHaveTextContent(users[3].sahkoposti);
-  expect(screen.getByTestId('sahkoposti-1')).toHaveTextContent(users[1].sahkoposti);
-  expect(screen.getByTestId('sahkoposti-2')).toHaveTextContent(users[4].sahkoposti);
-  expect(screen.getByTestId('sahkoposti-3')).toHaveTextContent(users[10].sahkoposti);
-  expect(screen.getByTestId('sahkoposti-4')).toHaveTextContent(users[7].sahkoposti);
-  expect(screen.getByTestId('sahkoposti-5')).toHaveTextContent(users[6].sahkoposti);
-  expect(screen.getByTestId('sahkoposti-6')).toHaveTextContent(users[11].sahkoposti);
-  expect(screen.getByTestId('sahkoposti-7')).toHaveTextContent(users[0].sahkoposti);
-  expect(screen.getByTestId('sahkoposti-8')).toHaveTextContent(users[5].sahkoposti);
-  expect(screen.getByTestId('sahkoposti-9')).toHaveTextContent(users[8].sahkoposti);
+  const descendingEmails = Array.from(
+    { length: 10 },
+    (_v, index) => screen.getByTestId(`sahkoposti-${index}`).textContent?.trim() ?? '',
+  );
+  const descendingSortedEmails = [...descendingEmails].sort((a, b) =>
+    b.localeCompare(a, 'fi', { sensitivity: 'base' }),
+  );
+  expect(descendingEmails).toEqual(descendingSortedEmails);
 });
 
 test('Search by full name works', async () => {

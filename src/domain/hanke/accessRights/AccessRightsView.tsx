@@ -101,6 +101,13 @@ function UserIcon({
   }
 }
 
+function rolesAreEqual(r1: string[], r2: string[]): boolean {
+  if (r1.length !== r2.length) return false;
+  const s1 = [...r1].sort((a, b) => a.localeCompare(b));
+  const s2 = [...r2].sort((a, b) => a.localeCompare(b));
+  return s1.every((r, i) => r === s2[i]);
+}
+
 function sort(rowOneColumn: string, rowTwoColumn: string) {
   if (rowOneColumn === rowTwoColumn) {
     return 0;
@@ -141,7 +148,7 @@ function AccessRightsView({ hankeUsers, hankeTunnus, signedInUser, readonly }: R
   const getEditUserPath = useLinkPath(ROUTES.EDIT_USER);
   const { setNotification } = useGlobalNotification();
   const [usersData, setUsersData] = useState<HankeUserWithWholeName[]>(() =>
-    hankeUsers.map(addWholeName),
+    hankeUsers.map((u) => addWholeName({ ...u, roolit: [...u.roolit].sort(userRoleSorter) })),
   );
 
   const { deleteInfoQueryResult, userToDelete, setDeletedUser, resetUserToDelete } =
@@ -172,6 +179,7 @@ function AccessRightsView({ hankeUsers, hankeTunnus, signedInUser, readonly }: R
       columns,
       data: usersData,
       autoResetFilters: false,
+      autoResetPage: false,
       sortTypes: {
         alphanumeric: (row1, row2, columnName) => {
           const rowOneColumn: string = row1.values[columnName];
@@ -195,7 +203,11 @@ function AccessRightsView({ hankeUsers, hankeTunnus, signedInUser, readonly }: R
     // compared only id and name, causing permission (kayttooikeustaso) changes to be ignored
     // and thus not rendered until a full page refresh. This fixes the regression by doing a
     // lightweight shallow comparison of key fields; if any differ, we replace the array.
-    const newUsers = hankeUsers.map(addWholeName);
+    // Pre-sort roolit by userRoleSorter so the table's array sortType comparator
+    // sees a consistent ordering without relying on mutation side effects.
+    const newUsers = hankeUsers.map((u) =>
+      addWholeName({ ...u, roolit: [...u.roolit].sort(userRoleSorter) }),
+    );
     setUsersData((prev) => {
       if (
         prev.length === newUsers.length &&
@@ -208,10 +220,7 @@ function AccessRightsView({ hankeUsers, hankeTunnus, signedInUser, readonly }: R
             u.sahkoposti === nu.sahkoposti &&
             u.puhelinnumero === nu.puhelinnumero &&
             // Compare roles ignoring order to avoid unnecessary re-renders
-            u.roolit?.length === nu.roolit?.length &&
-            [...u.roolit]
-              .sort((a, b) => a.localeCompare(b))
-              .every((r, idx) => r === [...nu.roolit].sort((a, b) => a.localeCompare(b))[idx])
+            rolesAreEqual(u.roolit ?? [], nu.roolit ?? [])
           );
         })
       ) {
@@ -309,7 +318,7 @@ function AccessRightsView({ hankeUsers, hankeTunnus, signedInUser, readonly }: R
   const getUserRolesLabel = useCallback(
     (args: HankeUser) =>
       args.roolit
-        .sort(userRoleSorter)
+        .toSorted(userRoleSorter)
         .map((role) => t(`hankeUsers:roleLabels:${role}`))
         .join(', '),
     [t],

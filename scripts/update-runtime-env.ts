@@ -3,35 +3,32 @@
 import * as path from 'path';
 import fs from 'fs';
 import util from 'util';
+import dotenv from 'dotenv';
 
-// react-scipts config requires ENV to be set
-const defaultNodeEnv = process.env.TEST ? 'test' : 'development';
-// Prevent collision is app is running while tests are started
-const configFile = process.env.TEST ? 'test-env-config.js' : 'env-config.js';
+const isTest = process.env.TEST === 'true';
+const configFile = isTest ? 'test-env-config.js' : 'env-config.js';
+const envSuffix = isTest ? '.test' : '.development';
 
-process.env.NODE_ENV = process.env.NODE_ENV || defaultNodeEnv;
-
-const getClientEnvironment = require('../node_modules/react-scripts/config/env.js');
-
-const configurationFile: string = path.join(__dirname, '../public/' + configFile);
-
-const start = async () => {
-  try {
-    const envVariables = getClientEnvironment();
-    fs.writeFile(
-      configurationFile,
-      'window._env_ = ' + util.inspect(envVariables.raw, false, 2, false),
-      function (err) {
-        if (err) {
-          return console.error(err);
-        }
-        return console.log('File created!');
-      }
-    );
-  } catch (err) {
-    console.error(err.message); // eslint-disable-line
-    process.exit(1);
-  }
+// Load .env files in priority order (later overrides earlier)
+const envFiles = ['.env', `.env${envSuffix}`, '.env.local', `.env${envSuffix}.local`];
+const raw: Record<string, string | undefined> = {
+  NODE_ENV: isTest ? 'test' : 'development',
 };
 
-start();
+for (const file of envFiles) {
+  const filePath = path.join(__dirname, '..', file);
+  if (fs.existsSync(filePath)) {
+    Object.assign(raw, dotenv.parse(fs.readFileSync(filePath)));
+  }
+}
+
+// CI/CD: process.env takes highest priority
+Object.keys(process.env)
+  .filter((key) => key.startsWith('REACT_APP_') || key === 'NODE_ENV' || key === 'PUBLIC_URL')
+  .forEach((key) => {
+    raw[key] = process.env[key];
+  });
+
+const configurationFile = path.join(__dirname, '../public/', configFile);
+fs.writeFileSync(configurationFile, 'window._env_ = ' + util.inspect(raw, false, 2, false));
+console.log('File created!');

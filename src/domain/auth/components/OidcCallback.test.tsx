@@ -17,7 +17,10 @@ function getWrapper({ state, returnUser, errorType, userProfile }: RenderWithLog
     userProfile,
     children: (
       <I18nextProvider i18n={i18n}>
-        <MemoryRouter initialEntries={[LOGIN_CALLBACK_PATH]}>
+        <MemoryRouter
+          initialEntries={[LOGIN_CALLBACK_PATH]}
+          future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
+        >
           <Routes>
             <Route path="/" element={<div>Home page</div>} />
             <Route path={LOGIN_CALLBACK_PATH} element={<OidcCallback />} />
@@ -30,7 +33,7 @@ function getWrapper({ state, returnUser, errorType, userProfile }: RenderWithLog
 
 describe('<OidcCallback />', () => {
   afterEach(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
     cleanup();
   });
 

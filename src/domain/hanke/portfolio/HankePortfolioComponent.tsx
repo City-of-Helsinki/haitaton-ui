@@ -135,7 +135,6 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke, signedInUser, 
             <Link
               to={hankeViewPath}
               aria-label={
-                // eslint-disable-next-line
                 t(`routes:${ROUTES.HANKE}.meta.title`) + ` ${hanke.nimi} - ${hanke.hankeTunnus} `
               }
               data-testid="hankeViewLink"
@@ -148,7 +147,6 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke, signedInUser, 
                   <Link
                     to={getEditHankePath({ hankeTunnus: hanke.hankeTunnus })}
                     aria-label={
-                      // eslint-disable-next-line
                       t(`routes:${ROUTES.EDIT_HANKE}.meta.title`) +
                       ` ${hanke.nimi} - ${hanke.hankeTunnus} `
                     }
@@ -284,7 +282,7 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke, signedInUser, 
 
 export type Column = {
   Header: string;
-  // eslint-disable-next-line
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   accessor: any;
 };
 

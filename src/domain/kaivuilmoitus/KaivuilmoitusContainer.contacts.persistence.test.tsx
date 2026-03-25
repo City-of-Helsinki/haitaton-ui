@@ -9,39 +9,43 @@ import { MemoryRouter } from 'react-router';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
 // Mock other pages except Contacts to keep test lightweight
-jest.mock('./BasicInfo', () => () => <div>BasicInfo</div>);
-jest.mock('./Attachments', () => () => <div>Attachments</div>);
-jest.mock('./ReviewAndSend', () => () => <div>ReviewAndSend</div>);
-jest.mock('./Areas', () => () => <div>Areas</div>);
-jest.mock('./HaittojenHallinta', () => () => <div>Haitat</div>);
-jest.mock('./components/FormErrorsNotification', () => () => null);
-jest.mock('../application/components/ApplicationSendDialog', () => () => <div />);
+vi.mock('./BasicInfo', () => ({ default: () => <div>BasicInfo</div> }));
+vi.mock('./Attachments', () => ({ default: () => <div>Attachments</div> }));
+vi.mock('./ReviewAndSend', () => ({ default: () => <div>ReviewAndSend</div> }));
+vi.mock('./Areas', () => ({ default: () => <div>Areas</div> }));
+vi.mock('./HaittojenHallinta', () => ({ default: () => <div>Haitat</div> }));
+vi.mock('./components/FormErrorsNotification', () => ({ default: () => null }));
+vi.mock('../application/components/ApplicationSendDialog', () => ({ default: () => <div /> }));
 
-jest.mock('../../common/components/featureFlags/FeatureFlagsContext', () => ({
+vi.mock('../../common/components/featureFlags/FeatureFlagsContext', () => ({
   useFeatureFlags: () => ({ flags: {}, isEnabled: () => false }),
   FeatureFlagsProvider: ({ children }: { children: React.ReactNode }) => <>{children}</>,
 }));
 
 // Silence hooks network calls
-jest.mock('../application/hooks/useApplications', () => ({
+vi.mock('../application/hooks/useApplications', () => ({
   useApplicationsForHanke: () => ({ data: { applications: [] } }),
 }));
-jest.mock('../hanke/hankeUsers/hooks/useUserRightsForHanke', () => ({
+vi.mock('../hanke/hankeUsers/hooks/useUserRightsForHanke', () => ({
   usePermissionsForHanke: () => ({ data: null }),
 }));
-jest.mock('../application/hooks/useAttachments', () => () => ({ data: [], isError: false }));
-jest.mock('../application/hooks/useSaveApplication', () => () => ({
-  applicationCreateMutation: { mutate: jest.fn() },
-  applicationUpdateMutation: { mutate: jest.fn() },
-  showSaveNotification: false,
-  setShowSaveNotification: jest.fn(),
+vi.mock('../application/hooks/useAttachments', () => ({
+  default: () => ({ data: [], isError: false }),
 }));
-jest.mock('../application/hooks/useNavigateToApplicationView', () => () => jest.fn());
+vi.mock('../application/hooks/useSaveApplication', () => ({
+  default: () => ({
+    applicationCreateMutation: { mutate: vi.fn() },
+    applicationUpdateMutation: { mutate: vi.fn() },
+    showSaveNotification: false,
+    setShowSaveNotification: vi.fn(),
+  }),
+}));
+vi.mock('../application/hooks/useNavigateToApplicationView', () => ({ default: () => vi.fn() }));
 
-jest.mock('react-i18next', () => ({
+vi.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (k: string) => k,
-    i18n: { language: 'fi', changeLanguage: jest.fn(), exists: () => true },
+    i18n: { language: 'fi', changeLanguage: vi.fn(), exists: () => true },
   }),
   Trans: ({ children }: { children: React.ReactNode }) => <>{children}</>,
 }));
@@ -90,7 +94,7 @@ const application: Application<KaivuilmoitusData> = {
 function mount() {
   const qc = new QueryClient();
   return render(
-    <MemoryRouter>
+    <MemoryRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
       <GlobalNotificationProvider>
         <QueryClientProvider client={qc}>
           <KaivuilmoitusContainer hankeData={hankeData} application={application} />
@@ -276,10 +280,14 @@ it('persists all contact person groups & invoicing customer across language chan
 });
 
 describe('invoicing customer registryKey language change persistence', () => {
+  beforeEach(() => {
+    sessionStorage.clear();
+  });
+
   function mountEmpty() {
     const qc = new QueryClient();
     return render(
-      <MemoryRouter>
+      <MemoryRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
         <GlobalNotificationProvider>
           <QueryClientProvider client={qc}>
             <KaivuilmoitusContainer hankeData={hankeData} application={application} />
@@ -420,10 +428,14 @@ describe('invoicing customer registryKey language change persistence', () => {
     act(() => {
       formCtx.setValue('applicationData.invoicingCustomer.registryKey', '2222222-2');
     });
-    act(() => {
+    await act(async () => {
       window.dispatchEvent(new CustomEvent('haitaton:languageChanging'));
     });
     utils.unmount();
+    // Clear step persistence so remount starts at BasicInfo (step 0), not Contacts (step 3).
+    // Without this, Contacts renders during hydration and its normalization effect converts
+    // the initially-undefined registryKey to null, overriding the hydrated '2222222-2' value.
+    sessionStorage.removeItem('functional-application-form-step-999-KAIVU-activeStep');
     mountEmpty();
     const newCtx = (
       window as unknown as {

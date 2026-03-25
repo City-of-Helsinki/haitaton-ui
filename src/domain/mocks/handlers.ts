@@ -1,4 +1,4 @@
-import { http, HttpResponse, delay } from 'msw';
+import { http, HttpResponse, delay, PathParams } from 'msw';
 import { HankeDataDraft } from '../types/hanke';
 import * as hankkeetDB from './data/hankkeet';
 import * as hakemuksetDB from './data/hakemukset';
@@ -22,7 +22,6 @@ import {
   NewJohtoselvitysData,
 } from '../application/types/application';
 import { defaultJohtoselvitysData } from './data/defaultJohtoselvitysData';
-import { PathParams } from 'msw/lib/core/utils/matching/matchRequestUrl';
 import ApiError from './apiError';
 import { GridMetadata } from '../map/components/Layers/SimpleHankeLayer';
 
@@ -101,10 +100,10 @@ export const handlers = [
     async () => {
       const metadata = {
         cellSizeMeters: 1000,
-        originX: 25486422.0,
-        originY: 6643836.0,
-        maxX: 25515423.0,
-        maxY: 6687837.0,
+        originX: 25486422,
+        originY: 6643836,
+        maxX: 25515423,
+        maxY: 6687837,
       };
       return HttpResponse.json(metadata);
     },

@@ -111,7 +111,7 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
     select(values) {
       try {
         // Persist the API-shaped HankeData only; do not include separate geometry snapshots.
-        return convertFormStateToHankeData(values as HankeDataFormState);
+        return convertFormStateToHankeData(values);
       } catch {
         return {};
       }
@@ -126,7 +126,7 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
         if (meaningful) {
           const converted = convertHankeDataToFormState(parsed as unknown as HankeData);
           // Replace whole form state with converted values (includes features from geometriat)
-          formContext.reset(converted as HankeDataFormState);
+          formContext.reset(converted);
         }
       } catch {
         // ignore malformed persisted data
@@ -201,7 +201,7 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
         if (raw) {
           const parsed = JSON.parse(raw);
           const converted = convertHankeDataToFormState(parsed as unknown as HankeData);
-          formContext.reset(converted as HankeDataFormState);
+          formContext.reset(converted);
         }
       } catch {
         // ignore restore errors

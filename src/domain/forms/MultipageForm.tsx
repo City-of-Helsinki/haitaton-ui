@@ -99,7 +99,7 @@ const MultipageForm: React.FC<Props> = ({
   //  3. default 0
   let persistedStep: number | undefined;
   try {
-    if (stepPersistKey && typeof window !== 'undefined') {
+    if (stepPersistKey && globalThis.window !== undefined) {
       const raw = sessionStorage.getItem(`${stepPersistKey}-activeStep`);
       if (raw !== null) {
         const parsed = Number.parseInt(raw, 10);
@@ -115,7 +115,7 @@ const MultipageForm: React.FC<Props> = ({
     activeStepIndex:
       typeof initialStep === 'number'
         ? Math.max(0, Math.min(initialStep, formSteps.length - 1))
-        : (persistedStep ?? 0),
+        : persistedStep ?? 0,
     steps: formSteps,
   };
 
@@ -157,8 +157,8 @@ const MultipageForm: React.FC<Props> = ({
         // ignore
       }
     };
-    window.addEventListener('haitaton:languageChanging', handler);
-    return () => window.removeEventListener('haitaton:languageChanging', handler);
+    globalThis.window.addEventListener('haitaton:languageChanging', handler);
+    return () => globalThis.window.removeEventListener('haitaton:languageChanging', handler);
     // Intentionally include state.activeStepIndex so the latest value is persisted
     // when the event fires.
   }, [stepPersistKey, state.activeStepIndex]);

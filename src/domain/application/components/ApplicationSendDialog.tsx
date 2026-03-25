@@ -178,7 +178,6 @@ const ApplicationSendDialog: React.FC<Props> = ({
                 >
                   <GridItem colSpan={2}>
                     <TextInput
-                      {...register('paperDecisionReceiver.name')}
                       name="paperDecisionReceiver.name"
                       label={t('hakemus:sendDialog:name')}
                       required={showPaperDecision}
@@ -187,7 +186,6 @@ const ApplicationSendDialog: React.FC<Props> = ({
                   </GridItem>
                   <GridItem colSpan={2}>
                     <TextInput
-                      {...register('paperDecisionReceiver.streetAddress')}
                       name="paperDecisionReceiver.streetAddress"
                       label={t('hakemus:sendDialog:streetAddress')}
                       required={showPaperDecision}
@@ -196,7 +194,6 @@ const ApplicationSendDialog: React.FC<Props> = ({
                   </GridItem>
                   <GridItem colSpan={{ sm: 1, xs: 2 }} colStart={{ sm: 1, xs: 1 }}>
                     <TextInput
-                      {...register('paperDecisionReceiver.postalCode')}
                       name="paperDecisionReceiver.postalCode"
                       label={t('hakemus:sendDialog:postalCode')}
                       required={showPaperDecision}
@@ -205,7 +202,6 @@ const ApplicationSendDialog: React.FC<Props> = ({
                   </GridItem>
                   <GridItem colSpan={2} colStart={{ sm: 2, xs: 1 }}>
                     <TextInput
-                      {...register('paperDecisionReceiver.city')}
                       name="paperDecisionReceiver.city"
                       label={t('hakemus:sendDialog:city')}
                       required={showPaperDecision}

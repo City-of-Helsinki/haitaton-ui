@@ -1,21 +1,28 @@
 import React from 'react';
 import { render, waitFor, cleanup } from '../../../testUtils/render';
+import { useFormContext } from 'react-hook-form';
 import HankeForm from './HankeForm';
 import { HankeDataFormState } from './types';
 
 // Keep peripheral components light
-jest.mock('./HankeFormPerustiedot', () => () => <div data-testid="mock-perustiedot" />);
-jest.mock('./HankeFormYhteystiedot', () => () => <div data-testid="mock-yhteystiedot" />);
-jest.mock('./HankeFormHaittojenHallinta', () => () => <div data-testid="mock-haitat" />);
-jest.mock('./HankeFormLiitteet', () => () => <div data-testid="mock-liitteet" />);
-jest.mock('./HankeFormSummary', () => () => <div data-testid="mock-summary" />);
-jest.mock('../../application/components/ApplicationAddDialog', () => () => null);
-jest.mock('../../application/hooks/useApplications', () => ({
+vi.mock('./HankeFormPerustiedot', () => ({
+  default: () => <div data-testid="mock-perustiedot" />,
+}));
+vi.mock('./HankeFormYhteystiedot', () => ({
+  default: () => <div data-testid="mock-yhteystiedot" />,
+}));
+vi.mock('./HankeFormHaittojenHallinta', () => ({
+  default: () => <div data-testid="mock-haitat" />,
+}));
+vi.mock('./HankeFormLiitteet', () => ({ default: () => <div data-testid="mock-liitteet" /> }));
+vi.mock('./HankeFormSummary', () => ({ default: () => <div data-testid="mock-summary" /> }));
+vi.mock('../../application/components/ApplicationAddDialog', () => ({ default: () => null }));
+vi.mock('../../application/hooks/useApplications', () => ({
   useApplicationsForHanke: () => ({ data: { applications: [] } }),
 }));
 
-jest.mock('react-i18next', () => ({
-  ...jest.requireActual('react-i18next'),
+vi.mock('react-i18next', async () => ({
+  ...(await vi.importActual<object>('react-i18next')),
   useTranslation: () => ({
     t: (k: string) => k,
     i18n: { language: 'fi', exists: () => true },
@@ -118,15 +125,13 @@ describe('HankeFormAlueet adapted immediate hydration', () => {
 
     // Render a Reader child that inspects hydrated form values directly (avoids triggering step-change validation)
     const Reader: React.FC = () => {
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
-      const { useFormContext } = require('react-hook-form');
       const { getValues } = useFormContext();
       const areas = getValues('alueet') || [];
       return <div data-testid="reader">{areas[0]?.nimi || 'no-area'}</div>;
     };
 
     const { getByTestId } = render(
-      <HankeForm formData={serverProvided} onIsDirtyChange={jest.fn()} onFormClose={jest.fn()}>
+      <HankeForm formData={serverProvided} onIsDirtyChange={vi.fn()} onFormClose={vi.fn()}>
         <Reader />
       </HankeForm>,
     );

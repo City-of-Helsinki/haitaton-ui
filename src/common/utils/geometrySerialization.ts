@@ -78,7 +78,6 @@ export function hydrateAreaFeature(
 
 /** Serialize an array of form areas that hold an OpenLayers Feature in a `feature` property. */
 export function serializeFeatureGeometries(
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   areas:
     | Array<{ id?: unknown; nimi?: string | null; feature?: Feature<Geometry> | null }>
     | null
@@ -93,7 +92,6 @@ export function serializeFeatureGeometries(
  * array length should match the serialized list; extra serialized entries are ignored.
  */
 export function hydrateFeatureGeometries(
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   targets: Array<{ feature?: Feature<Geometry> | null }> | null | undefined,
   serials: SerializedFeatureGeometry[] | null | undefined,
 ) {

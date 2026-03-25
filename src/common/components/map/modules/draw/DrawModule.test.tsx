@@ -5,11 +5,11 @@ import DrawProvider from './DrawProvider';
 
 const mockSource = new VectorSource();
 
-const mockDrawSegmentGuard = jest.fn();
+const mockDrawSegmentGuard = vi.fn();
 
 describe('DrawModule', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('renders without drawSegmentGuard prop', () => {
@@ -31,7 +31,7 @@ describe('DrawModule', () => {
   it('passes drawSegmentGuard prop to DrawInteraction', () => {
     const { container } = render(
       <DrawProvider source={mockSource}>
-        <DrawModule drawSegmentGuard={mockDrawSegmentGuard} onSelfIntersectingPolygon={jest.fn()} />
+        <DrawModule drawSegmentGuard={mockDrawSegmentGuard} onSelfIntersectingPolygon={vi.fn()} />
       </DrawProvider>,
     );
 

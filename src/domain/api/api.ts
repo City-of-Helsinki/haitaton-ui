@@ -49,7 +49,7 @@ api.interceptors.request.use(
 );
 
 api.interceptors.response.use(
-  // eslint-disable-next-line
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async (response: AxiosResponse): Promise<any> => {
     if (response.status >= 200 && response.status < 300) {
       return response;
@@ -69,7 +69,6 @@ api.interceptors.response.use(
       if (response.status === 401 && response.data?.errorCode) {
         const errorCode = response.data.errorCode;
         if (SESSION_TERMINATION_ERROR_CODES.has(errorCode)) {
-          // eslint-disable-next-line
           console.warn(`Session terminated with error code: ${errorCode}. Logging out...`);
           handleSessionTermination();
           return Promise.reject(error);
@@ -77,13 +76,10 @@ api.interceptors.response.use(
       }
 
       if (response.status >= 400 && response.status < 500) {
-        // eslint-disable-next-line
         console.error(response.data?.data?.message);
         return Promise.reject(error);
       }
     } else if (request) {
-      // eslint-disable-next-line
-      // console.error('Request failed. Please try again.');
       return Promise.reject(new Error('Request failed. Please try again.'));
     }
     return Promise.reject(error);

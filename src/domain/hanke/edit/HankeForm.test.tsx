@@ -3,7 +3,7 @@ import { FORMFIELD, HankeDataFormState } from './types';
 import HankeForm from './HankeForm';
 import HankeFormContainer from './HankeFormContainer';
 import { HANKE_VAIHE, HANKE_TYOMAATYYPPI, HankeData } from '../../types/hanke';
-import { render, cleanup, waitFor, screen, within } from '../../../testUtils/render';
+import { act, render, cleanup, waitFor, screen, within } from '../../../testUtils/render';
 import type { UserEvent } from '@testing-library/user-event';
 import hankkeet from '../../mocks/data/hankkeet-data';
 import { server } from '../../mocks/test-server';
@@ -16,7 +16,7 @@ import { cloneDeep } from 'lodash';
 import { Feature } from 'ol';
 import { Polygon } from 'ol/geom';
 import { waitForElementToBeRemoved } from '@testing-library/react';
-import { PathParams } from 'msw/lib/core/utils/matching/matchRequestUrl';
+import { PathParams } from 'msw';
 import { Haittojenhallintasuunnitelma } from '../../common/haittojenhallinta/types';
 
 afterEach(cleanup);
@@ -87,8 +87,8 @@ async function waitForFormValidationToStabilize() {
 beforeEach(() => {
   // Keep setup lightweight to avoid flakiness & performance issues.
   // (Rely on RTL's cleanup + our afterEach for DOM reset.)
-  jest.useRealTimers();
-  jest.clearAllTimers();
+  vi.useRealTimers();
+  vi.clearAllTimers();
   server.resetHandlers();
   window.history.replaceState({}, '', '/');
   window.localStorage.clear();
@@ -101,10 +101,10 @@ afterEach(() => {
   cleanup();
 
   // Clear any remaining timers
-  jest.clearAllTimers();
+  vi.clearAllTimers();
 
   // Reset any mocked functions
-  jest.clearAllMocks();
+  vi.clearAllMocks();
 
   // Clear DOM completely to prevent state leakage
   document.body.innerHTML = '';
@@ -664,7 +664,7 @@ describe('HankeForm', () => {
   });
 
   test('Should be able to upload attachments', async () => {
-    jest.spyOn(hankeAttachmentsApi, 'uploadAttachment').mockImplementation(uploadAttachment);
+    vi.spyOn(hankeAttachmentsApi, 'uploadAttachment').mockImplementation(uploadAttachment);
     initFileGetResponse([]);
     initFileUploadResponse();
     const { user } = render(<HankeFormContainer hankeTunnus="HAI22-1" />);
@@ -893,7 +893,6 @@ describe('HankeForm', () => {
       }
     }
     if (!draftFound) {
-      // eslint-disable-next-line no-console
       console.warn(
         'Draft state banner not located with expected patterns – continuing to list item assertions',
       );
@@ -1336,6 +1335,8 @@ test('Should not save if public hanke has missing haittojen hallinta fields', as
   await user.click(screen.getByRole('button', { name: /tallenna ja keskeytä/i }));
   const errorMessage = await screen.findByText(/kenttä on pakollinen/i);
   expect(errorMessage).toBeInTheDocument();
-  await new Promise((resolve) => setTimeout(resolve, 150));
+  await act(async () => {
+    await new Promise((resolve) => setTimeout(resolve, 150));
+  });
   expect(document.activeElement).toBe(suunnitelmaInput);
 });

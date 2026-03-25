@@ -53,8 +53,6 @@ const DateRangeControl: React.FC<React.PropsWithChildren<Props>> = ({
               maxDate={endDate ? new Date(endDate) : undefined}
               disableConfirmation
               crossOrigin=""
-              onPointerEnterCapture={() => {}}
-              onPointerLeaveCapture={() => {}}
             />
           </div>
         </GridItem>
@@ -79,8 +77,6 @@ const DateRangeControl: React.FC<React.PropsWithChildren<Props>> = ({
             minDate={startDate ? new Date(startDate) : undefined}
             disableConfirmation
             crossOrigin=""
-            onPointerEnterCapture={() => {}}
-            onPointerLeaveCapture={() => {}}
           />
         </GridItem>
       </Grid>

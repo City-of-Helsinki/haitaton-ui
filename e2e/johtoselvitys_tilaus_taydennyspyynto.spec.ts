@@ -90,7 +90,6 @@ test('Johtoselvityshakemus_tilaus_taydennyspyynto', async ({ page }) => {
 
   // Tee täydennys hakemukselle
   await page.getByText('Täydennä').click();
-  // await expect(page.locator('#set-focus-here')).toBeVisible();
   await page.getByText('Yhteystiedot').click();
   await page.getByTestId('applicationData.customerWithContacts.customer.phone').fill('0001234567');
   await nextAndCloseToast(page, 'Seuraava', 'Hakemus tallennettu');

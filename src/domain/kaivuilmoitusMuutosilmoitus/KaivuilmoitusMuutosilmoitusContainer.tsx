@@ -31,7 +31,10 @@ import { useApplicationsForHanke } from '../application/hooks/useApplications';
 import Areas from '../kaivuilmoitus/Areas';
 import HaittojenHallinta from '../kaivuilmoitus/HaittojenHallinta';
 import Contacts from '../kaivuilmoitus/Contacts';
-import { convertFormStateToKaivuilmoitusUpdateData } from '../kaivuilmoitus/utils';
+import {
+  convertFormStateToKaivuilmoitusUpdateData,
+  buildPersistedApplicationFromForm,
+} from '../kaivuilmoitus/utils';
 import MultipageForm from '../forms/MultipageForm';
 import { changeFormStep } from '../forms/utils';
 import FormActions from '../forms/components/FormActions';
@@ -56,7 +59,6 @@ import {
 } from '../application/muutosilmoitus/muutosilmoitusAttachmentsApi';
 import LoadingSpinner from '../../common/components/spinner/LoadingSpinner';
 import useAreasPersistence from '../../common/hooks/useAreasPersistence';
-import { buildPersistedApplicationFromForm } from '../kaivuilmoitus/utils';
 
 type Props = {
   muutosilmoitus: Muutosilmoitus<KaivuilmoitusData>;

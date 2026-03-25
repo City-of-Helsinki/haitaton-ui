@@ -70,6 +70,16 @@ declare global {
     >;
   }
 }
+function stepHasFormErrors(
+  stepIndex: number,
+  pageFieldsToValidate: FieldPath<KaivuilmoitusFormValues>[][],
+  errors: Record<string, unknown>,
+): boolean {
+  return (pageFieldsToValidate[stepIndex] ?? []).some((pf) =>
+    Object.keys(errors).some((k) => k.startsWith(pf)),
+  );
+}
+
 type Props = {
   hankeData: HankeData;
   application?: Application<KaivuilmoitusData>;
@@ -125,8 +135,7 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
     formContext,
     {
       persistAsApiModel: true,
-      buildApiModel: (values) =>
-        buildPersistedApplicationFromForm(values as KaivuilmoitusFormValues),
+      buildApiModel: (values) => buildPersistedApplicationFromForm(values),
     },
   );
 
@@ -518,16 +527,8 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
       setShowErrorsPerStep((prev) => {
         const next = [...prev];
         for (let i = 0; i < formSteps.length - 1; i++) {
-          // Mark step visible if it currently has validation errors captured in form state
-          if (!next[i]) {
-            // Heuristic: if any error key path starts with a field included in that pageFieldsToValidate entry
-            const pageFields = pageFieldsToValidate[i] || [];
-            const hasPageError = pageFields.some((pf) =>
-              Object.keys(errors).some((errKey) => errKey.startsWith(pf)),
-            );
-            if (hasPageError) {
-              next[i] = true;
-            }
+          if (!next[i] && stepHasFormErrors(i, pageFieldsToValidate, errors)) {
+            next[i] = true;
           }
         }
         return next;

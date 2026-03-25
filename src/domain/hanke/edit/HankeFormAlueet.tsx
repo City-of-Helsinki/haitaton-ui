@@ -193,7 +193,7 @@ const HankeFormAlueet: React.FC<FormProps & { drawSource: VectorSource }> = ({
   const features = useMemo(
     () =>
       (effectiveAlueet || []).map((hankeAlue) => {
-        const { feature, tormaystarkasteluTulos, nimi } = hankeAlue as HankeAlueFormState;
+        const { feature, tormaystarkasteluTulos, nimi } = hankeAlue;
         feature?.setProperties(
           {
             liikennehaittaindeksi: tormaystarkasteluTulos

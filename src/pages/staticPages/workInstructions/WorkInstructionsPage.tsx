@@ -20,7 +20,7 @@ const WorkInstructionsPage: React.FC<React.PropsWithChildren<unknown>> = () => {
       <Container alignWithHeader>
         <div className={styles.navmain}>
           <SideNav />
-          <div className={styles.main}>
+          <div className={styles.main} data-testid="static-content-main">
             <Outlet context={{ setBreadcrumbs }}></Outlet>
           </div>
         </div>

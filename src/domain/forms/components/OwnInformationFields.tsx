@@ -20,8 +20,6 @@ function OwnInformationFields() {
           value={`${user?.profile?.name}`}
           helperText={t('form:labels:fromHelsinkiProfile')}
           readOnly
-          onPointerEnterCapture={() => {}}
-          onPointerLeaveCapture={() => {}}
           crossOrigin=""
         />
       </Box>

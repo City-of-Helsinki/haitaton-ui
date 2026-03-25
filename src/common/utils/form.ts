@@ -12,7 +12,6 @@ const isI18nYupMessage = (error: any): boolean => {
 
   // Warn if YUP message is not correct
   if (process.env.NODE_ENV === 'development' && error && error.ref) {
-    // eslint-disable-next-line
     console.warn(
       `YUP translation key is not setup correctly. Fieldname: '${error.ref.name}'. Message: `,
       error,
@@ -23,7 +22,7 @@ const isI18nYupMessage = (error: any): boolean => {
 
 export const getInputErrorText = (
   t: TFunction<string>,
-  // eslint-disable-next-line
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   error: any,
 ): string | undefined => {
   if (isI18nYupMessage(error)) {
