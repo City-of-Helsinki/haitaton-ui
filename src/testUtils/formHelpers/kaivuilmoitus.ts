@@ -24,29 +24,28 @@ function FileListBuilder(files: File[]): FileList {
   }
 }
 
-async function configureCableReport(
+async function configureExistingCableReport(
   user: UserEvent,
-  cableReportDone: boolean,
   existingCableReport: string,
 ): Promise<void> {
-  if (cableReportDone) {
-    const existingRadio = document.getElementById('createCableReportNo');
-    if (existingRadio) await user.click(existingRadio);
-    const dropdownButton = document.getElementById('applicationData.cableReports-main-button');
-    if (dropdownButton) await user.click(dropdownButton);
-    const tagInput = document.getElementById('applicationData.cableReports-input-element');
-    if (tagInput) {
-      await user.type(tagInput, existingCableReport);
-      fireEvent.keyDown(tagInput, { key: 'Enter', code: 'Enter' });
-    }
-  } else {
-    const createNewRadio = document.getElementById('createCableReportYes');
-    if (createNewRadio && !(createNewRadio as HTMLInputElement).checked) {
-      await user.click(createNewRadio);
-    }
-    const rockYes = screen.queryByLabelText(/kyllä/i) || screen.queryByLabelText(/yes/i);
-    if (rockYes) await user.click(rockYes);
+  const existingRadio = document.getElementById('createCableReportNo');
+  if (existingRadio) await user.click(existingRadio);
+  const dropdownButton = document.getElementById('applicationData.cableReports-main-button');
+  if (dropdownButton) await user.click(dropdownButton);
+  const tagInput = document.getElementById('applicationData.cableReports-input-element');
+  if (tagInput) {
+    await user.type(tagInput, existingCableReport);
+    fireEvent.keyDown(tagInput, { key: 'Enter', code: 'Enter' });
   }
+}
+
+async function configureNewCableReport(user: UserEvent): Promise<void> {
+  const createNewRadio = document.getElementById('createCableReportYes');
+  if (createNewRadio && !(createNewRadio as HTMLInputElement).checked) {
+    await user.click(createNewRadio);
+  }
+  const rockYes = screen.queryByLabelText(/kyllä/i) || screen.queryByLabelText(/yes/i);
+  if (rockYes) await user.click(rockYes);
 }
 
 async function addPlacementContracts(user: UserEvent, contracts: string[]): Promise<void> {
@@ -106,7 +105,11 @@ export async function fillBasicInformation(
   }
 
   // Choose cable report mode (refined: use IDs to avoid ambiguous /johtoselvitys/ query collisions)
-  await configureCableReport(user, cableReportDone, existingCableReport);
+  if (cableReportDone) {
+    await configureExistingCableReport(user, existingCableReport);
+  } else {
+    await configureNewCableReport(user);
+  }
 
   // Placement contracts (TagInput) - add each value if not present already
   await addPlacementContracts(user, placementContracts);

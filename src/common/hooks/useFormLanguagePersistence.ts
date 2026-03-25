@@ -58,6 +58,26 @@ import debounce from 'lodash/debounce';
  * - `saveSnapshot()`: force an immediate persistence (used before custom navigation events).
  * - `hydrated`: boolean flag indicating hydration attempt has completed (useful for gating late side-effects).
  */
+function callAfterHydrate(
+  afterHydrate: ((raw: unknown) => void) | undefined,
+  storageKey: string,
+): void {
+  if (!afterHydrate) return;
+  try {
+    const raw = sessionStorage.getItem(storageKey);
+    if (!raw) return;
+    let parsed: unknown;
+    try {
+      parsed = JSON.parse(raw);
+    } catch {
+      parsed = undefined;
+    }
+    afterHydrate(parsed);
+  } catch {
+    // ignore
+  }
+}
+
 // T can be any form value shape used by react-hook-form
 // We purposefully don't constrain to Record<string, unknown> because many form value
 // interfaces have no index signature. We only require it to be object-like for merging.
@@ -118,7 +138,7 @@ export default function useFormLanguagePersistence<T extends object>(
     if (!enabled) return;
     try {
       const allValues = getValues();
-      const persistable = (select ? select(allValues as T) : allValues) as unknown;
+      const persistable = select ? select(allValues as T) : allValues;
       const json = safeStringify(persistable);
       if (json) {
         sessionStorage.setItem(storageKey, json);
@@ -166,7 +186,7 @@ export default function useFormLanguagePersistence<T extends object>(
       // we DO NOT treat the deeper path as dirty. This intentionally allows applying
       // persisted nested values when a parent container was marked dirty programmatically.
       if (!node || node === true) return false;
-      node = (node as Record<string, unknown>)[seg] as DirtyTree;
+      node = node[seg] as DirtyTree;
     }
     return node === true;
   }
@@ -266,23 +286,8 @@ export default function useFormLanguagePersistence<T extends object>(
       } catch {
         // ignore
       }
-      try {
-        if (afterHydrate) {
-          const raw = sessionStorage.getItem(storageKey);
-          // raw already parsed above but re-read to keep logic localized; performance impact negligible
-          if (raw) {
-            let parsed: unknown;
-            try {
-              parsed = JSON.parse(raw);
-            } catch {
-              parsed = undefined;
-            }
-            afterHydrate(parsed);
-          }
-        }
-      } catch {
-        // ignore
-      }
+      // raw already parsed above but re-read to keep logic localized; performance impact negligible
+      callAfterHydrate(afterHydrate, storageKey);
     }
   }, [enabled, storageKey, hydratePhase]);
 

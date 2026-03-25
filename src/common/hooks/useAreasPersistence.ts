@@ -96,9 +96,7 @@ export default function useAreasPersistence<T extends object = Record<string, un
                 return {
                   id: valuesObj?.id ?? null,
                   alluStatus: valuesObj?.alluStatus ?? null,
-                  applicationType:
-                    (applicationData as Record<string, unknown> | undefined)?.applicationType ??
-                    'EXCAVATION_NOTIFICATION',
+                  applicationType: applicationData?.applicationType ?? 'EXCAVATION_NOTIFICATION',
                   applicationData: applicationData ?? {},
                 };
               })();
@@ -111,7 +109,7 @@ export default function useAreasPersistence<T extends object = Record<string, un
         try {
           type WithAppData = { applicationData?: Record<string, unknown> } | undefined;
           const valuesObj = values as WithAppData;
-          const ad = (valuesObj?.applicationData ?? {}) as Record<string, unknown>;
+          const ad = valuesObj?.applicationData ?? {};
           const fallback = {
             id: (values as unknown as { id?: unknown })?.id ?? null,
             alluStatus: (values as unknown as { alluStatus?: unknown })?.alluStatus ?? null,
@@ -133,7 +131,7 @@ export default function useAreasPersistence<T extends object = Record<string, un
       }
 
       const valuesObj = values as { applicationData?: Record<string, unknown> } | undefined;
-      const ad = (valuesObj?.applicationData ?? {}) as Record<string, unknown>;
+      const ad = valuesObj?.applicationData ?? {};
 
       const base: Record<string, unknown> = {
         applicationData: {
