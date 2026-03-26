@@ -131,7 +131,13 @@
     "hds-react/**/minimatch": "^9.0.7",
     "eslint-plugin-jest/**/minimatch": "^9.0.7",
     "typescript-eslint/**/minimatch": "^9.0.7",
-    "react-query/**/minimatch": "^3.1.5"
+    "react-query/**/minimatch": "^3.1.5",
+    "micromatch/picomatch": "2.3.2",
+    "jest-util/picomatch": "2.3.2",
+    "sass/**/picomatch": "4.0.4",
+    "tinyglobby/picomatch": "4.0.4",
+    "babel-plugin-macros/**/yaml": "1.10.3",
+    "lint-staged/**/yaml": "2.8.3"
   },
   "lint-staged": {
     "*.@(js|jsx|ts|tsx)": [
