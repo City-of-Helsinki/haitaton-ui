@@ -128,6 +128,22 @@ export WSL=true
 This setting adds `--runInBand` parameter for Jest tests (
 see https://jestjs.io/docs/cli#--runinband).
 
+## Security auditing
+
+### `yarn audit`
+
+Runs the built-in yarn security audit against the npm advisory database.
+
+### `yarn audit:osv`
+
+Scans `yarn.lock` for known vulnerabilities using [OSV Scanner](https://github.com/google/osv-scanner),
+which checks against the OSV database including all GitHub Security Advisories (GHSA). This gives
+results equivalent to Dependabot alerts and may detect vulnerabilities not present in the npm
+advisory database (see `yarn audit`).
+
+OSV Scanner must be installed separately. See the [OSV Scanner GitHub page](https://github.com/google/osv-scanner)
+for installation instructions.
+
 ## Git hooks
 
 There are team-managed git hooks in the `.husky` -directory. To use these, husky must be enabled

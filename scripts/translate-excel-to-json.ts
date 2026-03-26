@@ -1,7 +1,7 @@
 #!/usr/bin/env ts-node-script
 
 import _ from 'lodash';
-import XLSX from 'xlsx';
+import ExcelJS from 'exceljs';
 import { ResultMap, traverse, flatToDeep } from './translate-common';
 import fs from 'fs';
 
@@ -11,10 +11,26 @@ const file_fi = 'src/locales/fi.json';
 const file_sv = 'src/locales/sv.json';
 const file_en = 'src/locales/en.json';
 
-function read_locales() {
-  const file = XLSX.readFile('locale_export.xlsx');
-  const data = XLSX.utils.sheet_to_json(file.Sheets[file.SheetNames[0]]);
-  return _.keyBy(data, 'path');
+async function read_locales(): Promise<ResultMap> {
+  const workbook = new ExcelJS.Workbook();
+  await workbook.xlsx.readFile('locale_export.xlsx');
+  const worksheet = workbook.worksheets[0];
+  const headers: string[] = [];
+  const data: Array<{ path: string; fi: string; sv: string; en: string }> = [];
+  worksheet.eachRow((row, rowNumber) => {
+    if (rowNumber === 1) {
+      row.eachCell((cell) => headers.push(String(cell.value ?? '')));
+    } else {
+      const obj: { [key: string]: string | number } = {};
+      row.eachCell((cell, colNumber) => {
+        const value = cell.value;
+        obj[headers[colNumber - 1]] =
+          typeof value === 'number' ? value : String(value ?? '').replace(/\r\n/g, '\n');
+      });
+      data.push(obj as { path: string; fi: string; sv: string; en: string });
+    }
+  });
+  return _.keyBy(data, 'path') as unknown as ResultMap;
 }
 
 function write_locales(result: ResultMap) {
@@ -23,10 +39,29 @@ function write_locales(result: ResultMap) {
   fs.writeFileSync(file_en, JSON.stringify(flatToDeep(result, 'en'), null, 2) + '\n');
 }
 
-function run() {
-  const original: ResultMap = {};
-  traverse([], fi, original);
-  const newData = read_locales();
+function normalizeLineEndings(result: ResultMap): ResultMap {
+  const normalized: ResultMap = {};
+  for (const key in result) {
+    const v = result[key];
+    normalized[key] = {
+      ...v,
+      fi: typeof v.fi === 'string' ? v.fi.replace(/\r\n/g, '\n') : v.fi,
+      sv: typeof v.sv === 'string' ? v.sv.replace(/\r\n/g, '\n') : v.sv,
+      en: typeof v.en === 'string' ? v.en.replace(/\r\n/g, '\n') : v.en,
+    };
+  }
+  return normalized;
+}
+
+async function run() {
+  const original: ResultMap = normalizeLineEndings(
+    (() => {
+      const r: ResultMap = {};
+      traverse([], fi, r);
+      return r;
+    })(),
+  );
+  const newData = await read_locales();
   const combined = _.merge(_.cloneDeep(original), newData);
   let updated = 0;
 
@@ -47,4 +82,7 @@ function run() {
   }
 }
 
-run();
+run().catch((err) => {
+  console.error(err);
+  process.exit(1);
+});

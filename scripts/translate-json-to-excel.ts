@@ -1,24 +1,31 @@
 #!/usr/bin/env ts-node-script
 
 import _ from 'lodash';
-import XLSX from 'xlsx';
+import ExcelJS from 'exceljs';
 import { ResultMap, traverse } from './translate-common';
 
 import fi from '../src/locales/fi.json';
 
-function write_file(result: ResultMap) {
-  const worksheet = XLSX.utils.json_to_sheet([..._.values(result)]);
-
-  const book = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(book, worksheet);
-  worksheet['!cols'] = [{ wch: 80 }];
-  XLSX.writeFile(book, 'locale_export.xlsx');
+async function write_file(result: ResultMap) {
+  const workbook = new ExcelJS.Workbook();
+  const worksheet = workbook.addWorksheet('Sheet1');
+  worksheet.columns = [
+    { header: 'path', key: 'path', width: 80 },
+    { header: 'fi', key: 'fi', width: 80 },
+    { header: 'sv', key: 'sv', width: 80 },
+    { header: 'en', key: 'en', width: 80 },
+  ];
+  worksheet.addRows(_.values(result));
+  await workbook.xlsx.writeFile('locale_export.xlsx');
 }
 
-function run() {
+async function run() {
   const result: ResultMap = {};
   traverse([], fi, result);
-  write_file(result);
+  await write_file(result);
 }
 
-run();
+run().catch((err) => {
+  console.error(err);
+  process.exit(1);
+});
