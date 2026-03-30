@@ -1,5 +1,7 @@
 import { test, expect } from '@playwright/test';
 import {
+  alluLogin,
+  alluSearchApplication,
   vastaava,
   testiData,
   helsinkiLogin,
@@ -45,16 +47,8 @@ test('Johtoselvityshakemus_tilaus_taydennyspyynto', async ({ page }) => {
   await expectApplicationStatus(page, hakemuksenTunnus, 'Odottaa käsittelyä');
 
   // Tee hakemukselle täydennyspyyntö Allussa
-  await page.goto(testiData.allu_url);
-  await expect(page.getByPlaceholder('Username')).toBeEmpty();
-  await page.getByPlaceholder('Username').click();
-  await page.getByPlaceholder('Username').fill(testiData.allupw);
-  await page.getByRole('button', { name: 'Submit' }).click();
-  await expect(page.getByRole('link', { name: 'HAKEMUKSET' })).toBeVisible();
-  await page.getByRole('link', { name: 'HAKEMUKSET' }).click();
-  await expect(page.getByRole('button', { name: 'HAE' })).toBeVisible();
-  await page.getByRole('button', { name: 'HAE' }).click();
-  await page.getByRole('link', { name: `${hakemuksenTunnus}` }).click();
+  await alluLogin(page);
+  await alluSearchApplication(page, hakemuksenTunnus);
   await page.getByRole('button', { name: 'NÄYTÄ UUDET TIEDOT' }).click();
   await page.getByRole('button', { name: 'KÄSITTELYYN' }).click();
   await page.getByLabel('Hakemuksen lajit *').getByText('Hakemuksen lajit').click();
@@ -114,16 +108,8 @@ test('Johtoselvityshakemus_tilaus_taydennyspyynto', async ({ page }) => {
   }).toPass({ intervals: [1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000], timeout: 120000 });
 
   // Käsittele täydennys Allussa
-  await page.goto(testiData.allu_url);
-  await expect(page.getByPlaceholder('Username')).toBeEmpty();
-  await page.getByPlaceholder('Username').click();
-  await page.getByPlaceholder('Username').fill(testiData.allupw);
-  await page.getByRole('button', { name: 'Submit' }).click();
-  await expect(page.getByRole('link', { name: 'HAKEMUKSET' })).toBeVisible();
-  await page.getByRole('link', { name: 'HAKEMUKSET' }).click();
-  await expect(page.getByRole('button', { name: 'HAE' })).toBeVisible();
-  await page.getByRole('button', { name: 'HAE' }).click();
-  await page.getByRole('link', { name: `${hakemuksenTunnus}` }).click();
+  await alluLogin(page);
+  await alluSearchApplication(page, hakemuksenTunnus);
   await page.getByRole('button', { name: 'Kuittaa' }).click();
   await expect(page.getByRole('button', { name: 'KÄSITTELE TÄYDENNYSPYYNTÖ' })).toBeVisible();
   await page.getByRole('button', { name: 'KÄSITTELE TÄYDENNYSPYYNTÖ' }).click();

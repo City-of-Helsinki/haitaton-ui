@@ -1,5 +1,7 @@
 import { test, expect } from '@playwright/test';
 import {
+  alluLogin,
+  alluSearchApplication,
   testiData,
   helsinkiLogin,
   hankeName,
@@ -40,18 +42,8 @@ test('Kaivuilmoitus muutosilmoitus', async ({ page }) => {
   const hanketunnus = await page.locator('[data-testid^=hanke-tunnus]').textContent();
 
   // Käsittele kaivuilmoitus Allussa
-  await page.goto(testiData.allu_url);
-  await page.getByPlaceholder('Username').fill(testiData.allupw);
-  await page.getByRole('button', { name: 'Submit' }).click();
-  await expect(page.getByRole('link', { name: 'HAKEMUKSET' })).toBeVisible();
-  await page.getByRole('link', { name: 'HAKEMUKSET' }).click();
-  await expect(page.getByRole('button', { name: 'HAE' })).toBeVisible();
-  await page.getByLabel('Hakemuksen tunnus').fill(`${kaivuilmoitus}`);
-  await page.getByRole('button', { name: 'HAE' }).click();
-  await expect(page.getByRole('link', { name: `${kaivuilmoitus}` })).toBeVisible({
-    timeout: 20000,
-  });
-  await page.getByRole('link', { name: `${kaivuilmoitus}` }).click();
+  await alluLogin(page);
+  await alluSearchApplication(page, kaivuilmoitus);
   await page.getByRole('button', { name: 'NÄYTÄ UUDET TIEDOT' }).click();
   await page.getByRole('button', { name: 'KÄSITTELYYN' }).click();
   await page.getByLabel('Hakemuksen lajit *').getByText('Hakemuksen lajit').click();
@@ -69,13 +61,8 @@ test('Kaivuilmoitus muutosilmoitus', async ({ page }) => {
   }).toPass({ intervals: [1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000], timeout: 120000 });
 
   // Tee kaivuilmoitukselle päätös Allussa
-  await page.goto(testiData.allu_url);
-  await page.getByPlaceholder('Username').fill(testiData.allupw);
-  await page.getByRole('button', { name: 'Submit' }).click();
-  await page.getByRole('link', { name: 'HAKEMUKSET' }).click();
-  await page.getByLabel('Hakemuksen tunnus').fill(`${kaivuilmoitus}`);
-  await page.getByRole('button', { name: 'HAE' }).click();
-  await page.getByRole('link', { name: `${kaivuilmoitus}` }).click();
+  await alluLogin(page);
+  await alluSearchApplication(page, kaivuilmoitus);
   await page.getByRole('button', { name: 'PÄÄTTÄMISEEN' }).click();
   await page.getByRole('button', { name: 'EHDOTA HYVÄKSYMISTÄ' }).click();
   await page.getByLabel('Perustelut *').click();
@@ -118,15 +105,8 @@ test('Kaivuilmoitus muutosilmoitus', async ({ page }) => {
   await page.getByText('Muutosilmoitus lähetetty').click();
 
   // Käsittele muutosilmoitus Allussa
-  await page.goto(testiData.allu_url);
-  await page.getByPlaceholder('Username').fill(testiData.allupw);
-  await page.getByRole('button', { name: 'Submit' }).click();
-  await page.getByRole('link', { name: 'HAKEMUKSET' }).click();
-  await page.getByLabel('Hakemuksen tunnus').click();
-  await page.getByLabel('Hakemuksen tunnus').fill(`${kaivuilmoitus}`);
-  await page.getByRole('button', { name: 'HAE' }).click();
-  await expect(page.getByRole('link', { name: `${kaivuilmoitus}` })).toBeVisible();
-  await page.getByRole('link', { name: `${kaivuilmoitus}` }).click();
+  await alluLogin(page);
+  await alluSearchApplication(page, kaivuilmoitus);
   // Tarkista että liitteet ovat saapuneet
   await page.getByRole('link', { name: 'Liitteet' }).click();
   await page.getByText('valtakirja_pdf.pdf').isVisible({ timeout: 5000 });
