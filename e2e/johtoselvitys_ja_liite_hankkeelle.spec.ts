@@ -1,5 +1,7 @@
 import { expect, test } from '@playwright/test';
 import {
+  alluLogin,
+  alluSearchApplication,
   createAndFillHankeForm,
   daysFromTodayDate,
   expectApplicationStatus,
@@ -109,16 +111,8 @@ test('Johtoselvitys ja liite hankkeelle', async ({ page }) => {
   const hakemusLinkki = `${testiData.testEnvUrl}${linkkiHakemukseenEdit}`;
 
   // check allu
-  await page.goto(testiData.allu_url);
-  await expect(page.getByPlaceholder('Username')).toBeEmpty();
-  await page.getByPlaceholder('Username').click();
-  await page.getByPlaceholder('Username').fill(testiData.allupw);
-  await page.getByRole('button', { name: 'Submit' }).click();
-  await expect(page.getByRole('link', { name: 'HAKEMUKSET' })).toBeVisible();
-  await page.getByRole('link', { name: 'HAKEMUKSET' }).click();
-  await expect(page.getByRole('button', { name: 'HAE' })).toBeVisible();
-  await page.getByRole('button', { name: 'HAE' }).click();
-  await page.getByRole('link', { name: `${hakemuksenTunnus}` }).click();
+  await alluLogin(page);
+  await alluSearchApplication(page, hakemuksenTunnus);
   await page.getByRole('button', { name: 'NÄYTÄ UUDET TIEDOT' }).click();
   await page.getByRole('button', { name: 'KÄSITTELYYN' }).click();
   await page.getByLabel('Hakemuksen lajit *').getByText('Hakemuksen lajit').click();

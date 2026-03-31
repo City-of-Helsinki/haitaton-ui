@@ -120,8 +120,7 @@ export const convertHankeDataToFormState = (
   hankeData: HankeDataDraft | HankeDataFormState | undefined,
 ): HankeDataFormState => ({
   ...hankeData,
-  [FORMFIELD.HANKEALUEET]:
-    hankeData && hankeData[FORMFIELD.HANKEALUEET]?.map(convertHankeAlueToFormState),
+  [FORMFIELD.HANKEALUEET]: hankeData?.[FORMFIELD.HANKEALUEET]?.map(convertHankeAlueToFormState),
   omistajat: hankeData?.omistajat ? hankeData.omistajat : [],
   rakennuttajat: hankeData?.rakennuttajat ? hankeData.rakennuttajat : [],
   toteuttajat: hankeData?.toteuttajat ? hankeData.toteuttajat : [],
