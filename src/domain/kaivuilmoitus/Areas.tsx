@@ -615,11 +615,11 @@ export default function Areas({ hankeData, hankkeenHakemukset, originalHakemus }
         )}
 
         {/* Work area selection buttons (mirror tab selection) */}
-        {applicationAreas.length > 0 && (
+        {watchApplicationAreas.length > 0 && (
           <Flex gap="var(--spacing-xs)" flexWrap="wrap" marginBottom="var(--spacing-s)">
-            {applicationAreas.map((alue, index) => (
+            {watchApplicationAreas.map((alue, index) => (
               <button
-                key={`work-area-btn-${alue.id}`}
+                key={`work-area-btn-${alue.hankealueId ?? index}`}
                 type="button"
                 data-testid="work-area-button"
                 data-selected={selectedTabIndex === index ? 'true' : 'false'}
