@@ -247,7 +247,7 @@ export default function Areas({ hankeData, hankkeenHakemukset, originalHakemus }
     selectedJohtoselvitysTunnukset?.includes(hakemus.applicationIdentifier!),
   );
 
-  const { tabRefs, setSelectedTabIndex, selectedTabIndex } = useSelectableTabs(applicationAreas, {
+  const { tabRefs, setSelectedTabIndex } = useSelectableTabs(applicationAreas, {
     selectLastTabOnChange: true,
   });
 
@@ -614,33 +614,6 @@ export default function Areas({ hankeData, hankkeenHakemukset, originalHakemus }
           </Box>
         )}
 
-        {/* Work area selection buttons (mirror tab selection) */}
-        {watchApplicationAreas.length > 0 && (
-          <Flex gap="var(--spacing-xs)" flexWrap="wrap" marginBottom="var(--spacing-s)">
-            {watchApplicationAreas.map((alue, index) => (
-              <button
-                key={`work-area-btn-${alue.hankealueId ?? index}`}
-                type="button"
-                data-testid="work-area-button"
-                data-selected={selectedTabIndex === index ? 'true' : 'false'}
-                aria-pressed={selectedTabIndex === index}
-                onClick={() => {
-                  setSelectedTabIndex(index);
-                }}
-                style={{
-                  border: '1px solid var(--color-black-40)',
-                  background:
-                    selectedTabIndex === index ? 'var(--color-bus-light)' : 'var(--color-black-5)',
-                  padding: '0.25rem 0.5rem',
-                  borderRadius: '4px',
-                  cursor: 'pointer',
-                }}
-              >
-                {alue.name}
-              </button>
-            ))}
-          </Flex>
-        )}
         <Tabs>
           <TabList>
             {applicationAreas.map((alue, index) => {
