@@ -1061,11 +1061,6 @@ test('Should be able to remove work areas', async () => {
   expect(screen.queryByText('Hankealue 2')).not.toBeInTheDocument();
 });
 
-// Skipped: No stable DOM attribute/class change currently exposed that reflects a work area button selection
-// interaction distinct from tab/stepper logic. Original assertion relied on internal class mutations that do not
-// occur; alternative tab selection check also not triggered by clicking the raw work area button in current
-// implementation. Once UI exposes a deterministic indicator (e.g. data-selected, aria-pressed, or tab change),
-// re-enable and adjust.
 test('Should highlight selected work area', async () => {
   const hankeData = hankkeet[1] as HankeData;
   const application = cloneDeep(applications[4] as Application<KaivuilmoitusData>);
@@ -1092,19 +1087,19 @@ test('Should highlight selected work area', async () => {
     <KaivuilmoitusContainer hankeData={hankeData} application={application} />,
   );
   await user.click(await screen.findByRole('button', { name: /alueiden/i }));
-  const workAreaButtons = await screen.findAllByTestId('work-area-button');
-  expect(workAreaButtons.length).toBeGreaterThan(1);
-  // Establish baseline: ensure first button becomes selected (hook effect may not have fired yet)
-  if (workAreaButtons[0].getAttribute('data-selected') !== 'true') {
-    await user.click(workAreaButtons[0]);
+  const tabs = await screen.findAllByRole('tab');
+  expect(tabs.length).toBeGreaterThan(1);
+  // Establish baseline: ensure first tab becomes selected (hook effect may not have fired yet)
+  if (tabs[0].getAttribute('aria-selected') !== 'true') {
+    await user.click(tabs[0]);
   }
-  await waitFor(() => expect(workAreaButtons[0].getAttribute('data-selected')).toBe('true'));
+  await waitFor(() => expect(tabs[0]).toHaveAttribute('aria-selected', 'true'));
   // Now select the second area and assert toggle
-  await user.click(workAreaButtons[1]);
+  await user.click(tabs[1]);
   await waitFor(() => {
-    const refreshed = screen.getAllByTestId('work-area-button');
-    expect(refreshed[1].getAttribute('data-selected')).toBe('true');
-    expect(refreshed[0].getAttribute('data-selected')).toBe('false');
+    const refreshed = screen.getAllByRole('tab');
+    expect(refreshed[1]).toHaveAttribute('aria-selected', 'true');
+    expect(refreshed[0]).toHaveAttribute('aria-selected', 'false');
   });
 });
 

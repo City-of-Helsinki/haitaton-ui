@@ -27,16 +27,16 @@ test('area removal persists across language change', async ({ page }) => {
   // The stepper button has an aria-label like: "Alueiden piirto. Vaihe 2/6. Valmis." — target it directly
   await page.locator('button[aria-label^="Alueiden piirto"]').first().click();
 
-  // Ensure the work area button exists
-  await expect(page.getByTestId('work-area-button')).toBeVisible();
+  // Ensure the work area tab exists
+  await expect(page.getByRole('tab').first()).toBeVisible();
 
   // Change language (Suomi -> English) via header language selector
   // Open language selector and pick English
   await page.getByRole('button', { name: 'Suomi' }).click();
   await page.getByText('English').click();
 
-  // After language change the work area button should still be present
-  await expect(page.getByTestId('work-area-button')).toBeVisible();
+  // After language change the work area tab should still be present
+  await expect(page.getByRole('tab').first()).toBeVisible();
 
   // Remove the work area using the table delete button (localized label)
   // Scope search to the tyoalueet table to target the correct delete button
@@ -53,13 +53,13 @@ test('area removal persists across language change', async ({ page }) => {
     .getByRole('button', { name: /Vahvista|Confirm|Remove/i })
     .click();
 
-  // Wait for the UI to reflect removal: no work-area buttons should remain
-  await expect(page.locator('[data-testid="work-area-button"]')).toHaveCount(0);
+  // Wait for the UI to reflect removal: no work-area tabs should remain
+  await expect(page.getByRole('tab')).toHaveCount(0);
 
   // Change language again (English -> Suomi)
   await page.getByRole('button', { name: 'English' }).click();
   await page.getByText('Suomi').click();
 
   // Verify the removal persisted after language change
-  await expect(page.locator('[data-testid="work-area-button"]')).toHaveCount(0);
+  await expect(page.getByRole('tab')).toHaveCount(0);
 });
