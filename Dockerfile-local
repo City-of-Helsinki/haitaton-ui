@@ -46,8 +46,13 @@ COPY ./scripts/nginx-env.sh /opt/nginx-env.sh
 # while replacing the environment variables
 COPY ./nginx/nginx.conf /opt/nginx.conf
 USER root
-RUN chmod +x /opt/env.sh
-RUN chmod +x /opt/nginx-env.sh
+# Create the environment file so that the user that will run the backend has
+# permission to overwrite the config based on environment variables.
+RUN touch env-config.js && \
+    chmod a+rw env-config.js && \
+# Set permissions for running scripts and updating the config
+    chmod +x /opt/env.sh && \
+    chmod +x /opt/nginx-env.sh
 USER default
 
 ENV REACT_APP_DISABLE_SENTRY=1
