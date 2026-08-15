@@ -57,7 +57,7 @@ test('Kaivuilmoitus => toiminnallinen kunto ja valmis', async ({ page }) => {
   await alluSearchApplication(page, kaivuilmoitus);
   await page.getByRole('button', { name: 'NÄYTÄ UUDET TIEDOT' }).click();
   await page.getByRole('button', { name: 'KÄSITTELYYN' }).click();
-  await page.getByLabel('Hakemuksen lajit *').getByText('Hakemuksen lajit').click();
+  await page.getByRole('combobox', { name: 'Hakemuksen lajit' }).click();
   await page.getByText('Katu- ja vihertyöt').click();
   await page.locator('.cdk-overlay-container > div:nth-child(3)').click();
   await expect(page.getByRole('button', { name: 'TALLENNA' })).toBeVisible();
@@ -65,9 +65,9 @@ test('Kaivuilmoitus => toiminnallinen kunto ja valmis', async ({ page }) => {
   await expect(page.getByRole('button', { name: 'PÄÄTTÄMISEEN' })).toBeVisible();
   await page.getByRole('button', { name: 'PÄÄTTÄMISEEN' }).click();
   await page.getByRole('button', { name: 'EHDOTA HYVÄKSYMISTÄ' }).click();
-  await page.getByLabel('Perustelut *').click();
-  await page.getByLabel('Perustelut *').fill('testiautomaatioperustelut');
-  await page.getByLabel('Valitse päättäjä').getByText('Valitse päättäjä').click();
+  await page.getByPlaceholder('Perustelut').click();
+  await page.getByPlaceholder('Perustelut').fill('testiautomaatioperustelut');
+  await page.getByRole('combobox', { name: 'Valitse päättäjä' }).click();
   await page.getByText('Allu Päättäjä').click();
   await page.getByRole('button', { name: 'TALLENNA' }).click();
   await expect(page.getByRole('button', { name: 'PÄÄTÄ' })).toBeVisible();
@@ -76,13 +76,13 @@ test('Kaivuilmoitus => toiminnallinen kunto ja valmis', async ({ page }) => {
   await expect(page.getByRole('heading', { name: 'TYÖJONO' })).toBeVisible();
   await expect(page.getByRole('link', { name: 'HAKEMUKSET' })).toBeVisible();
   await page.getByRole('link', { name: 'HAKEMUKSET' }).click();
-  await expect(page.getByLabel('Hakemuksen tunnus')).toBeVisible({ timeout: 20000 });
+  await expect(page.getByPlaceholder('Hakemuksen tunnus')).toBeVisible({ timeout: 20000 });
 
   // Tee johtoselvitykselle päätös Allussa
   await alluSearchApplication(page, johtoselvitys);
   await page.getByRole('button', { name: 'NÄYTÄ UUDET TIEDOT' }).click();
   await page.getByRole('button', { name: 'KÄSITTELYYN' }).click();
-  await page.getByLabel('Hakemuksen lajit *').getByText('Hakemuksen lajit').click();
+  await page.getByRole('combobox', { name: 'Hakemuksen lajit' }).click();
   await page.getByText('Katu- ja vihertyöt').click();
   await page.locator('.cdk-overlay-container > div:nth-child(3)').click();
   await expect(page.getByRole('button', { name: 'TALLENNA' })).toBeVisible();

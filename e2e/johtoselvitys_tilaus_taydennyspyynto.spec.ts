@@ -51,7 +51,7 @@ test('Johtoselvityshakemus_tilaus_taydennyspyynto', async ({ page }) => {
   await alluSearchApplication(page, hakemuksenTunnus);
   await page.getByRole('button', { name: 'NÄYTÄ UUDET TIEDOT' }).click();
   await page.getByRole('button', { name: 'KÄSITTELYYN' }).click();
-  await page.getByLabel('Hakemuksen lajit *').getByText('Hakemuksen lajit').click();
+  await page.getByRole('combobox', { name: 'Hakemuksen lajit' }).click();
   await page.getByText('Katu- ja vihertyöt').click();
   await page.locator('.cdk-overlay-container > div:nth-child(3)').click();
   await page.getByLabel('Työn tarkenne').getByText('Työn tarkenne').click();
@@ -62,8 +62,8 @@ test('Johtoselvityshakemus_tilaus_taydennyspyynto', async ({ page }) => {
   await expect(page.getByRole('button', { name: 'TÄYDENNYSPYYNTÖ' })).toBeVisible();
   await page.getByRole('button', { name: 'TÄYDENNYSPYYNTÖ' }).click();
   await page.getByLabel('Hyväksy tiedot täydennyspyynt').getByText('Hakija').click();
-  await expect(page.getByLabel('Selite *')).toBeVisible();
-  await page.getByLabel('Selite *').fill('Testi Auto Maatio');
+  await expect(page.getByPlaceholder('Selite')).toBeVisible();
+  await page.getByPlaceholder('Selite').fill('Testi Auto Maatio');
   await page.getByRole('button', { name: 'LÄHETÄ PYYNTÖ' }).click();
   await expect(page.getByText('Hakemus siirretty odottamaan täydennystä')).toBeVisible();
   await page
