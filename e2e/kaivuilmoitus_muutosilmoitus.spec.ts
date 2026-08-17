@@ -46,7 +46,7 @@ test('Kaivuilmoitus muutosilmoitus', async ({ page }) => {
   await alluSearchApplication(page, kaivuilmoitus);
   await page.getByRole('button', { name: 'NÄYTÄ UUDET TIEDOT' }).click();
   await page.getByRole('button', { name: 'KÄSITTELYYN' }).click();
-  await page.getByLabel('Hakemuksen lajit *').getByText('Hakemuksen lajit').click();
+  await page.getByRole('combobox', { name: 'Hakemuksen lajit' }).click();
   await page.getByText('Katu- ja vihertyöt').click();
   await page.locator('.cdk-overlay-container > div:nth-child(3)').click();
   await expect(page.getByRole('button', { name: 'TALLENNA' })).toBeVisible();
@@ -63,11 +63,15 @@ test('Kaivuilmoitus muutosilmoitus', async ({ page }) => {
   // Tee kaivuilmoitukselle päätös Allussa
   await alluLogin(page);
   await alluSearchApplication(page, kaivuilmoitus);
+  const naytaUudetTiedot = page.getByRole('button', { name: 'NÄYTÄ UUDET TIEDOT' });
+  if (await naytaUudetTiedot.isVisible().catch(() => false)) {
+    await naytaUudetTiedot.click();
+  }
   await page.getByRole('button', { name: 'PÄÄTTÄMISEEN' }).click();
   await page.getByRole('button', { name: 'EHDOTA HYVÄKSYMISTÄ' }).click();
-  await page.getByLabel('Perustelut *').click();
-  await page.getByLabel('Perustelut *').fill('Testiautomaatio e2e');
-  await page.getByLabel('Valitse päättäjä').getByText('Valitse päättäjä').click();
+  await page.getByPlaceholder('Perustelut').click();
+  await page.getByPlaceholder('Perustelut').fill('Testiautomaatio e2e');
+  await page.getByRole('combobox', { name: 'Valitse päättäjä' }).click();
   await page.getByText('Allu Päättäjä').click();
   await page.getByRole('button', { name: 'TALLENNA' }).click();
   await expect(page.getByLabel('Hakemus siirretty odottamaan')).toBeVisible();
@@ -113,17 +117,19 @@ test('Kaivuilmoitus muutosilmoitus', async ({ page }) => {
   await page.getByRole('link', { name: 'Perustiedot' }).click();
 
   // Tee korvaava päätös Allussa
-  await expect(page.getByRole('link', { name: 'Näytä' })).toBeVisible();
-  await page.getByRole('link', { name: 'Näytä' }).click();
+  await expect(
+    page.locator('external-update-notification').getByRole('link', { name: 'Näytä' }),
+  ).toBeVisible();
+  await page.locator('external-update-notification').getByRole('link', { name: 'Näytä' }).click();
   await expect(page.getByText('valtakirja_pdf.pdf')).toBeVisible();
   await page.getByRole('button', { name: 'KORVAAVA PÄÄTÖS' }).click();
   await page.getByRole('button', { name: 'TALLENNA' }).click();
-  await page.getByRole('option', { name: 'Muut muutokset' }).getByRole('button').click();
+  await page.getByRole('button').filter({ hasText: 'cancel' }).click();
   await page.getByRole('button', { name: 'PÄÄTTÄMISEEN' }).click();
   await page.getByRole('button', { name: 'EHDOTA HYVÄKSYMISTÄ' }).click();
-  await page.getByLabel('Perustelut *').click();
-  await page.getByLabel('Perustelut *').fill('Testiautomaatio e2e succesfull');
-  await page.getByLabel('Valitse päättäjä').getByText('Valitse päättäjä').click();
+  await page.getByPlaceholder('Perustelut').click();
+  await page.getByPlaceholder('Perustelut').fill('Testiautomaatio e2e succesfull');
+  await page.getByRole('combobox', { name: 'Valitse päättäjä' }).click();
   await page.getByText('Allu Päättäjä').click();
   await page.getByRole('button', { name: 'TALLENNA' }).click();
   await page.getByRole('button', { name: 'PÄÄTÄ' }).click();

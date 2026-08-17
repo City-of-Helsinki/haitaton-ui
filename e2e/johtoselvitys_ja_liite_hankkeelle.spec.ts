@@ -115,7 +115,7 @@ test('Johtoselvitys ja liite hankkeelle', async ({ page }) => {
   await alluSearchApplication(page, hakemuksenTunnus);
   await page.getByRole('button', { name: 'NÄYTÄ UUDET TIEDOT' }).click();
   await page.getByRole('button', { name: 'KÄSITTELYYN' }).click();
-  await page.getByLabel('Hakemuksen lajit *').getByText('Hakemuksen lajit').click();
+  await page.getByRole('combobox', { name: 'Hakemuksen lajit' }).click();
   await page.getByText('Katu- ja vihertyöt').click();
   await page.locator('.cdk-overlay-container > div:nth-child(3)').click();
   await expect(page.getByRole('button', { name: 'TALLENNA' })).toBeVisible();
