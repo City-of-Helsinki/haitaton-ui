@@ -12,6 +12,7 @@ import {
   daysFromTodayDate,
   hyvaksyKaivuilmoitusValmiiksi,
   hyvaksyKaivuilmoitusToiminnalliseenKuntoon,
+  hyvaksyTietopaivitykset,
 } from './_setup';
 
 test.beforeEach('Helsinki_login', async ({ page }) => {
@@ -55,19 +56,12 @@ test('Kaivuilmoitus => toiminnallinen kunto ja valmis', async ({ page }) => {
 
   // Tee kaivuilmoitukselle päätös Allussa
   await alluSearchApplication(page, kaivuilmoitus);
-  await page.getByRole('button', { name: 'NÄYTÄ UUDET TIEDOT' }).click();
-  await page.getByRole('button', { name: 'KÄSITTELYYN' }).click();
-  await page.getByRole('combobox', { name: 'Hakemuksen lajit' }).click();
-  await page.getByText('Katu- ja vihertyöt').click();
-  await page.locator('.cdk-overlay-container > div:nth-child(3)').click();
-  await expect(page.getByRole('button', { name: 'TALLENNA' })).toBeVisible();
-  await page.getByRole('button', { name: 'TALLENNA' }).click();
+  await hyvaksyTietopaivitykset(page, 'Katu- ja vihertyöt');
   await expect(page.getByRole('button', { name: 'PÄÄTTÄMISEEN' })).toBeVisible();
   await page.getByRole('button', { name: 'PÄÄTTÄMISEEN' }).click();
   await page.getByRole('button', { name: 'EHDOTA HYVÄKSYMISTÄ' }).click();
-  await page.getByPlaceholder('Perustelut').click();
-  await page.getByPlaceholder('Perustelut').fill('testiautomaatioperustelut');
-  await page.getByRole('combobox', { name: 'Valitse päättäjä' }).click();
+  await page.getByRole('textbox', { name: 'Perustelut' }).fill('testiautomaatioperustelut');
+  await page.getByRole('combobox', { name: 'Valitse päättäjä' }).press('Enter');
   await page.getByText('Allu Päättäjä').click();
   await page.getByRole('button', { name: 'TALLENNA' }).click();
   await expect(page.getByRole('button', { name: 'PÄÄTÄ' })).toBeVisible();
@@ -76,17 +70,13 @@ test('Kaivuilmoitus => toiminnallinen kunto ja valmis', async ({ page }) => {
   await expect(page.getByRole('heading', { name: 'TYÖJONO' })).toBeVisible();
   await expect(page.getByRole('link', { name: 'HAKEMUKSET' })).toBeVisible();
   await page.getByRole('link', { name: 'HAKEMUKSET' }).click();
-  await expect(page.getByPlaceholder('Hakemuksen tunnus')).toBeVisible({ timeout: 20000 });
+  await expect(page.getByRole('textbox', { name: 'Hakemuksen tunnus' })).toBeVisible({
+    timeout: 20000,
+  });
 
   // Tee johtoselvitykselle päätös Allussa
   await alluSearchApplication(page, johtoselvitys);
-  await page.getByRole('button', { name: 'NÄYTÄ UUDET TIEDOT' }).click();
-  await page.getByRole('button', { name: 'KÄSITTELYYN' }).click();
-  await page.getByRole('combobox', { name: 'Hakemuksen lajit' }).click();
-  await page.getByText('Katu- ja vihertyöt').click();
-  await page.locator('.cdk-overlay-container > div:nth-child(3)').click();
-  await expect(page.getByRole('button', { name: 'TALLENNA' })).toBeVisible();
-  await page.getByRole('button', { name: 'TALLENNA' }).click();
+  await hyvaksyTietopaivitykset(page, 'Katu- ja vihertyöt');
   await expect(page.getByRole('button', { name: 'PÄÄTTÄMISEEN' })).toBeVisible();
   await page.getByRole('button', { name: 'PÄÄTTÄMISEEN' }).click();
   await expect(page.getByRole('button', { name: 'PÄÄTÄ' })).toBeVisible();

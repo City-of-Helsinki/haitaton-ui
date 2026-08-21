@@ -16,7 +16,7 @@
     "test": "TEST=true yarn run update-runtime-env && vitest",
     "testCI": "TEST=true yarn run update-runtime-env && vitest run",
     "test:coverage": "TEST=true yarn run update-runtime-env && vitest run --coverage",
-    "e2e": "playwright test --retries=1 --project=chromium --workers=3",
+    "e2e": "playwright test --retries=1 --project=chromium",
     "type-check": "tsc --pretty --noEmit",
     "format": "prettier --write",
     "ts-check": "tsc --noEmit --project tsconfig.json",
