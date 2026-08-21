@@ -7,6 +7,7 @@ import {
   expectApplicationStatus,
   hankeName,
   helsinkiLogin,
+  hyvaksyTietopaivitykset,
   monthAndDayFromTodayDate,
   nextAndCloseToast,
   perustaja,
@@ -113,13 +114,7 @@ test('Johtoselvitys ja liite hankkeelle', async ({ page }) => {
   // check allu
   await alluLogin(page);
   await alluSearchApplication(page, hakemuksenTunnus);
-  await page.getByRole('button', { name: 'NÄYTÄ UUDET TIEDOT' }).click();
-  await page.getByRole('button', { name: 'KÄSITTELYYN' }).click();
-  await page.getByRole('combobox', { name: 'Hakemuksen lajit' }).click();
-  await page.getByText('Katu- ja vihertyöt').click();
-  await page.locator('.cdk-overlay-container > div:nth-child(3)').click();
-  await expect(page.getByRole('button', { name: 'TALLENNA' })).toBeVisible();
-  await page.getByRole('button', { name: 'TALLENNA' }).click();
+  await hyvaksyTietopaivitykset(page, 'Katu- ja vihertyöt');
 
   // Tarkista että liitteet ovat saapuneet
   await page.getByRole('link', { name: 'Liitteet (2)' }).click();

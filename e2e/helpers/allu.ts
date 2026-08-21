@@ -6,8 +6,8 @@ export async function alluLogin(page: Page) {
   const alluLogo = page.locator('img[src="assets/svg/allu-testi-logo.svg"]');
   if (!(await alluLogo.isVisible())) {
     await page.goto(testiData.allu_login);
-    await page.getByPlaceholder('Username').fill(testiData.allupw);
-    await page.getByRole('button', { name: 'Submit' }).click();
+    await page.getByPlaceholder('Käyttäjänimi').fill(testiData.allupw);
+    await page.getByRole('button', { name: 'Lähetä' }).click();
     await expect(page.getByRole('link', { name: 'HAKEMUKSET' })).toBeVisible();
   }
   await page.getByRole('link', { name: 'HAKEMUKSET' }).click();
@@ -15,10 +15,33 @@ export async function alluLogin(page: Page) {
 
 export async function alluSearchApplication(page: Page, applicationId: string) {
   await expect(page.getByRole('button', { name: 'HAE' })).toBeVisible();
-  await page.getByPlaceholder('Hakemuksen tunnus').fill(applicationId);
+  await page.getByRole('textbox', { name: 'Hakemuksen tunnus' }).fill(applicationId);
   await page.getByRole('button', { name: 'HAE' }).click();
   await expect(page.getByRole('link', { name: applicationId })).toBeVisible({ timeout: 20000 });
   await page.getByRole('link', { name: applicationId }).click();
+}
+
+// Takes an application from "Hakemus saapunut" into "Käsittelyssä", approving the
+// data Haitaton proposed in ALLU's "Tarjotut tiedot" dialog. Pass tyonTarkenne
+// only when the application type requires specifying it (e.g. Katu- ja vihertyöt).
+export async function hyvaksyTietopaivitykset(
+  page: Page,
+  hakemuksenLaji: string,
+  tyonTarkenne?: string,
+) {
+  await page.getByRole('button', { name: 'NÄYTÄ UUDET TIEDOT' }).click();
+  await page.getByRole('button', { name: 'KÄSITTELYYN' }).click();
+  const tietopaivitysDialog = page.getByRole('dialog', { name: 'Tarjotut tiedot' });
+  await tietopaivitysDialog.getByRole('combobox', { name: 'Hakemuksen lajit' }).press('Enter');
+  await page.getByText(hakemuksenLaji).click();
+  await page.keyboard.press('Escape');
+  if (tyonTarkenne) {
+    await tietopaivitysDialog.getByRole('combobox', { name: 'Työn tarkenne' }).press('Enter');
+    await page.getByText(tyonTarkenne).click();
+    await page.keyboard.press('Escape');
+  }
+  await expect(tietopaivitysDialog.getByRole('button', { name: 'TALLENNA' })).toBeVisible();
+  await tietopaivitysDialog.getByRole('button', { name: 'TALLENNA' }).click();
 }
 
 // Helper to assert application status text
@@ -69,12 +92,12 @@ export async function hyvaksyKaivuilmoitusToiminnalliseenKuntoon(
   await page.getByRole('link', { name: 'Valvonta (3)' }).click();
   await page.getByRole('button', { name: 'OMAKSI' }).first().click();
   await page.getByRole('button', { name: 'HYVÄKSY' }).click();
-  await page.getByRole('textbox', { name: 'Valvojan merkinnät' }).click();
   await page.getByRole('textbox', { name: 'Valvojan merkinnät' }).fill('Testiautomaatiomerkinnät');
   await page.getByRole('button', { name: 'EHDOTA PÄÄTETTÄVÄKSI' }).click();
-  await page.getByPlaceholder('Perustelut').click();
-  await page.getByPlaceholder('Perustelut').fill('Hyväksytty toiminnalliseen kuntoon');
-  await page.getByRole('combobox', { name: 'Valitse päättäjä' }).click();
+  await page
+    .getByRole('textbox', { name: 'Perustelut' })
+    .fill('Hyväksytty toiminnalliseen kuntoon');
+  await page.getByRole('combobox', { name: 'Valitse päättäjä' }).press('Enter');
   await page.getByText('Allu Päättäjä').click();
   await page.getByRole('button', { name: 'TALLENNA' }).click();
   await expect(page.getByText('MUOKKAA POISTA OMAKSI').first()).toBeVisible();
@@ -100,12 +123,10 @@ export async function hyvaksyKaivuilmoitusValmiiksi(page: Page, kaivuilmoitus: s
   await page.getByRole('link', { name: /Valvonta/gm }).click();
   await page.getByRole('button', { name: 'OMAKSI' }).first().click();
   await page.getByRole('button', { name: 'HYVÄKSY' }).click();
-  await page.getByRole('textbox', { name: 'Valvojan merkinnät' }).click();
   await page.getByRole('textbox', { name: 'Valvojan merkinnät' }).fill('Valmiiksi merkinnät');
   await page.getByRole('button', { name: 'EHDOTA PÄÄTETTÄVÄKSI' }).click();
-  await page.getByPlaceholder('Perustelut').click();
-  await page.getByPlaceholder('Perustelut').fill('Hyväksytty valmiiksi');
-  await page.getByRole('combobox', { name: 'Valitse päättäjä' }).click();
+  await page.getByRole('textbox', { name: 'Perustelut' }).fill('Hyväksytty valmiiksi');
+  await page.getByRole('combobox', { name: 'Valitse päättäjä' }).press('Enter');
   await page.getByText('Allu Päättäjä').click();
   await page.getByRole('button', { name: 'TALLENNA' }).click();
   await expect(page.getByText('MUOKKAA POISTA OMAKSI').first()).toBeVisible();

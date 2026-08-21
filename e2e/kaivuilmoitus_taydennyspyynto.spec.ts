@@ -10,6 +10,7 @@ import {
   createAndFillHankeForm,
   ilmoitaKaivuilmoitusValmiiksi,
   createAndFillKaivuilmoitusForm,
+  hyvaksyTietopaivitykset,
 } from './_setup';
 
 test.beforeEach('Helsinki_login', async ({ page }) => {
@@ -43,24 +44,12 @@ test('Kaivuilmoitus täydennyspyyntö', async ({ page }) => {
   // käsittely Allussa
   await alluLogin(page);
   await alluSearchApplication(page, kaivuilmoitus);
-  await page.getByRole('button', { name: 'NÄYTÄ UUDET TIEDOT' }).click();
-  await page.getByRole('button', { name: 'KÄSITTELYYN' }).click();
-  await page.getByRole('combobox', { name: 'Hakemuksen lajit' }).click();
-  await page.getByText('Katu- ja vihertyöt').click();
-  await page.locator('.cdk-overlay-container > div:nth-child(3)').click();
-  await expect(page.getByRole('button', { name: 'TALLENNA' })).toBeVisible();
-  await page.getByRole('button', { name: 'TALLENNA' }).click();
+  await hyvaksyTietopaivitykset(page, 'Katu- ja vihertyöt');
 
   // Johtoselvitys
   await page.getByRole('link', { name: 'HAKEMUKSET' }).click();
   await alluSearchApplication(page, johtoselvitys);
-  await page.getByRole('button', { name: 'NÄYTÄ UUDET TIEDOT' }).click();
-  await page.getByRole('button', { name: 'KÄSITTELYYN' }).click();
-  await page.getByRole('combobox', { name: 'Hakemuksen lajit' }).click();
-  await page.getByText('Katu- ja vihertyöt').click();
-  await page.locator('.cdk-overlay-container > div:nth-child(3)').click();
-  await expect(page.getByRole('button', { name: 'TALLENNA' })).toBeVisible();
-  await page.getByRole('button', { name: 'TALLENNA' }).click();
+  await hyvaksyTietopaivitykset(page, 'Katu- ja vihertyöt');
 
   // Odotetaan tuloksia
   await page.goto(testiData.alluTriggerUrl);
@@ -77,18 +66,15 @@ test('Kaivuilmoitus täydennyspyyntö', async ({ page }) => {
 
   await page.getByRole('button', { name: 'TÄYDENNYSPYYNTÖ' }).click();
   await page.getByText('Muu', { exact: true }).click();
-  await page.getByPlaceholder('Selite').click();
-  await page.getByPlaceholder('Selite').fill('Testiautomaatio täydennyspyyntö');
+  await page.getByRole('textbox', { name: 'Selite' }).fill('Testiautomaatio täydennyspyyntö');
   await page.getByRole('button', { name: 'LÄHETÄ PYYNTÖ' }).click();
   await page.getByRole('link', { name: 'HAKEMUKSET' }).click();
-  await page.getByPlaceholder('Hakemuksen tunnus').click();
-  await page.getByPlaceholder('Hakemuksen tunnus').fill(`${kaivuilmoitus}`);
+  await page.getByRole('textbox', { name: 'Hakemuksen tunnus' }).fill(`${kaivuilmoitus}`);
   await page.getByRole('button', { name: 'HAE' }).click();
   await page.getByRole('link', { name: `${kaivuilmoitus}` }).click();
   await page.getByRole('button', { name: 'TÄYDENNYSPYYNTÖ' }).click();
   await page.getByText('Muu', { exact: true }).click();
-  await page.getByPlaceholder('Selite').click();
-  await page.getByPlaceholder('Selite').fill('Testiautomaatio täydennyspyyntö');
+  await page.getByRole('textbox', { name: 'Selite' }).fill('Testiautomaatio täydennyspyyntö');
   await page.getByRole('button', { name: 'LÄHETÄ PYYNTÖ' }).click();
 
   // tarkista haitattomasta
@@ -160,7 +146,7 @@ test('Kaivuilmoitus täydennyspyyntö', async ({ page }) => {
   await expect(page.getByLabel('Hakemus päätetty')).toBeVisible();
 
   await page.getByRole('link', { name: 'HAKEMUKSET' }).click();
-  await page.getByPlaceholder('Hakemuksen tunnus').fill(`${kaivuilmoitus}`);
+  await page.getByRole('textbox', { name: 'Hakemuksen tunnus' }).fill(`${kaivuilmoitus}`);
   await page.getByRole('button', { name: 'HAE' }).click();
   await page.getByRole('link', { name: `${kaivuilmoitus}` }).click();
   await expect(page.getByText('TÄYDENNYS VASTAANOTETTU')).toBeVisible();
@@ -170,9 +156,8 @@ test('Kaivuilmoitus täydennyspyyntö', async ({ page }) => {
   await expect(page.getByText('KÄSITTELYSSÄ')).toBeVisible();
   await page.getByRole('button', { name: 'PÄÄTTÄMISEEN' }).click();
   await page.getByRole('button', { name: 'EHDOTA HYVÄKSYMISTÄ' }).click();
-  await page.getByPlaceholder('Perustelut').click();
-  await page.getByPlaceholder('Perustelut').fill('Testiautomaatio e2e succesfull');
-  await page.getByRole('combobox', { name: 'Valitse päättäjä' }).click();
+  await page.getByRole('textbox', { name: 'Perustelut' }).fill('Testiautomaatio e2e succesfull');
+  await page.getByRole('combobox', { name: 'Valitse päättäjä' }).press('Enter');
   await page.getByText('Allu Päättäjä').click();
   await page.getByRole('button', { name: 'TALLENNA' }).click();
 
@@ -204,10 +189,9 @@ test('Kaivuilmoitus täydennyspyyntö', async ({ page }) => {
   await page.getByRole('link', { name: /Valvonta/gm }).click();
   await page.getByRole('button', { name: 'OMAKSI' }).first().click();
   await page.getByRole('button', { name: 'HYVÄKSY' }).click();
-  await page.getByPlaceholder('Valvojan merkinnät').click();
-  await page.getByPlaceholder('Valvojan merkinnät').fill('Valmiiksi merkinnät');
+  await page.getByRole('textbox', { name: 'Valvojan merkinnät' }).fill('Valmiiksi merkinnät');
   await page.getByText('EHDOTA PÄÄTETTÄVÄKSI').click();
-  await page.getByRole('combobox', { name: 'Valitse päättäjä' }).click();
+  await page.getByRole('combobox', { name: 'Valitse päättäjä' }).press('Enter');
   await page.getByText('Allu Päättäjä').click();
   await page.getByRole('button', { name: 'TALLENNA' }).click();
   await expect(page.getByLabel('Valvontatehtävä hyväksytty')).toBeVisible();

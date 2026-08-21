@@ -8,6 +8,7 @@ import {
   expectApplicationStatus,
   createAndFillHankeForm,
   createAndFillKaivuilmoitusForm,
+  hyvaksyTietopaivitykset,
 } from './_setup';
 import path from 'path';
 
@@ -44,13 +45,7 @@ test('Kaivuilmoitus muutosilmoitus', async ({ page }) => {
   // Käsittele kaivuilmoitus Allussa
   await alluLogin(page);
   await alluSearchApplication(page, kaivuilmoitus);
-  await page.getByRole('button', { name: 'NÄYTÄ UUDET TIEDOT' }).click();
-  await page.getByRole('button', { name: 'KÄSITTELYYN' }).click();
-  await page.getByRole('combobox', { name: 'Hakemuksen lajit' }).click();
-  await page.getByText('Katu- ja vihertyöt').click();
-  await page.locator('.cdk-overlay-container > div:nth-child(3)').click();
-  await expect(page.getByRole('button', { name: 'TALLENNA' })).toBeVisible();
-  await page.getByRole('button', { name: 'TALLENNA' }).click();
+  await hyvaksyTietopaivitykset(page, 'Katu- ja vihertyöt');
 
   // Tarkista, että kaivuilmoitus on käsittelyssä Haitattomassa
   await page.goto(testiData.alluTriggerUrl);
@@ -69,9 +64,8 @@ test('Kaivuilmoitus muutosilmoitus', async ({ page }) => {
   }
   await page.getByRole('button', { name: 'PÄÄTTÄMISEEN' }).click();
   await page.getByRole('button', { name: 'EHDOTA HYVÄKSYMISTÄ' }).click();
-  await page.getByPlaceholder('Perustelut').click();
-  await page.getByPlaceholder('Perustelut').fill('Testiautomaatio e2e');
-  await page.getByRole('combobox', { name: 'Valitse päättäjä' }).click();
+  await page.getByRole('textbox', { name: 'Perustelut' }).fill('Testiautomaatio e2e');
+  await page.getByRole('combobox', { name: 'Valitse päättäjä' }).press('Enter');
   await page.getByText('Allu Päättäjä').click();
   await page.getByRole('button', { name: 'TALLENNA' }).click();
   await expect(page.getByLabel('Hakemus siirretty odottamaan')).toBeVisible();
@@ -127,9 +121,8 @@ test('Kaivuilmoitus muutosilmoitus', async ({ page }) => {
   await page.getByRole('button').filter({ hasText: 'cancel' }).click();
   await page.getByRole('button', { name: 'PÄÄTTÄMISEEN' }).click();
   await page.getByRole('button', { name: 'EHDOTA HYVÄKSYMISTÄ' }).click();
-  await page.getByPlaceholder('Perustelut').click();
-  await page.getByPlaceholder('Perustelut').fill('Testiautomaatio e2e succesfull');
-  await page.getByRole('combobox', { name: 'Valitse päättäjä' }).click();
+  await page.getByRole('textbox', { name: 'Perustelut' }).fill('Testiautomaatio e2e succesfull');
+  await page.getByRole('combobox', { name: 'Valitse päättäjä' }).press('Enter');
   await page.getByText('Allu Päättäjä').click();
   await page.getByRole('button', { name: 'TALLENNA' }).click();
   await page.getByRole('button', { name: 'PÄÄTÄ' }).click();
