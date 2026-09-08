@@ -463,7 +463,9 @@ describe('DrawInteraction startDraw events', () => {
     modify.emit('modifystart', startEvent);
 
     // Prepare modifyend with self-intersecting polygon
-    (utils.isPolygonSelfIntersecting as Mock).mockReturnValue(true);
+    const spyIsSelfIntersecting = vi
+      .spyOn(utils, 'isPolygonSelfIntersecting')
+      .mockReturnValue(true);
 
     const modifiedPolygon = { setCoordinates: vi.fn() };
     const endFeature = { getGeometry: vi.fn(() => modifiedPolygon) };
@@ -476,6 +478,7 @@ describe('DrawInteraction startDraw events', () => {
     expect(utils.isPolygonSelfIntersecting).toHaveBeenCalledWith(modifiedPolygon);
     expect(originalGeometryClone.getCoordinates).toHaveBeenCalled();
     expect(modifiedPolygon.setCoordinates).toHaveBeenCalledTimes(1);
+    spyIsSelfIntersecting.mockRestore();
   });
 
   test('removefeature clears selection and calls onSelfIntersectingPolygon(null) when none remain', async () => {
@@ -487,7 +490,9 @@ describe('DrawInteraction startDraw events', () => {
       expect((source as any).on).toHaveBeenCalled();
     });
 
-    (utils.isPolygonSelfIntersecting as Mock).mockReturnValue(false);
+    const spyIsSelfIntersecting = vi
+      .spyOn(utils, 'isPolygonSelfIntersecting')
+      .mockReturnValue(false);
 
     // Find the registered removefeature handler and invoke it
     type OnHandler = (...args: unknown[]) => void;
@@ -499,6 +504,7 @@ describe('DrawInteraction startDraw events', () => {
 
     expect(actions.setSelectedFeature).toHaveBeenCalledWith(null);
     expect(onSelfIntersectingPolygon).toHaveBeenCalledWith(null);
+    spyIsSelfIntersecting.mockRestore();
   });
 
   test('drawstart on.change handler allows drawing inside hanke area', async () => {
