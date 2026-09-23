@@ -316,7 +316,7 @@ describe('DrawInteraction startDraw events', () => {
     draw.emit('drawend', { feature });
     expect(onSelfIntersectingPolygon).toHaveBeenCalledWith(feature);
 
-    spyIsSelfIntersecting.mockRestore();
+    spyIsSelfIntersecting.mockReset();
   });
 
   test('allows finishing when closing segment is valid (non-self-intersecting)', async () => {
@@ -358,7 +358,7 @@ describe('DrawInteraction startDraw events', () => {
     expect(actions.setSelectedDrawToolType).toHaveBeenCalledWith(null);
     expect(actions.setSelectedFeature).toHaveBeenCalledWith(null);
 
-    spyIsSelfIntersecting.mockRestore();
+    spyIsSelfIntersecting.mockReset();
   });
 
   test('finishCondition blocks completion when closing segment introduces intersection', async () => {
@@ -398,7 +398,7 @@ describe('DrawInteraction startDraw events', () => {
     expect(canFinish).toBe(false);
     // Selected draw tool should remain active (not set to null yet)
     expect(actions.setSelectedDrawToolType).not.toHaveBeenCalledWith(null);
-    spyAreLines.mockRestore();
+    spyAreLines.mockReset();
   });
 
   test('finishCondition blocks completion when geometry is already closed and self-intersecting (no cursor point)', async () => {
@@ -433,7 +433,7 @@ describe('DrawInteraction startDraw events', () => {
     const canFinish = options.finishCondition({} as any);
     expect(spyAreLines).toHaveBeenCalledTimes(2);
     expect(canFinish).toBe(false);
-    spyAreLines.mockRestore();
+    spyAreLines.mockReset();
   });
 
   test('modifyend (self-intersecting) reverts coordinates to original', async () => {
