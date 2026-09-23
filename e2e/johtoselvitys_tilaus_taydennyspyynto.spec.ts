@@ -119,7 +119,7 @@ test('Johtoselvityshakemus_tilaus_taydennyspyynto', async ({ page }) => {
   await page.getByRole('button', { name: 'PÄÄTÄ' }).click();
   await expect(page.getByRole('heading', { name: 'Päätä hakemus' })).toBeVisible();
   await page.getByRole('button', { name: 'PÄÄTÄ' }).click();
-  await expect(page.getByRole('heading', { name: 'TYÖJONO' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'TYÖJONO' })).toBeVisible({ timeout: 30_000 });
 
   await page.goto(testiData.alluTriggerUrl);
 

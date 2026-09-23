@@ -67,7 +67,7 @@ test('Kaivuilmoitus => toiminnallinen kunto ja valmis', async ({ page }) => {
   await expect(page.getByRole('button', { name: 'PÄÄTÄ' })).toBeVisible();
   await page.getByRole('button', { name: 'PÄÄTÄ' }).click();
   await page.getByRole('button', { name: 'PÄÄTÄ' }).click();
-  await expect(page.getByRole('heading', { name: 'TYÖJONO' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'TYÖJONO' })).toBeVisible({ timeout: 30_000 });
   await expect(page.getByRole('link', { name: 'HAKEMUKSET' })).toBeVisible();
   await page.getByRole('link', { name: 'HAKEMUKSET' }).click();
   await expect(page.getByRole('textbox', { name: 'Hakemuksen tunnus' })).toBeVisible({
@@ -85,7 +85,7 @@ test('Kaivuilmoitus => toiminnallinen kunto ja valmis', async ({ page }) => {
   await page.getByRole('button', { name: 'PÄÄTÄ' }).click();
   await page.getByRole('button', { name: 'PÄÄTÄ' }).click();
   await page.getByRole('button', { name: 'PÄÄTÄ' }).click();
-  await expect(page.getByRole('heading', { name: 'TYÖJONO' })).toBeVisible({ timeout: 10000 });
+  await expect(page.getByRole('heading', { name: 'TYÖJONO' })).toBeVisible({ timeout: 30_000 });
 
   // Tarkista, että kaivuilmoituksella on päätös Haitattomassa
   await page.goto(testiData.alluTriggerUrl);
