@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Notification } from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import { loadBanners } from '../../../locales/i18n';
+import SanitizedHtml from '../sanitizedHtml/SanitizedHtml';
 
 enum NotificationType {
   INFO = 'info',
@@ -89,7 +90,7 @@ function ServiceNotifications() {
           closeButtonLabelText={`${t('common:components:notification:closeButtonLabelText')}`}
           onClose={() => closeNotification(NotificationType.INFO)}
         >
-          <div dangerouslySetInnerHTML={{ __html: infoText }} />
+          <SanitizedHtml html={infoText} />
         </Notification>
       )}
 
@@ -103,7 +104,7 @@ function ServiceNotifications() {
           closeButtonLabelText={`${t('common:components:notification:closeButtonLabelText')}`}
           onClose={() => closeNotification(NotificationType.WARNING)}
         >
-          <div dangerouslySetInnerHTML={{ __html: warningText }} />
+          <SanitizedHtml html={warningText} />
         </Notification>
       )}
 
@@ -117,7 +118,7 @@ function ServiceNotifications() {
           closeButtonLabelText={`${t('common:components:notification:closeButtonLabelText')}`}
           onClose={() => closeNotification(NotificationType.ERROR)}
         >
-          <div dangerouslySetInnerHTML={{ __html: errorText }} />
+          <SanitizedHtml html={errorText} />
         </Notification>
       )}
     </>
