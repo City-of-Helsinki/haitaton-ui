@@ -1,4 +1,5 @@
 import tseslint from 'typescript-eslint';
+import react from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
 import jest from 'eslint-plugin-jest';
 import globals from 'globals';
@@ -27,6 +28,14 @@ export default tseslint.config(
   {
     plugins: { 'react-hooks': reactHooks },
     rules: reactHooks.configs.recommended.rules,
+  },
+
+  // Render HTML strings only through SanitizedHtml
+  {
+    plugins: { react },
+    rules: {
+      'react/no-danger': 'error',
+    },
   },
 
   // TypeScript-aware settings and custom rules for all source files

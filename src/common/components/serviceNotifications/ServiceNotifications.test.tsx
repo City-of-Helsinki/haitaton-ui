@@ -64,6 +64,40 @@ describe('ServiceNotifications', () => {
     },
   );
 
+  it.each(Object.values(BannerType))(
+    'sanitizes HTML in %s notification text',
+    async (bannerType) => {
+      sessionStorage.clear();
+      const text =
+        '<a href="https://www.hel.fi">Lisätietoja</a><img src="x" onerror="alert(1)"><script>alert(2)</script>';
+      server.use(
+        http.get('/api/banners', async () => {
+          return HttpResponse.json({
+            [bannerType]: {
+              label: BANNERS[bannerType].label,
+              text: { fi: text, sv: text, en: text },
+            },
+          });
+        }),
+      );
+
+      const { container } = render(
+        <I18nextProvider i18n={i18n}>
+          <ServiceNotifications />
+        </I18nextProvider>,
+      );
+
+      const links = await screen.findAllByRole('link', { name: 'Lisätietoja' });
+      links.forEach((link) => {
+        expect(link).toHaveAttribute('href', 'https://www.hel.fi');
+        expect(link).toHaveAttribute('target', '_blank');
+        expect(link).toHaveAttribute('rel', 'noopener noreferrer');
+      });
+      expect(container.querySelector('[onerror]')).not.toBeInTheDocument();
+      expect(container.querySelector('script')).not.toBeInTheDocument();
+    },
+  );
+
   test('sessionStorage prevents rendering closed notifications', async () => {
     server.use(
       http.get('/api/banners', async () => {
