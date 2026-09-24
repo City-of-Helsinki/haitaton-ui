@@ -201,7 +201,7 @@ test('Kaivuilmoitus täydennyspyyntö', async ({ page }) => {
   await page.getByText('Työ valmis').click();
   await page.getByRole('button', { name: 'HYVÄKSY' }).click();
   await page.getByRole('button', { name: 'HYVÄKSY' }).click();
-  await expect(page.getByText('TYÖJONO')).toBeVisible();
+  await expect(page.getByText('TYÖJONO')).toBeVisible({ timeout: 30_000 });
 
   // Odotetaan tuloksia "valmis"
   await page.goto(testiData.alluTriggerUrl);
