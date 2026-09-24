@@ -88,7 +88,11 @@ describe('ServiceNotifications', () => {
       );
 
       const links = await screen.findAllByRole('link', { name: 'Lisätietoja' });
-      links.forEach((link) => expect(link).toHaveAttribute('href', 'https://www.hel.fi'));
+      links.forEach((link) => {
+        expect(link).toHaveAttribute('href', 'https://www.hel.fi');
+        expect(link).toHaveAttribute('target', '_blank');
+        expect(link).toHaveAttribute('rel', 'noopener noreferrer');
+      });
       expect(container.querySelector('[onerror]')).not.toBeInTheDocument();
       expect(container.querySelector('script')).not.toBeInTheDocument();
     },
