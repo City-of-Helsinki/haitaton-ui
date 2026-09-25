@@ -49,5 +49,6 @@ out/
 /playwright/.cache/
 /e2e/report
 .env.e2e
+.playwright-mcp/
 
 CLAUDE.md
