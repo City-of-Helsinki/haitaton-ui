@@ -111,7 +111,7 @@
     "stylelint-config-standard-scss": "^13.1.0",
     "ts-node": "^10.9.2",
     "typescript-eslint": "8.26.0",
-    "undici": "^6.28.1",
+    "undici": "^8.10.2",
     "vite": "^6.4.3",
     "vite-tsconfig-paths": "^6.1.1",
     "vitest": "^3.2.6",
