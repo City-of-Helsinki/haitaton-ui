@@ -4184,10 +4184,10 @@ dompurify@^3.4.16:
   optionalDependencies:
     "@types/trusted-types" "^2.0.7"
 
-dotenv@^17.3.1:
-  version "17.3.1"
-  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-17.3.1.tgz#2706f5b0165e45a1503348187b8468f87fe6aae2"
-  integrity sha512-IO8C/dzEb6O3F9/twg6ZLXz164a2fhTnEWb95H23Dm4OuN+92NmEAlTrupP9VW6Jm3sO26tQlqyvyi4CsnY9GA==
+dotenv@^18.0.2:
+  version "18.0.2"
+  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-18.0.2.tgz#857b2b3cda75347044daf2f5aa9adf6575f6bbab"
+  integrity sha512-wl0U3CxC0iobaryqEKpFJxzyp4AxQFYAKj/WWszXZr87vVHLi2yJv2syax5Vxt+u02xqNgE277rsc3lOKg9sPg==
 
 downshift@6.0.6:
   version "6.0.6"
