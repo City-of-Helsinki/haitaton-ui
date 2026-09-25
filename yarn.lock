@@ -5243,10 +5243,15 @@ hasown@^2.0.4:
   dependencies:
     function-bind "^1.1.2"
 
-hds-core@4.4.0, hds-core@^4.4.0:
+hds-core@4.4.0:
   version "4.4.0"
   resolved "https://registry.yarnpkg.com/hds-core/-/hds-core-4.4.0.tgz#6f17eaa1db94294fd8708395f759ffe350f84709"
   integrity sha512-2CRkUGyOLSVLCLOE9bfOe/Ed75qxizPyZaSFuA+hCqb/67TB2H662v9LJ5ZTfMIIn90dPd3fAocepZeUiM3stQ==
+
+hds-core@^6.0.5:
+  version "6.0.5"
+  resolved "https://registry.yarnpkg.com/hds-core/-/hds-core-6.0.5.tgz#0d805aa478b9794bf4526e2095d3962fcbc167d5"
+  integrity sha512-OMI4Thr+aZKuNTx1oXi28bBQ14elqBaF/gzszaNQerlYLR8lHeI6x4nTijU9Jqj6DiVGyQ8Hky6e0pdpLmBRNg==
 
 hds-design-tokens@^4.4.0:
   version "4.4.0"
