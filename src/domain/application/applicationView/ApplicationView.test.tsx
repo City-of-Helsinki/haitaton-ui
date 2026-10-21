@@ -25,6 +25,32 @@ import * as muutosilmoitusApi from '../muutosilmoitus/muutosilmoitusApi';
 import { HAITTA_INDEX_TYPE } from '../../common/haittaIndexes/types';
 import { PathParams } from 'msw';
 
+// Inline mock for map components to stabilize snapshot (dynamic OpenLayers DOM removed)
+vi.mock('../../map/components/OwnHankeMap/OwnHankeMap', () => ({
+  __esModule: true,
+  // Use unknown instead of any to satisfy lint rules
+  default: ({
+    hanke,
+    tyoalueet,
+  }: {
+    hanke: { hankeTunnus?: string } | undefined;
+    tyoalueet?: unknown[];
+  }) => (
+    <div data-testid="mock-own-hanke-map">
+      <p>MockOwnHankeMap</p>
+      <p>hanke:{hanke?.hankeTunnus}</p>
+      <p>tyoalueet:{Array.isArray(tyoalueet) ? tyoalueet.length : 0}</p>
+    </div>
+  ),
+}));
+
+vi.mock('../../map/components/OwnHankeMap/OwnHankeMapHeader', () => ({
+  __esModule: true,
+  default: ({ hankeTunnus }: { hankeTunnus: string }) => (
+    <div data-testid="mock-own-hanke-map-header">Alueiden sijainti ({hankeTunnus})</div>
+  ),
+}));
+
 describe('Cable report application view', () => {
   test('Correct information about application should be displayed', async () => {
     render(<ApplicationViewContainer id={4} />);
