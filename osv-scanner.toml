@@ -1,0 +1,4 @@
+[[IgnoredVulns]]
+id = "GHSA-vfj7-8cjw-p6xm"
+ignoreUntil = 2027-04-21
+reason = "braces: no fixed version exists. Only used by build/lint tooling with glob patterns from repo config, not in the production bundle. Dependabot alert #291 dismissed as tolerable risk (HAI-3619)."
