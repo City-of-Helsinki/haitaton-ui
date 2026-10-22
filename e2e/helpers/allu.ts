@@ -4,8 +4,20 @@ import { testiData } from './test-data';
 export async function alluLogin(page: Page) {
   await page.goto(testiData.allu_home);
   const alluLogo = page.locator('img[src="assets/svg/allu-testi-logo.svg"]');
+  // When logged out, /home redirects to a Microsoft login page that reloads itself.
+  // Wait until ALLU has rendered or the redirect has left ALLU before deciding.
+  const alluOrigin = new URL(testiData.allu_home).origin;
+  await expect
+    .poll(async () => (await alluLogo.isVisible()) || !page.url().startsWith(alluOrigin), {
+      timeout: 20000,
+    })
+    .toBe(true);
   if (!(await alluLogo.isVisible())) {
-    await page.goto(testiData.allu_login);
+    // The Microsoft page's own reload can abort this navigation, so retry it.
+    await expect(async () => {
+      await page.goto(testiData.allu_login);
+      await expect(page.getByPlaceholder('Käyttäjänimi')).toBeVisible({ timeout: 5000 });
+    }).toPass({ timeout: 30000 });
     await page.getByPlaceholder('Käyttäjänimi').fill(testiData.allupw);
     await page.getByRole('button', { name: 'Lähetä' }).click();
     await expect(page.getByRole('link', { name: 'HAKEMUKSET' })).toBeVisible();

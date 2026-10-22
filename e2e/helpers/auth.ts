@@ -14,7 +14,7 @@ export async function helsinkiLogin(page: Page, env = testiData.testEnvUrl) {
   await page.getByPlaceholder('-9988').fill(testiData.suomifilogin);
   await page.getByPlaceholder('-9988').press('Tab');
   await page.getByRole('button', { name: 'Tunnistaudu' }).click();
-  await expect(page.getByText('Jatka palveluun')).toBeVisible();
+  await expect(page.getByText('Jatka palveluun')).toBeVisible({ timeout: 30000 });
   await page.getByText('Jatka palveluun').click();
   await expect(page.getByLabel('Asiointi yksityisellä alueella.', { exact: true })).toBeVisible({
     timeout: 60000,

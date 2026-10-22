@@ -120,7 +120,7 @@ export const rakennuttaja: TestUser = {
 export const asianhoitaja: TestUser = {
   username: process.env.TA_ASIANHOITAJA_USERNAME ?? '',
   email: process.env.TA_ASIANHOITAJA_EMAIL ?? '',
-  phonenumber: process.env.TA_ASIANHOITAJAP_HONENUMBER ?? '',
+  phonenumber: process.env.TA_ASIANHOITAJA_PHONENUMBER ?? '',
   y_tunnus: process.env.TA_ASIANHOITAJA_YTUNNUS ?? '',
 };
 
